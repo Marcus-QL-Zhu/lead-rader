@@ -1,0 +1,70 @@
+#!/bin/sh
+set -u
+
+umask 077
+
+APP_DIR="${HT_LEAD_APP_DIR:-/home/admin/.openclaw/workspace/skills/hardtech-lead-radar}"
+JOSINT_DIR="${HT_LEAD_JOSINT_DIR:-/home/admin/.openclaw/workspace/skills/web-ad-radar}"
+ENV_FILE="${HT_LEAD_ENV_FILE:-$APP_DIR/.env}"
+PYTHON_BIN="${PYTHON_BIN:-python3}"
+DAILY_DIRECTION="${HT_LEAD_DAILY_DIRECTION:-具身智能}"
+
+case "$APP_DIR" in
+  /*/hardtech-lead-radar) ;;
+  *)
+    echo "HT_LEAD_APP_DIR must be an absolute hardtech-lead-radar directory" >&2
+    exit 64
+    ;;
+esac
+
+cd "$APP_DIR" || exit 1
+
+if [ ! -f "$ENV_FILE" ]; then
+  ENV_FILE="$JOSINT_DIR/.env"
+fi
+
+case "$ENV_FILE" in
+  /*) ;;
+  *) echo "HT_LEAD_ENV_FILE must resolve to an absolute path" >&2; exit 64 ;;
+esac
+mkdir -p data reports-daily logs backups
+
+set -- run \
+  --direction "$DAILY_DIRECTION" \
+  --provider fixed \
+  --fixed-sources config/fixed-sources.json \
+  --source-packs config/source-packs.json \
+  --source-state-db data/fixed-sources.sqlite \
+  --fact-db data/facts.sqlite \
+  --runtime-db data/runtime.sqlite \
+  --relationship-db data/relationships.sqlite \
+  --budget-db data/search-budget.sqlite \
+  --feishu-state-db data/feishu-projection.sqlite \
+  --audit-db data/audit.sqlite \
+  --ops-metrics-db data/ops-metrics.sqlite \
+  --env-file "$ENV_FILE" \
+  --josint-db "$JOSINT_DIR/data/jobs.sqlite" \
+  --output-dir reports-daily \
+  --minimum-score 0 \
+  --top 20 \
+  --metaso-verify-limit 3 \
+  --metaso-daily-point-budget 30 \
+  --metaso-provider-daily-limit 500
+
+if [ -f config/suppressions.json ]; then
+  set -- "$@" --suppressions config/suppressions.json
+fi
+
+"$PYTHON_BIN" scripts/run_lead_radar_v2.py "$@"
+
+status=$?
+"$PYTHON_BIN" scripts/run_lead_radar_v2.py monitor \
+  --runtime-db data/runtime.sqlite \
+  --source-health-db data/fixed-sources.sqlite \
+  --ops-metrics-db data/ops-metrics.sqlite \
+  > reports-daily/health-latest.json 2>&1 || true
+
+if [ "$status" -eq 2 ]; then
+  exit 0
+fi
+exit "$status"

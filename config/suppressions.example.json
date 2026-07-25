@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "companies": [
+    {
+      "name": "示例退出公司",
+      "aliases": ["Example Opt-out Co."],
+      "reason": "公开要求不被本系统分析",
+      "added_at": "2026-07-25T00:00:00+00:00",
+      "expires_at": null,
+      "source": "manual_verified_request"
+    }
+  ],
+  "people": [
+    {
+      "name": "示例退出人物",
+      "aliases": [],
+      "reason": "本人公开退出请求",
+      "added_at": "2026-07-25T00:00:00+00:00",
+      "expires_at": null,
+      "source": "manual_verified_request"
+    }
+  ]
+}

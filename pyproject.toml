@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ht-lead-radar"
+version = "0.3.0"
+description = "Evidence-first hard-tech director-level lead generator"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+ht-lead-radar = "ht_lead_radar.cli_v2:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+ht_lead_radar = ["data/*.json"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

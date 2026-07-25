@@ -1,0 +1,4 @@
+interface:
+  display_name: 'Hard-tech Lead Radar'
+  short_description: 'Find pre-ad Director-plus hiring signals and run Candidate Float'
+  default_prompt: 'Use $hardtech-lead-radar to interpret my request as Market Scan or Candidate Float, use stable source packs first, and return explainable Director-plus company opportunities without generating outreach.'

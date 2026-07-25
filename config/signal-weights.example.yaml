@@ -1,0 +1,232 @@
+version: "0.2"
+updated_at: "2026-07-24"
+description: >
+  HT Lead Radar 的首期可解释规则。权重不是最终真理，应通过顾问抽检、
+  历史回测和真实 BD 漏斗结果逐步校准。
+
+pilot_sectors:
+  - semiconductor
+  - embodied_ai
+
+component_caps:
+  upstream_demand_evidence: 40
+  director_plus_role_fit: 25
+  timing_lead_time: 15
+  commercial_value: 10
+  evidence_confidence: 10
+  risk_penalty: -40
+
+tier_thresholds:
+  bd_now: 75
+  research_watch: 55
+
+bd_now_gates:
+  target_seniority: director_plus
+  require_upstream_signal: true
+  reject_non_target_titles: true
+  ad_only_score_cap: 54
+  minimum_confidence_grade: B
+  minimum_independent_source_types: 2
+  allow_one_source_override:
+    - official_factory_or_project_approval
+    - official_major_order
+
+target_seniority:
+  include_titles:
+    - cxo
+    - president
+    - vice_president
+    - general_manager
+    - business_unit_general_manager
+    - director
+    - head_of_function
+  conditional_titles:
+    - chief_scientist
+    - chief_engineer
+    - chief_designer
+    - function_owner
+  conditional_minimum_scope_evidence: 2
+  scope_evidence:
+    - team_management
+    - budget_or_p_and_l
+    - reports_to_cxo_or_gm
+    - hiring_and_performance_authority
+    - cross_function_delivery_ownership
+  always_exclude_titles:
+    - manager
+    - senior_manager
+    - supervisor
+    - expert
+    - senior_expert
+    - principal
+    - staff
+    - fellow
+    - individual_contributor
+
+decay_formula: "base_weight * 2 ** (-age_days / half_life_days)"
+
+signals:
+  official_direct_job:
+    component: timing_lead_time
+    base_weight: 3
+    half_life_days: 14
+    source_quality: A
+    phase: recruit
+    eligible_seniority: director_plus
+    trigger_eligible: false
+
+  official_direct_job_cluster:
+    component: timing_lead_time
+    base_weight: 5
+    half_life_days: 21
+    source_quality: A
+    phase: recruit
+    eligible_seniority: director_plus
+    trigger_eligible: false
+    definition: "14 天内至少 3 个相互连贯的关键岗位"
+
+  recruiter_hidden_employer_job:
+    component: timing_lead_time
+    base_weight: 2
+    half_life_days: 14
+    source_quality: C
+    phase: marketed_competitive
+    eligible_seniority: director_plus
+    trigger_eligible: false
+    note: "已有竞争对手介入；雇主为推断而非事实"
+
+  non_target_manager_or_expert_job:
+    component: timing_lead_time
+    base_weight: 0
+    half_life_days: 14
+    source_quality: C
+    phase: recruit
+    eligible_seniority: false
+    trigger_eligible: false
+    create_lead: false
+
+  funding_round:
+    component: upstream_demand_evidence
+    base_weight: 10
+    half_life_days: 45
+    source_quality: B
+
+  key_executive_joined:
+    component: timing_lead_time
+    base_weight: 10
+    half_life_days: 30
+    source_quality: B
+
+  major_customer_order:
+    component: upstream_demand_evidence
+    base_weight: 18
+    half_life_days: 60
+    source_quality: A
+
+  official_factory_or_project_approval:
+    component: upstream_demand_evidence
+    base_weight: 24
+    half_life_days: 120
+    source_quality: A
+
+  equipment_move_in_or_ramp:
+    component: timing_lead_time
+    base_weight: 15
+    half_life_days: 90
+    source_quality: B
+
+  product_or_technical_milestone:
+    component: director_plus_role_fit
+    base_weight: 12
+    half_life_days: 60
+    source_quality: B
+
+  patent_cluster:
+    component: director_plus_role_fit
+    base_weight: 8
+    half_life_days: 180
+    source_quality: B
+
+  publication_or_lab_cluster:
+    component: director_plus_role_fit
+    base_weight: 6
+    half_life_days: 180
+    source_quality: B
+
+bonuses:
+  two_independent_source_types_within_30d: 12
+  strategy_signal_followed_by_build_signal: 12
+  clear_director_plus_role_hypothesis: 10
+  signal_matches_seed_account_priority: 5
+  official_upstream_source_plus_role_gap: 8
+
+penalties:
+  public_director_job_already_live:
+    value: -10
+    half_life_days: 14
+
+  multiple_agencies_already_marketing_role:
+    value: -20
+    half_life_days: 14
+
+  layoff_or_hiring_freeze:
+    value: -30
+    half_life_days: 60
+
+  cancelled_project_or_cash_risk:
+    value: -25
+    half_life_days: 90
+
+  unresolved_company_entity:
+    value: -15
+    half_life_days: 30
+
+  stale_or_closed_job:
+    value: -10
+    half_life_days: 14
+
+  evergreen_job:
+    value: -8
+    half_life_days: 30
+
+  sole_agency_employer_inference:
+    value: -12
+    half_life_days: 14
+
+  duplicated_media_syndication:
+    value: -8
+    half_life_days: 30
+
+  existing_client_conflict_or_suppression:
+    value: -100
+    action: block
+
+contact_priority:
+  role_relevance: 40
+  authority_or_influence: 20
+  public_professional_contact_quality: 15
+  warm_path: 15
+  role_recency: 10
+  permitted_contact_grades:
+    - A
+    - B
+    - D
+  prohibited_contact_grade:
+    - X
+
+review:
+  weekly_sample_size: 50
+  require_reason_on_reject: true
+  allowed_reject_reasons:
+    - outside_icp
+    - below_director_level
+    - expert_or_individual_contributor
+    - too_late_job_already_marketed
+    - no_upstream_signal
+    - stale_or_duplicate
+    - wrong_hiring_hypothesis
+    - wrong_contact
+    - already_covered
+    - client_conflict_or_suppressed
+    - no_budget_or_freeze
+    - other

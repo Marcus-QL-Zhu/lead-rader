@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "policy": {
+    "primary_discovery": "fixed_sources",
+    "metaso_role": "top_lead_verification_only",
+    "retention_days": 365,
+    "applicable_directions": ["灵巧手", "具身智能", "人形机器人", "机器人"]
+  },
+  "sources": [
+    {
+      "id": "inspire-company-news",
+      "name": "因时机器人企业新闻",
+      "list_url": "https://www.inspire-robots.com/news/company%20news/",
+      "link_pattern": "inspire-robots\\.com/news/company(?:%20| )news/.+\\.html$",
+      "company": "因时机器人",
+      "grade": "A",
+      "fetch_detail": true,
+      "max_items": 30,
+      "enabled": true
+    },
+    {
+      "id": "daimon-latest-news",
+      "name": "戴盟机器人最新资讯",
+      "list_url": "https://www.dmrobot.com/news-latest/",
+      "link_pattern": "(?:dmrobot\\.com|mp\\.weixin\\.qq\\.com)/",
+      "company": "戴盟机器人",
+      "grade": "A",
+      "fetch_detail": false,
+      "max_items": 30,
+      "enabled": true
+    },
+    {
+      "id": "oymotion-company-news",
+      "name": "傲意科技公司新闻",
+      "list_url": "https://www.oymotion.com/news8",
+      "link_pattern": "oymotion\\.com/news8/\\d+",
+      "company": "傲意科技",
+      "grade": "A",
+      "fetch_detail": true,
+      "max_items": 30,
+      "enabled": true
+    },
+    {
+      "id": "pedaily-robotics",
+      "name": "投资界机器人频道",
+      "list_url": "https://www.pedaily.cn/i107/",
+      "link_pattern": "news\\.pedaily\\.cn/.+\\.shtml$",
+      "grade": "B",
+      "fetch_detail": true,
+      "max_items": 40,
+      "enabled": true
+    },
+    {
+      "id": "stcn-flash",
+      "name": "证券时报人民财讯",
+      "list_url": "https://www.stcn.com/article/list/kx.html",
+      "link_pattern": "stcn\\.com/article/detail/\\d+\\.html",
+      "grade": "B",
+      "fetch_detail": true,
+      "max_items": 40,
+      "enabled": true
+    },
+    {
+      "id": "cls-telegraph",
+      "name": "财联社电报",
+      "list_url": "https://www.cls.cn/telegraph",
+      "link_pattern": "cls\\.cn/detail/\\d+",
+      "grade": "B",
+      "fetch_detail": true,
+      "max_items": 40,
+      "enabled": true
+    }
+  ],
+  "pending_sources": [
+    {
+      "id": "linkerbot-official",
+      "reason": "官网为 JavaScript 渲染，需 changedetection/browser 适配器"
+    },
+    {
+      "id": "government-project-sites",
+      "reason": "需按北京、上海、深圳、无锡、苏州等产业集群建立独立列表页注册表"
+    },
+    {
+      "id": "cninfo-disclosures",
+      "reason": "需单独实现上市公司公告 API 适配与股票代码到公司实体映射"
+    }
+  ]
+}
