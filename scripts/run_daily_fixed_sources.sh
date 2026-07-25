@@ -62,6 +62,7 @@ status=$?
   --runtime-db data/runtime.sqlite \
   --source-health-db data/fixed-sources.sqlite \
   --ops-metrics-db data/ops-metrics.sqlite \
+  --budget-db data/search-budget.sqlite \
   > reports-daily/health-latest.json 2>&1 || true
 
 if [ "$status" -eq 2 ]; then

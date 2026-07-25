@@ -89,6 +89,7 @@ def build_parser() -> argparse.ArgumentParser:
     monitor.add_argument("--runtime-db", default=DEFAULTS["runtime_db"])
     monitor.add_argument("--source-health-db", default=DEFAULTS["source_state_db"])
     monitor.add_argument("--ops-metrics-db", default="data/ops-metrics.sqlite")
+    monitor.add_argument("--budget-db", default=DEFAULTS["budget_db"])
     monitor.add_argument("--cron-text-file")
 
     backup = subparsers.add_parser("backup", help="在线一致性备份本项目 SQLite 数据")
@@ -338,7 +339,7 @@ def _monitor(args: argparse.Namespace) -> int:
     )
     payload = report.to_dict()
     payload["metaso_budget"] = SearchBudgetLedger(
-        DEFAULTS["budget_db"]
+        args.budget_db
     ).status().to_dict()
     _print_json(payload)
     return report.suggested_exit_code

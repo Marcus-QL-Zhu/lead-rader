@@ -27,7 +27,10 @@ from .collectors import (
     load_demo_fixture,
     load_env_file,
 )
-from .costs import SearchBudgetLedger
+from .costs import (
+    METASO_CONSERVATIVE_POINTS_PER_SEARCH,
+    SearchBudgetLedger,
+)
 from .discovery import PlannedSearchCollector
 from .fact_store import FactStore
 from .feishu import (
@@ -545,6 +548,16 @@ class LeadRadarApplication:
             )
             enrich_industry_roles(leads, value["direction"])
 
+        value["metaso_points_this_run"] = sum(
+            max(int(result.get("query_count", 0)), 0)
+            * max(
+                int(payload["metaso_points_per_search"]),
+                METASO_CONSERVATIVE_POINTS_PER_SEARCH,
+            )
+            for result in verification.values()
+            if isinstance(result, Mapping)
+        )
+
         deep_reports: dict[str, dict[str, Any]] = {}
         float_payload: list[dict[str, Any]] = []
         deep_requested = bool(
@@ -746,13 +759,12 @@ class LeadRadarApplication:
         )
         try:
             metrics = OpsMetricsStore(payload["ops_metrics_db"])
-            budget = value.get("budget_status") or {}
             metrics.record_run(
                 context.run_id,
                 recorded_at=datetime.now(timezone.utc),
                 status="completed",
                 result_count=len(leads),
-                metaso_points=float(budget.get("spent_points", 0)),
+                metaso_points=float(value.get("metaso_points_this_run", 0)),
             )
             for index, source_run in enumerate(source_summary["runs"]):
                 if not isinstance(source_run, Mapping):

@@ -8,7 +8,8 @@ from typing import Iterable
 from urllib.parse import urlparse
 
 from .models import CompanyLead, Evidence, OutreachRoute, ScoreComponent
-from .taxonomy import classify_seniority, profile_for, target_roles
+from .role_inference import roles_for
+from .taxonomy import classify_seniority
 
 
 WEIGHTS: dict[str, tuple[float, float]] = {
@@ -25,6 +26,13 @@ WEIGHTS: dict[str, tuple[float, float]] = {
 
 UPSTREAM_PHASES = {'strategy_capital', 'build_organize'}
 COMMERCIAL_EVENTS = {'factory_or_capacity', 'major_order', 'funding', 'global_expansion'}
+ROLE_FUNCTION_TERMS = (
+    '研发', '算法', '产品', '数据', '临床', '医学', '注册', '法规', '质量',
+    '制造', '量产', '运营', '供应链', '交付', '客户', '商业化', '战略',
+    '组织', '投资', '海外', '全球', '政府', '项目', '基地', '厂务', 'ehs',
+    '工艺', '工程', '试验', '验证', '总装', '采购', '科研', '产业合作',
+    '解决方案', '生态合作',
+)
 
 
 def _parse_date(value: str) -> date | None:
@@ -72,7 +80,6 @@ def build_leads(
     minimum_score: float = 0,
     limit: int = 20,
 ) -> list[CompanyLead]:
-    profile = profile_for(direction)
     effective_date = as_of or date.today()
     grouped: dict[str, list[Evidence]] = defaultdict(list)
     for item in evidence:
@@ -85,14 +92,18 @@ def build_leads(
 
     for company, items in grouped.items():
         upstream = [item for item in items if item.phase in UPSTREAM_PHASES and item.event_type != 'job_ad']
-        related_ads = [
+        director_ads = [
             item
             for item in items
             if item.event_type == 'job_ad'
             and classify_seniority(item.title, item.snippet)[1]
         ]
         event_types = {item.event_type for item in upstream}
-        roles = target_roles(profile, event_types)
+        roles = roles_for(direction, event_types)
+        related_ads = [
+            item for item in director_ads
+            if _job_ad_matches_roles(item, roles)
+        ]
         target_gate = bool(roles) and all(_is_director_plus_role(role) for role in roles)
         upstream_gate = _upstream_precedes_job_ads(upstream, related_ads)
         if not target_gate or not upstream_gate:
@@ -263,6 +274,19 @@ def build_late_opportunities(
 
 def _is_director_plus_role(role: str) -> bool:
     return any(term in role.lower() for term in ('总监', '总经理', '平台主管', '总师', '首席', 'director', 'head', 'vp', 'cxo'))
+
+
+def _job_ad_matches_roles(item: Evidence, roles: list[str]) -> bool:
+    """Return whether a Director advert matches a predicted role function."""
+
+    text = f'{item.title} {item.snippet}'.casefold()
+    role_terms = {
+        term.casefold()
+        for role in roles
+        for term in ROLE_FUNCTION_TERMS
+        if term.casefold() in role.casefold()
+    }
+    return bool(role_terms) and any(term in text for term in role_terms)
 
 
 def _upstream_precedes_job_ads(

@@ -78,6 +78,8 @@ GENERIC_ROLES = {
 
 
 def roles_for(direction: str, event_types: Iterable[str], limit: int = 3) -> list[str]:
+    if limit <= 0:
+        return []
     lowered = direction.casefold()
     event_set = set(event_types)
     role_map = dict(GENERIC_ROLES)
@@ -85,11 +87,25 @@ def roles_for(direction: str, event_types: Iterable[str], limit: int = 3) -> lis
         if any(alias.casefold() in lowered for alias in aliases):
             role_map.update(mapping)
             break
+    active_events = [
+        event_type for event_type in role_map if event_type in event_set
+    ]
     roles: list[str] = []
-    for event_type in event_set:
-        for role in role_map.get(event_type, ()):
-            if role not in roles:
-                roles.append(role)
+    max_roles = max(
+        (len(role_map[event_type]) for event_type in active_events),
+        default=0,
+    )
+    # Interleave event types in declared map order. Iterating the caller's set
+    # made role order vary with PYTHONHASHSEED and let one event monopolise all
+    # three hypotheses.
+    for role_index in range(max_roles):
+        for event_type in active_events:
+            event_roles = role_map[event_type]
+            if (
+                role_index < len(event_roles)
+                and event_roles[role_index] not in roles
+            ):
+                roles.append(event_roles[role_index])
             if len(roles) >= limit:
                 return roles
     return roles

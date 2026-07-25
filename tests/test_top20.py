@@ -151,3 +151,36 @@ def test_manager_ad_does_not_close_director_level_upstream_window():
     assert build_leads(
         '脑机接口', [signal, manager_ad], as_of=date(2026, 7, 25)
     )
+
+def test_unrelated_director_ad_does_not_close_target_function_window():
+    signal = upstream(
+        "职能科技", "funding", "https://news.example/funding",
+        event_date="2026-07-20",
+    )
+    finance_ad = Evidence(
+        company="职能科技", event_type="job_ad", phase="recruit",
+        event_date="2026-07-01", title="财务总监", snippet="全面负责财务团队",
+        source_url="https://jobs.example/finance", source_name="jobs",
+        source_grade="C", direction="脑机接口",
+    )
+
+    leads = build_leads(
+        "脑机接口", [signal, finance_ad], as_of=date(2026, 7, 25)
+    )
+
+    assert leads[0].timing_stage == "pre_ad"
+    assert all(item.key != "advertised_penalty" for item in leads[0].score_components)
+
+
+def test_industry_specific_event_can_pass_hard_gate_and_explain_same_roles():
+    clinical = upstream(
+        "临床科技", "clinical_milestone", "https://news.example/clinical"
+    )
+
+    lead = build_leads("脑机接口", [clinical], as_of=date(2026, 7, 25))[0]
+
+    assert lead.target_roles == ["临床运营总监", "医学事务总监", "注册法规总监"]
+    role_component = next(
+        item for item in lead.score_components if item.key == "role"
+    )
+    assert role_component.reason == "、".join(lead.target_roles)

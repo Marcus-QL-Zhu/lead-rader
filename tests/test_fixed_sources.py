@@ -110,3 +110,34 @@ def test_media_inference_rejects_product_edition_as_company(tmp_path):
     )
 
     assert all(item.company != '启元Q1探索者版' for item in evidence)
+
+def test_fixed_source_fetch_rejects_oversized_response(tmp_path, monkeypatch):
+    class Headers:
+        @staticmethod
+        def get_content_charset():
+            return "utf-8"
+
+    class Response:
+        headers = Headers()
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return None
+
+        @staticmethod
+        def read(_size=-1):
+            return b"12345"
+
+    collector = FixedSourceCollector(
+        _write_registry(tmp_path), tmp_path / "bounded.sqlite", max_bytes=4
+    )
+    monkeypatch.setattr("urllib.request.urlopen", lambda *_args, **_kwargs: Response())
+
+    try:
+        collector._fetch("https://example.com/large")
+    except ValueError as error:
+        assert "response exceeds 4 bytes" in str(error)
+    else:
+        raise AssertionError("oversized response was accepted")

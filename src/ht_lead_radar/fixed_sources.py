@@ -44,10 +44,19 @@ class FixedSourceCollector:
     provider_name = 'fixed-source direct crawl'
     supports_search = False
 
-    def __init__(self, registry_path: str | Path, state_db: str | Path, timeout: float = 20.0):
+    def __init__(
+        self,
+        registry_path: str | Path,
+        state_db: str | Path,
+        timeout: float = 20.0,
+        max_bytes: int = 5_000_000,
+    ):
+        if max_bytes <= 0:
+            raise ValueError('max_bytes must be positive')
         self.registry_path = Path(registry_path)
         self.state_db = Path(state_db)
         self.timeout = timeout
+        self.max_bytes = max_bytes
         self.registry = json.loads(self.registry_path.read_text(encoding='utf-8'))
         self.last_run_summary: dict[str, object] = {'sources': {}, 'errors': []}
         self._initialize()
@@ -81,7 +90,9 @@ class FixedSourceCollector:
         })
         with urllib.request.urlopen(request, timeout=self.timeout) as response:
             charset = response.headers.get_content_charset() or 'utf-8'
-            payload = response.read()
+            payload = response.read(self.max_bytes + 1)
+        if len(payload) > self.max_bytes:
+            raise ValueError(f'response exceeds {self.max_bytes} bytes')
         try:
             return payload.decode(charset, errors='replace')
         except LookupError:
