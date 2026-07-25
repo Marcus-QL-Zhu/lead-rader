@@ -548,6 +548,11 @@ def collect_josint(db_path: str | Path, direction: str) -> list[Evidence]:
     if not path.exists():
         raise FileNotFoundError(path)
     terms = profile_for(direction).aliases
+    from .josint_adapter import read_canonical_evidence
+    canonical_rows = read_canonical_evidence(path, terms=terms, direction=direction)
+    if canonical_rows is not None:
+        return [Evidence(**row) for row in canonical_rows]
+
     connection = sqlite3.connect(path)
     connection.row_factory = sqlite3.Row
     try:
