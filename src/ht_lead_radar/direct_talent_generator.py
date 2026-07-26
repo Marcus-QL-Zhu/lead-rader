@@ -268,6 +268,7 @@ def generate_direct_talent_bundle(
                     f"company-demand:{packet['lead_index']}",
                 ),
             )
+            ensure_deadline()
             try:
                 demand = parse_single_company_demand(raw, packet=packet)
             except Exception as parse_error:
@@ -284,6 +285,7 @@ def generate_direct_talent_bundle(
                         f"company-demand-repair:{packet['lead_index']}",
                     ),
                 )
+                ensure_deadline()
                 demand = parse_single_company_demand(
                     repaired_raw,
                     packet=packet,
@@ -317,17 +319,19 @@ def generate_direct_talent_bundle(
     )
     seed_bundle = replace(seed_bundle, generation_model=generation_model)
     if not themes:
-        return replace(
-            seed_bundle,
-            generation_error="; ".join(failures),
-        )
+        if failures:
+            raise DirectTalentGenerationError(
+                "no valid talent theme after analysis failures: "
+                + "; ".join(failures)
+            )
+        return seed_bundle
 
     forbidden = _forbidden_public_terms(report)
     generated: list[TalentPoolDraft] = []
     for theme, seed in zip(themes, seed_bundle.drafts, strict=True):
-        ensure_deadline()
-        response = _draft_response(
-            active_runner.run(
+        try:
+            ensure_deadline()
+            raw_response = active_runner.run(
                 build_theme_ad_prompt(theme, seed),
                 system_prompt=JOB_AD_SYSTEM_PROMPT,
                 session_id=_session_id(
@@ -335,31 +339,8 @@ def generate_direct_talent_bundle(
                     f"job-ad:{theme['theme_id']}",
                 ),
             )
-        )
-        issues = _validate_theme_response(
-            response,
-            bundle=seed_bundle,
-            seed=seed,
-            theme=theme,
-            forbidden_terms=forbidden,
-        )
-        if issues:
             ensure_deadline()
-            response = _draft_response(
-                active_runner.run(
-                    build_theme_repair_prompt(
-                        theme,
-                        seed,
-                        response,
-                        issues,
-                    ),
-                    system_prompt=JOB_AD_SYSTEM_PROMPT,
-                    session_id=_session_id(
-                        source_run_id,
-                        f"job-ad-repair:{theme['theme_id']}",
-                    ),
-                )
-            )
+            response = _draft_response(raw_response)
             issues = _validate_theme_response(
                 response,
                 bundle=seed_bundle,
@@ -367,16 +348,53 @@ def generate_direct_talent_bundle(
                 theme=theme,
                 forbidden_terms=forbidden,
             )
-        if issues:
-            raise DirectTalentGenerationError(
-                f"theme {theme['theme_id']} failed after one repair: "
-                + "; ".join(issues)
+            if issues:
+                ensure_deadline()
+                repaired_response = active_runner.run(
+                    build_theme_repair_prompt(theme, seed, response, issues),
+                    system_prompt=JOB_AD_SYSTEM_PROMPT,
+                    session_id=_session_id(
+                        source_run_id,
+                        f"job-ad-repair:{theme['theme_id']}",
+                    ),
+                )
+                ensure_deadline()
+                response = _draft_response(repaired_response)
+                issues = _validate_theme_response(
+                    response,
+                    bundle=seed_bundle,
+                    seed=seed,
+                    theme=theme,
+                    forbidden_terms=forbidden,
+                )
+            if issues:
+                raise DirectTalentGenerationError(
+                    f"failed after one repair: {'; '.join(issues)}"
+                )
+            generated.append(_materialize_draft(response, seed))
+        except Exception as error:
+            failures.append(
+                f"theme {theme['theme_id']}: {type(error).__name__}: {error}"
             )
-        generated.append(_materialize_draft(response, seed))
-    if len({item.recommended_title for item in generated}) != len(generated):
-        raise DirectTalentGenerationError("generated themes have duplicate titles")
-    if len({item.payload_hash for item in generated}) != len(generated):
-        raise DirectTalentGenerationError("generated themes have duplicate payloads")
+
+    unique: list[TalentPoolDraft] = []
+    seen_titles: set[str] = set()
+    seen_payloads: set[str] = set()
+    for draft in generated:
+        if draft.recommended_title in seen_titles:
+            failures.append(f"draft {draft.draft_id}: duplicate generated title")
+            continue
+        if draft.payload_hash in seen_payloads:
+            failures.append(f"draft {draft.draft_id}: duplicate generated payload")
+            continue
+        seen_titles.add(draft.recommended_title)
+        seen_payloads.add(draft.payload_hash)
+        unique.append(draft)
+    generated = unique
+    if not generated:
+        raise DirectTalentGenerationError(
+            "all talent themes failed: " + "; ".join(failures)
+        )
     return replace(
         seed_bundle,
         drafts=tuple(generated),
