@@ -14,8 +14,9 @@ if [ -z "${PYTHON_BIN:-}" ]; then
     PYTHON_BIN="python3"
   fi
 fi
-OPENCLAW_BIN="${OPENCLAW_BIN:-/home/admin/.local/share/pnpm/openclaw}"
-export OPENCLAW_BIN
+OPENCLAW_CONFIG_PATH="${OPENCLAW_CONFIG_PATH:-/home/admin/.openclaw/openclaw.json}"
+OPENCLAW_MODELS_PATH="${OPENCLAW_MODELS_PATH:-/home/admin/.openclaw/agents/main/agent/models.json}"
+export OPENCLAW_CONFIG_PATH OPENCLAW_MODELS_PATH
 DAILY_DIRECTION="${HT_LEAD_DAILY_DIRECTION:-具身智能}"
 
 case "$APP_DIR" in
@@ -42,6 +43,14 @@ case "$ENV_FILE" in
   *) echo "HT_LEAD_ENV_FILE must resolve to an absolute path" >&2; exit 64 ;;
 esac
 mkdir -p data reports-daily logs backups
+
+if command -v flock >/dev/null 2>&1; then
+  exec 9>data/daily-task.lock
+  if ! flock -n 9; then
+    echo "Another Lead Rader daily task is already running." >&2
+    exit 75
+  fi
+fi
 
 set -- run \
   --direction "$DAILY_DIRECTION" \
@@ -76,7 +85,7 @@ talent_draft_status=0
 if [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; then
   "$PYTHON_BIN" scripts/generate_talent_pool_drafts.py \
     --direction "$DAILY_DIRECTION" \
-    --generator openclaw \
+    --generator direct-llm \
     --report-dir reports-daily \
     --output-dir reports-daily/talent-pool \
     --state-db data/talent-pool.sqlite \

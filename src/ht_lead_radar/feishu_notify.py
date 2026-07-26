@@ -208,6 +208,35 @@ def find_report(
     return path, payload
 
 
+def find_talent_bundle(
+    output_dir: str | Path,
+    *,
+    run_date: str,
+    direction: str,
+    source_run_id: str = "",
+) -> dict[str, Any] | None:
+    candidates: list[tuple[float, dict[str, Any]]] = []
+    for path in Path(output_dir).glob("*.json"):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        if not isinstance(payload, Mapping):
+            continue
+        if (
+            str(payload.get("run_date") or "") == run_date
+            and str(payload.get("direction") or "") == direction
+            and (
+                not source_run_id
+                or str(payload.get("source_run_id") or "") == source_run_id
+            )
+        ):
+            candidates.append((path.stat().st_mtime, dict(payload)))
+    if not candidates:
+        return None
+    return max(candidates, key=lambda item: item[0])[1]
+
+
 def notification_key(
     *,
     run_date: str,
@@ -245,6 +274,7 @@ def build_summary(
     report: Mapping[str, Any] | None,
     talent_drafts: list[Mapping[str, Any]] | None = None,
     talent_generation_error: str = "",
+    company_demands: list[Mapping[str, Any]] | None = None,
 ) -> str:
     if task_exit_code == 0:
         status = "✅ 已完成"
@@ -273,12 +303,32 @@ def build_summary(
     manifest = report.get("manifest") or {}
     source_summary = manifest.get("source_summary") or {}
     source_failures = source_summary.get("failures") or []
+    demand_values = company_demands or []
+    demand_by_index = {
+        int(item["lead_index"]): item
+        for item in demand_values
+        if isinstance(item, Mapping) and isinstance(item.get("lead_index"), int)
+    }
+    analysis_failures = sum(
+        1 for item in demand_values if str(item.get("analysis_error") or "")
+    )
+    hypothesis_companies = sum(
+        1 for item in demand_values if item.get("hypotheses")
+    )
     lines.extend(
         [
             f"入选公司：{len(leads)} 家",
             f"信源异常：{len(source_failures)} 个",
         ]
     )
+    if demand_values:
+        lines.extend(
+            [
+                f"MiniMax 已分析：{len(demand_values)} 家",
+                f"形成具体岗位假设：{hypothesis_companies} 家",
+                f"分析失败：{analysis_failures} 家",
+            ]
+        )
     if leads:
         lines.append("")
         lines.append("公司排序：")
@@ -286,11 +336,20 @@ def build_summary(
             company = str(lead.get("company") or "公司未识别").strip()
             score = _format_score(lead.get("score"))
             grade = str(lead.get("confidence_grade") or "-").strip()
+            demand = demand_by_index.get(index) or {}
+            hypotheses = demand.get("hypotheses") or []
             roles = [
-                str(role).strip()
-                for role in (lead.get("target_roles") or [])
-                if str(role).strip()
+                str(item.get("specific_title") or "").strip()
+                for item in hypotheses
+                if isinstance(item, Mapping)
+                and str(item.get("specific_title") or "").strip()
             ]
+            if not demand_values:
+                roles = [
+                    str(role).strip()
+                    for role in (lead.get("target_roles") or [])
+                    if str(role).strip()
+                ]
             role_text = "、".join(roles[:3]) or "岗位待验证"
             lines.append(
                 f"{index}. {company}｜{score}分｜置信度 {grade}｜{role_text}"
@@ -300,8 +359,9 @@ def build_summary(
     lines.append("得分依据和完整证据请查看报告，由人工做最终判断。")
     lines.append("")
     if talent_generation_error:
-        lines.append(f"人才蓄水草稿生成失败：{talent_generation_error}")
-    elif talent_drafts:
+        detail = talent_generation_error[:500]
+        lines.append(f"职位草稿生成存在失败：{detail}")
+    if talent_drafts:
         lines.append(
             f"今日建议发布的人才蓄水职位（共 {len(talent_drafts)} 个）"
         )
@@ -319,12 +379,8 @@ def build_summary(
         lines.extend(
             [
                 "",
-                "可用指令：",
-                "- 发布全部",
-                "- 发布 1,3,5",
-                "- 跳过全部",
-                "- 查看 2 的完整广告 JSON",
-                "只有以上明确发布指令才构成批准；其他回复不会触发发布。",
+                "当前消息仅供人工审核；飞书入站审批与一键发布尚未接通。",
+                "如需批准，请明确要求 Codex/OpenClaw 查看当日草稿并执行审批流程。",
             ]
         )
     else:
@@ -337,6 +393,7 @@ def load_talent_drafts(
     *,
     run_date: str,
     direction: str,
+    source_run_id: str = "",
 ) -> list[dict[str, Any]]:
     path = Path(database)
     if not path.exists():
@@ -351,9 +408,10 @@ def load_talent_drafts(
               ON b.run_date=d.run_date AND b.direction=d.direction
              AND b.source_run_id=d.source_run_id
             WHERE d.run_date=? AND d.direction=?
+              AND (?='' OR d.source_run_id=?)
             ORDER BY d.ordinal
             """,
-            (run_date, direction),
+            (run_date, direction, source_run_id, source_run_id),
         ).fetchall()
     result = []
     for row in rows:
@@ -387,6 +445,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--env-file", required=True)
     parser.add_argument("--fallback-env-file")
     parser.add_argument("--talent-state-db", default="data/talent-pool.sqlite")
+    parser.add_argument(
+        "--talent-output-dir",
+        default="reports-daily/talent-pool",
+    )
     parser.add_argument("--talent-draft-exit-code", type=int, default=0)
     parser.add_argument("--force", action="store_true")
     return parser
@@ -413,19 +475,39 @@ def main(
         if args.task_exit_code not in {0, 2}:
             report_path = None
             report = None
+        source_run_id = str(
+            ((report or {}).get("manifest") or {}).get("run_id") or ""
+        )
+        talent_bundle = (
+            find_talent_bundle(
+                args.talent_output_dir,
+                run_date=args.run_date,
+                direction=args.direction,
+                source_run_id=source_run_id,
+            )
+            if report and source_run_id
+            else None
+        )
         talent_drafts = (
             load_talent_drafts(
                 args.talent_state_db,
                 run_date=args.run_date,
                 direction=args.direction,
+                source_run_id=source_run_id,
             )
-            if args.talent_draft_exit_code == 0 and report
+            if talent_bundle
             else []
         )
-        talent_generation_error = (
-            f"退出码 {args.talent_draft_exit_code}"
-            if args.talent_draft_exit_code != 0 and report
-            else ""
+        talent_generation_error = str(
+            (talent_bundle or {}).get("generation_error") or ""
+        ).strip()
+        if args.talent_draft_exit_code != 0 and report:
+            exit_detail = f"退出码 {args.talent_draft_exit_code}"
+            talent_generation_error = "; ".join(
+                item for item in (exit_detail, talent_generation_error) if item
+            )
+        company_demands = list(
+            (talent_bundle or {}).get("company_demand_analysis") or []
         )
         key = notification_key(
             run_date=args.run_date,
@@ -447,6 +529,7 @@ def main(
             report=report,
             talent_drafts=talent_drafts,
             talent_generation_error=talent_generation_error,
+            company_demands=company_demands,
         )
         message_id = client_class(app_id, app_secret).send_text(
             recipient,

@@ -109,8 +109,8 @@ def test_real_liepin_contract_fields_and_advertisement_shape():
         assert payload["work_experience_years"] == [10]
         assert payload["salary_low"].endswith("k")
         assert payload["salary_high"].endswith("k")
-        assert "人才蓄水说明" in payload["position_scope"]
-        assert "不代表某一特定企业当前已有正式招聘委托" in payload["position_scope"]
+        assert "人才蓄水" not in payload["position_scope"]
+        assert "长期机会储备" not in payload["position_scope"]
         assert "核心职责：1." in payload["position_scope"]
         assert "任职要求：1." in payload["position_scope"]
         assert len(payload["position_scope"]) <= 500
@@ -119,7 +119,7 @@ def test_real_liepin_contract_fields_and_advertisement_shape():
 def test_anonymization_gate_and_contract_reject_invalid_payload():
     draft = generate_draft_bundle(sample_report()).drafts[0]
     with pytest.raises(ValueError, match="leaks"):
-        assert_anonymized(draft.public_payload, forbidden_terms=["人才蓄水"])
+        assert_anonymized(draft.public_payload, forbidden_terms=["岗位使命"])
     broken = dict(draft.public_payload)
     broken["seniority"] = "总监"
     with pytest.raises(ValueError, match="seniority"):

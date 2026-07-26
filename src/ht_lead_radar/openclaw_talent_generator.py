@@ -1,91 +1,42 @@
-"""Generate talent-pool copy through the configured OpenClaw main agent.
+"""Generate structured role analysis and job copy with a direct LLM call.
 
-OpenClaw remains the model/provider control plane. This module only supplies a
-strict prompt, extracts the structured response, and applies deterministic
-Lead Rader safety and Liepin-contract validation before anything is persisted.
+OpenClaw remains the credential and model configuration owner. Lead Radar reads
+that configuration and calls the provider API without invoking an OpenClaw Agent.
 """
 
 from __future__ import annotations
 
 import json
-import os
 import re
-import subprocess
 import uuid
 from dataclasses import replace
 from typing import Any, Mapping, Protocol
 
+from .talent_ad_policy import advertisement_specificity_policy
+from .openclaw_llm import OpenClawConfiguredLLMRunner
+from .talent_ad_repair import build_ad_repair_prompt, draft_response_issues
 from .talent_pool import (
     DraftBundle,
     TalentPoolDraft,
     assert_anonymized,
     canonical_payload_hash,
     generate_draft_bundle,
-    is_director_plus,
     validate_liepin_payload,
+)
+from .talent_demand_analysis import (
+    build_company_demand_prompt,
+    enrich_report_with_company_demands,
+    is_specific_director_title,
+    parse_company_demand_analysis,
 )
 
 
 class OpenClawGenerationError(RuntimeError):
-    """Raised when OpenClaw cannot return a safe, valid draft bundle."""
+    """Raised when the configured LLM cannot return a safe, valid draft bundle."""
 
 
 class PromptRunner(Protocol):
     def run(self, prompt: str, *, session_id: str) -> str: ...
-
-
-class OpenClawAgentRunner:
-    """Call the server's configured OpenClaw main agent through its Gateway."""
-
-    def __init__(
-        self,
-        *,
-        executable: str | None = None,
-        agent: str = "main",
-        thinking: str = "medium",
-        timeout_seconds: int = 600,
-    ) -> None:
-        self.executable = executable or os.environ.get("OPENCLAW_BIN", "openclaw")
-        self.agent = agent
-        self.thinking = thinking
-        self.timeout_seconds = timeout_seconds
-
-    def run(self, prompt: str, *, session_id: str) -> str:
-        command = [
-            self.executable,
-            "agent",
-            "--agent",
-            self.agent,
-            "--session-id",
-            session_id,
-            "--message",
-            prompt,
-            "--thinking",
-            self.thinking,
-            "--timeout",
-            str(self.timeout_seconds),
-            "--json",
-        ]
-        try:
-            completed = subprocess.run(
-                command,
-                check=False,
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                timeout=self.timeout_seconds + 30,
-            )
-        except (OSError, subprocess.TimeoutExpired) as error:
-            raise OpenClawGenerationError(
-                f"OpenClaw invocation failed: {type(error).__name__}: {error}"
-            ) from error
-        if completed.returncode != 0:
-            detail = (completed.stderr or completed.stdout).strip()
-            raise OpenClawGenerationError(
-                f"OpenClaw exited with {completed.returncode}: {detail[-1000:]}"
-            )
-        return _extract_agent_text(completed.stdout)
 
 
 def _json_objects(text: str) -> list[Any]:
@@ -100,30 +51,6 @@ def _json_objects(text: str) -> list[Any]:
             continue
         objects.append(value)
     return objects
-
-
-def _extract_agent_text(stdout: str) -> str:
-    """Extract the assistant text from OpenClaw's JSON CLI envelope."""
-
-    envelopes = [item for item in _json_objects(stdout) if isinstance(item, dict)]
-    for envelope in reversed(envelopes):
-        result = envelope.get("result")
-        if isinstance(result, Mapping):
-            payloads = result.get("payloads")
-            if isinstance(payloads, list):
-                texts = [
-                    item.get("text")
-                    for item in payloads
-                    if isinstance(item, Mapping)
-                    and isinstance(item.get("text"), str)
-                ]
-                if texts:
-                    return "\n".join(texts)
-        for key in ("text", "output", "reply", "message", "content"):
-            value = envelope.get(key)
-            if isinstance(value, str) and value.strip():
-                return value
-    raise OpenClawGenerationError("OpenClaw output did not contain assistant text")
 
 
 def _response_payload(text: str) -> dict[str, Any]:
@@ -155,73 +82,94 @@ def _forbidden_public_terms(report: Mapping[str, Any]) -> set[str]:
     return {item for item in terms if item}
 
 
-def _seed_payload(bundle: DraftBundle) -> list[dict[str, Any]]:
-    seeds: list[dict[str, Any]] = []
-    for ordinal, draft in enumerate(bundle.drafts, start=1):
-        seeds.append(
+def _numbered(items: list[str]) -> str:
+    return "；".join(f"{index}.{item}" for index, item in enumerate(items, start=1))
+
+
+def _few_shot_example(
+    bundle: DraftBundle,
+    company_demands: tuple[dict[str, Any], ...],
+) -> dict[str, Any]:
+    """Build one fully shaped example from the first inferred demand."""
+
+    draft = bundle.drafts[0]
+    hypothesis = company_demands[0]["hypotheses"][0]
+    title = str(hypothesis["specific_title"])
+    mandate = str(hypothesis["mandate"])
+    why_now = str(hypothesis["why_now"])
+    responsibilities = [str(item) for item in hypothesis["responsibilities"]]
+    must_have = [str(item) for item in hypothesis["must_have"]]
+    preferred = [str(item) for item in hypothesis["preferred"]]
+    payload = dict(draft.public_payload)
+    payload.update(
+        {
+            "position_name": title,
+            "position_scope": (
+                f"岗位使命：{mandate}。核心职责：{_numbered(responsibilities)}。"
+                f"任职要求：{_numbered(must_have)}。机会亮点：{why_now}。"
+            )[:500],
+            "cities": [str(hypothesis["city"])],
+            "must_have_signals": must_have,
+            "preferred_signals": preferred,
+        }
+    )
+    return {
+        "drafts": [
             {
-                "ordinal": ordinal,
-                "internal_market_signals": [
-                    {
-                        "company": lead.company,
-                        "score": lead.score,
-                        "role_hypotheses": list(lead.role_hypotheses),
-                        "event_types": list(lead.event_types),
-                    }
-                    for lead in draft.source_leads
-                ],
-                "seed_role_family": draft.role_family,
-                "seed_persona": draft.talent_persona,
-                "seed_title": draft.recommended_title,
-                "seed_attraction_angle": draft.attraction_angle,
-                "required_liepin_shape": draft.public_payload,
+                "ordinal": 1,
+                "talent_persona": f"能够承担‘{mandate}’任务的总监级人才",
+                "role_family": title,
+                "attraction_angle": why_now,
+                "recommended_title": title,
+                "why_now": why_now,
+                "public_payload": payload,
             }
-        )
-    return seeds
+        ]
+    }
 
 
-def build_openclaw_prompt(bundle: DraftBundle) -> str:
-    seeds = _seed_payload(bundle)
+def build_openclaw_prompt(
+    bundle: DraftBundle,
+    company_demands: tuple[dict[str, Any], ...] = (),
+) -> str:
+    draft_count = len(bundle.drafts)
+    example = _few_shot_example(bundle, company_demands)
     return f"""
-你是 Lead Rader 的“市场信号驱动人才蓄水广告生成器”。禁止调用任何工具，
-只根据下面给出的内部市场信号生成严格 JSON。
+{advertisement_specificity_policy()}
+
+你是 Lead Rader 的“市场信号驱动职位广告生成器”。请只根据给出的公司需求分析
+生成严格 JSON。
 
 目标：
-- 为猎头的人才蓄水而写，不声称任何具体公司存在真实委托或正式空缺。
+- 根据市场信号写有吸引力、可公开发布的匿名职位广告。
 - 每条均为总监级以上；经理、专家、Principal、Staff、Fellow 均不允许。
 - 同批画像、职责和吸引角度必须有实质差异，不能只换词。
 - 公开 payload 必须彻底匿名：不得出现公司、创始人、投资人、独有产品、
   独家客户、融资轮次、精确办公地点或能反推雇主的组合线索。
 - 文案有吸引力但不得捏造股权、融资、团队规模、汇报关系或薪酬承诺。
-- position_scope 用中文完整写出：匿名蓄水声明、岗位使命、5-8 条职责、
+- position_scope 直接用中文完整写出岗位使命、5-8 条职责、
   5-8 条要求和机会亮点；总长度不超过 500 个字符。
-- public_payload 必须保留 required_liepin_shape 的全部字段、字段类型和枚举
-  形式；work_experience_years 必须为 [10]；薪资保持 xxk，最高不超过 85k，
+- public_payload 的字段、字段类型和枚举形式与输出示例完全一致；
+  work_experience_years 必须为 [10]；薪资保持 xxk，最高不超过 85k，
   区间差不超过 20k。
 
-只返回一个 JSON 对象，不要 Markdown，不要解释：
-{{
-  "drafts": [
-    {{
-      "ordinal": 1,
-      "talent_persona": "匿名、可跨客户复用的人才画像",
-      "role_family": "职能族",
-      "attraction_angle": "吸引角度",
-      "recommended_title": "总监级以上标题",
-      "why_now": "为什么现在值得蓄水，不出现公司名",
-      "public_payload": {{...与 required_liepin_shape 相同的字段...}}
-    }}
-  ]
-}}
+公司需求分析：
+{json.dumps(company_demands, ensure_ascii=False, separators=(",", ":"))}
 
-必须恰好返回 {len(seeds)} 条，ordinal 必须完整覆盖 1..{len(seeds)}。
-内部输入如下（其中公司名只用于推理，严禁复制到输出）：
-{json.dumps(seeds, ensure_ascii=False, separators=(",", ":"))}
+单条输出示例（展示完整字段和所需具体程度）：
+{json.dumps(example, ensure_ascii=False, separators=(",", ":"))}
+
+请基于公司需求分析恰好生成 {draft_count} 条，ordinal 完整覆盖 1..{draft_count}。
+每条使用相应需求推理中的具体业务任务、技术词和能力要求。
+只返回一个 JSON 对象 {{"drafts": [...]}}，不要 Markdown，不要解释。
 """.strip()
 
 
-def _session_id(bundle: DraftBundle) -> str:
-    identity = f"{bundle.source_run_id}\x1f{bundle.run_date}\x1f{bundle.direction}"
+def _session_id(bundle: DraftBundle, phase: str) -> str:
+    identity = (
+        f"{bundle.source_run_id}\x1f{bundle.run_date}\x1f"
+        f"{bundle.direction}\x1f{phase}"
+    )
     return str(uuid.uuid5(uuid.NAMESPACE_URL, "lead-rader:" + identity))
 
 
@@ -231,19 +179,64 @@ def generate_openclaw_draft_bundle(
     target_count: int = 5,
     runner: PromptRunner | None = None,
 ) -> DraftBundle:
-    """Generate with OpenClaw, then fail closed on any contract/safety issue."""
+    """Generate with the direct LLM, then fail closed on every validation issue."""
 
-    seed_bundle = generate_draft_bundle(report, target_count=target_count)
-    if not seed_bundle.drafts:
-        return replace(seed_bundle, schema_version=2, generation_provider="openclaw-main")
-
-    active_runner = runner or OpenClawAgentRunner()
+    initial_bundle = generate_draft_bundle(report, target_count=target_count)
+    if not initial_bundle.drafts:
+        return replace(
+            initial_bundle,
+            schema_version=3,
+            generation_provider="direct-llm-openclaw-config-two-stage",
+        )
+    active_runner = runner or OpenClawConfiguredLLMRunner()
+    company_demands = parse_company_demand_analysis(
+        active_runner.run(
+            build_company_demand_prompt(report),
+            session_id=_session_id(initial_bundle, "company-demand"),
+        ),
+        report=report,
+    )
+    enhanced_report = enrich_report_with_company_demands(report, company_demands)
+    seed_bundle = generate_draft_bundle(
+        enhanced_report,
+        target_count=target_count,
+    )
     response = _response_payload(
         active_runner.run(
-            build_openclaw_prompt(seed_bundle),
-            session_id=_session_id(seed_bundle),
+            build_openclaw_prompt(seed_bundle, company_demands),
+            session_id=_session_id(seed_bundle, "advertisement"),
         )
     )
+    forbidden = _forbidden_public_terms(report)
+    issues = draft_response_issues(
+        response,
+        seed_bundle=seed_bundle,
+        company_demands=company_demands,
+        forbidden_terms=forbidden,
+    )
+    if issues:
+        response = _response_payload(
+            active_runner.run(
+                build_ad_repair_prompt(
+                    seed_bundle=seed_bundle,
+                    company_demands=company_demands,
+                    rejected_response=response,
+                    issues=issues,
+                ),
+                session_id=_session_id(seed_bundle, "advertisement-repair"),
+            )
+        )
+        issues = draft_response_issues(
+            response,
+            seed_bundle=seed_bundle,
+            company_demands=company_demands,
+            forbidden_terms=forbidden,
+        )
+        if issues:
+            raise OpenClawGenerationError(
+                "LLM response failed validation after one repair: "
+                + "; ".join(issues)
+            )
     values = response.get("drafts")
     if not isinstance(values, list) or len(values) != len(seed_bundle.drafts):
         raise OpenClawGenerationError(
@@ -262,6 +255,12 @@ def generate_openclaw_draft_bundle(
     if set(by_ordinal) != expected:
         raise OpenClawGenerationError("draft ordinals must exactly cover the seed set")
 
+    specificity_terms = {
+        term.casefold()
+        for demand in company_demands
+        for hypothesis in demand["hypotheses"]
+        for term in hypothesis["specificity_terms"]
+    }
     forbidden = _forbidden_public_terms(report)
     generated: list[TalentPoolDraft] = []
     for ordinal, seed in enumerate(seed_bundle.drafts, start=1):
@@ -278,9 +277,9 @@ def generate_openclaw_draft_bundle(
             if not text:
                 raise OpenClawGenerationError(f"draft {ordinal} has empty {key}")
             strings[key] = text
-        if not is_director_plus(strings["recommended_title"]):
+        if not is_specific_director_title(strings["recommended_title"]):
             raise OpenClawGenerationError(
-                f"draft {ordinal} recommended_title is not Director+"
+                f"draft {ordinal} recommended_title is too broad or not Director+"
             )
         payload = value.get("public_payload")
         if not isinstance(payload, dict):
@@ -291,6 +290,18 @@ def generate_openclaw_draft_bundle(
             )
         try:
             validate_liepin_payload(payload)
+            if str(payload["position_name"]).strip() != strings["recommended_title"]:
+                raise ValueError(
+                    "position_name must equal the specific recommended_title"
+                )
+            public_text = json.dumps(payload, ensure_ascii=False).casefold()
+            matched_terms = {
+                term for term in specificity_terms if term and term in public_text
+            }
+            if len(matched_terms) < 2:
+                raise ValueError(
+                    "public payload must contain at least two specificity terms"
+                )
             assert_anonymized(payload, forbidden_terms=forbidden)
             assert_anonymized(
                 {
@@ -318,21 +329,23 @@ def generate_openclaw_draft_bundle(
             )
         )
     if len({item.payload_hash for item in generated}) != len(generated):
-        raise OpenClawGenerationError("OpenClaw returned duplicate public payloads")
+        raise OpenClawGenerationError("LLM returned duplicate public payloads")
     if len({item.talent_persona for item in generated}) != len(generated):
-        raise OpenClawGenerationError("OpenClaw returned duplicate talent personas")
+        raise OpenClawGenerationError("LLM returned duplicate talent personas")
+    if len({item.recommended_title for item in generated}) != len(generated):
+        raise OpenClawGenerationError("LLM returned duplicate titles")
     return DraftBundle(
-        schema_version=2,
+        schema_version=3,
         run_date=seed_bundle.run_date,
         direction=seed_bundle.direction,
         source_run_id=seed_bundle.source_run_id,
         drafts=tuple(generated),
-        generation_provider="openclaw-main",
+        generation_provider="direct-llm-openclaw-config-two-stage",
+        company_demand_analysis=company_demands,
     )
 
 
 __all__ = [
-    "OpenClawAgentRunner",
     "OpenClawGenerationError",
     "build_openclaw_prompt",
     "generate_openclaw_draft_bundle",

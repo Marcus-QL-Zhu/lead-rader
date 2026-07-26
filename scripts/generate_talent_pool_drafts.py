@@ -12,7 +12,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from ht_lead_radar.feishu_notify import find_report
-from ht_lead_radar.openclaw_talent_generator import generate_openclaw_draft_bundle
+from ht_lead_radar.direct_talent_generator import generate_direct_talent_bundle
 from ht_lead_radar.talent_pool import generate_draft_bundle, write_draft_bundle
 from ht_lead_radar.talent_pool_store import TalentPoolStore
 
@@ -28,14 +28,17 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--target-count", type=int, default=5)
     parser.add_argument(
         "--generator",
-        choices=("openclaw", "template"),
-        default="openclaw",
-        help="openclaw uses the configured main Agent API; template is offline fallback",
+        choices=("direct-llm", "openclaw", "template"),
+        default="direct-llm",
+        help=(
+            "direct-llm calls the provider API with OpenClaw-owned credentials; "
+            "openclaw is a legacy alias; template is offline fallback"
+        ),
     )
     parser.add_argument(
         "--allow-template-fallback",
         action="store_true",
-        help="explicitly allow deterministic fallback when OpenClaw generation fails",
+        help="explicitly allow deterministic fallback when direct LLM generation fails",
     )
     return parser
 
@@ -62,15 +65,15 @@ def main(argv: list[str] | None = None) -> int:
         if not str(manifest.get("run_id") or ""):
             raise ValueError("report manifest requires run_id for audit")
         try:
-            if args.generator == "openclaw":
-                bundle = generate_openclaw_draft_bundle(
+            if args.generator in {"direct-llm", "openclaw"}:
+                bundle = generate_direct_talent_bundle(
                     report,
                     target_count=args.target_count,
                 )
             else:
                 bundle = generate_draft_bundle(report, target_count=args.target_count)
         except Exception:
-            if args.generator != "openclaw" or not args.allow_template_fallback:
+            if args.generator not in {"direct-llm", "openclaw"} or not args.allow_template_fallback:
                 raise
             bundle = generate_draft_bundle(report, target_count=args.target_count)
         direction_key = "".join(
@@ -86,16 +89,17 @@ def main(argv: list[str] | None = None) -> int:
         print(
             json.dumps(
                 {
-                    "status": "ok",
+                    "status": "partial" if bundle.generation_error else "ok",
                     "draft_count": len(bundle.drafts),
                     "output": str(output),
                     "source_report": str(report_path),
                     "generation_provider": bundle.generation_provider,
+                    "generation_error": bundle.generation_error,
                 },
                 ensure_ascii=False,
             )
         )
-        return 0
+        return 72 if bundle.generation_error else 0
     except Exception as error:
         print(
             f"talent-pool generation failed: {type(error).__name__}: {error}",

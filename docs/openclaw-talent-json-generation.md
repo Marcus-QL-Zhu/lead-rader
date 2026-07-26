@@ -1,34 +1,54 @@
-# OpenClaw 人才蓄水 JSON 生成
+# 复用 OpenClaw 凭证的直接 LLM JSON 生成
 
-## 算力归属
+## 算力与调用边界
 
-05:00 生产流程默认使用 OpenClaw `main` Agent：
+05:00 生产流程读取 OpenClaw `main` 的模型与 Provider 配置，但不调用
+OpenClaw Agent。当前服务器解析出的配置是：
 
-```bash
-openclaw agent --agent main --session-id <deterministic-uuid> \
-  --message <structured-prompt> --thinking medium --json
+```text
+provider: minimax
+model: MiniMax-M2.7-highspeed
+base URL: https://api.minimaxi.com/v1
+API protocol: OpenAI-compatible Chat Completions
 ```
 
-该命令经 OpenClaw Gateway 使用 `main` Agent 当前配置的主模型与凭证。
-Lead Rader 不复制、不保存上游模型 API Key，也不把模板当作生产默认算力。
+实际调用链：
 
-## 生成与验证边界
+```text
+Lead Radar
+  → 读取 OpenClaw 主模型和 Provider 配置
+  → POST /v1/chat/completions
+  → 解析结构化 JSON
+  → 执行确定性校验
+```
 
-Lead Rader 先用确定性规则把当日 Lead 聚合为 3–10 个安全种子。OpenClaw
-负责生成人才画像、职能、吸引角度、Director+ 标题、why-now 和完整猎聘
-payload 文案。
+因此不会继承 OpenClaw Agent 的 system prompt、Skills、会话历史或工具层。
+Lead Radar 不复制、不保存、不记录 API Key；凭证只在请求生命周期中从
+OpenClaw 配置或其环境变量读取。
 
-模型输出不能直接落库，必须依次通过以下确定性闸门：
+## 配置来源
 
-- 返回数量和 ordinal 与种子一一对应；
-- 标题为总监级以上；
-- `public_payload` 字段集合、类型和枚举符合现有猎聘 Skills；
-- 工龄、薪资区间和城市字段合法；
-- 公司、创始人、投资人、产品、客户等内部标识没有泄漏；
-- 同批人才画像和公开 payload 不重复。
+```text
+/home/admin/.openclaw/openclaw.json
+/home/admin/.openclaw/agents/main/agent/models.json
+```
 
-任何验证失败都 fail-closed：当日日报显示“草稿生成失败”，不读取前一天
-草稿，也不会进入猎聘发布链路。
+生产脚本通过 `OPENCLAW_CONFIG_PATH` 和 `OPENCLAW_MODELS_PATH` 指向上述文件。
+可以用 `LEAD_RADAR_LLM_MODEL=provider/model` 显式覆盖模型，但 Provider 仍必须
+存在于 OpenClaw 的 `models.json` 中。
+
+## Evidence-bound 分阶段生成
+
+1. Evidence Compiler 为每家公司选择跨事件类型的公开证据并分配稳定 `evidence_id`。
+2. MiniMax 每次只分析一家公司，先判断阶段变化和能力缺口，再决定是否形成 0–3 个 Director+ 岗位。
+3. 每个岗位必须引用真实 `evidence_id`；证据不足时只返回 `watch_for`，不生成职位。
+4. 具体岗位按职能和能力词聚成可复用人才主题，并保留来源岗位 ID。
+5. MiniMax 每次只为一个主题生成一条猎聘 JSON；失败时只允许一次主题级修复。
+
+请求使用独立 system/user message，并启用 `reasoning_split=true`。模型输出在持久化
+前必须通过 evidence 引用、具体职位标题、主题标题一致性、主题自己的关键词、
+单城市、猎聘字段、匿名化及同批去重校验。失败时 fail-closed，不读取旧草稿，
+也不会进入猎聘发布链路。
 
 ## 模板 fallback
 
@@ -36,21 +56,11 @@ payload 文案。
 
 ```bash
 python scripts/generate_talent_pool_drafts.py \
-  --generator openclaw \
+  --generator direct-llm \
   --allow-template-fallback \
   ...
 ```
 
-也可以人工指定 `--generator template` 做离线测试。05:00 生产脚本不启用
-fallback，避免 API 失败时悄悄把模板结果冒充模型结果。
+05:00 生产脚本不启用 fallback，避免 API 失败时把模板结果冒充模型结果。
 
-## 当前生产路径
-
-服务器 OpenClaw 可执行文件：
-
-```text
-/home/admin/.local/share/pnpm/openclaw
-```
-
-生产启动脚本将该路径写入 `OPENCLAW_BIN`，不依赖 cron 的默认 `PATH`。
 本次代码仍只在本地修改；用户验收前不部署服务器、不推送 GitHub。

@@ -29,6 +29,13 @@ DIRECTOR_MARKERS = (
     "首席",
 )
 EXCLUDED_MARKERS = ("经理", "专家", "principal", "staff", "fellow")
+PUBLIC_DISCLAIMER_MARKERS = (
+    "人才蓄水",
+    "长期机会储备",
+    "不代表特定企业",
+    "不代表某一特定企业",
+    "不构成任何企业真实招聘委托",
+)
 
 
 @dataclass(frozen=True)
@@ -71,6 +78,8 @@ class DraftBundle:
     drafts: tuple[TalentPoolDraft, ...]
     generation_error: str = ""
     generation_provider: str = "template"
+    company_demand_analysis: tuple[dict[str, Any], ...] = ()
+    talent_themes: tuple[dict[str, Any], ...] = ()
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -250,15 +259,17 @@ def validate_liepin_payload(payload: Mapping[str, Any]) -> None:
     scope = str(payload["position_scope"]).strip()
     if not scope or len(scope) > 500:
         raise ValueError("position_scope must contain 1-500 characters")
+    if any(marker in scope for marker in PUBLIC_DISCLAIMER_MARKERS):
+        raise ValueError("position_scope contains unsupported prefatory text")
     if payload["seniority"] not in LIEPIN_SENIORITY:
         raise ValueError("invalid Liepin seniority enum")
     if payload["education"] not in LIEPIN_EDUCATION:
         raise ValueError("invalid Liepin education enum")
     cities = payload["cities"]
-    if not isinstance(cities, list) or not cities or not all(
+    if not isinstance(cities, list) or len(cities) != 1 or not all(
         isinstance(item, str) and item.strip() for item in cities
     ):
-        raise ValueError("cities must be a non-empty string list")
+        raise ValueError("cities must contain exactly one city")
     for key in ("salary_low", "salary_high"):
         if not re.fullmatch(r"\d+k", str(payload[key])):
             raise ValueError(f"{key} must use the Liepin '30k' format")
@@ -357,8 +368,6 @@ def _scope(template: RoleTemplate, direction: str, angle: str) -> str:
         f"{index + 1}.{item}" for index, item in enumerate(template.requirements)
     )
     return (
-        f"人才蓄水说明：本广告用于{direction or '硬科技'}领域人才交流与长期机会储备，"
-        "不代表某一特定企业当前已有正式招聘委托。"
         f"岗位使命：围绕{angle}，承担团队、预算与业务结果责任。"
         f"核心职责：{responsibilities}。任职要求：{requirements}。"
         "机会亮点：可参与复杂技术走向规模化的关键阶段，并建设长期组织能力。"

@@ -24,10 +24,9 @@ def test_feishu_summary_includes_drafts_and_exact_commands(tmp_path):
     )
     assert "今日建议发布的人才蓄水职位（共 5 个）" in text
     assert bundle.drafts[0].draft_id in text
-    assert "发布全部" in text
-    assert "发布 1,3,5" in text
-    assert "跳过全部" in text
-    assert "查看 2 的完整广告 JSON" in text
+    assert "发布全部" not in text
+    assert "飞书入站审批与一键发布尚未接通" in text
+    assert "明确要求 Codex/OpenClaw" in text
     assert "星火机器人" in text  # market lead section remains internal to user
 
 
@@ -41,7 +40,7 @@ def test_feishu_summary_surfaces_generation_failure_without_stale_drafts(tmp_pat
         talent_drafts=[],
         talent_generation_error="退出码 71",
     )
-    assert "人才蓄水草稿生成失败：退出码 71" in text
+    assert "职位草稿生成存在失败：退出码 71" in text
     assert "今日建议发布的人才蓄水职位" not in text
 
 
@@ -55,6 +54,31 @@ def test_daily_launcher_generates_before_the_single_feishu_notification():
     assert script.count("scripts/send_daily_feishu_summary.py") == 1
     assert "--talent-state-db data/talent-pool.sqlite" in script
     assert '--talent-draft-exit-code "$talent_draft_status"' in script
-    assert "--generator openclaw" in script
-    assert "/home/admin/.local/share/pnpm/openclaw" in script
+    assert "--generator direct-llm" in script
+    assert "/home/admin/.openclaw/openclaw.json" in script
+    assert "/home/admin/.openclaw/agents/main/agent/models.json" in script
     assert 'exit "$talent_draft_status"' in script
+    assert "flock -n 9" in script
+
+def test_feishu_company_list_prefers_evidence_bound_minimax_roles(tmp_path):
+    report = sample_report(leads=1)
+    text = build_summary(
+        run_date="2026-07-26",
+        direction="具身智能",
+        task_exit_code=0,
+        report_path=tmp_path / "report.json",
+        report=report,
+        company_demands=[
+            {
+                "lead_index": 1,
+                "company": "星火机器人",
+                "hypotheses": [
+                    {"specific_title": "运动控制算法工程化总监"}
+                ],
+            }
+        ],
+    )
+
+    assert "MiniMax 已分析：1 家" in text
+    assert "运动控制算法工程化总监" in text
+    assert "机器人研发总监" not in text
