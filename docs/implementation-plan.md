@@ -268,3 +268,32 @@ Float 失败后跨进程不能 resume，这是有意的数据治理结果：候�
 - 最终验收详情：`docs/delivery-status-2026-07-25.md`。
 
 完整交付后只应继续处理外部配置、被允许的新信源适配或用户提出的新迭代，不得重新把已排除的触达发送、简历库或原生结果评分系统加入范围。
+
+# 2026-07-26：Evidence-bound MiniMax 重构
+
+状态：本地实现完成，等待用户验收；尚未同步 GitHub 或服务器。
+
+- [x] 固定信源证据编译为逐公司 packet，并生成稳定 `evidence_id`
+- [x] 证据按事件类型、来源等级和时间多样化选择，不再截取前六条
+- [x] MiniMax 改为一家公司一次调用
+- [x] 允许证据不足时返回空岗位与 `watch_for`
+- [x] 岗位必须引用 packet 中真实存在的 `evidence_id`
+- [x] 统一时间窗口为 `near_term`（0–90 天）与 `watchlist`（91–180 天）
+- [x] 具体岗位显式聚簇为人才主题，保留来源岗位 ID
+- [x] MiniMax 改为一个人才主题一次 JD 调用
+- [x] 标题、城市和 specificity terms 按当前主题独立校验
+- [x] 请求拆分 system/user message，并启用 `reasoning_split=true`
+- [x] 公司岗位标题强制使用无歧义 Director+ 职级，裸“负责人”不通过
+- [x] 候选人 preferred 能力与人工待核问题分离
+- [x] 人才主题优先选择独立证据更多的假设
+- [x] 公司分析与 JD 分别保留一次有界修复和 fail-closed
+- [x] 确定性执行证据门槛，单条融资和单条招聘广告不能形成 near-term 岗位
+- [x] LLM 有限重试、240 秒单次超时、3600 秒批次 deadline、每日任务防重叠锁
+- [x] 部分分析失败非零退出并进入飞书；公司列表改用 MiniMax 具体岗位
+- [x] 未知城市不进入可发布主题；飞书不再展示尚未接通的发布指令
+- [x] 飞书严格匹配当前报告 source_run_id，生成硬失败时不读取同日旧草稿
+- [x] 真实 MiniMax 临时链路验收：生成“运动控制算法工程化总监”，单城市上海，绑定两条证据
+- [x] 本地自动化验收：224 tests passed，Ruff、compileall、git diff --check 全部通过
+- [ ] 用户验收
+- [ ] 子代理 full code review（仅在准备更新 GitHub 前执行）
+- [ ] Commit、Push、GitHub Actions、按 GitHub SHA 部署服务器

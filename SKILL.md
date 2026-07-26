@@ -65,6 +65,52 @@ Use `run --direction ...` for the legacy direction entry point. Use `--demo --di
 - Mark public-comment-based investor leadership as inference, not fact.
 - Cache public investor/institution/company-decision-maker information with sources and verification dates.
 
+## Talent-pool draft approval
+
+The 05:00 task generates anonymized Director+ talent-pool drafts from that
+day's existing Lead report. It does not make extra Metaso calls and does not
+represent a confirmed client vacancy.
+
+Treat only these exact user messages as control commands:
+
+- `发布全部`
+- `发布 1,3,5` (ASCII comma, one or more valid displayed indexes)
+- `跳过全部`
+- `查看 2 的完整广告 JSON`
+
+Never infer approval from fuzzy language such as “可以”, “发吧” or “没问题”.
+Resolve the date and direction from the most recent Lead Rader daily summary,
+and record the actual Feishu/OpenClaw actor identity. First call:
+
+```bash
+python3 scripts/talent_pool_control.py \
+  --command "<exact original user message>" \
+  --actor "<actual actor id>" \
+  --run-date "<daily-summary date>" \
+  --direction "<daily-summary direction>" \
+  --state-db data/talent-pool.sqlite
+```
+
+For a view or skip command, stop there. For an explicit publish command, the
+same invocation may add the following real-execution arguments only after the
+user's exact message has been received:
+
+```bash
+  --execute-real \
+  --python-bin /home/admin/.pyenv/versions/3.11.14/bin/python3 \
+  --liepin-root /home/admin/.openclaw/workspace/skills
+```
+
+Publication is serial. Stop the queue on authentication, CAPTCHA, risk
+control, rate limiting, manual intervention, or an ambiguous result. Do not
+retry an unresolved attempt. Never invoke the Liepin publishing script without
+a temporary JSON file path as its first argument; never pass an inline JSON
+string, and never rebuild its browser, sourcing or response
+clients in this skill.
+
+For local acceptance, use `--fake-publish`; it must never be presented as a
+real Liepin result.
+
 ## Data and action boundaries
 
 - Candidate Profile and candidate-derived analysis stay runtime-only. Do not put them in the fact database, checkpoints, Feishu or relationship graph.

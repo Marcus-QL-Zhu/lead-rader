@@ -14,6 +14,9 @@ if [ -z "${PYTHON_BIN:-}" ]; then
     PYTHON_BIN="python3"
   fi
 fi
+OPENCLAW_CONFIG_PATH="${OPENCLAW_CONFIG_PATH:-/home/admin/.openclaw/openclaw.json}"
+OPENCLAW_MODELS_PATH="${OPENCLAW_MODELS_PATH:-/home/admin/.openclaw/agents/main/agent/models.json}"
+export OPENCLAW_CONFIG_PATH OPENCLAW_MODELS_PATH
 DAILY_DIRECTION="${HT_LEAD_DAILY_DIRECTION:-具身智能}"
 
 case "$APP_DIR" in
@@ -40,6 +43,14 @@ case "$ENV_FILE" in
   *) echo "HT_LEAD_ENV_FILE must resolve to an absolute path" >&2; exit 64 ;;
 esac
 mkdir -p data reports-daily logs backups
+
+if command -v flock >/dev/null 2>&1; then
+  exec 9>data/daily-task.lock
+  if ! flock -n 9; then
+    echo "Another Lead Rader daily task is already running." >&2
+    exit 75
+  fi
+fi
 
 set -- run \
   --direction "$DAILY_DIRECTION" \
@@ -70,6 +81,17 @@ fi
 "$PYTHON_BIN" scripts/run_lead_radar_v2.py "$@"
 
 status=$?
+talent_draft_status=0
+if [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; then
+  "$PYTHON_BIN" scripts/generate_talent_pool_drafts.py \
+    --direction "$DAILY_DIRECTION" \
+    --generator direct-llm \
+    --report-dir reports-daily \
+    --output-dir reports-daily/talent-pool \
+    --state-db data/talent-pool.sqlite \
+    || talent_draft_status=$?
+fi
+
 "$PYTHON_BIN" scripts/run_lead_radar_v2.py monitor \
   --runtime-db data/runtime.sqlite \
   --source-health-db data/fixed-sources.sqlite \
@@ -85,12 +107,18 @@ notification_status=0
   --state-db data/feishu-notifications.sqlite \
   --env-file "$ENV_FILE" \
   --fallback-env-file "$JOSINT_DIR/.env" \
+  --talent-state-db data/talent-pool.sqlite \
+  --talent-draft-exit-code "$talent_draft_status" \
   || notification_status=$?
 
 if [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; then
   if [ "$notification_status" -ne 0 ]; then
     echo "Lead Rader completed, but Feishu summary notification failed." >&2
     exit "$notification_status"
+  fi
+  if [ "$talent_draft_status" -ne 0 ]; then
+    echo "Lead Rader completed, but talent-pool draft generation failed." >&2
+    exit "$talent_draft_status"
   fi
   exit 0
 fi
