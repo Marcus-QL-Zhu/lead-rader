@@ -21,6 +21,7 @@ data/
 reports/
 reports-*/
 delivery-validation/
+.acceptance/
 *.sqlite
 *.sqlite3
 *.db

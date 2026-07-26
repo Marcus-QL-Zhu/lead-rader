@@ -214,6 +214,8 @@ def notification_key(
     direction: str,
     task_exit_code: int,
     report: Mapping[str, Any] | None,
+    talent_drafts: list[Mapping[str, Any]] | None = None,
+    talent_generation_error: str = "",
 ) -> str:
     manifest = (report or {}).get("manifest") or {}
     value = {
@@ -221,6 +223,14 @@ def notification_key(
         "direction": direction,
         "task_exit_code": task_exit_code,
         "run_id": str(manifest.get("run_id") or ""),
+        "talent_drafts": [
+            {
+                "draft_id": str(item.get("draft_id") or ""),
+                "payload_hash": str(item.get("payload_hash") or ""),
+            }
+            for item in (talent_drafts or ())
+        ],
+        "talent_generation_error": talent_generation_error,
     }
     serialized = json.dumps(value, ensure_ascii=False, sort_keys=True)
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
@@ -233,6 +243,8 @@ def build_summary(
     task_exit_code: int,
     report_path: Path | None,
     report: Mapping[str, Any] | None,
+    talent_drafts: list[Mapping[str, Any]] | None = None,
+    talent_generation_error: str = "",
 ) -> str:
     if task_exit_code == 0:
         status = "✅ 已完成"
@@ -286,7 +298,75 @@ def build_summary(
     if report_path:
         lines.extend(["", f"服务器报告：{report_path}"])
     lines.append("得分依据和完整证据请查看报告，由人工做最终判断。")
+    lines.append("")
+    if talent_generation_error:
+        lines.append(f"人才蓄水草稿生成失败：{talent_generation_error}")
+    elif talent_drafts:
+        lines.append(
+            f"今日建议发布的人才蓄水职位（共 {len(talent_drafts)} 个）"
+        )
+        for index, item in enumerate(talent_drafts, start=1):
+            lines.extend(
+                [
+                    "",
+                    f"{index}. [{item.get('draft_id', '-')}] "
+                    f"{item.get('recommended_title', '未命名草稿')}",
+                    f"   人才画像：{item.get('talent_persona', '-')}",
+                    f"   吸引角度：{item.get('attraction_angle', '-')}",
+                    f"   为什么现在蓄水：{item.get('why_now', '-')}",
+                ]
+            )
+        lines.extend(
+            [
+                "",
+                "可用指令：",
+                "- 发布全部",
+                "- 发布 1,3,5",
+                "- 跳过全部",
+                "- 查看 2 的完整广告 JSON",
+                "只有以上明确发布指令才构成批准；其他回复不会触发发布。",
+            ]
+        )
+    else:
+        lines.append("今日没有人才蓄水草稿；不会读取或沿用历史草稿。")
     return "\n".join(lines)
+
+
+def load_talent_drafts(
+    database: str | Path,
+    *,
+    run_date: str,
+    direction: str,
+) -> list[dict[str, Any]]:
+    path = Path(database)
+    if not path.exists():
+        return []
+    with sqlite3.connect(path) as connection:
+        connection.row_factory = sqlite3.Row
+        rows = connection.execute(
+            """
+            SELECT d.draft_id, d.payload_hash, d.status, d.draft_json
+            FROM talent_pool_drafts d
+            JOIN talent_pool_current_batches b
+              ON b.run_date=d.run_date AND b.direction=d.direction
+             AND b.source_run_id=d.source_run_id
+            WHERE d.run_date=? AND d.direction=?
+            ORDER BY d.ordinal
+            """,
+            (run_date, direction),
+        ).fetchall()
+    result = []
+    for row in rows:
+        draft = json.loads(row["draft_json"])
+        result.append(
+            {
+                **draft,
+                "draft_id": row["draft_id"],
+                "payload_hash": row["payload_hash"],
+                "status": row["status"],
+            }
+        )
+    return result
 
 
 def _format_score(value: Any) -> str:
@@ -306,6 +386,8 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--state-db", default="data/feishu-notifications.sqlite")
     parser.add_argument("--env-file", required=True)
     parser.add_argument("--fallback-env-file")
+    parser.add_argument("--talent-state-db", default="data/talent-pool.sqlite")
+    parser.add_argument("--talent-draft-exit-code", type=int, default=0)
     parser.add_argument("--force", action="store_true")
     return parser
 
@@ -331,11 +413,27 @@ def main(
         if args.task_exit_code not in {0, 2}:
             report_path = None
             report = None
+        talent_drafts = (
+            load_talent_drafts(
+                args.talent_state_db,
+                run_date=args.run_date,
+                direction=args.direction,
+            )
+            if args.talent_draft_exit_code == 0 and report
+            else []
+        )
+        talent_generation_error = (
+            f"退出码 {args.talent_draft_exit_code}"
+            if args.talent_draft_exit_code != 0 and report
+            else ""
+        )
         key = notification_key(
             run_date=args.run_date,
             direction=args.direction,
             task_exit_code=args.task_exit_code,
             report=report,
+            talent_drafts=talent_drafts,
+            talent_generation_error=talent_generation_error,
         )
         state = NotificationState(args.state_db)
         if state.was_sent(key) and not args.force:
@@ -347,6 +445,8 @@ def main(
             task_exit_code=args.task_exit_code,
             report_path=report_path,
             report=report,
+            talent_drafts=talent_drafts,
+            talent_generation_error=talent_generation_error,
         )
         message_id = client_class(app_id, app_secret).send_text(
             recipient,

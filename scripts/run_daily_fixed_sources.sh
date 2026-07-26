@@ -14,6 +14,8 @@ if [ -z "${PYTHON_BIN:-}" ]; then
     PYTHON_BIN="python3"
   fi
 fi
+OPENCLAW_BIN="${OPENCLAW_BIN:-/home/admin/.local/share/pnpm/openclaw}"
+export OPENCLAW_BIN
 DAILY_DIRECTION="${HT_LEAD_DAILY_DIRECTION:-具身智能}"
 
 case "$APP_DIR" in
@@ -70,6 +72,17 @@ fi
 "$PYTHON_BIN" scripts/run_lead_radar_v2.py "$@"
 
 status=$?
+talent_draft_status=0
+if [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; then
+  "$PYTHON_BIN" scripts/generate_talent_pool_drafts.py \
+    --direction "$DAILY_DIRECTION" \
+    --generator openclaw \
+    --report-dir reports-daily \
+    --output-dir reports-daily/talent-pool \
+    --state-db data/talent-pool.sqlite \
+    || talent_draft_status=$?
+fi
+
 "$PYTHON_BIN" scripts/run_lead_radar_v2.py monitor \
   --runtime-db data/runtime.sqlite \
   --source-health-db data/fixed-sources.sqlite \
@@ -85,12 +98,18 @@ notification_status=0
   --state-db data/feishu-notifications.sqlite \
   --env-file "$ENV_FILE" \
   --fallback-env-file "$JOSINT_DIR/.env" \
+  --talent-state-db data/talent-pool.sqlite \
+  --talent-draft-exit-code "$talent_draft_status" \
   || notification_status=$?
 
 if [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; then
   if [ "$notification_status" -ne 0 ]; then
     echo "Lead Rader completed, but Feishu summary notification failed." >&2
     exit "$notification_status"
+  fi
+  if [ "$talent_draft_status" -ne 0 ]; then
+    echo "Lead Rader completed, but talent-pool draft generation failed." >&2
+    exit "$talent_draft_status"
   fi
   exit 0
 fi
