@@ -838,6 +838,37 @@ class TalentPoolStore:
             )
         return cursor.rowcount == 1
 
+    def requeue_openclaw_report(
+        self,
+        snapshot_id: str,
+        *,
+        session_key: str = "agent:main:main",
+    ) -> bool:
+        """Explicitly requeue one exact current report for an operator resend."""
+
+        with self._connect() as connection:
+            cursor = connection.execute(
+                """
+                UPDATE talent_pool_openclaw_reports
+                SET status='pending', reported_at=NULL, updated_at=?, last_error=''
+                WHERE snapshot_id=? AND session_key=?
+                  AND status IN ('reported', 'failed')
+                  AND snapshot_id = (
+                    SELECT r2.snapshot_id
+                    FROM talent_pool_openclaw_reports r2
+                    JOIN talent_pool_current_snapshots c
+                      ON c.snapshot_id=r2.snapshot_id
+                     AND c.run_date=r2.run_date
+                     AND c.direction=r2.direction
+                    WHERE r2.session_key=?
+                    ORDER BY r2.run_date DESC, r2.created_at DESC
+                    LIMIT 1
+                  )
+                """,
+                (_utcnow(), snapshot_id, session_key, session_key),
+            )
+        return cursor.rowcount == 1
+
     def current_bundle(
         self,
         run_date: str,

@@ -78,3 +78,13 @@ Lead Rader 从公开的上游经营信号判断哪些公司可能新增总监级
 - OpenClaw 已开始读取但未标记完成：20 分钟后可重新领取。
 - 生成失败或没有可用草稿：说明原因，不虚构职位。
 - 猎聘登录、验证码、风控、限流或结果不明确：停止队列并报告，禁止自动重试。
+
+## Generation-failure attribution guardrails
+
+The bridge output is authoritative for report attribution:
+
+- `drafts[*].validation_status` applies only to that displayed draft index.
+- `omitted_generation_failures` contains themes or duplicate candidates that were not added to `drafts`; these items are not publishable and have no displayed index.
+- A phrase such as `draft 1` inside an omitted failure's `reason` is generator-local text. Never map it to displayed index 1.
+- Report valid displayed drafts and omitted failures in separate sections. Never describe a valid displayed draft as warned or suggest publishing an invalid draft to observe what happens.
+- If `approval_blocked` is true, do not offer publish commands.

@@ -151,6 +151,78 @@ def test_render_context_keeps_company_role_mapping_and_json_is_on_demand(tmp_pat
     assert payload["draft"]["public_payload"]["cities"] == ["上海"]
 
 
+def test_render_context_separates_omitted_theme_from_displayed_draft_one(tmp_path):
+    store, _ = _store(tmp_path)
+    row = store.pending_openclaw_report()
+    assert row is not None
+    row["bundle"] = dict(row["bundle"])
+    row["bundle"]["talent_themes"] = [
+        {
+            "theme_id": "theme_2ddbfd722857",
+            "recommended_title": "具身智能行业应用与商业化总监",
+            "source_lead_indices": [1],
+        }
+    ]
+    row["bundle"]["company_demand_analysis"] = [
+        {
+            "lead_index": 1,
+            "company": "戴盟机器人",
+            "hypotheses": [{"specific_title": "具身智能行业应用与商业化总监"}],
+        }
+    ]
+    row["bundle"]["generation_error"] = (
+        "theme theme_2ddbfd722857: DirectTalentGenerationError: "
+        "failed after one repair: draft 1 title is too broad or not Director+; "
+        "draft 1 talent_persona is empty; draft 1 public_payload must be an object; "
+        "recommended_title must equal the talent theme title"
+    )
+
+    rendered = bridge.render_context(row)
+
+    assert rendered["generation_status"] == "partial"
+    assert rendered["valid_draft_count"] == rendered["draft_count"]
+    assert rendered["omitted_failure_count"] == 1
+    failure = rendered["omitted_generation_failures"][0]
+    assert failure["scope"] == "omitted_talent_theme"
+    assert failure["companies"] == ["戴盟机器人"]
+    assert failure["recommended_title"] == "具身智能行业应用与商业化总监"
+    assert failure["displayed_draft_index"] is None
+    assert failure["affects_displayed_drafts"] is False
+    assert failure["reason"] == (
+        "LLM output failed deterministic validation after one repair"
+    )
+    assert rendered["drafts"][0]["validation_status"] == "valid"
+    assert rendered["drafts"][0]["validation_issues"] == []
+
+
+def test_unclassified_generation_error_is_never_assigned_to_displayed_index(tmp_path):
+    store, _ = _store(tmp_path)
+    row = store.pending_openclaw_report()
+    assert row is not None
+    row["bundle"] = dict(row["bundle"])
+    row["bundle"]["generation_error"] = "partial generation"
+
+    failure = bridge.render_context(row)["omitted_generation_failures"][0]
+
+    assert failure["scope"] == "omitted_generation_item"
+    assert failure["displayed_draft_index"] is None
+    assert failure["affects_displayed_drafts"] is False
+
+
+def test_operator_can_requeue_only_exact_current_completed_report(tmp_path):
+    store, _ = _store(tmp_path)
+    current = store.pending_openclaw_report(claim=True)
+    assert current is not None
+    assert store.mark_openclaw_reported(current["snapshot_id"])
+
+    assert store.requeue_openclaw_report(current["snapshot_id"])
+    pending = store.pending_openclaw_report()
+    assert pending is not None
+    assert pending["snapshot_id"] == current["snapshot_id"]
+    assert not store.requeue_openclaw_report(current["snapshot_id"])
+    assert not store.requeue_openclaw_report("missing-snapshot")
+
+
 def test_reset_guide_leaves_delivery_status_to_outer_bridge():
     guide = (bridge.ROOT / "references" / "openclaw-daily-operator.md").read_text(
         encoding="utf-8"
@@ -203,8 +275,10 @@ def test_wake_runs_current_main_session_and_marks_reported(tmp_path):
         openclaw_bin="openclaw",
         sessions_file=sessions,
         runner=fake_runner,
+        include_agent_response=True,
     )
     assert result["status"] == "reported"
+    assert result["agent_response"] == "ok"
     assert store.pending_openclaw_report() is None
     command = calls[0][0]
     assert command[:3] == ["openclaw", "agent", "--session-id"]
@@ -322,3 +396,81 @@ def test_delivery_failure_after_exact_read_remains_retriable(tmp_path):
     current = store.latest_openclaw_context()
     assert current is not None and current["status"] == "failed"
     assert store.pending_openclaw_report()["snapshot_id"] == current["snapshot_id"]
+
+
+def test_payload_validation_is_deterministic_and_handles_non_object(tmp_path):
+    store, _ = _store(tmp_path)
+    row = store.pending_openclaw_report()
+    assert row is not None
+    draft = dict(row["bundle"]["drafts"][0])
+
+    draft["payload_hash"] = "tampered"
+    summary = bridge._draft_summary(draft, 1)
+    assert summary["validation_status"] == "invalid"
+    assert "payload_hash does not match" in " ".join(summary["validation_issues"])
+
+    draft["public_payload"] = ["not", "an", "object"]
+    summary = bridge._draft_summary(draft, 1)
+    assert summary["validation_status"] == "invalid"
+    assert "public_payload must be an object" in summary["validation_issues"]
+
+
+def test_duplicate_omission_is_attributed_to_its_theme(tmp_path):
+    store, _ = _store(tmp_path)
+    row = store.pending_openclaw_report()
+    assert row is not None
+    bundle = dict(row["bundle"])
+    theme = {
+        "theme_id": "theme_abcdef123456",
+        "recommended_title": "机器人量产工程化总监",
+        "source_lead_indices": [1],
+    }
+    bundle["talent_themes"] = [theme]
+    bundle["company_demand_analysis"] = [
+        {"lead_index": 1, "company": "测试机器人公司", "hypotheses": []}
+    ]
+    duplicate_id = bridge._theme_draft_id(
+        theme,
+        run_date=bundle["run_date"],
+        direction=bundle["direction"],
+    )
+    bundle["generation_error"] = f"draft {duplicate_id}: duplicate generated payload"
+
+    failure = bridge._generation_failures(bundle)[0]
+    assert failure["scope"] == "omitted_duplicate_draft"
+    assert failure["companies"] == ["测试机器人公司"]
+    assert failure["recommended_title"] == "机器人量产工程化总监"
+    assert failure["reason"] == "duplicate generated payload was omitted"
+    assert failure["displayed_draft_index"] is None
+
+
+def test_requeue_rejects_active_wrong_session_and_stale_snapshots(tmp_path):
+    store, first_bundle = _store(tmp_path)
+    first = store.pending_openclaw_report(claim=True)
+    assert first is not None
+    assert not store.requeue_openclaw_report(first["snapshot_id"])
+    assert store.mark_openclaw_read(first["snapshot_id"])
+    assert not store.requeue_openclaw_report(first["snapshot_id"])
+    assert store.mark_openclaw_reported(first["snapshot_id"])
+    assert not store.requeue_openclaw_report(
+        first["snapshot_id"], session_key="agent:other:main"
+    )
+
+    next_report = sample_report()
+    next_report["manifest"]["as_of"] = "2026-07-28"
+    next_report["manifest"]["run_id"] = "run-20260728"
+    next_bundle = generate_draft_bundle(next_report)
+    store.save_bundle(next_bundle.to_dict())
+    assert not store.requeue_openclaw_report(first["snapshot_id"])
+
+    current = store.pending_openclaw_report(claim=True)
+    assert current is not None
+    assert store.mark_openclaw_report_failed(current["snapshot_id"], "retry")
+    assert store.requeue_openclaw_report(current["snapshot_id"])
+
+
+def test_event_prompt_never_requests_approval_for_blocked_payloads():
+    prompt = bridge.event_text("a" * 64, source="test")
+    assert "If approval_blocked is true" in prompt
+    assert "do not ask for approval" in prompt
+    assert "Only when approval_blocked is false" in prompt
