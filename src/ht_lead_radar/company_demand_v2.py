@@ -26,6 +26,17 @@ Director+ 组织缺口。判断顺序是：企业阶段变化 → 新增业务�
 允许证据不足：此时返回空的 role_hypotheses，并列出可公开观察的 watch_for，
 不为完成数量而猜测岗位。watch_for 不得虚构具体产量、日期、人名或招聘动作。
 最终只返回严格 JSON，不输出分析过程。
+
+以下三个示例只用于学习输出结构和证据门槛。不得复制示例中的公司、岗位或 evidence_id；必须使用当前事实包中的公司和 evidence_id。
+
+示例一（两个独立上游事件支持具体岗位）：
+{"lead_index":1,"company":"示例机器人","stage_transition":"从原型验证进入小批量交付","organizational_gaps":["缺少跨研发与制造的工程化能力"],"role_hypotheses":[{"specific_title":"机器人小批量制造工程化总监","capability_gap":"缺少从样机到稳定交付的制造工程体系","mandate":"建立试制、质量与供应链协同闭环","why_now":"产线建设与产品发布共同指向交付责任增加","horizon":"near_term","evidence_refs":["ev_factory","ev_launch"],"evidence_against":[],"unknowns_to_verify":["现有制造负责人配置"],"key_outcomes":["建立试制流程","形成质量闭环","完成供应商分级"],"must_have_signals":["机器人量产经验","制造工程体系经验","跨部门交付经验"],"preferred_signals":["有从样机到小批量爬坡经验"],"specificity_terms":["机器人制造","小批量交付","制造工程化"],"city":"深圳","city_basis":"公开产线信息唯一指向深圳"}],"watch_for":[]}
+
+示例二（单一融资事件不足以生成岗位）：
+{"lead_index":2,"company":"示例脑机接口","stage_transition":"仅确认完成融资，尚不足以判断新增组织责任","organizational_gaps":[],"role_hypotheses":[],"watch_for":["观察临床项目启动或注册进展","观察生产基地、产线或商业化交付信号"]}
+
+示例三（单个 A 级运营事件支持观察名单岗位）：
+{"lead_index":3,"company":"示例商业航天","stage_transition":"从研制进入产能建设","organizational_gaps":["缺少产能爬坡与交付统筹能力"],"role_hypotheses":[{"specific_title":"液体火箭发动机产能爬坡总监","capability_gap":"缺少批产节拍、质量与供应链统筹能力","mandate":"建立发动机批产和准时交付体系","why_now":"官方披露新产线启动建设","horizon":"watchlist","evidence_refs":["ev_site"],"evidence_against":["产线仍处建设阶段"],"unknowns_to_verify":["首批交付时间"],"key_outcomes":["定义产能爬坡计划","建立质量门禁","完善关键物料保障"],"must_have_signals":["航天批产经验","质量体系经验","复杂供应链协同经验"],"preferred_signals":["有发动机产线投产经验"],"specificity_terms":["液体火箭发动机","产能爬坡","批产交付"],"city":"上海","city_basis":"公开证据未确认唯一城市；按发布规则默认上海，需人工复核"}],"watch_for":["观察产线投产或批产订单信号"]}
 """.strip()
 
 
@@ -155,7 +166,7 @@ def build_single_company_demand_prompt(packet: Mapping[str, Any]) -> str:
 4. evidence_refs 只能填写事实包中存在的 evidence_id。
 5. job_ad 只能作为晚期验证，不能作为早期岗位推断的唯一依据。
 6. horizon 只能是 near_term（0–90 天）或 watchlist（91–180 天）。
-7. city 只填一个城市；无法从事实判断时填空字符串，并在 city_basis 说明待核。
+7. city 只填一个城市；事实明确指向唯一城市时必须保留该城市。无法判断、标为未知/待定/全国/多地、或存在多个可能城市时，统一填“上海”，并在 city_basis 写“公开证据未确认唯一城市；按发布规则默认上海，需人工复核”。
 8. why_now 与 city_basis 只能复述或明确推导输入事实，不能把“产线在某城市”改写成“总部在该城市”；计划结果必须写成目标，不能冒充已发生事实。
 9. watch_for 优先使用招聘广告之前的可观察信号，不把发布职位广告作为主要触发条件。
 
@@ -179,7 +190,7 @@ def build_single_company_demand_prompt(packet: Mapping[str, Any]) -> str:
       "must_have_signals": ["3-5条候选人关键能力"],
       "preferred_signals": ["1-3条加分能力；必须是候选人特征，不能写待核问题"],
       "specificity_terms": ["3-8个匿名广告可用词"],
-      "city": "一个城市或空字符串",
+      "city": "一个城市；不确定时填上海",
       "city_basis": "城市依据或待核原因"
     }}
   ],
@@ -195,6 +206,14 @@ def build_company_demand_repair_prompt(
     rejected_response: str,
     error: Exception,
 ) -> str:
+    safe_example = {
+        "lead_index": packet["lead_index"],
+        "company": packet["company"],
+        "stage_transition": "证据不足，尚不能判断新增组织责任",
+        "organizational_gaps": [],
+        "role_hypotheses": [],
+        "watch_for": ["观察新的上游运营信号"],
+    }
     return f"""
 公司事实包：
 {json.dumps(packet, ensure_ascii=False, separators=(",", ":"))}
@@ -208,6 +227,11 @@ def build_company_demand_repair_prompt(
 请只修复上述错误，并重新返回完整的单公司 JSON。仍须只引用事实包里的 evidence_id；
 不得用“生产总监、研发总监、供应链总监、负责人”等含混标题；如果没有可辩护的
 具体 Director+ 岗位，则返回空 role_hypotheses 和可观察的 watch_for。
+
+以下是格式正确的安全回退示例；只能学习结构，不能因此忽略事实包中已有的充分证据：
+{json.dumps(safe_example, ensure_ascii=False, separators=(",", ":"))}
+
+只返回一个完整 JSON 对象，不要 Markdown、代码围栏、解释或前后缀文字。
 """.strip()
 
 
@@ -238,17 +262,25 @@ def _texts(
     *,
     minimum: int,
     maximum: int,
+    truncate_overflow: bool = True,
 ) -> list[str]:
     if not isinstance(value, list):
         raise DemandAnalysisError(f"{field} must be a list")
-    result = [_text(item, field) for item in value]
-    if not minimum <= len(result) <= maximum:
+    result: list[str] = []
+    seen: set[str] = set()
+    for item in value:
+        normalized = _text(item, field)
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        result.append(normalized)
+    if len(result) < minimum:
         raise DemandAnalysisError(
-            f"{field} must contain {minimum}-{maximum} items"
+            f"{field} must contain at least {minimum} unique items"
         )
-    if len(result) != len(set(result)):
-        raise DemandAnalysisError(f"{field} must not contain duplicates")
-    return result
+    if len(result) > maximum and not truncate_overflow:
+        raise DemandAnalysisError(f"{field} must contain at most {maximum} items")
+    return result[:maximum]
 
 
 OPERATIONAL_ROLE_SIGNAL_TYPES = frozenset(
@@ -316,6 +348,40 @@ def _validate_evidence_gate(
         )
 
 
+UNCERTAIN_CITY_MARKERS = frozenset(
+    {"待定", "未知", "不确定", "全国", "多地", "待核", "未确认", "暂无"}
+)
+CITY_DEFAULT_BASIS = "公开证据未确认唯一城市；按发布规则默认上海，需人工复核"
+
+
+def _contains_multiple_city_connector(city: str) -> bool:
+    if "或" in city:
+        return True
+    for connector in ("和", "及", "与"):
+        if connector not in city:
+            continue
+        left, right = city.rsplit(connector, 1)
+        if len(left.strip()) >= 2 and len(right.strip()) >= 2:
+            return True
+    return False
+
+
+def _normalize_city(raw_city: Any, raw_basis: Any) -> tuple[str, str]:
+    city = _text(raw_city, "city", allow_empty=True)
+    city_basis = _text(raw_basis, "city_basis", allow_empty=True)
+    uncertain = (
+        not city
+        or any(marker in city for marker in UNCERTAIN_CITY_MARKERS)
+        or any(separator in city for separator in (",", "，", "、", "/", "；"))
+        or _contains_multiple_city_connector(city)
+    )
+    if uncertain:
+        return "上海", CITY_DEFAULT_BASIS
+    if not city_basis:
+        raise DemandAnalysisError("city_basis must not be empty")
+    return city, city_basis
+
+
 def parse_single_company_demand(
     text: str,
     *,
@@ -353,16 +419,23 @@ def parse_single_company_demand(
         title = _text(raw.get("specific_title"), "specific_title")
         if not is_specific_director_title(title):
             raise DemandAnalysisError(f"specific_title is too broad: {title}")
-        refs = _texts(raw.get("evidence_refs"), "evidence_refs", minimum=1, maximum=6)
+        refs = _texts(
+            raw.get("evidence_refs"),
+            "evidence_refs",
+            minimum=1,
+            maximum=6,
+            truncate_overflow=False,
+        )
         if not set(refs).issubset(evidence_ids):
             raise DemandAnalysisError("evidence_refs contain unknown evidence IDs")
         horizon = _text(raw.get("horizon"), "horizon")
         if horizon not in {"near_term", "watchlist"}:
             raise DemandAnalysisError("horizon must be near_term or watchlist")
         _validate_evidence_gate(packet, refs, horizon)
-        city = _text(raw.get("city"), "city", allow_empty=True)
-        if any(separator in city for separator in (",", "，", "、", "/", "；")):
-            raise DemandAnalysisError("city must contain at most one city")
+        city, city_basis = _normalize_city(
+            raw.get("city"),
+            raw.get("city_basis"),
+        )
         hypotheses.append(
             {
                 "hypothesis_id": f"lead_{lead_index}_role_{role_index}",
@@ -377,12 +450,14 @@ def parse_single_company_demand(
                     "evidence_against",
                     minimum=0,
                     maximum=4,
+                    truncate_overflow=False,
                 ),
                 "unknowns_to_verify": _texts(
                     raw.get("unknowns_to_verify"),
                     "unknowns_to_verify",
                     minimum=1,
                     maximum=5,
+                    truncate_overflow=False,
                 ),
                 "key_outcomes": _texts(
                     raw.get("key_outcomes"),
@@ -409,7 +484,7 @@ def parse_single_company_demand(
                     maximum=8,
                 ),
                 "city": city,
-                "city_basis": _text(raw.get("city_basis"), "city_basis"),
+                "city_basis": city_basis,
             }
         )
     watch_for = _texts(
