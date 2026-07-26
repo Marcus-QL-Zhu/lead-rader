@@ -6,7 +6,14 @@ umask 077
 APP_DIR="${HT_LEAD_APP_DIR:-/home/admin/.openclaw/workspace/skills/hardtech-lead-radar}"
 JOSINT_DIR="${HT_LEAD_JOSINT_DIR:-/home/admin/.openclaw/workspace/skills/web-ad-radar}"
 ENV_FILE="${HT_LEAD_ENV_FILE:-$APP_DIR/.env}"
-PYTHON_BIN="${PYTHON_BIN:-python3}"
+SERVER_PYTHON="/home/admin/.pyenv/versions/3.11.14/bin/python3"
+if [ -z "${PYTHON_BIN:-}" ]; then
+  if [ -x "$SERVER_PYTHON" ]; then
+    PYTHON_BIN="$SERVER_PYTHON"
+  else
+    PYTHON_BIN="python3"
+  fi
+fi
 DAILY_DIRECTION="${HT_LEAD_DAILY_DIRECTION:-具身智能}"
 
 case "$APP_DIR" in
@@ -18,6 +25,11 @@ case "$APP_DIR" in
 esac
 
 cd "$APP_DIR" || exit 1
+
+"$PYTHON_BIN" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)' || {
+  echo "Lead Rader requires Python >= 3.10; got: $("$PYTHON_BIN" --version 2>&1)" >&2
+  exit 69
+}
 
 if [ ! -f "$ENV_FILE" ]; then
   ENV_FILE="$JOSINT_DIR/.env"
