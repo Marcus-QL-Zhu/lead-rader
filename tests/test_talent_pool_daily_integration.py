@@ -24,10 +24,14 @@ def test_feishu_summary_includes_drafts_and_exact_commands(tmp_path):
         talent_generation_model="minimax/MiniMax-M3",
     )
     assert "LLM 模型：minimax/MiniMax-M3" in text
-    assert "今日建议发布的人才蓄水职位（共 5 个）" in text
+    assert "今日建议发布职位（共 5 个）" in text
     assert bundle.drafts[0].draft_id in text
+    assert "目标公司/岗位：星火机器人" in text
+    assert "猎聘 JSON：" in text
+    assert '"position_name"' in text
+    assert len(text) < 30_000
     assert "发布全部" not in text
-    assert "飞书入站审批与一键发布尚未接通" in text
+    assert "每条猎聘 JSON 已与目标公司和岗位假设关联并持久化" in text
     assert "明确要求 Codex/OpenClaw" in text
     assert "星火机器人" in text  # market lead section remains internal to user
 
@@ -43,7 +47,7 @@ def test_feishu_summary_surfaces_generation_failure_without_stale_drafts(tmp_pat
         talent_generation_error="退出码 71",
     )
     assert "职位草稿生成存在失败：退出码 71" in text
-    assert "今日建议发布的人才蓄水职位" not in text
+    assert "今日建议发布职位" not in text
 
 
 def test_daily_launcher_generates_before_the_single_feishu_notification():

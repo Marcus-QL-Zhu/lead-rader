@@ -113,3 +113,7 @@ python scripts/talent_pool_control.py \
 ```
 
 该端到端只产生 `fake-*` 职位 ID，不接触猎聘账号。
+
+## 当前快照与长期机会历史
+
+同日重复生成不会再把旧草稿混入飞书或审批。当前批次由精确 snapshot membership 决定；完整 bundle 以及“人才主题—目标公司—岗位假设—证据—猎聘 JSON”关系长期保存在 SQLite，供后续 Float 分析调用。详见 `docs/talent-opportunity-persistence.md`。

@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import secrets
 import re
@@ -97,6 +98,59 @@ class TalentPoolStore:
                     PRIMARY KEY(run_date, direction)
                 );
 
+                CREATE TABLE IF NOT EXISTS talent_pool_current_snapshot_drafts (
+                    run_date TEXT NOT NULL,
+                    direction TEXT NOT NULL,
+                    snapshot_id TEXT NOT NULL,
+                    draft_id TEXT NOT NULL,
+                    ordinal INTEGER NOT NULL,
+                    PRIMARY KEY(run_date, direction, draft_id)
+                );
+
+                CREATE TABLE IF NOT EXISTS talent_pool_current_snapshots (
+                    run_date TEXT NOT NULL,
+                    direction TEXT NOT NULL,
+                    snapshot_id TEXT NOT NULL,
+                    source_run_id TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    PRIMARY KEY(run_date, direction)
+                );
+
+                CREATE TABLE IF NOT EXISTS talent_pool_bundle_snapshots (
+                    snapshot_id TEXT PRIMARY KEY,
+                    run_date TEXT NOT NULL,
+                    direction TEXT NOT NULL,
+                    source_run_id TEXT NOT NULL,
+                    generation_provider TEXT NOT NULL,
+                    generation_model TEXT NOT NULL,
+                    generation_error TEXT NOT NULL,
+                    bundle_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS idx_talent_pool_snapshots
+                ON talent_pool_bundle_snapshots(run_date, direction, created_at);
+
+                CREATE TABLE IF NOT EXISTS talent_pool_opportunity_links (
+                    snapshot_id TEXT NOT NULL,
+                    run_date TEXT NOT NULL,
+                    direction TEXT NOT NULL,
+                    source_run_id TEXT NOT NULL,
+                    generation_model TEXT NOT NULL,
+                    draft_id TEXT NOT NULL,
+                    recommended_title TEXT NOT NULL,
+                    role_family TEXT NOT NULL,
+                    talent_persona TEXT NOT NULL,
+                    company TEXT NOT NULL,
+                    company_role TEXT NOT NULL,
+                    evidence_urls_json TEXT NOT NULL,
+                    liepin_payload_json TEXT NOT NULL,
+                    active INTEGER NOT NULL DEFAULT 1,
+                    created_at TEXT NOT NULL,
+                    PRIMARY KEY(snapshot_id, draft_id, company, company_role)
+                );
+                CREATE INDEX IF NOT EXISTS idx_talent_pool_opportunity_current
+                ON talent_pool_opportunity_links(active, direction, company);
+
                 CREATE TABLE IF NOT EXISTS talent_pool_approval_events (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     draft_id TEXT NOT NULL,
@@ -133,21 +187,215 @@ class TalentPoolStore:
                 );
                 """
             )
+            self._migrate_legacy_state(connection)
 
     def _connect(self) -> sqlite3.Connection:
         connection = sqlite3.connect(self.database)
         connection.row_factory = sqlite3.Row
         return connection
 
+    def _migrate_legacy_state(self, connection: sqlite3.Connection) -> None:
+        """Backfill current pointers and opportunity links from pre-snapshot DBs."""
+
+        now = _utcnow()
+        batches = connection.execute(
+            """
+            SELECT b.run_date, b.direction, b.source_run_id, b.generated_at
+            FROM talent_pool_current_batches b
+            LEFT JOIN talent_pool_current_snapshots c
+              ON c.run_date=b.run_date AND c.direction=b.direction
+            WHERE c.snapshot_id IS NULL
+            """
+        ).fetchall()
+        for batch in batches:
+            rows = connection.execute(
+                """
+                SELECT * FROM talent_pool_drafts
+                WHERE run_date=? AND direction=? AND source_run_id=?
+                  AND status<>'expired'
+                ORDER BY ordinal
+                """,
+                (batch["run_date"], batch["direction"], batch["source_run_id"]),
+            ).fetchall()
+            drafts = [json.loads(row["draft_json"]) for row in rows]
+            legacy_bundle = {
+                "run_date": batch["run_date"],
+                "direction": batch["direction"],
+                "source_run_id": batch["source_run_id"],
+                "generation_provider": "legacy-migration",
+                "generation_model": "",
+                "generation_error": "",
+                "drafts": drafts,
+            }
+            bundle_json = json.dumps(
+                legacy_bundle,
+                ensure_ascii=False,
+                sort_keys=True,
+                separators=(",", ":"),
+            )
+            snapshot_id = hashlib.sha256(bundle_json.encode("utf-8")).hexdigest()
+            connection.execute(
+                """
+                INSERT OR IGNORE INTO talent_pool_bundle_snapshots(
+                    snapshot_id, run_date, direction, source_run_id,
+                    generation_provider, generation_model, generation_error,
+                    bundle_json, created_at
+                ) VALUES (?, ?, ?, ?, 'legacy-migration', '', '', ?, ?)
+                """,
+                (
+                    snapshot_id,
+                    batch["run_date"],
+                    batch["direction"],
+                    batch["source_run_id"],
+                    bundle_json,
+                    batch["generated_at"] or now,
+                ),
+            )
+            connection.execute(
+                """
+                INSERT OR REPLACE INTO talent_pool_current_snapshots(
+                    run_date, direction, snapshot_id, source_run_id, updated_at
+                ) VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    batch["run_date"],
+                    batch["direction"],
+                    snapshot_id,
+                    batch["source_run_id"],
+                    now,
+                ),
+            )
+            for ordinal, (row, draft) in enumerate(zip(rows, drafts), start=1):
+                connection.execute(
+                    """
+                    INSERT OR REPLACE INTO talent_pool_current_snapshot_drafts(
+                        run_date, direction, snapshot_id, draft_id, ordinal
+                    ) VALUES (?, ?, ?, ?, ?)
+                    """,
+                    (
+                        batch["run_date"],
+                        batch["direction"],
+                        snapshot_id,
+                        row["draft_id"],
+                        ordinal,
+                    ),
+                )
+                self._insert_opportunity_links(
+                    connection,
+                    snapshot_id=snapshot_id,
+                    run_date=batch["run_date"],
+                    direction=batch["direction"],
+                    source_run_id=batch["source_run_id"],
+                    generation_model="",
+                    draft=draft,
+                    active=1,
+                    created_at=batch["generated_at"] or now,
+                )
+
+        historical_rows = connection.execute(
+            """
+            SELECT d.* FROM talent_pool_drafts d
+            WHERE NOT EXISTS (
+                SELECT 1 FROM talent_pool_opportunity_links o
+                WHERE o.draft_id=d.draft_id
+            )
+            """
+        ).fetchall()
+        for row in historical_rows:
+            draft = json.loads(row["draft_json"])
+            legacy_id = hashlib.sha256(
+                f"legacy:{row['draft_id']}:{row['payload_hash']}".encode("utf-8")
+            ).hexdigest()
+            self._insert_opportunity_links(
+                connection,
+                snapshot_id=legacy_id,
+                run_date=row["run_date"],
+                direction=row["direction"],
+                source_run_id=row["source_run_id"],
+                generation_model="",
+                draft=draft,
+                active=0,
+                created_at=row["updated_at"] or now,
+            )
+
+    @staticmethod
+    def _insert_opportunity_links(
+        connection: sqlite3.Connection,
+        *,
+        snapshot_id: str,
+        run_date: str,
+        direction: str,
+        source_run_id: str,
+        generation_model: str,
+        draft: Mapping[str, Any],
+        active: int,
+        created_at: str,
+    ) -> None:
+        payload_json = json.dumps(
+            draft.get("public_payload") or {}, ensure_ascii=False, sort_keys=True
+        )
+        for source in draft.get("source_leads") or ():
+            if not isinstance(source, Mapping):
+                continue
+            company = str(source.get("company") or "").strip()
+            if not company:
+                continue
+            roles = [
+                str(item).strip()
+                for item in source.get("role_hypotheses") or ()
+                if str(item).strip()
+            ] or [str(draft.get("recommended_title") or "").strip()]
+            evidence_urls_json = json.dumps(
+                list(source.get("evidence_urls") or ()),
+                ensure_ascii=False,
+                sort_keys=True,
+            )
+            for company_role in roles:
+                connection.execute(
+                    """
+                    INSERT OR REPLACE INTO talent_pool_opportunity_links(
+                        snapshot_id, run_date, direction, source_run_id,
+                        generation_model, draft_id, recommended_title,
+                        role_family, talent_persona, company, company_role,
+                        evidence_urls_json, liepin_payload_json, active, created_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        snapshot_id, run_date, direction, source_run_id,
+                        generation_model, str(draft.get("draft_id") or ""),
+                        str(draft.get("recommended_title") or ""),
+                        str(draft.get("role_family") or ""),
+                        str(draft.get("talent_persona") or ""),
+                        company, company_role, evidence_urls_json, payload_json,
+                        active, created_at,
+                    ),
+                )
     def save_bundle(self, bundle: Mapping[str, Any]) -> int:
         run_date = str(bundle.get("run_date") or "")
         direction = str(bundle.get("direction") or "")
         source_run_id = str(bundle.get("source_run_id") or "")
         if not source_run_id:
             raise ValueError("draft bundle requires source_run_id")
-        drafts = bundle.get("drafts") or ()
+        raw_drafts = bundle.get("drafts") or ()
+        if not isinstance(raw_drafts, (list, tuple)):
+            raise ValueError("draft bundle drafts must be a list")
+        drafts = [dict(item) for item in raw_drafts if isinstance(item, Mapping)]
+        if len(drafts) != len(raw_drafts):
+            raise ValueError("each draft must be an object")
+        for draft in drafts:
+            draft["payload_hash"] = canonical_payload_hash(draft["public_payload"])
+        normalized_bundle = dict(bundle)
+        normalized_bundle["drafts"] = drafts
+        bundle_json = json.dumps(
+            normalized_bundle,
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        snapshot_id = hashlib.sha256(bundle_json.encode("utf-8")).hexdigest()
         now = _utcnow()
         with self._connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
             unresolved = connection.execute(
                 """
                 SELECT 1 FROM talent_pool_drafts d
@@ -164,6 +412,44 @@ class TalentPoolStore:
                 raise RuntimeError(
                     "cannot replace a batch while a publish result is unresolved"
                 )
+            prior_memberships = {
+                row["draft_id"]: row["snapshot_id"]
+                for row in connection.execute(
+                    """
+                    SELECT draft_id, snapshot_id
+                    FROM talent_pool_current_snapshot_drafts
+                    WHERE run_date=? AND direction=?
+                    """,
+                    (run_date, direction),
+                ).fetchall()
+            }
+            connection.execute(
+                """
+                INSERT OR IGNORE INTO talent_pool_bundle_snapshots(
+                    snapshot_id, run_date, direction, source_run_id,
+                    generation_provider, generation_model, generation_error,
+                    bundle_json, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    snapshot_id,
+                    run_date,
+                    direction,
+                    source_run_id,
+                    str(bundle.get("generation_provider") or ""),
+                    str(bundle.get("generation_model") or ""),
+                    str(bundle.get("generation_error") or ""),
+                    bundle_json,
+                    now,
+                ),
+            )
+            connection.execute(
+                """
+                UPDATE talent_pool_opportunity_links SET active=0
+                WHERE run_date=? AND direction=?
+                """,
+                (run_date, direction),
+            )
             connection.execute(
                 """
                 UPDATE talent_pool_drafts SET status='expired', updated_at=?
@@ -171,6 +457,34 @@ class TalentPoolStore:
                   AND status NOT IN ('published', 'expired')
                 """,
                 (now, run_date, direction, source_run_id),
+            )
+            current_ids = [str(item["draft_id"]) for item in drafts]
+            if current_ids:
+                placeholders = ",".join("?" for _ in current_ids)
+                connection.execute(
+                    f"""
+                    UPDATE talent_pool_drafts SET status='expired', updated_at=?
+                    WHERE run_date=? AND direction=? AND source_run_id=?
+                      AND draft_id NOT IN ({placeholders})
+                      AND status NOT IN ('published', 'expired')
+                    """,
+                    (now, run_date, direction, source_run_id, *current_ids),
+                )
+            else:
+                connection.execute(
+                    """
+                    UPDATE talent_pool_drafts SET status='expired', updated_at=?
+                    WHERE run_date=? AND direction=? AND source_run_id=?
+                      AND status NOT IN ('published', 'expired')
+                    """,
+                    (now, run_date, direction, source_run_id),
+                )
+            connection.execute(
+                """
+                DELETE FROM talent_pool_current_snapshot_drafts
+                WHERE run_date=? AND direction=?
+                """,
+                (run_date, direction),
             )
             connection.execute(
                 """
@@ -182,6 +496,18 @@ class TalentPoolStore:
                     generated_at=excluded.generated_at
                 """,
                 (run_date, direction, source_run_id, now),
+            )
+            connection.execute(
+                """
+                INSERT INTO talent_pool_current_snapshots(
+                    run_date, direction, snapshot_id, source_run_id, updated_at
+                ) VALUES (?, ?, ?, ?, ?)
+                ON CONFLICT(run_date, direction) DO UPDATE SET
+                    snapshot_id=excluded.snapshot_id,
+                    source_run_id=excluded.source_run_id,
+                    updated_at=excluded.updated_at
+                """,
+                (run_date, direction, snapshot_id, source_run_id, now),
             )
             for ordinal, draft_value in enumerate(drafts, start=1):
                 draft = dict(draft_value)
@@ -204,9 +530,10 @@ class TalentPoolStore:
                 clear_approval = True
                 if (
                     current
+                    and current["status"] != "expired"
                     and current["payload_hash"] == payload_hash
                     and (
-                        current["source_run_id"] == source_run_id
+                        prior_memberships.get(draft_id) == snapshot_id
                         or current["status"] == "published"
                     )
                 ):
@@ -258,7 +585,89 @@ class TalentPoolStore:
                         """,
                         (draft_id,),
                     )
+                connection.execute(
+                    """
+                    INSERT INTO talent_pool_current_snapshot_drafts(
+                        run_date, direction, snapshot_id, draft_id, ordinal
+                    ) VALUES (?, ?, ?, ?, ?)
+                    """,
+                    (run_date, direction, snapshot_id, draft_id, ordinal),
+                )
+                payload_json = json.dumps(
+                    draft["public_payload"], ensure_ascii=False, sort_keys=True
+                )
+                for source in draft.get("source_leads") or ():
+                    if not isinstance(source, Mapping):
+                        continue
+                    company = str(source.get("company") or "").strip()
+                    if not company:
+                        continue
+                    company_roles = [
+                        str(item).strip()
+                        for item in source.get("role_hypotheses") or ()
+                        if str(item).strip()
+                    ] or [str(draft.get("recommended_title") or "").strip()]
+                    evidence_urls_json = json.dumps(
+                        list(source.get("evidence_urls") or ()),
+                        ensure_ascii=False,
+                        sort_keys=True,
+                    )
+                    for company_role in company_roles:
+                        connection.execute(
+                            """
+                            INSERT OR REPLACE INTO talent_pool_opportunity_links(
+                                snapshot_id, run_date, direction, source_run_id,
+                                generation_model, draft_id, recommended_title,
+                                role_family, talent_persona, company, company_role,
+                                evidence_urls_json, liepin_payload_json, active,
+                                created_at
+                            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?)
+                            """,
+                            (
+                                snapshot_id,
+                                run_date,
+                                direction,
+                                source_run_id,
+                                str(bundle.get("generation_model") or ""),
+                                draft_id,
+                                str(draft.get("recommended_title") or ""),
+                                str(draft.get("role_family") or ""),
+                                str(draft.get("talent_persona") or ""),
+                                company,
+                                company_role,
+                                evidence_urls_json,
+                                payload_json,
+                                now,
+                            ),
+                        )
         return len(drafts)
+
+    def current_bundle(
+        self,
+        run_date: str,
+        direction: str,
+        *,
+        source_run_id: str = "",
+    ) -> dict[str, Any] | None:
+        """Return the atomically committed current bundle for a daily run."""
+
+        with self._connect() as connection:
+            row = connection.execute(
+                """
+                SELECT c.snapshot_id, s.bundle_json
+                FROM talent_pool_current_snapshots c
+                JOIN talent_pool_bundle_snapshots s
+                  ON s.snapshot_id=c.snapshot_id
+                WHERE c.run_date=? AND c.direction=?
+                  AND (?='' OR c.source_run_id=?)
+                """,
+                (run_date, direction, source_run_id, source_run_id),
+            ).fetchone()
+        if row is None:
+            return None
+        payload = json.loads(row["bundle_json"])
+        payload["_snapshot_id"] = row["snapshot_id"]
+        return payload
 
     def batch(self, run_date: str, direction: str) -> list[dict[str, Any]]:
         self.expire(run_date=run_date, direction=direction)
@@ -266,15 +675,67 @@ class TalentPoolStore:
             rows = connection.execute(
                 """
                 SELECT d.* FROM talent_pool_drafts d
-                JOIN talent_pool_current_batches b
-                  ON b.run_date=d.run_date AND b.direction=d.direction
-                 AND b.source_run_id=d.source_run_id
+                JOIN talent_pool_current_snapshot_drafts c
+                  ON c.run_date=d.run_date AND c.direction=d.direction
+                 AND c.draft_id=d.draft_id
                 WHERE d.run_date=? AND d.direction=?
-                ORDER BY d.ordinal
+                ORDER BY c.ordinal
                 """,
                 (run_date, direction),
             ).fetchall()
         return [_row_to_dict(row) for row in rows]
+
+    def find_opportunities(
+        self,
+        *,
+        terms: tuple[str, ...] | list[str] = (),
+        direction: str = "",
+        current_only: bool = False,
+        limit: int = 200,
+    ) -> list[dict[str, Any]]:
+        """Return persisted company-role-Liepin mappings for later float analysis."""
+
+        if limit <= 0:
+            return []
+        conditions: list[str] = []
+        parameters: list[Any] = []
+        if current_only:
+            conditions.append("active=1")
+        if direction:
+            conditions.append("direction=?")
+            parameters.append(direction)
+        where = " WHERE " + " AND ".join(conditions) if conditions else ""
+        with self._connect() as connection:
+            rows = connection.execute(
+                "SELECT * FROM talent_pool_opportunity_links"
+                + where
+                + " ORDER BY created_at DESC, company, recommended_title",
+                parameters,
+            ).fetchall()
+        normalized_terms = [str(item).strip().lower() for item in terms if str(item).strip()]
+        output: list[dict[str, Any]] = []
+        for row in rows:
+            value = _row_to_dict(row)
+            searchable = " ".join(
+                str(value.get(key) or "")
+                for key in (
+                    "direction",
+                    "recommended_title",
+                    "role_family",
+                    "talent_persona",
+                    "company",
+                    "company_role",
+                    "liepin_payload_json",
+                )
+            ).lower()
+            if normalized_terms and not any(term in searchable for term in normalized_terms):
+                continue
+            value["evidence_urls"] = json.loads(value.pop("evidence_urls_json"))
+            value["liepin_payload"] = json.loads(value.pop("liepin_payload_json"))
+            output.append(value)
+            if len(output) >= limit:
+                break
+        return output
 
     def apply_command(
         self,
@@ -284,19 +745,39 @@ class TalentPoolStore:
         command: str,
         actor: str,
     ) -> dict[str, Any]:
-        rows = self.batch(run_date, direction)
-        parsed = parse_approval_command(command, draft_count=len(rows))
-        if parsed is None:
-            raise ValueError("指令不明确；未执行审批或发布")
-        selected = [rows[index - 1] for index in parsed.indexes]
-        if parsed.action == "view":
-            return {
-                "action": "view",
-                "draft": json.loads(selected[0]["draft_json"]),
-            }
         now = _utcnow()
-        new_status = "approved" if parsed.action == "publish" else "rejected"
         with self._connect() as connection:
+            connection.execute("BEGIN IMMEDIATE")
+            connection.execute(
+                """
+                UPDATE talent_pool_drafts SET status='expired', updated_at=?
+                WHERE run_date=? AND direction=? AND expires_at < ?
+                  AND status IN ('draft', 'pending_approval', 'approved',
+                                 'publish_failed', 'rejected')
+                """,
+                (now, run_date, direction, date.today().isoformat()),
+            )
+            rows = connection.execute(
+                """
+                SELECT d.*, c.snapshot_id FROM talent_pool_drafts d
+                JOIN talent_pool_current_snapshot_drafts c
+                  ON c.run_date=d.run_date AND c.direction=d.direction
+                 AND c.draft_id=d.draft_id
+                WHERE d.run_date=? AND d.direction=?
+                ORDER BY c.ordinal
+                """,
+                (run_date, direction),
+            ).fetchall()
+            parsed = parse_approval_command(command, draft_count=len(rows))
+            if parsed is None:
+                raise ValueError("指令不明确；未执行审批或发布")
+            selected = [rows[index - 1] for index in parsed.indexes]
+            if parsed.action == "view":
+                return {
+                    "action": "view",
+                    "draft": json.loads(selected[0]["draft_json"]),
+                }
+            new_status = "approved" if parsed.action == "publish" else "rejected"
             for row in selected:
                 if row["status"] in {"published", "expired"}:
                     continue
@@ -310,12 +791,17 @@ class TalentPoolStore:
                     raise ValueError(
                         f"{row['draft_id']} is not approvable from {row['status']}"
                     )
-                connection.execute(
+                cursor = connection.execute(
                     """
                     UPDATE talent_pool_drafts SET status=?, approved_at=?,
                         approved_by=?, approval_command=?, updated_at=?,
                         last_error_code=NULL, last_error_message=NULL
-                    WHERE draft_id=?
+                    WHERE draft_id=? AND payload_hash=?
+                      AND EXISTS (
+                        SELECT 1 FROM talent_pool_current_snapshot_drafts c
+                        WHERE c.run_date=? AND c.direction=?
+                          AND c.snapshot_id=? AND c.draft_id=?
+                      )
                     """,
                     (
                         new_status,
@@ -324,8 +810,15 @@ class TalentPoolStore:
                         command if new_status == "approved" else None,
                         now,
                         row["draft_id"],
+                        row["payload_hash"],
+                        run_date,
+                        direction,
+                        row["snapshot_id"],
+                        row["draft_id"],
                     ),
                 )
+                if cursor.rowcount != 1:
+                    raise RuntimeError("current talent-pool snapshot changed during approval")
                 connection.execute(
                     """
                     INSERT INTO talent_pool_approval_events(
@@ -347,7 +840,6 @@ class TalentPoolStore:
             "action": parsed.action,
             "draft_ids": [row["draft_id"] for row in selected],
         }
-
     def expire(self, *, run_date: str, direction: str, today: str | None = None) -> int:
         today = today or date.today().isoformat()
         with self._connect() as connection:
@@ -413,32 +905,41 @@ class TalentPoolStore:
                 """
                 UPDATE talent_pool_publish_leases SET released_at=?
                 WHERE lease_key='liepin-account' AND lease_token=?
+                  AND run_date=? AND direction=?
                 """,
-                (_utcnow(), token),
+                (_utcnow(), token, run_date, direction),
             )
 
     def begin_publish(
         self, draft_id: str, *, lease_token: str
     ) -> tuple[dict[str, Any], str] | None:
-        """Atomically claim an approved draft; return None when already handled."""
+        """Atomically claim an approved current-snapshot draft."""
 
         with self._connect() as connection:
             connection.execute("BEGIN IMMEDIATE")
             row = connection.execute(
-                "SELECT * FROM talent_pool_drafts WHERE draft_id=?", (draft_id,)
+                """
+                SELECT d.*, c.snapshot_id
+                FROM talent_pool_drafts d
+                JOIN talent_pool_current_snapshot_drafts c
+                  ON c.run_date=d.run_date AND c.direction=d.direction
+                 AND c.draft_id=d.draft_id
+                WHERE d.draft_id=?
+                """,
+                (draft_id,),
             ).fetchone()
             if row is None:
-                raise KeyError(draft_id)
+                raise KeyError(f"{draft_id} is not in the current snapshot")
             lease = connection.execute(
                 """
                 SELECT 1 FROM talent_pool_publish_leases
                 WHERE lease_key='liepin-account' AND lease_token=?
-                  AND released_at IS NULL
+                  AND run_date=? AND direction=? AND released_at IS NULL
                 """,
-                (lease_token,),
+                (lease_token, row["run_date"], row["direction"]),
             ).fetchone()
             if lease is None:
-                raise RuntimeError("active serial publish lease is required")
+                raise RuntimeError("matching active serial publish lease is required")
             if row["status"] == "published":
                 return None
             if row["status"] != "approved":
@@ -468,17 +969,14 @@ class TalentPoolStore:
                 """
                 SELECT outcome FROM talent_pool_publish_attempts
                 WHERE draft_id=? AND payload_hash=?
-                ORDER BY id DESC
-                LIMIT 1
+                ORDER BY id DESC LIMIT 1
                 """,
                 (draft_id, actual_hash),
             ).fetchone()
             if prior and prior["outcome"] == "published":
                 return None
             if prior and prior["outcome"] in {"started", "ambiguous"}:
-                raise RuntimeError(
-                    f"{draft_id} has an unresolved prior publish attempt"
-                )
+                raise RuntimeError(f"{draft_id} has an unresolved prior publish attempt")
             attempt_number = connection.execute(
                 "SELECT COUNT(*) FROM talent_pool_publish_attempts "
                 "WHERE draft_id=? AND payload_hash=?",
@@ -494,11 +992,13 @@ class TalentPoolStore:
                 """,
                 (draft_id, actual_hash, attempt_key, row["source_run_id"], _utcnow()),
             )
-            connection.execute(
+            cursor = connection.execute(
                 "UPDATE talent_pool_drafts SET status='publishing', updated_at=? "
-                "WHERE draft_id=?",
-                (_utcnow(), draft_id),
+                "WHERE draft_id=? AND payload_hash=? AND status='approved'",
+                (_utcnow(), draft_id, actual_hash),
             )
+            if cursor.rowcount != 1:
+                raise RuntimeError("draft changed while publish was being claimed")
         return _row_to_dict(row), attempt_key
 
     def finish_publish(
@@ -517,41 +1017,56 @@ class TalentPoolStore:
         status = "published" if outcome == "published" else "publish_failed"
         now = _utcnow()
         with self._connect() as connection:
-            connection.execute(
+            connection.execute("BEGIN IMMEDIATE")
+            attempt = connection.execute(
+                """
+                SELECT draft_id, payload_hash, outcome
+                FROM talent_pool_publish_attempts WHERE attempt_key=?
+                """,
+                (attempt_key,),
+            ).fetchone()
+            if attempt is None:
+                raise KeyError(attempt_key)
+            if attempt["draft_id"] != draft_id:
+                raise ValueError("publish attempt does not belong to draft")
+            if attempt["outcome"] != "started":
+                raise ValueError("publish attempt is not open")
+            draft = connection.execute(
+                "SELECT payload_hash, status FROM talent_pool_drafts WHERE draft_id=?",
+                (draft_id,),
+            ).fetchone()
+            if draft is None or draft["payload_hash"] != attempt["payload_hash"]:
+                raise RuntimeError("draft payload no longer matches publish attempt")
+            if draft["status"] != "publishing":
+                raise RuntimeError("draft is not currently publishing")
+            attempt_cursor = connection.execute(
                 """
                 UPDATE talent_pool_publish_attempts SET finished_at=?, outcome=?,
                     error_code=?, error_message=?, job_id=?, job_url=?
-                WHERE attempt_key=?
+                WHERE attempt_key=? AND draft_id=? AND payload_hash=?
+                  AND outcome='started'
                 """,
                 (
-                    now,
-                    outcome,
-                    error_code,
-                    error_message[:1000],
-                    job_id,
-                    job_url,
-                    attempt_key,
+                    now, outcome, error_code, error_message[:1000], job_id, job_url,
+                    attempt_key, draft_id, attempt["payload_hash"],
                 ),
             )
-            connection.execute(
+            draft_cursor = connection.execute(
                 """
                 UPDATE talent_pool_drafts SET status=?, liepin_job_id=?,
                     liepin_job_url=?, published_at=?, last_error_code=?,
                     last_error_message=?, updated_at=?
-                WHERE draft_id=?
+                WHERE draft_id=? AND payload_hash=? AND status='publishing'
                 """,
                 (
-                    status,
-                    job_id,
-                    job_url,
+                    status, job_id, job_url,
                     now if outcome == "published" else None,
-                    error_code,
-                    error_message[:1000],
-                    now,
-                    draft_id,
+                    error_code, error_message[:1000], now,
+                    draft_id, attempt["payload_hash"],
                 ),
             )
-
+            if attempt_cursor.rowcount != 1 or draft_cursor.rowcount != 1:
+                raise RuntimeError("publish completion lost its atomic claim")
     def approved_ids(self, run_date: str, direction: str) -> list[str]:
         return [
             row["draft_id"]

@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from ht_lead_radar.feishu_notify import FeishuRecipient, main
 from ht_lead_radar.talent_pool import generate_draft_bundle
 from ht_lead_radar.talent_pool_store import TalentPoolStore
@@ -78,7 +80,8 @@ def test_main_merges_recipient_fallback_and_suppresses_duplicate(tmp_path):
     assert recipient == FeishuRecipient("ou-open", "open_id")
     assert "示例机器人" in text
 
-def test_main_does_not_mix_stale_same_day_talent_bundle(tmp_path):
+@pytest.mark.parametrize("talent_exit_code", [71, 137])
+def test_main_does_not_mix_stale_same_day_talent_bundle(tmp_path, talent_exit_code):
     FakeClient.sent.clear()
     env_file = tmp_path / "lead.env"
     env_file.write_text(
@@ -124,11 +127,11 @@ def test_main_does_not_mix_stale_same_day_talent_bundle(tmp_path):
         "--talent-output-dir",
         str(talent_dir),
         "--talent-draft-exit-code",
-        "71",
+        str(talent_exit_code),
     ]
 
     assert main(args, client_class=FakeClient) == 0
     text = FakeClient.sent[0][3]
-    assert "退出码 71" in text
-    assert "今日建议发布的人才蓄水职位" not in text
+    assert f"退出码 {talent_exit_code}" in text
+    assert "今日建议发布职位" not in text
     assert old_bundle.drafts[0].draft_id not in text

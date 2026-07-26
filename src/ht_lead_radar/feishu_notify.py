@@ -246,6 +246,7 @@ def notification_key(
     talent_drafts: list[Mapping[str, Any]] | None = None,
     talent_generation_error: str = "",
     talent_generation_model: str = "",
+    talent_snapshot_id: str = "",
 ) -> str:
     manifest = (report or {}).get("manifest") or {}
     value = {
@@ -262,9 +263,39 @@ def notification_key(
         ],
         "talent_generation_error": talent_generation_error,
         "talent_generation_model": talent_generation_model,
+        "talent_snapshot_id": talent_snapshot_id,
     }
     serialized = json.dumps(value, ensure_ascii=False, sort_keys=True)
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+
+
+def _draft_target_text(item: Mapping[str, Any]) -> str:
+    targets: list[str] = []
+    for source in item.get("source_leads") or ():
+        if not isinstance(source, Mapping):
+            continue
+        company = str(source.get("company") or "").strip()
+        if not company:
+            continue
+        roles = [
+            str(role).strip()
+            for role in source.get("role_hypotheses") or ()
+            if str(role).strip()
+        ]
+        role_text = "、".join(roles) or str(
+            item.get("recommended_title") or "岗位待核"
+        )
+        targets.append(f"{company} → {role_text}")
+    return "；".join(targets) or "关联公司与岗位待核"
+
+
+def _liepin_json_text(item: Mapping[str, Any]) -> str:
+    payload = item.get("public_payload")
+    if not isinstance(payload, Mapping):
+        return "{}"
+    return json.dumps(
+        dict(payload), ensure_ascii=False, sort_keys=True, separators=(",", ":")
+    )
 
 
 def build_summary(
@@ -278,6 +309,7 @@ def build_summary(
     talent_generation_error: str = "",
     talent_generation_model: str = "",
     company_demands: list[Mapping[str, Any]] | None = None,
+    include_liepin_json: bool = True,
 ) -> str:
     if task_exit_code == 0:
         status = "✅ 已完成"
@@ -368,7 +400,7 @@ def build_summary(
         lines.append(f"职位草稿生成存在失败：{detail}")
     if talent_drafts:
         lines.append(
-            f"今日建议发布的人才蓄水职位（共 {len(talent_drafts)} 个）"
+            f"今日建议发布职位（共 {len(talent_drafts)} 个）"
         )
         for index, item in enumerate(talent_drafts, start=1):
             lines.extend(
@@ -376,15 +408,17 @@ def build_summary(
                     "",
                     f"{index}. [{item.get('draft_id', '-')}] "
                     f"{item.get('recommended_title', '未命名草稿')}",
+                    f"   目标公司/岗位：{_draft_target_text(item)}",
                     f"   人才画像：{item.get('talent_persona', '-')}",
                     f"   吸引角度：{item.get('attraction_angle', '-')}",
-                    f"   为什么现在蓄水：{item.get('why_now', '-')}",
+                    f"   为什么现在：{item.get('why_now', '-')}",
+                    *([f"   猎聘 JSON：{_liepin_json_text(item)}"] if include_liepin_json else []),
                 ]
             )
         lines.extend(
             [
                 "",
-                "当前消息仅供人工审核；飞书入站审批与一键发布尚未接通。",
+                "当前消息仅供人工审核；每条猎聘 JSON 已与目标公司和岗位假设关联并持久化。",
                 "如需批准，请明确要求 Codex/OpenClaw 查看当日草稿并执行审批流程。",
             ]
         )
@@ -392,6 +426,49 @@ def build_summary(
         lines.append("今日没有人才蓄水草稿；不会读取或沿用历史草稿。")
     return "\n".join(lines)
 
+FEISHU_TEXT_MAX_BYTES = 28_000
+
+
+def _split_utf8(text: str, max_bytes: int = FEISHU_TEXT_MAX_BYTES) -> list[str]:
+    if len(text.encode("utf-8")) <= max_bytes:
+        return [text]
+    parts: list[str] = []
+    current: list[str] = []
+    size = 0
+    for character in text:
+        encoded_size = len(character.encode("utf-8"))
+        if current and size + encoded_size > max_bytes:
+            parts.append("".join(current))
+            current = []
+            size = 0
+        current.append(character)
+        size += encoded_size
+    if current:
+        parts.append("".join(current))
+    return parts
+
+
+def build_summary_parts(**kwargs: Any) -> list[str]:
+    """Keep a normal run in one message; split safely when full JSON is large."""
+
+    full = build_summary(**kwargs)
+    if len(full.encode("utf-8")) <= FEISHU_TEXT_MAX_BYTES:
+        return [full]
+    base_kwargs = dict(kwargs)
+    base_kwargs["include_liepin_json"] = False
+    parts = _split_utf8(build_summary(**base_kwargs))
+    drafts = kwargs.get("talent_drafts") or ()
+    for index, item in enumerate(drafts, start=1):
+        detail = (
+            f"【猎聘 JSON {index}/{len(drafts)}】\n"
+            f"[{item.get('draft_id', '-')}] {item.get('recommended_title', '-')}\n"
+            f"目标公司/岗位：{_draft_target_text(item)}\n"
+            f"{_liepin_json_text(item)}"
+        )
+        if len(detail.encode("utf-8")) > FEISHU_TEXT_MAX_BYTES:
+            raise ValueError("single Liepin JSON exceeds Feishu text limit")
+        parts.append(detail)
+    return parts
 
 def load_talent_drafts(
     database: str | Path,
@@ -403,18 +480,21 @@ def load_talent_drafts(
     path = Path(database)
     if not path.exists():
         return []
+    from .talent_pool_store import TalentPoolStore
+
+    TalentPoolStore(path)
     with sqlite3.connect(path) as connection:
         connection.row_factory = sqlite3.Row
         rows = connection.execute(
             """
             SELECT d.draft_id, d.payload_hash, d.status, d.draft_json
             FROM talent_pool_drafts d
-            JOIN talent_pool_current_batches b
-              ON b.run_date=d.run_date AND b.direction=d.direction
-             AND b.source_run_id=d.source_run_id
+            JOIN talent_pool_current_snapshot_drafts c
+              ON c.run_date=d.run_date AND c.direction=d.direction
+             AND c.draft_id=d.draft_id
             WHERE d.run_date=? AND d.direction=?
               AND (?='' OR d.source_run_id=?)
-            ORDER BY d.ordinal
+            ORDER BY c.ordinal
             """,
             (run_date, direction, source_run_id, source_run_id),
         ).fetchall()
@@ -483,31 +563,32 @@ def main(
         source_run_id = str(
             ((report or {}).get("manifest") or {}).get("run_id") or ""
         )
-        talent_bundle = (
-            find_talent_bundle(
-                args.talent_output_dir,
-                run_date=args.run_date,
-                direction=args.direction,
+        from .talent_pool_store import TalentPoolStore
+
+        talent_store = TalentPoolStore(args.talent_state_db)
+        if args.talent_draft_exit_code not in {0, 72}:
+            talent_bundle = None
+        elif report and source_run_id:
+            talent_bundle = talent_store.current_bundle(
+                args.run_date,
+                args.direction,
                 source_run_id=source_run_id,
             )
-            if report and source_run_id
-            else None
-        )
-        talent_drafts = (
-            load_talent_drafts(
-                args.talent_state_db,
-                run_date=args.run_date,
-                direction=args.direction,
-                source_run_id=source_run_id,
-            )
-            if talent_bundle
-            else []
-        )
+        else:
+            talent_bundle = None
+        talent_drafts = [
+            dict(item)
+            for item in (talent_bundle or {}).get("drafts") or ()
+            if isinstance(item, Mapping)
+        ]
         talent_generation_error = str(
             (talent_bundle or {}).get("generation_error") or ""
         ).strip()
         talent_generation_model = str(
             (talent_bundle or {}).get("generation_model") or ""
+        ).strip()
+        talent_snapshot_id = str(
+            (talent_bundle or {}).get("_snapshot_id") or ""
         ).strip()
         if args.talent_draft_exit_code != 0 and report:
             exit_detail = f"退出码 {args.talent_draft_exit_code}"
@@ -525,12 +606,9 @@ def main(
             talent_drafts=talent_drafts,
             talent_generation_error=talent_generation_error,
             talent_generation_model=talent_generation_model,
+            talent_snapshot_id=talent_snapshot_id,
         )
-        state = NotificationState(args.state_db)
-        if state.was_sent(key) and not args.force:
-            print("Feishu daily summary already sent; skipping duplicate.")
-            return 0
-        text = build_summary(
+        parts = build_summary_parts(
             run_date=args.run_date,
             direction=args.direction,
             task_exit_code=args.task_exit_code,
@@ -541,13 +619,25 @@ def main(
             talent_generation_model=talent_generation_model,
             company_demands=company_demands,
         )
-        message_id = client_class(app_id, app_secret).send_text(
-            recipient,
-            text,
-            idempotency_key=key,
-        )
-        state.record(key, message_id)
-        print("Feishu daily summary sent.")
+        state = NotificationState(args.state_db)
+        client = client_class(app_id, app_secret)
+        sent_count = 0
+        for index, text in enumerate(parts, start=1):
+            part_manifest = f"{key}:{index}:{hashlib.sha256(text.encode('utf-8')).hexdigest()}"
+            part_key = hashlib.sha256(part_manifest.encode("utf-8")).hexdigest()
+            if state.was_sent(part_key) and not args.force:
+                continue
+            message_id = client.send_text(
+                recipient,
+                text,
+                idempotency_key=part_key,
+            )
+            state.record(part_key, message_id)
+            sent_count += 1
+        if sent_count:
+            print(f"Feishu daily summary sent ({sent_count} message(s)).")
+        else:
+            print("Feishu daily summary already sent; skipping duplicate.")
         return 0
     except Exception as error:
         print(

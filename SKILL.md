@@ -41,6 +41,19 @@ python3 scripts/run_lead_radar_v2.py deep-research \
 ```
 
 Use `run --direction ...` for the legacy direction entry point. Use `--demo --direction 灵巧手 --metaso-verify-limit 0` for a deterministic smoke test.
+Before a Candidate Float, query persisted market opportunities so prior daily
+analysis is not lost:
+
+```bash
+python3 scripts/query_talent_opportunities.py \
+  --term "<candidate capability or role>" \
+  --direction "<direction when known>" \
+  --state-db data/talent-pool.sqlite
+```
+
+Use the returned company-role mappings, evidence URLs and Liepin payload as
+inputs to the Float analysis, then verify current facts. Do not treat a stored
+opportunity as a confirmed vacancy.
 
 ## Source policy
 
