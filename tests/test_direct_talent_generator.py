@@ -1,11 +1,14 @@
 import json
 
+import pytest
+
 from ht_lead_radar.company_demand_v2 import (
     COMPANY_DEMAND_SYSTEM_PROMPT,
     build_company_evidence_packets,
     parse_single_company_demand,
 )
 from ht_lead_radar.direct_talent_generator import (
+    DirectTalentGenerationError,
     JOB_AD_SYSTEM_PROMPT,
     generate_direct_talent_bundle,
 )
@@ -303,3 +306,61 @@ def test_unknown_city_defaults_to_shanghai_and_remains_publishable():
 
     assert len(themes) == 1
     assert themes[0]["city"] == "上海"
+
+
+def test_one_invalid_theme_returns_partial_bundle_instead_of_losing_valid_drafts():
+    report = supported_report(leads=2)
+    packets = build_company_evidence_packets(report)
+    raw_demands = [
+        demand_response(packets[0], title="机器人运动控制工程化总监"),
+        demand_response(packets[1], title="商业航天动力系统交付总监"),
+    ]
+    parsed = tuple(
+        parse_single_company_demand(
+            json.dumps(response, ensure_ascii=False),
+            packet=packet,
+        )
+        for response, packet in zip(raw_demands, packets, strict=True)
+    )
+    themes = build_talent_themes(report, parsed, target_count=5)
+    seeds = build_theme_draft_bundle(report, parsed, themes)
+    runner = SequenceRunner(
+        *raw_demands,
+        {"drafts": []},
+        {"drafts": []},
+        ad_response(seeds.drafts[1]),
+    )
+
+    bundle = generate_direct_talent_bundle(report, target_count=5, runner=runner)
+
+    assert len(bundle.drafts) == 1
+    assert bundle.drafts[0].recommended_title == seeds.drafts[1].recommended_title
+    assert "failed after one repair" in bundle.generation_error
+
+def test_deadline_crossed_inside_llm_call_is_not_accepted(monkeypatch):
+    report = supported_report(leads=1)
+    packet = build_company_evidence_packets(report)[0]
+    runner = SequenceRunner(
+        demand_response(packet, title="机器人运动控制工程化总监")
+    )
+    ticks = iter([0.0, 0.0, 2.0])
+    monkeypatch.setattr(
+        "ht_lead_radar.direct_talent_generator.time.monotonic",
+        lambda: next(ticks),
+    )
+
+    with pytest.raises(DirectTalentGenerationError, match="no valid talent theme"):
+        generate_direct_talent_bundle(
+            report,
+            target_count=5,
+            runner=runner,
+            deadline_seconds=1,
+        )
+
+
+def test_all_company_analysis_failures_do_not_commit_empty_partial_bundle():
+    report = supported_report(leads=1)
+    runner = SequenceRunner({"unexpected": True}, {"unexpected": True})
+
+    with pytest.raises(DirectTalentGenerationError, match="no valid talent theme"):
+        generate_direct_talent_bundle(report, target_count=5, runner=runner)
