@@ -26,6 +26,11 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--direction", required=True)
     parser.add_argument("--run-date", default=date.today().isoformat())
     parser.add_argument("--state-db", default="data/talent-pool.sqlite")
+    parser.add_argument(
+        "--context-snapshot-id",
+        default="",
+        help=argparse.SUPPRESS,
+    )
     mode = parser.add_mutually_exclusive_group()
     mode.add_argument("--fake-publish", action="store_true")
     mode.add_argument("--execute-real", action="store_true")
@@ -43,6 +48,7 @@ def main(argv: list[str] | None = None) -> int:
             direction=args.direction,
             command=args.command,
             actor=args.actor,
+            expected_snapshot_id=args.context_snapshot_id,
         )
         if command_result["action"] == "view":
             print(

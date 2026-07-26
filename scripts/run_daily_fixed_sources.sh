@@ -16,6 +16,7 @@ if [ -z "${PYTHON_BIN:-}" ]; then
 fi
 OPENCLAW_CONFIG_PATH="${OPENCLAW_CONFIG_PATH:-/home/admin/.openclaw/openclaw.json}"
 OPENCLAW_MODELS_PATH="${OPENCLAW_MODELS_PATH:-/home/admin/.openclaw/agents/main/agent/models.json}"
+OPENCLAW_BIN="${OPENCLAW_BIN:-/home/admin/.local/share/pnpm/openclaw}"
 LEAD_RADAR_LLM_MODEL="${LEAD_RADAR_LLM_MODEL:-minimax/MiniMax-M3}"
 export OPENCLAW_CONFIG_PATH OPENCLAW_MODELS_PATH LEAD_RADAR_LLM_MODEL
 DAILY_DIRECTION="${HT_LEAD_DAILY_DIRECTION:-具身智能}"
@@ -101,20 +102,39 @@ fi
   > reports-daily/health-latest.json 2>&1 || true
 
 notification_status=0
-"$PYTHON_BIN" scripts/send_daily_feishu_summary.py \
-  --direction "$DAILY_DIRECTION" \
-  --task-exit-code "$status" \
-  --report-dir reports-daily \
-  --state-db data/feishu-notifications.sqlite \
-  --env-file "$ENV_FILE" \
-  --fallback-env-file "$JOSINT_DIR/.env" \
-  --talent-state-db data/talent-pool.sqlite \
-  --talent-draft-exit-code "$talent_draft_status" \
-  || notification_status=$?
+openclaw_hook_status=0
+if { [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; } \
+  && { [ "$talent_draft_status" -eq 0 ] || [ "$talent_draft_status" -eq 72 ]; }; then
+  if [ ! -x "$OPENCLAW_BIN" ]; then
+    echo "OpenClaw binary is not executable: $OPENCLAW_BIN" >&2
+    openclaw_hook_status=69
+  else
+    "$PYTHON_BIN" scripts/openclaw_daily_report.py \
+      --state-db data/talent-pool.sqlite \
+      wake --source completion-hook --openclaw-bin "$OPENCLAW_BIN" \
+      || openclaw_hook_status=$?
+  fi
+fi
 
+# Keep the direct Feishu sender only as a failure fallback. A successful hook
+# is reported by OpenClaw in its reset-safe main conversation.
+if [ "$openclaw_hook_status" -ne 0 ] \
+  || { [ "$status" -ne 0 ] && [ "$status" -ne 2 ]; } \
+  || { [ "$talent_draft_status" -ne 0 ] && [ "$talent_draft_status" -ne 72 ]; }; then
+  "$PYTHON_BIN" scripts/send_daily_feishu_summary.py \
+    --direction "$DAILY_DIRECTION" \
+    --task-exit-code "$status" \
+    --report-dir reports-daily \
+    --state-db data/feishu-notifications.sqlite \
+    --env-file "$ENV_FILE" \
+    --fallback-env-file "$JOSINT_DIR/.env" \
+    --talent-state-db data/talent-pool.sqlite \
+    --talent-draft-exit-code "$talent_draft_status" \
+    || notification_status=$?
+fi
 if [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; then
   if [ "$notification_status" -ne 0 ]; then
-    echo "Lead Rader completed, but Feishu summary notification failed." >&2
+    echo "Lead Rader completed, but its fallback Feishu notification failed." >&2
     exit "$notification_status"
   fi
   if [ "$talent_draft_status" -ne 0 ]; then

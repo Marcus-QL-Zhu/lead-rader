@@ -185,6 +185,20 @@ class TalentPoolStore:
                     acquired_at TEXT NOT NULL,
                     released_at TEXT
                 );
+                CREATE TABLE IF NOT EXISTS talent_pool_openclaw_reports (
+                    snapshot_id TEXT PRIMARY KEY,
+                    run_date TEXT NOT NULL,
+                    direction TEXT NOT NULL,
+                    session_key TEXT NOT NULL,
+                    ordered_draft_ids_json TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    reported_at TEXT,
+                    last_error TEXT NOT NULL DEFAULT ''
+                );
+                CREATE INDEX IF NOT EXISTS idx_talent_pool_openclaw_pending
+                ON talent_pool_openclaw_reports(status, run_date, direction);
                 """
             )
             self._migrate_legacy_state(connection)
@@ -361,15 +375,24 @@ class TalentPoolStore:
                     ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """,
                     (
-                        snapshot_id, run_date, direction, source_run_id,
-                        generation_model, str(draft.get("draft_id") or ""),
+                        snapshot_id,
+                        run_date,
+                        direction,
+                        source_run_id,
+                        generation_model,
+                        str(draft.get("draft_id") or ""),
                         str(draft.get("recommended_title") or ""),
                         str(draft.get("role_family") or ""),
                         str(draft.get("talent_persona") or ""),
-                        company, company_role, evidence_urls_json, payload_json,
-                        active, created_at,
+                        company,
+                        company_role,
+                        evidence_urls_json,
+                        payload_json,
+                        active,
+                        created_at,
                     ),
                 )
+
     def save_bundle(self, bundle: Mapping[str, Any]) -> int:
         run_date = str(bundle.get("run_date") or "")
         direction = str(bundle.get("direction") or "")
@@ -640,7 +663,136 @@ class TalentPoolStore:
                                 now,
                             ),
                         )
+            existing_report = connection.execute(
+                "SELECT status FROM talent_pool_openclaw_reports WHERE snapshot_id=?",
+                (snapshot_id,),
+            ).fetchone()
+            if existing_report is None:
+                connection.execute(
+                    """
+                    INSERT INTO talent_pool_openclaw_reports(
+                        snapshot_id, run_date, direction, session_key,
+                        ordered_draft_ids_json, status, created_at, updated_at
+                    ) VALUES (?, ?, ?, 'agent:main:main', ?, 'pending', ?, ?)
+                    """,
+                    (
+                        snapshot_id,
+                        run_date,
+                        direction,
+                        json.dumps(current_ids, ensure_ascii=False),
+                        now,
+                        now,
+                    ),
+                )
         return len(drafts)
+
+    def pending_openclaw_report(
+        self,
+        *,
+        session_key: str = "agent:main:main",
+        claim: bool = False,
+    ) -> dict[str, Any] | None:
+        """Return the newest current snapshot that OpenClaw has not reported."""
+
+        stale_before = datetime.now(timezone.utc).timestamp() - 20 * 60
+        with self._connect() as connection:
+            if claim:
+                connection.execute("BEGIN IMMEDIATE")
+            rows = connection.execute(
+                """
+                SELECT r.*, s.bundle_json
+                FROM talent_pool_openclaw_reports r
+                JOIN talent_pool_current_snapshots c
+                  ON c.snapshot_id=r.snapshot_id
+                 AND c.run_date=r.run_date
+                 AND c.direction=r.direction
+                JOIN talent_pool_bundle_snapshots s
+                  ON s.snapshot_id=r.snapshot_id
+                WHERE r.session_key=?
+                ORDER BY r.run_date DESC, r.created_at DESC
+                LIMIT 1
+                """,
+                (session_key,),
+            ).fetchone()
+            selected = rows
+            if selected is None or selected["status"] == "reported":
+                return None
+            if selected["status"] == "reporting":
+                try:
+                    updated_at = datetime.fromisoformat(
+                        str(selected["updated_at"]).replace("Z", "+00:00")
+                    )
+                except ValueError:
+                    updated_at = datetime.fromtimestamp(0, timezone.utc)
+                if updated_at.timestamp() > stale_before:
+                    return None
+            if claim:
+                connection.execute(
+                    """
+                    UPDATE talent_pool_openclaw_reports
+                    SET status='reporting', updated_at=?, last_error=''
+                    WHERE snapshot_id=?
+                    """,
+                    (_utcnow(), selected["snapshot_id"]),
+                )
+            result = dict(selected)
+        result["bundle"] = json.loads(result.pop("bundle_json"))
+        result["ordered_draft_ids"] = json.loads(result.pop("ordered_draft_ids_json"))
+        return result
+
+    def latest_openclaw_context(
+        self, *, session_key: str = "agent:main:main"
+    ) -> dict[str, Any] | None:
+        """Return the newest committed report that still matches current state."""
+
+        with self._connect() as connection:
+            row = connection.execute(
+                """
+                SELECT r.*, s.bundle_json
+                FROM talent_pool_openclaw_reports r
+                JOIN talent_pool_current_snapshots c
+                  ON c.snapshot_id=r.snapshot_id
+                 AND c.run_date=r.run_date
+                 AND c.direction=r.direction
+                JOIN talent_pool_bundle_snapshots s
+                  ON s.snapshot_id=r.snapshot_id
+                WHERE r.session_key=?
+                ORDER BY r.run_date DESC, r.updated_at DESC
+                LIMIT 1
+                """,
+                (session_key,),
+            ).fetchone()
+        if row is None:
+            return None
+        result = dict(row)
+        result["bundle"] = json.loads(result.pop("bundle_json"))
+        result["ordered_draft_ids"] = json.loads(result.pop("ordered_draft_ids_json"))
+        return result
+
+    def mark_openclaw_reported(self, snapshot_id: str) -> bool:
+        now = _utcnow()
+        with self._connect() as connection:
+            cursor = connection.execute(
+                """
+                UPDATE talent_pool_openclaw_reports
+                SET status='reported', reported_at=?, updated_at=?, last_error=''
+                WHERE snapshot_id=? AND status IN ('pending', 'reporting', 'failed')
+                """,
+                (now, now, snapshot_id),
+            )
+        return cursor.rowcount == 1
+
+    def mark_openclaw_report_failed(self, snapshot_id: str, error: str) -> bool:
+        with self._connect() as connection:
+            cursor = connection.execute(
+                """
+                UPDATE talent_pool_openclaw_reports
+                SET status='failed', updated_at=?, last_error=?
+                WHERE snapshot_id=? AND status<>'reported'
+                """,
+                (_utcnow(), str(error)[:1000], snapshot_id),
+            )
+        return cursor.rowcount == 1
 
     def current_bundle(
         self,
@@ -712,7 +864,9 @@ class TalentPoolStore:
                 + " ORDER BY created_at DESC, company, recommended_title",
                 parameters,
             ).fetchall()
-        normalized_terms = [str(item).strip().lower() for item in terms if str(item).strip()]
+        normalized_terms = [
+            str(item).strip().lower() for item in terms if str(item).strip()
+        ]
         output: list[dict[str, Any]] = []
         for row in rows:
             value = _row_to_dict(row)
@@ -728,7 +882,9 @@ class TalentPoolStore:
                     "liepin_payload_json",
                 )
             ).lower()
-            if normalized_terms and not any(term in searchable for term in normalized_terms):
+            if normalized_terms and not any(
+                term in searchable for term in normalized_terms
+            ):
                 continue
             value["evidence_urls"] = json.loads(value.pop("evidence_urls_json"))
             value["liepin_payload"] = json.loads(value.pop("liepin_payload_json"))
@@ -744,6 +900,7 @@ class TalentPoolStore:
         direction: str,
         command: str,
         actor: str,
+        expected_snapshot_id: str = "",
     ) -> dict[str, Any]:
         now = _utcnow()
         with self._connect() as connection:
@@ -768,6 +925,26 @@ class TalentPoolStore:
                 """,
                 (run_date, direction),
             ).fetchall()
+            if (
+                rows
+                and expected_snapshot_id
+                and any(row["snapshot_id"] != expected_snapshot_id for row in rows)
+            ):
+                raise RuntimeError(
+                    "displayed daily report is no longer current; show the latest report first"
+                )
+            if expected_snapshot_id:
+                report_state = connection.execute(
+                    """
+                    SELECT status FROM talent_pool_openclaw_reports
+                    WHERE snapshot_id=?
+                    """,
+                    (expected_snapshot_id,),
+                ).fetchone()
+                if report_state is None or report_state["status"] != "reported":
+                    raise RuntimeError(
+                        "current daily report has not been shown completely; report it before approval"
+                    )
             parsed = parse_approval_command(command, draft_count=len(rows))
             if parsed is None:
                 raise ValueError("指令不明确；未执行审批或发布")
@@ -818,7 +995,9 @@ class TalentPoolStore:
                     ),
                 )
                 if cursor.rowcount != 1:
-                    raise RuntimeError("current talent-pool snapshot changed during approval")
+                    raise RuntimeError(
+                        "current talent-pool snapshot changed during approval"
+                    )
                 connection.execute(
                     """
                     INSERT INTO talent_pool_approval_events(
@@ -840,6 +1019,7 @@ class TalentPoolStore:
             "action": parsed.action,
             "draft_ids": [row["draft_id"] for row in selected],
         }
+
     def expire(self, *, run_date: str, direction: str, today: str | None = None) -> int:
         today = today or date.today().isoformat()
         with self._connect() as connection:
@@ -976,12 +1156,17 @@ class TalentPoolStore:
             if prior and prior["outcome"] == "published":
                 return None
             if prior and prior["outcome"] in {"started", "ambiguous"}:
-                raise RuntimeError(f"{draft_id} has an unresolved prior publish attempt")
-            attempt_number = connection.execute(
-                "SELECT COUNT(*) FROM talent_pool_publish_attempts "
-                "WHERE draft_id=? AND payload_hash=?",
-                (draft_id, actual_hash),
-            ).fetchone()[0] + 1
+                raise RuntimeError(
+                    f"{draft_id} has an unresolved prior publish attempt"
+                )
+            attempt_number = (
+                connection.execute(
+                    "SELECT COUNT(*) FROM talent_pool_publish_attempts "
+                    "WHERE draft_id=? AND payload_hash=?",
+                    (draft_id, actual_hash),
+                ).fetchone()[0]
+                + 1
+            )
             attempt_key = f"{draft_id}:{actual_hash}:{attempt_number}"
             connection.execute(
                 """
@@ -1047,8 +1232,15 @@ class TalentPoolStore:
                   AND outcome='started'
                 """,
                 (
-                    now, outcome, error_code, error_message[:1000], job_id, job_url,
-                    attempt_key, draft_id, attempt["payload_hash"],
+                    now,
+                    outcome,
+                    error_code,
+                    error_message[:1000],
+                    job_id,
+                    job_url,
+                    attempt_key,
+                    draft_id,
+                    attempt["payload_hash"],
                 ),
             )
             draft_cursor = connection.execute(
@@ -1059,14 +1251,20 @@ class TalentPoolStore:
                 WHERE draft_id=? AND payload_hash=? AND status='publishing'
                 """,
                 (
-                    status, job_id, job_url,
+                    status,
+                    job_id,
+                    job_url,
                     now if outcome == "published" else None,
-                    error_code, error_message[:1000], now,
-                    draft_id, attempt["payload_hash"],
+                    error_code,
+                    error_message[:1000],
+                    now,
+                    draft_id,
+                    attempt["payload_hash"],
                 ),
             )
             if attempt_cursor.rowcount != 1 or draft_cursor.rowcount != 1:
                 raise RuntimeError("publish completion lost its atomic claim")
+
     def approved_ids(self, run_date: str, direction: str) -> list[str]:
         return [
             row["draft_id"]
@@ -1080,8 +1278,8 @@ def _row_to_dict(row: sqlite3.Row) -> dict[str, Any]:
 
 
 def _utcnow() -> str:
-    return datetime.now(timezone.utc).isoformat(timespec="seconds").replace(
-        "+00:00", "Z"
+    return (
+        datetime.now(timezone.utc).isoformat(timespec="seconds").replace("+00:00", "Z")
     )
 
 

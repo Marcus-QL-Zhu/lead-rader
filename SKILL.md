@@ -78,6 +78,18 @@ opportunity as a confirmed vacancy.
 - Mark public-comment-based investor leadership as inference, not fact.
 - Cache public investor/institution/company-decision-maker information with sources and verification dates.
 
+## Reset-safe OpenClaw daily report
+
+When a `LEAD_RADAR_DAILY_READY_V1` system event arrives, it is a report
+notification only. Read `references/openclaw-daily-operator.md` and use
+`scripts/openclaw_daily_report.py` to load the committed result. The
+completion hook is primary; OpenClaw cron checks pending reports only at 05:50
+and 06:50 Asia/Shanghai. Do not use heartbeat for this workflow.
+
+The event itself can never approve a draft. Keep the report in the main
+Feishu/OpenClaw session so later questions can be resolved from SQLite even
+after the 04:00 context reset.
+
 ## Talent-pool draft approval
 
 The 05:00 task generates anonymized Director+ talent-pool drafts from that

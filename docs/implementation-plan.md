@@ -325,3 +325,19 @@ Float 失败后跨进程不能 resume，这是有意的数据治理结果：候�
 - [x] 新增 `query_talent_opportunities.py`，供后续 Float Agent 查询历史或当前机会。
 - [x] 不增加结果评分和自动发布能力。
 - [x] 单个人才主题经一次修复仍失败时降级为部分成功（退出码 72），保留并推送其他有效职位；仅全部主题失败时退出 71。
+
+# 2026-07-27：OpenClaw reset-safe 日报与轻量审批桥
+
+状态：代码与本地测试完成，待独立代码审查、GitHub CI、生产部署与飞书冒烟验证。
+
+- [x] 每个已提交人才池 bundle 在同一 SQLite 事务中登记待汇报状态；相同 snapshot 重跑不重复汇报。
+- [x] 05:00 任务完成后通过 `openclaw system event` 唤醒 `agent:main:main`；事件只包含项目地图和读取命令，不携带网页正文或完整 JSON。
+- [x] 新增 `references/openclaw-daily-operator.md`，供 OpenClaw 在 04:00 会话重置后恢复 Lead Rader 所需的最小上下文。
+- [x] 新增按需查询：当前日报、待汇报日报、指定编号的完整公司—岗位—证据—猎聘 JSON。
+- [x] 正常路径由 OpenClaw 在主飞书会话汇报；原飞书 REST 汇总只在 hook/任务/草稿生成失败时兜底。
+- [x] OpenClaw cron 只在 05:50 和 06:50 运行（`50 5,6 * * *`，Asia/Shanghai），不使用 heartbeat。
+- [x] 用户仍只需回复 `发布 1,3` 等自然编号；系统内部轻量校验当前显示结果未被同日重跑替换，不要求用户提供 snapshot code。
+- [x] hook 和 cron 均只能汇报、查询和询问；发布必须来自真实飞书入站的精确用户命令。
+- [ ] 独立子代理 full code review。
+- [ ] 推送 GitHub 并等待 exact SHA 的 Actions 通过。
+- [ ] 备份生产源代码与数据库，部署 exact SHA，安装唯一的两次 cron 并执行 reset-safe/飞书冒烟测试。

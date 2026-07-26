@@ -50,14 +50,17 @@ def test_feishu_summary_surfaces_generation_failure_without_stale_drafts(tmp_pat
     assert "今日建议发布职位" not in text
 
 
-def test_daily_launcher_generates_before_the_single_feishu_notification():
+def test_daily_launcher_generates_before_openclaw_hook_with_feishu_fallback():
     script = (
         Path(__file__).parents[1] / "scripts" / "run_daily_fixed_sources.sh"
     ).read_text(encoding="utf-8")
     generator = script.index("scripts/generate_talent_pool_drafts.py")
+    hook = script.index("scripts/openclaw_daily_report.py")
     notifier = script.index("scripts/send_daily_feishu_summary.py")
-    assert generator < notifier
+    assert generator < hook < notifier
     assert script.count("scripts/send_daily_feishu_summary.py") == 1
+    assert "wake --source completion-hook" in script
+    assert "openclaw_hook_status" in script
     assert "--talent-state-db data/talent-pool.sqlite" in script
     assert '--talent-draft-exit-code "$talent_draft_status"' in script
     assert "--generator direct-llm" in script

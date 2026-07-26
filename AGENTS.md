@@ -45,7 +45,8 @@ deployment.
 
 The production daily task is:
 
-- cron time: 05:00 Asia/Shanghai
+- Lead generation cron time: 05:00 Asia/Shanghai
+- OpenClaw report reconciliation cron: exactly 05:50 and 06:50 Asia/Shanghai (50 5,6 * * *); no heartbeat
 - launcher:
   `/home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/run_daily_fixed_sources.sh`
 - supported Python: 3.10 or newer
