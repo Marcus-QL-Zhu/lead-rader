@@ -4,7 +4,9 @@ from ht_lead_radar.feishu_notify import (
     FeishuMessageClient,
     FeishuRecipient,
     NotificationState,
+    FEISHU_TEXT_MAX_BYTES,
     build_summary,
+    build_summary_parts,
     find_report,
     notification_key,
     resolve_recipient,
@@ -154,3 +156,56 @@ def test_notification_key_changes_for_failure_or_new_run():
         report=changed,
     )
     assert len({first, failed, second}) == 3
+
+
+def test_large_liepin_json_is_split_without_exceeding_feishu_limit():
+    draft = {
+        "draft_id": "tp-large-1",
+        "recommended_title": "具身智能商业化总监",
+        "talent_persona": "商业化负责人",
+        "attraction_angle": "新业务",
+        "why_now": "融资后扩张",
+        "source_leads": [
+            {"company": "示例机器人", "role_hypotheses": ["商业化总监"]}
+        ],
+        "public_payload": {
+            "position_name": "具身智能商业化总监",
+            "position_scope": "具体职责" * 1_200,
+            "cities": ["上海"],
+        },
+    }
+    second = json.loads(json.dumps(draft, ensure_ascii=False))
+    second["draft_id"] = "tp-large-2"
+    parts = build_summary_parts(
+        run_date="2026-07-26",
+        direction="具身智能",
+        task_exit_code=0,
+        report_path=None,
+        report=_report(),
+        talent_drafts=[draft, second],
+    )
+
+    assert len(parts) == 3
+    assert all(len(part.encode("utf-8")) <= FEISHU_TEXT_MAX_BYTES for part in parts)
+    assert all('"position_name":"具身智能商业化总监"' in part for part in parts[1:])
+    assert "示例机器人 → 商业化总监" in "".join(parts)
+
+
+def test_single_oversized_liepin_json_fails_instead_of_sending_broken_json():
+    draft = {
+        "draft_id": "tp-too-large",
+        "recommended_title": "商业化总监",
+        "source_leads": [{"company": "示例机器人"}],
+        "public_payload": {"position_scope": "职责" * 20_000},
+    }
+    import pytest
+
+    with pytest.raises(ValueError, match="exceeds Feishu text limit"):
+        build_summary_parts(
+            run_date="2026-07-26",
+            direction="具身智能",
+            task_exit_code=0,
+            report_path=None,
+            report=_report(),
+            talent_drafts=[draft],
+        )

@@ -314,3 +314,13 @@ Float 失败后跨进程不能 resume，这是有意的数据治理结果：候�
 - [x] 不修改 OpenClaw 全局主模型，不复制 Provider 凭证。
 - [x] 人才池 bundle、生成脚本摘要和飞书汇总记录完整 `provider/model`。
 - [x] 对照结果记录于 `docs/minimax-m3-ab-2026-07-26.md`。
+
+# 2026-07-26：飞书职位关联与 Float 机会持久化
+
+- [x] 修复同一 `source_run_id` 多次生成时旧草稿混入当前飞书的问题。
+- [x] 当前审批批次改用精确 snapshot draft membership，不再按日期累积。
+- [x] 飞书每条职位展示目标公司、对应公司岗位假设和完整猎聘 JSON。
+- [x] 新增不可变 bundle snapshot 与规范化 company-role-opportunity 历史表。
+- [x] 保存证据 URL、人才画像、公司岗位假设和 Liepin payload，候选人简历仍不持久化。
+- [x] 新增 `query_talent_opportunities.py`，供后续 Float Agent 查询历史或当前机会。
+- [x] 不增加结果评分和自动发布能力。

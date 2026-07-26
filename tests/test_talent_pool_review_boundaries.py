@@ -1,7 +1,9 @@
 import json
+import sqlite3
 import subprocess
 
 import pytest
+from dataclasses import replace
 
 from ht_lead_radar.feishu_notify import load_talent_drafts
 from ht_lead_radar.liepin_bridge import (
@@ -142,3 +144,154 @@ def test_external_bridge_passes_json_file_path_and_detects_partial_pipeline(
     assert result.job_id == "12345"
     assert result.blocking
     assert result.error_code == "manual_required"
+
+
+def test_same_source_run_rerun_uses_exact_current_snapshot_and_keeps_history(tmp_path):
+    store, first = _store(tmp_path)
+    second = replace(first, drafts=first.drafts[:1], generation_model="minimax/MiniMax-M3")
+
+    store.save_bundle(second.to_dict())
+
+    current_rows = store.batch(second.run_date, second.direction)
+    current_drafts = load_talent_drafts(
+        store.database,
+        run_date=second.run_date,
+        direction=second.direction,
+        source_run_id=second.source_run_id,
+    )
+    assert [row["draft_id"] for row in current_rows] == [second.drafts[0].draft_id]
+    assert [row["draft_id"] for row in current_drafts] == [second.drafts[0].draft_id]
+
+    current_links = store.find_opportunities(current_only=True)
+    history_links = store.find_opportunities(current_only=False)
+    assert current_links
+    assert {item["draft_id"] for item in current_links} == {
+        second.drafts[0].draft_id
+    }
+    assert len(history_links) > len(current_links)
+    assert all(item["company"] for item in history_links)
+    assert all(item["company_role"] for item in history_links)
+    assert all("position_name" in item["liepin_payload"] for item in history_links)
+    with sqlite3.connect(store.database) as connection:
+        assert connection.execute(
+            "SELECT COUNT(*) FROM talent_pool_bundle_snapshots"
+        ).fetchone()[0] == 2
+
+
+def test_opportunity_history_can_be_retrieved_for_later_float_analysis(tmp_path):
+    store, bundle = _store(tmp_path)
+
+    matches = store.find_opportunities(
+        terms=[bundle.drafts[0].recommended_title],
+        direction=bundle.direction,
+    )
+
+    assert matches
+    assert matches[0]["recommended_title"] == bundle.drafts[0].recommended_title
+    assert matches[0]["evidence_urls"]
+    assert matches[0]["liepin_payload"]["position_name"]
+
+
+def test_draft_that_reappears_after_snapshot_expiry_is_approvable_again(tmp_path):
+    store, first = _store(tmp_path)
+    without_first = replace(first, drafts=first.drafts[1:])
+    store.save_bundle(without_first.to_dict())
+    store.save_bundle(first.to_dict())
+
+    rows = store.batch(first.run_date, first.direction)
+
+    assert rows[0]["draft_id"] == first.drafts[0].draft_id
+    assert rows[0]["status"] == "pending_approval"
+
+
+def test_committed_bundle_is_exact_and_mapping_change_invalidates_approval(tmp_path):
+    store, bundle = _store(tmp_path)
+    store.apply_command(
+        run_date=bundle.run_date,
+        direction=bundle.direction,
+        command="发布 1",
+        actor="user",
+    )
+    changed = bundle.to_dict()
+    changed["drafts"][0]["source_leads"][0]["role_hypotheses"] = ["新的具体总监岗位"]
+
+    store.save_bundle(changed)
+
+    committed = store.current_bundle(
+        bundle.run_date,
+        bundle.direction,
+        source_run_id=bundle.source_run_id,
+    )
+    assert committed is not None
+    assert committed["_snapshot_id"]
+    assert committed["drafts"][0]["source_leads"][0]["role_hypotheses"] == [
+        "新的具体总监岗位"
+    ]
+    assert store.batch(bundle.run_date, bundle.direction)[0]["status"] == "pending_approval"
+
+
+def test_publish_attempt_cannot_finish_another_draft(tmp_path):
+    store, bundle = _store(tmp_path)
+    store.apply_command(
+        run_date=bundle.run_date,
+        direction=bundle.direction,
+        command="发布 1",
+        actor="user",
+    )
+    lease = store.acquire_publish_lease(bundle.run_date, bundle.direction)
+    _, attempt_key = store.begin_publish(
+        bundle.drafts[0].draft_id,
+        lease_token=lease,
+    )
+
+    with pytest.raises(ValueError, match="does not belong"):
+        store.finish_publish(
+            draft_id=bundle.drafts[1].draft_id,
+            attempt_key=attempt_key,
+            outcome="published",
+        )
+
+    assert store.batch(bundle.run_date, bundle.direction)[0]["status"] == "publishing"
+    store.finish_publish(
+        draft_id=bundle.drafts[0].draft_id,
+        attempt_key=attempt_key,
+        outcome="published",
+        job_id="job-1",
+    )
+    assert store.batch(bundle.run_date, bundle.direction)[0]["status"] == "published"
+
+def test_existing_database_is_backfilled_into_snapshot_and_opportunity_tables(tmp_path):
+    store, bundle = _store(tmp_path)
+    store.apply_command(
+        run_date=bundle.run_date,
+        direction=bundle.direction,
+        command="发布 1",
+        actor="user",
+    )
+    with store._connect() as connection:
+        connection.execute("DELETE FROM talent_pool_current_snapshots")
+        connection.execute("DELETE FROM talent_pool_current_snapshot_drafts")
+        connection.execute("DELETE FROM talent_pool_opportunity_links")
+        connection.execute("DELETE FROM talent_pool_bundle_snapshots")
+
+    migrated = TalentPoolStore(store.database)
+
+    rows = migrated.batch(bundle.run_date, bundle.direction)
+    assert len(rows) == len(bundle.drafts)
+    assert rows[0]["status"] == "approved"
+    assert migrated.current_bundle(bundle.run_date, bundle.direction) is not None
+    assert migrated.find_opportunities(current_only=True)
+
+
+def test_snapshot_normalizes_payload_hash_before_commit(tmp_path):
+    store, bundle = _store(tmp_path)
+    changed = bundle.to_dict()
+    changed["drafts"][0]["payload_hash"] = "stale"
+
+    store.save_bundle(changed)
+
+    committed = store.current_bundle(bundle.run_date, bundle.direction)
+    rows = store.batch(bundle.run_date, bundle.direction)
+    assert committed is not None
+    assert committed["drafts"][0]["payload_hash"] == rows[0]["payload_hash"]
+    assert committed["drafts"][0]["payload_hash"] != "stale"

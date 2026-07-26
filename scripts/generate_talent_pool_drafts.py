@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from datetime import date
 from pathlib import Path
@@ -84,8 +85,13 @@ def main(argv: list[str] | None = None) -> int:
             Path(args.output_dir)
             / f"talent-pool-{args.run_date}-{direction_key}.json"
         )
-        write_draft_bundle(bundle, output)
-        TalentPoolStore(args.state_db).save_bundle(bundle.to_dict())
+        temporary_output = output.with_name(f".{output.name}.tmp-{os.getpid()}")
+        write_draft_bundle(bundle, temporary_output)
+        try:
+            TalentPoolStore(args.state_db).save_bundle(bundle.to_dict())
+            os.replace(temporary_output, output)
+        finally:
+            temporary_output.unlink(missing_ok=True)
         print(
             json.dumps(
                 {
