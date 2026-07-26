@@ -32,7 +32,7 @@ flowchart TD
 
 MiniMax 返回的每个岗位必须引用事实包中真实存在的 `evidence_id`，程序会验证引用集合，未知 ID 直接拒绝。
 
-为降低 M2.7 思考模型的结构漂移，固定 system prompt 内置三个短而多样的 few-shot（充分证据、单一融资证据不足、A 级运营信号），修复提示再提供一个完整的安全 JSON 示例。程序只对展示型列表做去重和上限裁剪，并把空值、未知/待定/全国/多地及多城市归一为上海；明确的唯一城市会原样保留。岗位数量、证据 ID、反证、待核项、Director+ 标题和证据门槛仍严格校验。
+为降低 MiniMax 思考模型的结构漂移，固定 system prompt 内置三个短而多样的 few-shot（充分证据、单一融资证据不足、A 级运营信号），修复提示再提供一个完整的安全 JSON 示例。程序只对展示型列表做去重和上限裁剪，并把空值、未知/待定/全国/多地及多城市归一为上海；明确的唯一城市会原样保留。岗位数量、证据 ID、反证、待核项、Director+ 标题和证据门槛仍严格校验。
 
 ## 单公司岗位推断
 
@@ -82,8 +82,9 @@ MiniMax 返回的每个岗位必须引用事实包中真实存在的 `evidence_i
 
 ## MiniMax API
 
-Lead Radar 继续读取 OpenClaw 的主模型、Provider、base URL 和 API Key，但直接
-调用 Provider API。请求把固定判断方法放在 system message，把动态事实包放在
+Lead Radar 继续读取 OpenClaw 的 Provider、base URL 和 API Key，但直接
+调用 Provider API。每日任务默认通过项目级覆盖使用 `minimax/MiniMax-M3`，不改变 OpenClaw
+全局主模型；可用 `LEAD_RADAR_LLM_MODEL` 回退。请求把固定判断方法放在 system message，把动态事实包放在
 user message，并设置 `reasoning_split=true`。单次调用超时 240 秒；429、5xx 和
 网络错误最多有限重试两次；整批默认 3600 秒 deadline；每日 launcher 使用文件锁
 防止 cron 与人工重跑重叠。部分公司分析失败会写入 bundle、让生成脚本非零退出，

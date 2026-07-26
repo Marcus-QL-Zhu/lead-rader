@@ -21,7 +21,9 @@ def test_feishu_summary_includes_drafts_and_exact_commands(tmp_path):
         report_path=tmp_path / "report.json",
         report=report,
         talent_drafts=drafts,
+        talent_generation_model="minimax/MiniMax-M3",
     )
+    assert "LLM 模型：minimax/MiniMax-M3" in text
     assert "今日建议发布的人才蓄水职位（共 5 个）" in text
     assert bundle.drafts[0].draft_id in text
     assert "发布全部" not in text
@@ -55,6 +57,8 @@ def test_daily_launcher_generates_before_the_single_feishu_notification():
     assert "--talent-state-db data/talent-pool.sqlite" in script
     assert '--talent-draft-exit-code "$talent_draft_status"' in script
     assert "--generator direct-llm" in script
+    assert 'LEAD_RADAR_LLM_MODEL="${LEAD_RADAR_LLM_MODEL:-minimax/MiniMax-M3}"' in script
+    assert "export OPENCLAW_CONFIG_PATH OPENCLAW_MODELS_PATH LEAD_RADAR_LLM_MODEL" in script
     assert "/home/admin/.openclaw/openclaw.json" in script
     assert "/home/admin/.openclaw/agents/main/agent/models.json" in script
     assert 'exit "$talent_draft_status"' in script

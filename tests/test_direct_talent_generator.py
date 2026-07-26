@@ -176,13 +176,18 @@ def test_insufficient_evidence_can_return_no_role_without_fabricating_draft():
         "watch_for": ["产品进入工程化或量产阶段"],
     }
 
+    runner = SequenceRunner(no_role)
+    runner.config = type(
+        "Config", (), {"provider": "minimax", "model": "MiniMax-M3"}
+    )()
     bundle = generate_direct_talent_bundle(
         report,
         target_count=5,
-        runner=SequenceRunner(no_role),
+        runner=runner,
     )
 
     assert bundle.drafts == ()
+    assert bundle.generation_model == "minimax/MiniMax-M3"
     assert bundle.company_demand_analysis[0]["hypotheses"] == []
 
 

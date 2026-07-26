@@ -51,6 +51,8 @@ The production daily task is:
 - supported Python: 3.10 or newer
 - preferred server interpreter:
   `/home/admin/.pyenv/versions/3.11.14/bin/python3`
+- default Lead Radar LLM override: `minimax/MiniMax-M3` via
+  `LEAD_RADAR_LLM_MODEL`; this must not change OpenClaw's global primary model
 
 The launcher must not rely on cron's default `PATH`, because `/usr/bin/python3`
 on the server is an unsupported Python 3.6 installation.

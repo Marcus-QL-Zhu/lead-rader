@@ -238,6 +238,14 @@ def generate_direct_talent_bundle(
     manifest = report.get("manifest") or {}
     source_run_id = str(manifest.get("run_id") or "")
     active_runner = runner or OpenClawConfiguredLLMRunner()
+    runner_config = getattr(active_runner, "config", None)
+    generation_provider = str(getattr(runner_config, "provider", "") or "")
+    generation_model_name = str(getattr(runner_config, "model", "") or "")
+    generation_model = (
+        f"{generation_provider}/{generation_model_name}"
+        if generation_provider and generation_model_name
+        else generation_model_name
+    )
     started_at = time.monotonic()
 
     def ensure_deadline() -> None:
@@ -307,6 +315,7 @@ def generate_direct_talent_bundle(
         company_demands,
         themes,
     )
+    seed_bundle = replace(seed_bundle, generation_model=generation_model)
     if not themes:
         return replace(
             seed_bundle,
