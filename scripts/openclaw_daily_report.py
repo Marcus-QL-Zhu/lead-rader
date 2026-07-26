@@ -19,6 +19,7 @@ DEFAULT_SESSION_KEY = "agent:main:main"
 DEFAULT_STATE_DB = "data/talent-pool.sqlite"
 GUIDE_PATH = ROOT / "references" / "openclaw-daily-operator.md"
 SERVER_PYTHON = "/home/admin/.pyenv/versions/3.11.14/bin/python3"
+DEFAULT_SESSIONS_FILE = "/home/admin/.openclaw/agents/main/sessions/sessions.json"
 
 
 def _draft_summary(draft: dict[str, Any], index: int) -> dict[str, Any]:
@@ -124,11 +125,34 @@ def event_text(snapshot_id: str, *, source: str) -> str:
         f"{ROOT / 'SKILL.md'} and "
         f"{GUIDE_PATH}. Then run: {SERVER_PYTHON} "
         f"{ROOT / 'scripts' / 'openclaw_daily_report.py'} "
-        f"--state-db {ROOT / DEFAULT_STATE_DB} show-pending. "
+        f"--state-db {ROOT / DEFAULT_STATE_DB} show-snapshot "
+        f"--snapshot-id {snapshot_id}. "
         "Summarize the returned current report in this Feishu main conversation, "
         "show each index with its target company and role, ask whether to publish, "
         "and do not publish until an exact inbound user command is received."
     )
+
+
+def _main_session_route(sessions_file: str | Path, session_key: str) -> dict[str, str]:
+    payload = json.loads(Path(sessions_file).read_text(encoding="utf-8"))
+    entry = payload.get(session_key) if isinstance(payload, dict) else None
+    if not isinstance(entry, dict):
+        raise LookupError(f"OpenClaw session key not found: {session_key}")
+    route = entry.get("deliveryContext") or {}
+    session_id = str(entry.get("sessionId") or "").strip()
+    channel = str(route.get("channel") or entry.get("lastChannel") or "").strip()
+    recipient = str(route.get("to") or entry.get("lastTo") or "").strip()
+    account = str(route.get("accountId") or entry.get("lastAccountId") or "").strip()
+    if not session_id:
+        raise ValueError("OpenClaw main session has no sessionId")
+    if channel != "feishu" or not recipient or not account:
+        raise ValueError("OpenClaw main session has no usable Feishu delivery route")
+    return {
+        "session_id": session_id,
+        "channel": channel,
+        "recipient": recipient,
+        "account": account,
+    }
 
 
 def wake(
@@ -137,36 +161,58 @@ def wake(
     session_key: str,
     source: str,
     openclaw_bin: str,
+    sessions_file: str | Path = DEFAULT_SESSIONS_FILE,
     runner: Callable[..., subprocess.CompletedProcess[str]] = subprocess.run,
 ) -> dict[str, Any]:
-    row = store.pending_openclaw_report(session_key=session_key)
+    row = store.pending_openclaw_report(session_key=session_key, claim=True)
     if row is None:
         return {"status": "no_pending_report"}
-    command = [
-        openclaw_bin,
-        "system",
-        "event",
-        "--text",
-        event_text(row["snapshot_id"], source=source),
-        "--mode",
-        "now",
-    ]
-    completed = runner(command, text=True, capture_output=True, check=False)
-    if completed.returncode != 0:
-        store.mark_openclaw_report_failed(
-            row["snapshot_id"],
-            (
-                completed.stderr or completed.stdout or "openclaw system event failed"
-            ).strip(),
-        )
-        raise RuntimeError(
-            f"openclaw system event failed with exit code {completed.returncode}"
-        )
-    return {
-        "status": "woken",
-        "snapshot_id": row["snapshot_id"],
-        "session_key": session_key,
-    }
+    try:
+        route = _main_session_route(sessions_file, session_key)
+        command = [
+            openclaw_bin,
+            "agent",
+            "--session-id",
+            route["session_id"],
+            "--message",
+            event_text(row["snapshot_id"], source=source),
+            "--deliver",
+            "--reply-channel",
+            route["channel"],
+            "--reply-to",
+            route["recipient"],
+            "--reply-account",
+            route["account"],
+            "--timeout",
+            "600",
+        ]
+        completed = runner(command, text=True, capture_output=True, check=False)
+        if completed.returncode != 0:
+            raise RuntimeError(
+                "OpenClaw agent turn failed with exit code "
+                f"{completed.returncode}: "
+                f"{(completed.stderr or completed.stdout).strip()[:1000]}"
+            )
+        context = store.latest_openclaw_context(session_key=session_key)
+        if (
+            context is None
+            or context["snapshot_id"] != row["snapshot_id"]
+            or context["status"] not in {"read", "reported"}
+        ):
+            raise RuntimeError(
+                "OpenClaw agent returned without reading the pending daily report"
+            )
+        if context["status"] != "reported":
+            store.mark_openclaw_reported(row["snapshot_id"])
+        return {
+            "status": "reported",
+            "snapshot_id": row["snapshot_id"],
+            "session_key": session_key,
+            "session_id": route["session_id"],
+        }
+    except Exception as error:
+        store.mark_openclaw_report_failed(row["snapshot_id"], str(error))
+        raise
 
 
 def _context(store: TalentPoolStore, session_key: str) -> dict[str, Any] | None:
@@ -180,16 +226,15 @@ def build_parser() -> argparse.ArgumentParser:
     sub = parser.add_subparsers(dest="action", required=True)
     sub.add_parser("show-pending")
     sub.add_parser("show-current")
+    snapshot = sub.add_parser("show-snapshot")
+    snapshot.add_argument("--snapshot-id", required=True)
     detail = sub.add_parser("show-draft")
     detail.add_argument("--index", type=int, required=True)
-    mark = sub.add_parser("mark-reported")
-    mark.add_argument("--snapshot-id", required=True)
-    fail = sub.add_parser("mark-failed")
-    fail.add_argument("--snapshot-id", required=True)
-    fail.add_argument("--error", required=True)
+
     wake_parser = sub.add_parser("wake")
     wake_parser.add_argument("--source", default="completion-hook")
     wake_parser.add_argument("--openclaw-bin", default="openclaw")
+    wake_parser.add_argument("--sessions-file", default=DEFAULT_SESSIONS_FILE)
     return parser
 
 
@@ -209,6 +254,24 @@ def main(argv: list[str] | None = None) -> int:
             result = (
                 {"status": "no_current_report"} if row is None else render_context(row)
             )
+        elif args.action == "show-snapshot":
+            row = store.openclaw_context_by_snapshot(
+                args.snapshot_id,
+                session_key=args.session_key,
+            )
+            if row is None:
+                raise LookupError("claimed OpenClaw daily snapshot is not current")
+            if row["status"] not in {"reporting", "read", "reported"}:
+                raise RuntimeError(
+                    "OpenClaw daily snapshot was not claimed by the bridge"
+                )
+            if row["status"] == "reporting":
+                if not store.mark_openclaw_read(args.snapshot_id):
+                    raise RuntimeError(
+                        "OpenClaw daily snapshot read acknowledgement failed"
+                    )
+                row["status"] = "read"
+            result = render_context(row)
         elif args.action == "show-draft":
             row = _context(store, args.session_key)
             if row is None:
@@ -223,26 +286,13 @@ def main(argv: list[str] | None = None) -> int:
                 "index": args.index,
                 "draft": drafts[args.index - 1],
             }
-        elif args.action == "mark-reported":
-            result = {
-                "status": "reported"
-                if store.mark_openclaw_reported(args.snapshot_id)
-                else "unchanged",
-                "snapshot_id": args.snapshot_id,
-            }
-        elif args.action == "mark-failed":
-            result = {
-                "status": "failed"
-                if store.mark_openclaw_report_failed(args.snapshot_id, args.error)
-                else "unchanged",
-                "snapshot_id": args.snapshot_id,
-            }
         else:
             result = wake(
                 store,
                 session_key=args.session_key,
                 source=args.source,
                 openclaw_bin=args.openclaw_bin,
+                sessions_file=args.sessions_file,
             )
         print(json.dumps(result, ensure_ascii=False, indent=2))
         return 0

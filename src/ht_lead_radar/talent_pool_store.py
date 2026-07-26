@@ -717,7 +717,7 @@ class TalentPoolStore:
             selected = rows
             if selected is None or selected["status"] == "reported":
                 return None
-            if selected["status"] == "reporting":
+            if selected["status"] in {"reporting", "read"}:
                 try:
                     updated_at = datetime.fromisoformat(
                         str(selected["updated_at"]).replace("Z", "+00:00")
@@ -769,6 +769,50 @@ class TalentPoolStore:
         result["ordered_draft_ids"] = json.loads(result.pop("ordered_draft_ids_json"))
         return result
 
+    def openclaw_context_by_snapshot(
+        self,
+        snapshot_id: str,
+        *,
+        session_key: str = "agent:main:main",
+    ) -> dict[str, Any] | None:
+        """Return one exact current report for a claimed Agent turn."""
+
+        with self._connect() as connection:
+            row = connection.execute(
+                """
+                SELECT r.*, s.bundle_json
+                FROM talent_pool_openclaw_reports r
+                JOIN talent_pool_current_snapshots c
+                  ON c.snapshot_id=r.snapshot_id
+                 AND c.run_date=r.run_date
+                 AND c.direction=r.direction
+                JOIN talent_pool_bundle_snapshots s
+                  ON s.snapshot_id=r.snapshot_id
+                WHERE r.snapshot_id=? AND r.session_key=?
+                """,
+                (snapshot_id, session_key),
+            ).fetchone()
+        if row is None:
+            return None
+        result = dict(row)
+        result["bundle"] = json.loads(result.pop("bundle_json"))
+        result["ordered_draft_ids"] = json.loads(result.pop("ordered_draft_ids_json"))
+        return result
+
+    def mark_openclaw_read(self, snapshot_id: str) -> bool:
+        """Record that the main Agent loaded the exact bridge-claimed snapshot."""
+
+        with self._connect() as connection:
+            cursor = connection.execute(
+                """
+                UPDATE talent_pool_openclaw_reports
+                SET status='read', updated_at=?, last_error=''
+                WHERE snapshot_id=? AND status='reporting'
+                """,
+                (_utcnow(), snapshot_id),
+            )
+        return cursor.rowcount == 1
+
     def mark_openclaw_reported(self, snapshot_id: str) -> bool:
         now = _utcnow()
         with self._connect() as connection:
@@ -776,7 +820,7 @@ class TalentPoolStore:
                 """
                 UPDATE talent_pool_openclaw_reports
                 SET status='reported', reported_at=?, updated_at=?, last_error=''
-                WHERE snapshot_id=? AND status IN ('pending', 'reporting', 'failed')
+                WHERE snapshot_id=? AND status IN ('pending', 'reporting', 'read', 'failed')
                 """,
                 (now, now, snapshot_id),
             )

@@ -2,10 +2,11 @@
   "name": "lead-radar-daily-report-reconcile",
   "schedule": "50 5,6 * * *",
   "timezone": "Asia/Shanghai",
-  "session": "main",
-  "session_key": "agent:main:main",
+  "session": "isolated",
+  "target_session_key": "agent:main:main",
   "wake": "now",
   "heartbeat_enabled": false,
-  "event_type": "LEAD_RADAR_DAILY_READY_V1",
-  "purpose": "Retry only an unreported committed Lead Rader daily result at 05:50 and 06:50."
+  "system_event_enabled": false,
+  "mechanism": "isolated cron agent runs the deterministic bridge; bridge dynamically invokes and delivers the current main Feishu session",
+  "purpose": "Retry only the newest unreported committed Lead Rader daily result at 05:50 and 06:50."
 }

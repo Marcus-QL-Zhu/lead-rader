@@ -20,16 +20,21 @@ SERVER_PYTHON = "/home/admin/.pyenv/versions/3.11.14/bin/python3"
 OPENCLAW_BIN = "/home/admin/.local/share/pnpm/openclaw"
 
 
-def reconcile_event_text() -> str:
-    return (
-        "[LEAD_RADAR_DAILY_READY_V1] source=scheduled-reconcile. "
-        "This event is only a pending-report check and never an approval. "
-        f"Read {ROOT / 'SKILL.md'} and "
-        f"{ROOT / 'references' / 'openclaw-daily-operator.md'}, then run "
+def reconcile_message() -> str:
+    command = (
         f"{SERVER_PYTHON} {ROOT / 'scripts' / 'openclaw_daily_report.py'} "
-        f"--state-db {ROOT / 'data' / 'talent-pool.sqlite'} show-pending. "
-        "If there is no pending report, end silently. Otherwise report it in the "
-        "current Feishu main conversation and ask for an exact approval command."
+        f"--state-db {ROOT / 'data' / 'talent-pool.sqlite'} "
+        f"wake --source scheduled-reconcile --openclaw-bin {OPENCLAW_BIN} "
+        "--sessions-file /home/admin/.openclaw/agents/main/sessions/sessions.json"
+    )
+    return (
+        "Lead Rader deterministic reconciliation. Run the command between the "
+        "markers exactly once with the exec tool and return only its status.\n"
+        "BEGIN_COMMAND\n"
+        f"{command}\n"
+        "END_COMMAND\n"
+        "Do not inspect evidence, summarize a report, or approve/publish anything "
+        "in this isolated cron session; the command wakes the current main Feishu session."
     )
 
 
@@ -57,9 +62,10 @@ def desired_command(openclaw_bin: str, job_id: str = "") -> list[str]:
         "--tz",
         TIMEZONE,
         "--session",
-        "main",
-        "--system-event",
-        reconcile_event_text(),
+        "isolated",
+        "--message",
+        reconcile_message(),
+        "--no-deliver",
         "--wake",
         "now",
     ]

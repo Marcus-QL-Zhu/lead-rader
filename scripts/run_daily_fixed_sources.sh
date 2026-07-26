@@ -112,6 +112,7 @@ if { [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; } \
     "$PYTHON_BIN" scripts/openclaw_daily_report.py \
       --state-db data/talent-pool.sqlite \
       wake --source completion-hook --openclaw-bin "$OPENCLAW_BIN" \
+      --sessions-file /home/admin/.openclaw/agents/main/sessions/sessions.json \
       || openclaw_hook_status=$?
   fi
 fi

@@ -151,26 +151,49 @@ def test_render_context_keeps_company_role_mapping_and_json_is_on_demand(tmp_pat
     assert payload["draft"]["public_payload"]["cities"] == ["上海"]
 
 
-def test_reset_guide_uses_complete_absolute_mark_reported_command():
+def test_reset_guide_leaves_delivery_status_to_outer_bridge():
     guide = (bridge.ROOT / "references" / "openclaw-daily-operator.md").read_text(
         encoding="utf-8"
     )
-    expected = (
-        "/home/admin/.pyenv/versions/3.11.14/bin/python3 "
-        "/home/admin/.openclaw/workspace/skills/hardtech-lead-radar/"
-        "scripts/openclaw_daily_report.py"
-    )
-    assert expected in guide
-    assert "mark-reported --snapshot-id" in guide
-    assert "`mark-reported --snapshot-id" not in guide
+    assert "show-snapshot --snapshot-id" in guide
+    assert "不要执行 `mark-reported`" in guide
+    assert "delivery 失败则标记 `failed`" in guide
 
 
-def test_wake_uses_system_event_main_session_without_full_payload(tmp_path):
+def test_wake_runs_current_main_session_and_marks_reported(tmp_path):
     store, _ = _store(tmp_path)
     calls = []
+    sessions = tmp_path / "sessions.json"
+    sessions.write_text(
+        json.dumps(
+            {
+                "agent:main:main": {
+                    "sessionId": "session-123",
+                    "deliveryContext": {
+                        "channel": "feishu",
+                        "to": "user:test-open-id",
+                        "accountId": "feishubot",
+                    },
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
 
     def fake_runner(command, **kwargs):
         calls.append((command, kwargs))
+        second = bridge.wake(
+            store,
+            session_key="agent:main:main",
+            source="concurrent-test",
+            openclaw_bin="openclaw",
+            sessions_file=sessions,
+            runner=lambda *_args, **_kwargs: None,
+        )
+        assert second == {"status": "no_pending_report"}
+        claimed = store.latest_openclaw_context()
+        assert claimed is not None and claimed["status"] == "reporting"
+        assert store.mark_openclaw_read(claimed["snapshot_id"])
         return subprocess.CompletedProcess(command, 0, stdout="ok", stderr="")
 
     result = bridge.wake(
@@ -178,18 +201,124 @@ def test_wake_uses_system_event_main_session_without_full_payload(tmp_path):
         session_key="agent:main:main",
         source="test",
         openclaw_bin="openclaw",
+        sessions_file=sessions,
         runner=fake_runner,
     )
-    assert result["status"] == "woken"
+    assert result["status"] == "reported"
+    assert store.pending_openclaw_report() is None
     command = calls[0][0]
-    assert command[:3] == ["openclaw", "system", "event"]
-    assert "--session-key" not in command
-    assert command[-2:] == ["--mode", "now"]
-    event = command[command.index("--text") + 1]
+    assert command[:3] == ["openclaw", "agent", "--session-id"]
+    assert command[3] == "session-123"
+    assert "--deliver" in command
+    assert command[command.index("--reply-channel") + 1] == "feishu"
+    assert command[command.index("--reply-to") + 1] == "user:test-open-id"
+    assert command[command.index("--reply-account") + 1] == "feishubot"
+    event = command[command.index("--message") + 1]
     assert "LEAD_RADAR_DAILY_READY_V1" in event
     assert "public_payload" not in event
     assert "openclaw-daily-operator.md" in event
     assert str(bridge.ROOT / "SKILL.md") in event
     assert "/home/admin/.pyenv/versions/3.11.14/bin/python3" in event
     assert "--state-db" in event
-    assert event.index("--state-db") < event.index("show-pending")
+    assert event.index("--state-db") < event.index("show-snapshot")
+    assert "--snapshot-id" in event
+
+
+def test_wake_fails_closed_without_feishu_main_route(tmp_path):
+    store, _ = _store(tmp_path)
+    sessions = tmp_path / "sessions.json"
+    sessions.write_text(
+        json.dumps(
+            {
+                "agent:main:main": {
+                    "sessionId": "session-123",
+                    "deliveryContext": {"channel": "wecom", "to": "user:test"},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    with pytest.raises(ValueError, match="Feishu delivery route"):
+        bridge.wake(
+            store,
+            session_key="agent:main:main",
+            source="test",
+            openclaw_bin="openclaw",
+            sessions_file=sessions,
+        )
+    assert store.latest_openclaw_context()["status"] == "failed"
+
+
+def test_wake_does_not_mark_reported_when_agent_skips_pending_read(tmp_path):
+    store, _ = _store(tmp_path)
+    sessions = tmp_path / "sessions.json"
+    sessions.write_text(
+        json.dumps(
+            {
+                "agent:main:main": {
+                    "sessionId": "session-123",
+                    "deliveryContext": {
+                        "channel": "feishu",
+                        "to": "user:test-open-id",
+                        "accountId": "feishubot",
+                    },
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def fake_runner(command, **kwargs):
+        return subprocess.CompletedProcess(command, 0, stdout="ignored", stderr="")
+
+    with pytest.raises(RuntimeError, match="without reading"):
+        bridge.wake(
+            store,
+            session_key="agent:main:main",
+            source="test",
+            openclaw_bin="openclaw",
+            sessions_file=sessions,
+            runner=fake_runner,
+        )
+    assert store.latest_openclaw_context()["status"] == "failed"
+
+
+def test_delivery_failure_after_exact_read_remains_retriable(tmp_path):
+    store, _ = _store(tmp_path)
+    sessions = tmp_path / "sessions.json"
+    sessions.write_text(
+        json.dumps(
+            {
+                "agent:main:main": {
+                    "sessionId": "session-123",
+                    "deliveryContext": {
+                        "channel": "feishu",
+                        "to": "user:test-open-id",
+                        "accountId": "feishubot",
+                    },
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def failing_runner(command, **kwargs):
+        claimed = store.latest_openclaw_context()
+        assert claimed is not None and claimed["status"] == "reporting"
+        assert store.mark_openclaw_read(claimed["snapshot_id"])
+        return subprocess.CompletedProcess(
+            command, 1, stdout="", stderr="delivery failed"
+        )
+
+    with pytest.raises(RuntimeError, match="delivery failed"):
+        bridge.wake(
+            store,
+            session_key="agent:main:main",
+            source="test",
+            openclaw_bin="openclaw",
+            sessions_file=sessions,
+            runner=failing_runner,
+        )
+    current = store.latest_openclaw_context()
+    assert current is not None and current["status"] == "failed"
+    assert store.pending_openclaw_report()["snapshot_id"] == current["snapshot_id"]

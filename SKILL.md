@@ -80,11 +80,11 @@ opportunity as a confirmed vacancy.
 
 ## Reset-safe OpenClaw daily report
 
-When a `LEAD_RADAR_DAILY_READY_V1` system event arrives, it is a report
+When a `LEAD_RADAR_DAILY_READY_V1` internal agent message arrives, it is a report
 notification only. Read `references/openclaw-daily-operator.md` and use
-`scripts/openclaw_daily_report.py` to load the committed result. The
-completion hook is primary; OpenClaw cron checks pending reports only at 05:50
-and 06:50 Asia/Shanghai. Do not use heartbeat for this workflow.
+`scripts/openclaw_daily_report.py` to load only the exact bridge-claimed snapshot. The Agent must not mark report status; the outer bridge owns `reported`/`failed` after delivery returns. The
+completion hook dynamically targets the reset main-session ID and Feishu route; an isolated OpenClaw cron calls the same bridge only at 05:50
+and 06:50 Asia/Shanghai. Do not use heartbeat or `system event` for this workflow.
 
 The event itself can never approve a draft. Keep the report in the main
 Feishu/OpenClaw session so later questions can be resolved from SQLite even

@@ -331,11 +331,11 @@ Float 失败后跨进程不能 resume，这是有意的数据治理结果：候�
 状态：代码与本地测试完成，待独立代码审查、GitHub CI、生产部署与飞书冒烟验证。
 
 - [x] 每个已提交人才池 bundle 在同一 SQLite 事务中登记待汇报状态；相同 snapshot 重跑不重复汇报。
-- [x] 05:00 任务完成后通过 `openclaw system event` 唤醒 `agent:main:main`；事件只包含项目地图和读取命令，不携带网页正文或完整 JSON。
+- [x] 05:00 任务完成后动态读取当日 `agent:main:main` 的 session ID 与飞书路由，通过 `openclaw agent --session-id ... --deliver` 执行真实主会话 turn；内部消息只包含项目地图和读取命令，不携带网页正文或完整 JSON。
 - [x] 新增 `references/openclaw-daily-operator.md`，供 OpenClaw 在 04:00 会话重置后恢复 Lead Rader 所需的最小上下文。
 - [x] 新增按需查询：当前日报、待汇报日报、指定编号的完整公司—岗位—证据—猎聘 JSON。
 - [x] 正常路径由 OpenClaw 在主飞书会话汇报；原飞书 REST 汇总只在 hook/任务/草稿生成失败时兜底。
-- [x] OpenClaw cron 只在 05:50 和 06:50 运行（`50 5,6 * * *`，Asia/Shanghai），不使用 heartbeat。
+- [x] OpenClaw cron 只在 05:50 和 06:50 运行（`50 5,6 * * *`，Asia/Shanghai）；isolated cron turn 仅调用同一个 bridge，由 bridge 唤醒 main session，不使用 heartbeat/system event。
 - [x] 用户仍只需回复 `发布 1,3` 等自然编号；系统内部轻量校验当前显示结果未被同日重跑替换，不要求用户提供 snapshot code。
 - [x] hook 和 cron 均只能汇报、查询和询问；发布必须来自真实飞书入站的精确用户命令。
 - [ ] 独立子代理 full code review。
