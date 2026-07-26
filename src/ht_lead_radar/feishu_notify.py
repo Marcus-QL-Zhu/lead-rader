@@ -171,6 +171,8 @@ def find_report(
             payload = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
+        if not isinstance(payload, Mapping):
+            continue
         manifest = payload.get("manifest") or {}
         if (
             str(manifest.get("as_of") or "") == run_date

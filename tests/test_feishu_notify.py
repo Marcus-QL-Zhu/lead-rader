@@ -76,6 +76,10 @@ def test_build_failure_summary_does_not_present_stale_leads():
 
 
 def test_find_report_and_notification_state_are_idempotent(tmp_path):
+    (tmp_path / "feishu-change-set.json").write_text(
+        json.dumps([{"operation": "create"}]),
+        encoding="utf-8",
+    )
     report_path = tmp_path / "lead-radar.json"
     report_path.write_text(
         json.dumps(_report(), ensure_ascii=False),
