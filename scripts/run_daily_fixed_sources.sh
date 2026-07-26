@@ -77,7 +77,21 @@ status=$?
   --budget-db data/search-budget.sqlite \
   > reports-daily/health-latest.json 2>&1 || true
 
-if [ "$status" -eq 2 ]; then
+notification_status=0
+"$PYTHON_BIN" scripts/send_daily_feishu_summary.py \
+  --direction "$DAILY_DIRECTION" \
+  --task-exit-code "$status" \
+  --report-dir reports-daily \
+  --state-db data/feishu-notifications.sqlite \
+  --env-file "$ENV_FILE" \
+  --fallback-env-file "$JOSINT_DIR/.env" \
+  || notification_status=$?
+
+if [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; then
+  if [ "$notification_status" -ne 0 ]; then
+    echo "Lead Rader completed, but Feishu summary notification failed." >&2
+    exit "$notification_status"
+  fi
   exit 0
 fi
 exit "$status"
