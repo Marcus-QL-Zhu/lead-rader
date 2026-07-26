@@ -278,7 +278,7 @@ def test_invalid_company_title_gets_one_bounded_repair():
     assert "确定性校验错误" in runner.calls[1]["prompt"]
     assert bundle.drafts[0].recommended_title == "机器人小批量制造工程化总监"
 
-def test_unknown_city_is_withheld_from_publishable_themes():
+def test_unknown_city_defaults_to_shanghai_and_remains_publishable():
     report = supported_report(leads=1)
     packet = build_company_evidence_packets(report)[0]
     response = demand_response(
@@ -294,4 +294,7 @@ def test_unknown_city_is_withheld_from_publishable_themes():
         ),
     )
 
-    assert build_talent_themes(report, parsed, target_count=5) == ()
+    themes = build_talent_themes(report, parsed, target_count=5)
+
+    assert len(themes) == 1
+    assert themes[0]["city"] == "上海"
