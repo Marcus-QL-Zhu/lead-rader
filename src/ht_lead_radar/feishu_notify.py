@@ -6,6 +6,7 @@ import json
 import os
 import sqlite3
 import sys
+import urllib.error
 import urllib.request
 from dataclasses import dataclass
 from datetime import date
@@ -36,8 +37,27 @@ class FeishuMessageClient:
             headers=headers,
             method="POST",
         )
-        with urllib.request.urlopen(request, timeout=30) as response:
-            result = json.loads(response.read().decode("utf-8"))
+        try:
+            with urllib.request.urlopen(request, timeout=30) as response:
+                result = json.loads(response.read().decode("utf-8"))
+        except urllib.error.HTTPError as error:
+            raw_body = error.read().decode("utf-8", errors="replace")
+            try:
+                body = json.loads(raw_body)
+            except json.JSONDecodeError:
+                body = {}
+            code = body.get("code", error.code)
+            message = body.get("msg") or error.reason
+            violations = (body.get("error") or {}).get("field_violations") or []
+            details = "; ".join(
+                f"{item.get('field')}: {item.get('description')}"
+                for item in violations
+                if isinstance(item, Mapping)
+            )
+            suffix = f"; {details}" if details else ""
+            raise RuntimeError(
+                f"Feishu HTTP {error.code} error {code}: {message}{suffix}"
+            ) from error
         if result.get("code", 0) != 0:
             raise RuntimeError(
                 f"Feishu API error {result.get('code')}: {result.get('msg')}"
@@ -61,6 +81,9 @@ class FeishuMessageClient:
         *,
         idempotency_key: str,
     ) -> str:
+        if not idempotency_key:
+            raise ValueError("idempotency_key must not be empty")
+        request_uuid = idempotency_key[:50]
         query = urlencode({"receive_id_type": recipient.receive_id_type})
         result = self._post_json(
             f"https://open.feishu.cn/open-apis/im/v1/messages?{query}",
@@ -68,7 +91,7 @@ class FeishuMessageClient:
                 "receive_id": recipient.receive_id,
                 "msg_type": "text",
                 "content": json.dumps({"text": text}, ensure_ascii=False),
-                "uuid": idempotency_key,
+                "uuid": request_uuid,
             },
             self.token(),
         )

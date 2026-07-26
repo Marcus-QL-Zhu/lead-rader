@@ -1,6 +1,7 @@
 import json
 
 from ht_lead_radar.feishu_notify import (
+    FeishuMessageClient,
     FeishuRecipient,
     NotificationState,
     build_summary,
@@ -43,6 +44,32 @@ def test_resolve_recipient_supports_generic_chat_and_open_ids():
     assert resolve_recipient(
         {"FEISHU_NOTIFY_OPEN_ID": "ou-open"}
     ) == FeishuRecipient("ou-open", "open_id")
+
+
+def test_message_client_limits_feishu_uuid_to_50_characters(monkeypatch):
+    calls = []
+    client = FeishuMessageClient("app-id", "app-secret")
+
+    def fake_post(url, payload, token=""):
+        calls.append((url, payload, token))
+        if "tenant_access_token" in url:
+            return {"tenant_access_token": "tenant-token"}
+        return {"data": {"message_id": "om-message"}}
+
+    monkeypatch.setattr(client, "_post_json", fake_post)
+    message_id = client.send_text(
+        FeishuRecipient("ou-open", "open_id"),
+        "daily summary",
+        idempotency_key="a" * 64,
+    )
+
+    assert message_id == "om-message"
+    message_url, payload, token = calls[1]
+    assert message_url.endswith("messages?receive_id_type=open_id")
+    assert token == "tenant-token"
+    assert payload["receive_id"] == "ou-open"
+    assert json.loads(payload["content"]) == {"text": "daily summary"}
+    assert payload["uuid"] == "a" * 50
 
 
 def test_build_success_summary_contains_rank_score_roles_and_source_health(tmp_path):
