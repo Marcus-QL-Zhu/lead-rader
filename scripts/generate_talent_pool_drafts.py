@@ -94,6 +94,7 @@ def main(argv: list[str] | None = None) -> int:
                     "output": str(output),
                     "source_report": str(report_path),
                     "generation_provider": bundle.generation_provider,
+                    "generation_model": bundle.generation_model,
                     "generation_error": bundle.generation_error,
                 },
                 ensure_ascii=False,

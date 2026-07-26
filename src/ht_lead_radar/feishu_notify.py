@@ -245,6 +245,7 @@ def notification_key(
     report: Mapping[str, Any] | None,
     talent_drafts: list[Mapping[str, Any]] | None = None,
     talent_generation_error: str = "",
+    talent_generation_model: str = "",
 ) -> str:
     manifest = (report or {}).get("manifest") or {}
     value = {
@@ -260,6 +261,7 @@ def notification_key(
             for item in (talent_drafts or ())
         ],
         "talent_generation_error": talent_generation_error,
+        "talent_generation_model": talent_generation_model,
     }
     serialized = json.dumps(value, ensure_ascii=False, sort_keys=True)
     return hashlib.sha256(serialized.encode("utf-8")).hexdigest()
@@ -274,6 +276,7 @@ def build_summary(
     report: Mapping[str, Any] | None,
     talent_drafts: list[Mapping[str, Any]] | None = None,
     talent_generation_error: str = "",
+    talent_generation_model: str = "",
     company_demands: list[Mapping[str, Any]] | None = None,
 ) -> str:
     if task_exit_code == 0:
@@ -321,6 +324,8 @@ def build_summary(
             f"信源异常：{len(source_failures)} 个",
         ]
     )
+    if talent_generation_model:
+        lines.append(f"LLM 模型：{talent_generation_model}")
     if demand_values:
         lines.extend(
             [
@@ -501,6 +506,9 @@ def main(
         talent_generation_error = str(
             (talent_bundle or {}).get("generation_error") or ""
         ).strip()
+        talent_generation_model = str(
+            (talent_bundle or {}).get("generation_model") or ""
+        ).strip()
         if args.talent_draft_exit_code != 0 and report:
             exit_detail = f"退出码 {args.talent_draft_exit_code}"
             talent_generation_error = "; ".join(
@@ -516,6 +524,7 @@ def main(
             report=report,
             talent_drafts=talent_drafts,
             talent_generation_error=talent_generation_error,
+            talent_generation_model=talent_generation_model,
         )
         state = NotificationState(args.state_db)
         if state.was_sent(key) and not args.force:
@@ -529,6 +538,7 @@ def main(
             report=report,
             talent_drafts=talent_drafts,
             talent_generation_error=talent_generation_error,
+            talent_generation_model=talent_generation_model,
             company_demands=company_demands,
         )
         message_id = client_class(app_id, app_secret).send_text(

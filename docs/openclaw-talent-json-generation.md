@@ -7,7 +7,7 @@ OpenClaw Agent。当前服务器解析出的配置是：
 
 ```text
 provider: minimax
-model: MiniMax-M2.7-highspeed
+model: MiniMax-M3（Lead Radar 默认覆盖；OpenClaw 全局主模型不变）
 base URL: https://api.minimaxi.com/v1
 API protocol: OpenAI-compatible Chat Completions
 ```
@@ -34,7 +34,7 @@ OpenClaw 配置或其环境变量读取。
 ```
 
 生产脚本通过 `OPENCLAW_CONFIG_PATH` 和 `OPENCLAW_MODELS_PATH` 指向上述文件。
-可以用 `LEAD_RADAR_LLM_MODEL=provider/model` 显式覆盖模型，但 Provider 仍必须
+每日任务默认设置 `LEAD_RADAR_LLM_MODEL=minimax/MiniMax-M3`；也可以用同一变量显式覆盖或回退模型，但 Provider 仍必须
 存在于 OpenClaw 的 `models.json` 中。
 
 ## Evidence-bound 分阶段生成
@@ -63,4 +63,4 @@ python scripts/generate_talent_pool_drafts.py \
 
 05:00 生产脚本不启用 fallback，避免 API 失败时把模板结果冒充模型结果。
 
-本次代码仍只在本地修改；用户验收前不部署服务器、不推送 GitHub。
+完整 `provider/model` 会写入人才池 bundle，并显示在飞书每日汇总中，便于审计和回退。

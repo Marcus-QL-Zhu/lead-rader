@@ -78,6 +78,7 @@ class DraftBundle:
     drafts: tuple[TalentPoolDraft, ...]
     generation_error: str = ""
     generation_provider: str = "template"
+    generation_model: str = ""
     company_demand_analysis: tuple[dict[str, Any], ...] = ()
     talent_themes: tuple[dict[str, Any], ...] = ()
 

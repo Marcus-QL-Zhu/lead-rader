@@ -132,3 +132,37 @@ def test_direct_runner_fails_closed_on_missing_assistant_text():
     )
     with pytest.raises(DirectLLMError, match="no choices"):
         runner.run("prompt", session_id="ignored")
+
+
+def test_explicit_configured_model_override_uses_same_provider(tmp_path):
+    config_path, models_path = write_openclaw_config(tmp_path)
+    models = json.loads(models_path.read_text(encoding="utf-8"))
+    models["providers"]["minimax"]["models"].append({"id": "MiniMax-M3"})
+    models_path.write_text(json.dumps(models), encoding="utf-8")
+
+    config = load_openclaw_llm_config(
+        env={
+            "MINIMAX_API_KEY": "test-secret",
+            "LEAD_RADAR_LLM_MODEL": "minimax/MiniMax-M3",
+        },
+        config_path=config_path,
+        models_path=models_path,
+    )
+
+    assert config.provider == "minimax"
+    assert config.model == "MiniMax-M3"
+    assert config.base_url == "https://api.minimaxi.com/v1"
+
+
+def test_explicit_model_override_fails_closed_when_not_allowlisted(tmp_path):
+    config_path, models_path = write_openclaw_config(tmp_path)
+
+    with pytest.raises(LLMConfigurationError, match="not configured"):
+        load_openclaw_llm_config(
+            env={
+                "MINIMAX_API_KEY": "test-secret",
+                "LEAD_RADAR_LLM_MODEL": "minimax/MiniMax-Unknown",
+            },
+            config_path=config_path,
+            models_path=models_path,
+        )
