@@ -158,13 +158,20 @@ def test_one_company_per_call_then_one_job_ad_per_theme():
         for call in runner.calls[:2]
     )
     assert all(
-        call["system_prompt"] == JOB_AD_SYSTEM_PROMPT
-        for call in runner.calls[2:]
+        call["system_prompt"] == JOB_AD_SYSTEM_PROMPT for call in runner.calls[2:]
     )
     assert "星火机器人" in runner.calls[0]["prompt"]
     assert "深空动力" not in runner.calls[0]["prompt"]
     assert "深空动力" in runner.calls[1]["prompt"]
     assert all(len(draft.public_payload["cities"]) == 1 for draft in bundle.drafts)
+    assert all(
+        draft.public_payload["position_scope"].startswith("【岗位职责】\n• ")
+        and "\n\n【任职要求】\n• " in draft.public_payload["position_scope"]
+        and draft.public_payload["job_type"] == "社招"
+        and draft.public_payload["languages"] == ["普通话"]
+        and "五险一金" in draft.public_payload["benefits"]
+        for draft in bundle.drafts
+    )
 
 
 def test_insufficient_evidence_can_return_no_role_without_fabricating_draft():
@@ -180,9 +187,7 @@ def test_insufficient_evidence_can_return_no_role_without_fabricating_draft():
     }
 
     runner = SequenceRunner(no_role)
-    runner.config = type(
-        "Config", (), {"provider": "minimax", "model": "MiniMax-M3"}
-    )()
+    runner.config = type("Config", (), {"provider": "minimax", "model": "MiniMax-M3"})()
     bundle = generate_direct_talent_bundle(
         report,
         target_count=5,
@@ -211,9 +216,7 @@ def test_theme_ad_gets_one_bounded_repair_and_cannot_change_theme_title():
     seed = build_theme_draft_bundle(report, parsed, themes).drafts[0]
     rejected = ad_response(seed)
     rejected["drafts"][0]["recommended_title"] = "机器人产品商业化总监"
-    rejected["drafts"][0]["public_payload"][
-        "position_name"
-    ] = "机器人产品商业化总监"
+    rejected["drafts"][0]["public_payload"]["position_name"] = "机器人产品商业化总监"
     runner = SequenceRunner(demand, rejected, ad_response(seed))
 
     bundle = generate_direct_talent_bundle(
@@ -225,6 +228,7 @@ def test_theme_ad_gets_one_bounded_repair_and_cannot_change_theme_title():
     assert len(runner.calls) == 3
     assert "确定性校验发现" in runner.calls[2]["prompt"]
     assert bundle.drafts[0].recommended_title == "机器人运动控制工程化总监"
+
 
 def test_theme_ranking_prefers_more_independent_evidence():
     report = supported_report(leads=1)
@@ -253,9 +257,8 @@ def test_theme_ranking_prefers_more_independent_evidence():
     themes = build_talent_themes(report, parsed, target_count=1)
 
     assert themes[0]["recommended_title"] == "机器人运动控制工程化总监"
-    assert themes[0]["preferred_signals"] == [
-        "有从样机验证推进至小批量交付的经验"
-    ]
+    assert themes[0]["preferred_signals"] == ["有从样机验证推进至小批量交付的经验"]
+
 
 def test_invalid_company_title_gets_one_bounded_repair():
     report = supported_report(leads=1)
@@ -285,6 +288,7 @@ def test_invalid_company_title_gets_one_bounded_repair():
     assert len(runner.calls) == 3
     assert "确定性校验错误" in runner.calls[1]["prompt"]
     assert bundle.drafts[0].recommended_title == "机器人小批量制造工程化总监"
+
 
 def test_unknown_city_defaults_to_shanghai_and_remains_publishable():
     report = supported_report(leads=1)
@@ -337,12 +341,11 @@ def test_one_invalid_theme_returns_partial_bundle_instead_of_losing_valid_drafts
     assert bundle.drafts[0].recommended_title == seeds.drafts[1].recommended_title
     assert "failed after one repair" in bundle.generation_error
 
+
 def test_deadline_crossed_inside_llm_call_is_not_accepted(monkeypatch):
     report = supported_report(leads=1)
     packet = build_company_evidence_packets(report)[0]
-    runner = SequenceRunner(
-        demand_response(packet, title="机器人运动控制工程化总监")
-    )
+    runner = SequenceRunner(demand_response(packet, title="机器人运动控制工程化总监"))
     ticks = iter([0.0, 0.0, 2.0])
     monkeypatch.setattr(
         "ht_lead_radar.direct_talent_generator.time.monotonic",

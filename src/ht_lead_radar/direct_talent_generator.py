@@ -30,11 +30,9 @@ from .talent_themes import (
 
 
 JOB_AD_SYSTEM_PROMPT = """
-你是高级猎头职位广告编辑。输入是已经由公开证据支持的人才主题。你的任务是把
-该主题写成一条具体、匿名、可公开发布的 Director+ 职位广告 JSON。
-
-每条职责、要求和技术词都应服务于输入主题的 mandate 与 specificity_terms。
-只返回严格 JSON，不输出解释或分析过程。
+你是高级猎头职位广告编辑。输入是已经由公开证据支持的人才主题。把该主题直接
+写成可由 liepin-job-posting 发布的最终 Director+ JSON。职责、要求和技术词都应
+服务于输入主题的 mandate 与 specificity_terms。只返回严格 JSON。
 """.strip()
 
 
@@ -96,10 +94,7 @@ def _forbidden_public_terms(report: Mapping[str, Any]) -> set[str]:
         terms.add(str(lead.get("company") or "").strip())
         for evidence in lead.get("evidence") or ():
             if isinstance(evidence, Mapping):
-                terms.update(
-                    str(item).strip()
-                    for item in evidence.get("people") or ()
-                )
+                terms.update(str(item).strip() for item in evidence.get("people") or ())
         research = lead.get("basic_research") or {}
         if isinstance(research, Mapping):
             for key in ("aliases", "products", "founders", "customers"):
@@ -137,9 +132,11 @@ def build_theme_ad_prompt(
 任务：
 - 输出恰好一条 draft，ordinal 固定为 1。
 - recommended_title 和 position_name 使用人才主题的具体标题。
-- position_scope 包含岗位使命、5–8 条核心职责、5–8 条任职要求和机会亮点，
-  总长度不超过 500 个字符。
-- public_payload 字段集合、类型和枚举形式与示例完全一致。
+- position_scope 严格使用【岗位职责】和【任职要求】两个章节；每个章节各写
+  5–10 行以“• ”开头的 bullet，总长度不超过 500 个字符。
+- public_payload 是将被持久化并直接发布的最终 JSON；字段集合、类型、枚举和值
+  与示例契约一致，包括 job_type=社招、languages=[普通话]、seniority 无空格、
+  benefits 包含五险一金。
 - cities 只含人才主题中的一个城市。
 - 公开内容保持匿名，并自然使用至少两个 specificity_terms。
 - 工龄为 [10]；薪资使用 xxk，最高不超过 85k，区间差不超过 20k。
@@ -185,11 +182,7 @@ def _validate_theme_response(
     forbidden_terms: set[str],
 ) -> list[str]:
     synthetic_demands = (
-        {
-            "hypotheses": [
-                {"specificity_terms": list(theme["specificity_terms"])}
-            ]
-        },
+        {"hypotheses": [{"specificity_terms": list(theme["specificity_terms"])}]},
     )
     issues = draft_response_issues(
         response,
@@ -292,9 +285,7 @@ def generate_direct_talent_bundle(
                 )
             demands.append(demand)
         except Exception as error:
-            failures.append(
-                f"{packet['company']}: {type(error).__name__}: {error}"
-            )
+            failures.append(f"{packet['company']}: {type(error).__name__}: {error}")
             demands.append(
                 {
                     "lead_index": packet["lead_index"],
@@ -321,8 +312,7 @@ def generate_direct_talent_bundle(
     if not themes:
         if failures:
             raise DirectTalentGenerationError(
-                "no valid talent theme after analysis failures: "
-                + "; ".join(failures)
+                "no valid talent theme after analysis failures: " + "; ".join(failures)
             )
         return seed_bundle
 

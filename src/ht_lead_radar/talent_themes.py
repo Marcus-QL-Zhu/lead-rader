@@ -10,6 +10,7 @@ from .talent_pool import (
     DraftBundle,
     SourceLead,
     TalentPoolDraft,
+    build_liepin_position_scope,
     canonical_payload_hash,
     validate_liepin_payload,
 )
@@ -45,9 +46,7 @@ def _similar(left: Mapping[str, Any], right: Mapping[str, Any]) -> bool:
 
 def _source_lead(lead: Mapping[str, Any], titles: list[str]) -> SourceLead:
     evidence = [
-        item
-        for item in lead.get("evidence") or ()
-        if isinstance(item, Mapping)
+        item for item in lead.get("evidence") or () if isinstance(item, Mapping)
     ]
     return SourceLead(
         company=str(lead.get("company") or "").strip(),
@@ -76,11 +75,7 @@ def build_talent_themes(
     *,
     target_count: int,
 ) -> tuple[dict[str, Any], ...]:
-    leads = [
-        item
-        for item in report.get("leads") or ()
-        if isinstance(item, Mapping)
-    ]
+    leads = [item for item in report.get("leads") or () if isinstance(item, Mapping)]
     candidates: list[dict[str, Any]] = []
     for demand in company_demands:
         lead_index = int(demand["lead_index"])
@@ -106,11 +101,7 @@ def build_talent_themes(
     groups: list[list[dict[str, Any]]] = []
     for candidate in candidates:
         group = next(
-            (
-                existing
-                for existing in groups
-                if _similar(existing[0], candidate)
-            ),
+            (existing for existing in groups if _similar(existing[0], candidate)),
             None,
         )
         if group is None:
@@ -121,13 +112,7 @@ def build_talent_themes(
         key=lambda group: (
             group[0]["horizon"] != "near_term",
             -len({item["lead_index"] for item in group}),
-            -len(
-                {
-                    ref
-                    for item in group
-                    for ref in item["evidence_refs"]
-                }
-            ),
+            -len({ref for item in group for ref in item["evidence_refs"]}),
             -max(item["lead_score"] for item in group),
             group[0]["specific_title"],
         )
@@ -142,11 +127,7 @@ def build_talent_themes(
             ),
         )
         terms = list(
-            dict.fromkeys(
-                term
-                for item in group
-                for term in item["specificity_terms"]
-            )
+            dict.fromkeys(term for item in group for term in item["specificity_terms"])
         )[:8]
         cities = [item["city"] for item in group if item["city"]]
         city = Counter(cities).most_common(1)[0][0] if cities else "上海"
@@ -155,9 +136,7 @@ def build_talent_themes(
             if cities
             else "公开证据未确认城市；发布草稿暂用单城市默认值，需人工复核"
         )
-        identity = "\x1f".join(
-            sorted(item["hypothesis_id"] for item in group)
-        )
+        identity = "\x1f".join(sorted(item["hypothesis_id"] for item in group))
         themes.append(
             {
                 "theme_id": "theme_"
@@ -170,38 +149,28 @@ def build_talent_themes(
                 "specificity_terms": terms,
                 "key_outcomes": list(
                     dict.fromkeys(
-                        outcome
-                        for item in group
-                        for outcome in item["key_outcomes"]
+                        outcome for item in group for outcome in item["key_outcomes"]
                     )
                 )[:5],
                 "must_have_signals": list(
                     dict.fromkeys(
-                        signal
-                        for item in group
-                        for signal in item["must_have_signals"]
+                        signal for item in group for signal in item["must_have_signals"]
                     )
                 )[:5],
                 "preferred_signals": list(
                     dict.fromkeys(
-                        signal
-                        for item in group
-                        for signal in item["preferred_signals"]
+                        signal for item in group for signal in item["preferred_signals"]
                     )
                 )[:3],
                 "city": city,
                 "city_basis": city_basis,
-                "source_hypothesis_ids": [
-                    item["hypothesis_id"] for item in group
-                ],
+                "source_hypothesis_ids": [item["hypothesis_id"] for item in group],
                 "source_lead_indices": list(
                     dict.fromkeys(item["lead_index"] for item in group)
                 ),
                 "evidence_refs": list(
                     dict.fromkeys(
-                        ref
-                        for item in group
-                        for ref in item["evidence_refs"]
+                        ref for item in group for ref in item["evidence_refs"]
                     )
                 ),
             }
@@ -210,44 +179,49 @@ def build_talent_themes(
 
 
 def _numbered(items: list[str]) -> str:
-    return "；".join(
-        f"{index}.{item}" for index, item in enumerate(items, start=1)
-    )
+    return "；".join(f"{index}.{item}" for index, item in enumerate(items, start=1))
+
+
+def _fill_to_five(items: list[str], fallbacks: list[str]) -> list[str]:
+    return list(dict.fromkeys([*items, *fallbacks]))[:5]
 
 
 def _payload_example(theme: Mapping[str, Any]) -> dict[str, Any]:
     title = str(theme["recommended_title"])
-    outcomes = [str(item) for item in theme["key_outcomes"]]
-    must_have = [str(item) for item in theme["must_have_signals"]]
-    scope = (
-        f"岗位使命：{theme['shared_mandate']}。"
-        f"核心职责：{_numbered(outcomes)}。"
-        f"任职要求：{_numbered(must_have)}。"
-        f"机会亮点：{theme['why_now']}。"
-    )[:500]
+    mandate = str(theme["shared_mandate"])
+    outcomes = _fill_to_five(
+        [str(item) for item in theme["key_outcomes"]],
+        [
+            f"围绕{mandate}拆解年度目标与关键里程碑",
+            "建立跨研发、业务与交付团队的协同和复盘机制",
+            "负责团队建设、关键岗位配置与能力梯队",
+        ],
+    )
+    must_have = _fill_to_five(
+        [str(item) for item in theme["must_have_signals"]],
+        [
+            "具备总监级团队建设与跨部门管理经验",
+            "能够把复杂任务拆解为可量化结果",
+            "具备高不确定环境下的决策与推进能力",
+        ],
+    )
     payload = {
         "position_name": title,
-        "position_scope": scope,
+        "position_scope": build_liepin_position_scope(outcomes, must_have),
         "cities": [str(theme["city"])],
         "seniority": "10年以上",
         "work_experience_years": [10],
         "education": "本科",
         "salary_low": "50k",
         "salary_high": "70k",
-        "salary_months": "15个月",
         "must_have_signals": must_have,
-        "preferred_signals": list(theme["preferred_signals"]) or [
-            "有同类业务阶段的组织建设经验"
-        ],
-        "benefits": [
-            "参与关键业务能力从验证走向规模化",
-            "承担真实的团队和业务结果责任",
-        ],
-        "hard_rejects": ["仅有个人贡献者经历且无团队管理责任"],
+        "preferred_signals": list(theme["preferred_signals"])
+        or ["有同类业务阶段的组织建设经验"],
+        "benefits": ["五险一金", "带薪年假"],
         "target_count": 10,
-        "job_type": "全职",
+        "job_type": "社招",
         "recruit_count": 1,
-        "languages": ["中文"],
+        "languages": ["普通话"],
     }
     validate_liepin_payload(payload)
     return payload
@@ -262,11 +236,7 @@ def build_theme_draft_bundle(
     run_date = str(manifest.get("as_of") or "")
     direction = str(manifest.get("direction") or "")
     run_id = str(manifest.get("run_id") or "")
-    leads = [
-        item
-        for item in report.get("leads") or ()
-        if isinstance(item, Mapping)
-    ]
+    leads = [item for item in report.get("leads") or () if isinstance(item, Mapping)]
     drafts: list[TalentPoolDraft] = []
     for theme in themes:
         source_leads = tuple(
@@ -277,16 +247,13 @@ def build_theme_draft_bundle(
                     for demand in company_demands
                     if demand["lead_index"] == index
                     for hypothesis in demand["hypotheses"]
-                    if hypothesis["hypothesis_id"]
-                    in theme["source_hypothesis_ids"]
+                    if hypothesis["hypothesis_id"] in theme["source_hypothesis_ids"]
                 ],
             )
             for index in theme["source_lead_indices"]
         )
         payload = _payload_example(theme)
-        identity = "\x1f".join(
-            (run_date, direction, str(theme["theme_id"]))
-        )
+        identity = "\x1f".join((run_date, direction, str(theme["theme_id"])))
         drafts.append(
             TalentPoolDraft(
                 draft_id="tp_"

@@ -50,14 +50,14 @@ pending_approval -> approved -> publishing -> published
                   -> expired
 ```
 
-只接受四类精确指令：
+用户可以用自然语言查看、发布、跳过或确认。OpenClaw 根据当前已展示日报和对话
+语境解析结构化 `action + indexes`；例如“发布第一个草稿”“把 1 和 3 发掉”都可
+直接执行，“确认”则继承 OpenClaw 上一条消息中明确提出的草稿选择。只有选择范围
+确实不清楚时才追问，不要求用户复述固定机器指令。
 
-- `发布全部`
-- `发布 1,3,5`
-- `跳过全部`
-- `查看 2 的完整广告 JSON`
-
-“可以”“发吧”“发布1,3”、中文逗号或越界编号均不构成批准。批准记录 actor、时间、原始命令和 payload hash。公开 payload 发生任何变化，批准立即失效。草稿默认 7 天过期。
+批准仍必须来自真实飞书入站用户消息。控制脚本记录 actor、时间、用户原文和
+payload hash，并以结构化 action/indexes 执行；hook、cron、日报事件或 Agent 自身
+不能批准。公开 payload 发生任何变化，批准立即失效。草稿默认 7 天过期。
 
 发布按日报顺序串行执行。普通单项字段错误会记录失败并继续；登录、验证码、风控、限流、要求人工处理或结果不确定会立即停止剩余队列。`draft_id + payload_hash` 是本地幂等键。职位已经创建但后续 Sourcing 接管失败时仍保留为 `published`，阻止重复发广告，并记录阻断告警。
 
@@ -65,7 +65,7 @@ pending_approval -> approved -> publishing -> published
 
 `scripts/talent_pool_control.py` 默认只写批准状态，不调用猎聘。测试只能使用 `--fake-publish`。真实调用必须同时满足：
 
-1. 用户刚刚发出了上面的明确发布指令；
+1. OpenClaw 已从刚收到的真实用户消息中解析出发布意图和草稿编号；
 2. 操作者显式传入 `--execute-real`；
 3. 传入现有猎聘 Skills 根目录；
 4. 草稿仍在有效期内、payload hash 未变化且尚未发布。
@@ -104,11 +104,14 @@ python scripts/generate_talent_pool_drafts.py \
   --output-dir /tmp/talent-pool
 
 python scripts/talent_pool_control.py \
-  --command "发布 1,3,5" \
+  --action publish \
+  --indexes "1,3,5" \
+  --user-message "发布第一个、第三个和第五个草稿" \
   --actor local-acceptance \
   --direction 具身智能 \
   --run-date 2026-07-26 \
   --state-db /tmp/talent-pool.sqlite \
+  --context-snapshot-id "<show-current snapshot_id>" \
   --fake-publish
 ```
 

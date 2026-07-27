@@ -7,7 +7,10 @@ from ht_lead_radar.openclaw_talent_generator import (
     generate_openclaw_draft_bundle,
 )
 from ht_lead_radar.talent_demand_analysis import DemandAnalysisError
-from ht_lead_radar.talent_pool import generate_draft_bundle
+from ht_lead_radar.talent_pool import (
+    build_liepin_position_scope,
+    generate_draft_bundle,
+)
 from test_talent_pool import sample_report
 
 
@@ -86,12 +89,21 @@ def valid_ad_response(report):
         payload = dict(item.public_payload)
         payload["position_name"] = titles[ordinal - 1]
         payload["cities"] = ["上海"]
-        payload["position_scope"] = (
-            f"岗位使命：建设第{ordinal}类运动控制与强化学习关键能力。"
-            "核心职责：1.制定技术路线；2.搭建团队；3.推动算法工程化；"
-            "4.建立仿真实机闭环；5.协同机器人量产。任职要求："
-            "1.十年以上经验；2.有运动控制经验；3.有强化学习经验；"
-            "4.管理跨学科团队；5.有规模交付经历。"
+        payload["position_scope"] = build_liepin_position_scope(
+            [
+                f"建设第{ordinal}类运动控制与强化学习关键能力",
+                "制定运动控制技术路线",
+                "搭建算法与工程团队",
+                "建立仿真和实机验证闭环",
+                "协同关键部件量产导入",
+            ],
+            [
+                "十年以上机器人研发经验",
+                "有运动控制算法落地经验",
+                "有强化学习工程化经验",
+                "管理过跨学科研发团队",
+                "有机器人量产交付经验",
+            ],
         )
         payload["must_have_signals"] = [
             "运动控制算法落地",
@@ -160,9 +172,7 @@ def test_openclaw_response_fails_closed_on_leak_or_bad_count():
         generate_openclaw_draft_bundle(
             report,
             target_count=3,
-            runner=SequenceRunner(
-                valid_demand_response(report), response, response
-            ),
+            runner=SequenceRunner(valid_demand_response(report), response, response),
         )
 
     with pytest.raises(OpenClawGenerationError, match="expected 3"):
@@ -180,9 +190,7 @@ def test_openclaw_response_fails_closed_on_leak_or_bad_count():
 def test_openclaw_fails_closed_when_demand_analysis_is_generic():
     report = sample_report(leads=1)
     response = valid_demand_response(report)
-    response["company_demands"][0]["hypotheses"][0][
-        "specific_title"
-    ] = "研发总监"
+    response["company_demands"][0]["hypotheses"][0]["specific_title"] = "研发总监"
     with pytest.raises(DemandAnalysisError, match="too broad"):
         generate_openclaw_draft_bundle(
             report,

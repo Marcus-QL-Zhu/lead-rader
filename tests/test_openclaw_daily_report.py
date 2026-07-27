@@ -99,7 +99,7 @@ def test_pending_selector_never_falls_back_to_older_backlog(tmp_path):
     assert store.pending_openclaw_report() is None
 
 
-def test_command_examples_never_reference_missing_drafts(tmp_path):
+def test_daily_report_offers_natural_language_examples(tmp_path):
     store, _ = _store(tmp_path)
     row = store.pending_openclaw_report()
     assert row is not None
@@ -107,23 +107,22 @@ def test_command_examples_never_reference_missing_drafts(tmp_path):
     one = dict(row)
     one["bundle"] = dict(row["bundle"])
     one["bundle"]["drafts"] = list(row["bundle"]["drafts"][:1])
-    assert bridge.render_context(one)["commands"] == [
-        "查看 1 的完整广告 JSON",
-        "发布全部",
-        "发布 1",
-        "跳过全部",
+    assert bridge.render_context(one)["natural_language_examples"] == [
+        "发布第一个草稿",
+        "这些职位都跳过",
     ]
 
     three = dict(row)
     three["bundle"] = dict(row["bundle"])
     three["bundle"]["drafts"] = list(row["bundle"]["drafts"][:3])
-    assert "查看 2 的完整广告 JSON" in bridge.render_context(three)["commands"]
-    assert "发布 1,2,3" in bridge.render_context(three)["commands"]
+    examples = bridge.render_context(three)["natural_language_examples"]
+    assert "查看前两个职位的完整 JSON" in examples
+    assert "把第 1 和第 3 个发布" in examples
 
     empty = dict(row)
     empty["bundle"] = dict(row["bundle"])
     empty["bundle"]["drafts"] = []
-    assert bridge.render_context(empty)["commands"] == []
+    assert bridge.render_context(empty)["natural_language_examples"] == []
 
 
 def test_render_context_keeps_company_role_mapping_and_json_is_on_demand(tmp_path):
@@ -144,6 +143,7 @@ def test_render_context_keeps_company_role_mapping_and_json_is_on_demand(tmp_pat
             "1",
         ],
         text=True,
+        encoding="utf-8",
         capture_output=True,
         check=True,
     )

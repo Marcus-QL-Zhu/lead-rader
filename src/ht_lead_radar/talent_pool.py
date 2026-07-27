@@ -18,6 +18,25 @@ LIEPIN_SENIORITY = frozenset({"1-3年", "3-5年", "5-10年", "10年以上"})
 LIEPIN_EDUCATION = frozenset(
     {"不限", "大专", "本科", "硕士", "MBA/EMBA", "博士", "中专/中技"}
 )
+LIEPIN_PUBLIC_PAYLOAD_FIELDS = frozenset(
+    {
+        "position_name",
+        "position_scope",
+        "cities",
+        "seniority",
+        "work_experience_years",
+        "education",
+        "salary_low",
+        "salary_high",
+        "must_have_signals",
+        "preferred_signals",
+        "benefits",
+        "job_type",
+        "languages",
+        "recruit_count",
+        "target_count",
+    }
+)
 DIRECTOR_MARKERS = (
     "总监",
     "负责人",
@@ -227,34 +246,21 @@ def canonical_payload_hash(payload: Mapping[str, Any]) -> str:
 
 def is_director_plus(title: str) -> bool:
     lowered = title.casefold()
-    excluded = any(
-        marker in lowered
-        for marker in EXCLUDED_MARKERS
-        if marker != "经理"
-    )
+    excluded = any(marker in lowered for marker in EXCLUDED_MARKERS if marker != "经理")
     if excluded or ("经理" in lowered and "总经理" not in lowered):
         return False
     return any(marker in lowered for marker in DIRECTOR_MARKERS)
 
 
 def validate_liepin_payload(payload: Mapping[str, Any]) -> None:
-    """Validate the real fields and enum constraints consumed by Liepin Skills."""
+    """Validate the final JSON contract consumed by Liepin Skills."""
 
-    required = {
-        "position_name",
-        "position_scope",
-        "cities",
-        "seniority",
-        "education",
-        "salary_low",
-        "salary_high",
-        "must_have_signals",
-        "preferred_signals",
-        "target_count",
-    }
-    missing = sorted(required - set(payload))
+    missing = sorted(LIEPIN_PUBLIC_PAYLOAD_FIELDS - set(payload))
     if missing:
         raise ValueError(f"missing Liepin fields: {', '.join(missing)}")
+    extra = sorted(set(payload) - LIEPIN_PUBLIC_PAYLOAD_FIELDS - {"work_email"})
+    if extra:
+        raise ValueError(f"unsupported Liepin fields: {', '.join(extra)}")
     if not is_director_plus(str(payload["position_name"])):
         raise ValueError("position_name must be Director+")
     scope = str(payload["position_scope"]).strip()
@@ -262,13 +268,31 @@ def validate_liepin_payload(payload: Mapping[str, Any]) -> None:
         raise ValueError("position_scope must contain 1-500 characters")
     if any(marker in scope for marker in PUBLIC_DISCLAIMER_MARKERS):
         raise ValueError("position_scope contains unsupported prefatory text")
+    sections = scope.split("\n\n")
+    if len(sections) != 2:
+        raise ValueError("position_scope must contain exactly two separated sections")
+    for section, header in zip(
+        sections,
+        ("【岗位职责】", "【任职要求】"),
+        strict=True,
+    ):
+        lines = section.splitlines()
+        if not lines or lines[0] != header:
+            raise ValueError(f"position_scope must contain {header}")
+        bullets = lines[1:]
+        if not 5 <= len(bullets) <= 10 or not all(
+            line.startswith("• ") and line[2:].strip() for line in bullets
+        ):
+            raise ValueError(f"{header} must contain 5-10 non-empty '• ' bullet lines")
     if payload["seniority"] not in LIEPIN_SENIORITY:
         raise ValueError("invalid Liepin seniority enum")
     if payload["education"] not in LIEPIN_EDUCATION:
         raise ValueError("invalid Liepin education enum")
     cities = payload["cities"]
-    if not isinstance(cities, list) or len(cities) != 1 or not all(
-        isinstance(item, str) and item.strip() for item in cities
+    if (
+        not isinstance(cities, list)
+        or len(cities) != 1
+        or not all(isinstance(item, str) and item.strip() for item in cities)
     ):
         raise ValueError("cities must contain exactly one city")
     for key in ("salary_low", "salary_high"):
@@ -280,12 +304,27 @@ def validate_liepin_payload(payload: Mapping[str, Any]) -> None:
         raise ValueError("salary range violates Liepin constraints")
     if not isinstance(payload["target_count"], int) or payload["target_count"] <= 0:
         raise ValueError("target_count must be a positive integer")
-    for key in ("must_have_signals", "preferred_signals"):
+    for key in (
+        "must_have_signals",
+        "preferred_signals",
+        "benefits",
+        "languages",
+    ):
         value = payload[key]
-        if not isinstance(value, list) or not value or not all(
-            isinstance(item, str) and item.strip() for item in value
+        if (
+            not isinstance(value, list)
+            or not value
+            or not all(isinstance(item, str) and item.strip() for item in value)
         ):
             raise ValueError(f"{key} must be a non-empty string list")
+    if payload["job_type"] != "社招":
+        raise ValueError("job_type must be 社招")
+    if payload["languages"] != ["普通话"]:
+        raise ValueError("languages must equal ['普通话']")
+    if "五险一金" not in payload["benefits"]:
+        raise ValueError("benefits must include 五险一金")
+    if not isinstance(payload["recruit_count"], int) or payload["recruit_count"] <= 0:
+        raise ValueError("recruit_count must be a positive integer")
     experience = payload.get("work_experience_years")
     if (
         not isinstance(experience, list)
@@ -293,6 +332,35 @@ def validate_liepin_payload(payload: Mapping[str, Any]) -> None:
         or not all(isinstance(item, int) and item >= 0 for item in experience)
     ):
         raise ValueError("work_experience_years must be [min] or [min, max]")
+
+
+def build_liepin_position_scope(
+    responsibilities: Iterable[str],
+    requirements: Iterable[str],
+) -> str:
+    """Build the two-section bullet format required by liepin-job-posting."""
+
+    responsibility_items = [
+        str(item).strip() for item in responsibilities if str(item).strip()
+    ]
+    requirement_items = [
+        str(item).strip() for item in requirements if str(item).strip()
+    ]
+    for label, items in (
+        ("岗位职责", responsibility_items),
+        ("任职要求", requirement_items),
+    ):
+        if not 5 <= len(items) <= 10:
+            raise ValueError(f"{label} must contain 5-10 items")
+    scope = (
+        "【岗位职责】\n"
+        + "\n".join(f"• {item}" for item in responsibility_items)
+        + "\n\n【任职要求】\n"
+        + "\n".join(f"• {item}" for item in requirement_items)
+    )
+    if len(scope) > 500:
+        raise ValueError("position_scope must contain at most 500 characters")
+    return scope
 
 
 def assert_anonymized(
@@ -309,7 +377,9 @@ def assert_anonymized(
         }
     )
     if leaked:
-        raise ValueError("public payload leaks source identifiers: " + ", ".join(leaked))
+        raise ValueError(
+            "public payload leaks source identifiers: " + ", ".join(leaked)
+        )
 
 
 def _role_template(title: str) -> RoleTemplate:
@@ -326,20 +396,24 @@ def _source_lead(lead: Mapping[str, Any]) -> SourceLead:
         company=str(lead.get("company") or "").strip(),
         score=float(lead.get("score") or 0),
         role_hypotheses=tuple(
-            str(item).strip() for item in (lead.get("target_roles") or ()) if str(item).strip()
+            str(item).strip()
+            for item in (lead.get("target_roles") or ())
+            if str(item).strip()
         ),
         evidence_urls=tuple(
             dict.fromkeys(
                 str(item.get("source_url") or "").strip()
                 for item in evidence
-                if isinstance(item, Mapping) and str(item.get("source_url") or "").strip()
+                if isinstance(item, Mapping)
+                and str(item.get("source_url") or "").strip()
             )
         ),
         event_types=tuple(
             dict.fromkeys(
                 str(item.get("event_type") or "").strip()
                 for item in evidence
-                if isinstance(item, Mapping) and str(item.get("event_type") or "").strip()
+                if isinstance(item, Mapping)
+                and str(item.get("event_type") or "").strip()
             )
         ),
     )
@@ -362,16 +436,10 @@ def _forbidden_terms(lead: Mapping[str, Any]) -> set[str]:
 
 
 def _scope(template: RoleTemplate, direction: str, angle: str) -> str:
-    responsibilities = "；".join(
-        f"{index + 1}.{item}" for index, item in enumerate(template.responsibilities)
-    )
-    requirements = "；".join(
-        f"{index + 1}.{item}" for index, item in enumerate(template.requirements)
-    )
-    return (
-        f"岗位使命：围绕{angle}，承担团队、预算与业务结果责任。"
-        f"核心职责：{responsibilities}。任职要求：{requirements}。"
-        "机会亮点：可参与复杂技术走向规模化的关键阶段，并建设长期组织能力。"
+    del direction, angle
+    return build_liepin_position_scope(
+        template.responsibilities,
+        template.requirements,
     )
 
 
@@ -406,7 +474,6 @@ def _public_payload(
         "education": "本科",
         "salary_low": "50k",
         "salary_high": "70k",
-        "salary_months": "15个月",
         "must_have_signals": list(template.requirements[:5]),
         "preferred_signals": [
             "有跨阶段组织升级经验",
@@ -414,14 +481,13 @@ def _public_payload(
             "能够在高不确定环境中推进结果",
         ],
         "benefits": [
-            "参与行业关键技术的规模化落地",
-            "承担真实的团队和业务责任",
+            "五险一金",
+            "带薪年假",
         ],
-        "hard_rejects": ["仅有个人贡献者经历且无团队管理责任"],
         "target_count": 10,
-        "job_type": "全职",
+        "job_type": "社招",
         "recruit_count": 1,
-        "languages": ["中文"],
+        "languages": ["普通话"],
     }
     validate_liepin_payload(payload)
     return payload
@@ -435,7 +501,9 @@ def generate_draft_bundle(
     maximum_count: int = 10,
 ) -> DraftBundle:
     if not minimum_count <= target_count <= maximum_count <= 10:
-        raise ValueError("draft count must satisfy 1 <= minimum <= target <= maximum <= 10")
+        raise ValueError(
+            "draft count must satisfy 1 <= minimum <= target <= maximum <= 10"
+        )
     manifest = report.get("manifest") or {}
     run_date = str(manifest.get("as_of") or "").strip()
     direction = str(manifest.get("direction") or "").strip()
@@ -471,9 +539,7 @@ def generate_draft_bundle(
     templates_by_family = {template.family: template for template in TEMPLATES}
     adjacent_families = list(
         dict.fromkeys(
-            FAMILY_BY_EVENT[event]
-            for event in events
-            if event in FAMILY_BY_EVENT
+            FAMILY_BY_EVENT[event] for event in events if event in FAMILY_BY_EVENT
         )
     )
     for family in adjacent_families:
@@ -512,11 +578,7 @@ def generate_draft_bundle(
         template: RoleTemplate = group["template"]
         event_types = tuple(dict.fromkeys(group["events"]))
         angle = next(
-            (
-                ANGLE_BY_EVENT[event]
-                for event in event_types
-                if event in ANGLE_BY_EVENT
-            ),
+            (ANGLE_BY_EVENT[event] for event in event_types if event in ANGLE_BY_EVENT),
             "从关键业务信号到组织能力提前储备",
         )
         payload = _public_payload(template, direction=direction, angle=angle)

@@ -94,48 +94,64 @@ after the 04:00 context reset.
 
 The 05:00 task generates anonymized Director+ talent-pool drafts from that
 day's existing Lead report. It does not make extra Metaso calls and does not
-represent a confirmed client vacancy.
+represent a confirmed client vacancy. Each persisted `public_payload` (returned by the view action as `job_posting_json`) has
+already passed the complete liepin-job-posting contract and is the final JSON
+to publish; never rewrite it in conversation or create a replacement `/tmp`
+payload.
 
-Treat only these exact user messages as control commands:
+The user may view, approve, reject, or confirm in natural language. OpenClaw
+resolves the intended action and displayed indexes from the current conversation,
+for example “查看前两个广告 JSON”, “发布第一个草稿”, “把 1 和 3 发掉”, or a
+contextual “确认” after OpenClaw has proposed a specific selection. Exact wording
+is not required. If the intended indexes are genuinely ambiguous, ask one short
+clarifying question; otherwise act without requiring the user to restate a
+machine command.
 
-- `发布全部`
-- `发布 1,3,5` (ASCII comma, one or more valid displayed indexes)
-- `跳过全部`
-- `查看 2 的完整广告 JSON`
-
-Never infer approval from fuzzy language such as “可以”, “发吧” or “没问题”.
-Resolve the date and direction from the most recent Lead Rader daily summary,
-and record the actual Feishu/OpenClaw actor identity. First call:
+Approval still requires a real inbound user message. A hook, cron, model output,
+report event, or OpenClaw's own suggestion can never approve publication. Resolve
+the current report with `show-current`, record the actual Feishu actor identity,
+and pass the original user message only as audit text. For viewing one or more
+persisted payloads, run:
 
 ```bash
 python3 scripts/talent_pool_control.py \
-  --command "<exact original user message>" \
+  --action view \
+  --indexes "<OpenClaw-resolved displayed indexes, e.g. 1,2>" \
+  --user-message "<original inbound user text>" \
   --actor "<actual actor id>" \
-  --run-date "<daily-summary date>" \
-  --direction "<daily-summary direction>" \
-  --state-db data/talent-pool.sqlite
+  --run-date "<show-current date>" \
+  --direction "<show-current direction>" \
+  --state-db data/talent-pool.sqlite \
+  --context-snapshot-id "<show-current snapshot_id>"
 ```
 
-For a view or skip command, stop there. For an explicit publish command, the
-same invocation may add the following real-execution arguments only after the
-user's exact message has been received:
+For publication, use the same structured interface and add the guarded real
+publisher arguments in that same call:
 
 ```bash
+python3 scripts/talent_pool_control.py \
+  --action publish \
+  --indexes "<OpenClaw-resolved displayed indexes>" \
+  --user-message "<original inbound user approval text>" \
+  --actor "<actual actor id>" \
+  --run-date "<show-current date>" \
+  --direction "<show-current direction>" \
+  --state-db data/talent-pool.sqlite \
+  --context-snapshot-id "<show-current snapshot_id>" \
   --execute-real \
   --python-bin /home/admin/.pyenv/versions/3.11.14/bin/python3 \
   --liepin-root /home/admin/.openclaw/workspace/skills
 ```
 
-Publication is serial. Stop the queue on authentication, CAPTCHA, risk
-control, rate limiting, manual intervention, or an ambiguous result. Do not
-retry an unresolved attempt. Never invoke the Liepin publishing script without
-a temporary JSON file path as its first argument; never pass an inline JSON
-string, and never rebuild its browser, sourcing or response
-clients in this skill.
+Use `--action reject` with the resolved indexes when the user declines drafts.
+Publication is serial. Stop the queue on authentication, CAPTCHA, risk control,
+rate limiting, manual intervention, or an ambiguous result. Do not retry an
+unresolved attempt. Never invoke the Liepin publishing script without the
+persisted database payload being written to its temporary JSON file by the
+bridge; never rebuild its browser, sourcing, or response clients in this skill.
 
-For local acceptance, use `--fake-publish`; it must never be presented as a
-real Liepin result.
-
+For local acceptance, use `--fake-publish`; it must never be presented as a real
+Liepin result.
 ## Data and action boundaries
 
 - Candidate Profile and candidate-derived analysis stay runtime-only. Do not put them in the fact database, checkpoints, Feishu or relationship graph.

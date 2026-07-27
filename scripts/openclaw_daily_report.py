@@ -13,6 +13,11 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Callable
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+if hasattr(sys.stderr, "reconfigure"):
+    sys.stderr.reconfigure(encoding="utf-8")
+
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
@@ -229,17 +234,15 @@ def _demand_summary(item: Any) -> dict[str, Any]:
     }
 
 
-def _command_examples(draft_count: int) -> list[str]:
+def _interaction_examples(draft_count: int) -> list[str]:
     if draft_count <= 0:
         return []
-    view_index = min(2, draft_count)
-    selected = ",".join(str(index) for index in range(1, min(3, draft_count) + 1))
-    return [
-        f"查看 {view_index} 的完整广告 JSON",
-        "发布全部",
-        f"发布 {selected}",
-        "跳过全部",
-    ]
+    examples = ["发布第一个草稿", "这些职位都跳过"]
+    if draft_count >= 2:
+        examples.insert(1, "查看前两个职位的完整 JSON")
+    if draft_count >= 3:
+        examples.insert(2, "把第 1 和第 3 个发布")
+    return examples
 
 
 def render_context(row: dict[str, Any]) -> dict[str, Any]:
@@ -280,7 +283,9 @@ def render_context(row: dict[str, Any]) -> dict[str, Any]:
             _demand_summary(item)
             for item in bundle.get("company_demand_analysis") or []
         ],
-        "commands": [] if approval_blocked else _command_examples(len(drafts)),
+        "natural_language_examples": (
+            [] if approval_blocked else _interaction_examples(len(drafts))
+        ),
     }
 
 
@@ -304,8 +309,10 @@ def event_text(snapshot_id: str, *, source: str) -> str:
         "that draft's own validation_status is invalid. Do not recommend publishing "
         "an invalid draft and observing the result. If approval_blocked is true, "
         "state that publication is blocked and do not ask for approval. Only when "
-        "approval_blocked is false, ask whether to publish. Do not publish until "
-        "an exact inbound user command is received."
+        "approval_blocked is false, ask whether to publish and make clear that the "
+        "user may answer in natural language. OpenClaw interprets the intent and "
+        "selected indexes; no exact wording is required. Never publish without a "
+        "real inbound user message that expresses approval."
     )
 
 

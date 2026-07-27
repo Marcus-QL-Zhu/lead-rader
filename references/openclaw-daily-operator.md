@@ -51,18 +51,28 @@ Lead Rader 从公开的上游经营信号判断哪些公司可能新增总监级
 
 ## 审批与发布
 
-只有真实飞书入站用户消息完全匹配以下命令，才可执行：
+用户可以用自然语言表达查看、发布、跳过或确认，不需要复述机器指令。OpenClaw
+根据当前已展示日报和连续对话判断 `action` 与展示编号。例如：
 
-- `发布全部`
-- `发布 1`（或以 ASCII 逗号分隔多个当前已展示编号）
-- `跳过全部`
-- `查看 1 的完整广告 JSON`（编号必须存在于当前已展示日报）
+- “查看前两个广告 JSON” → `action=view, indexes=1,2`
+- “发布第一个草稿” → `action=publish, indexes=1`
+- “把 1 和 3 发掉” → `action=publish, indexes=1,3`
+- OpenClaw 已明确提议发布第 1 条后，用户回复“确认” → `action=publish, indexes=1`
 
-执行前先运行 `show-current`。只有返回状态为 `reported` 时才可继续；若为 `pending`、`reporting`、`read` 或 `failed`，必须先完成最新日报汇报并停止本次发布。然后取其内部 `run_date`、`direction`、`snapshot_id`。把 snapshot 作为隐藏的一致性参数传给控制脚本，用户无需看见或输入：
+只有当自然语言确实无法确定会影响哪些草稿时才追问。不得要求用户改写成固定句式。
+但批准仍必须来自真实飞书入站用户消息；hook、cron、日报事件、模型输出或 OpenClaw
+自己的建议都不是批准。
+
+执行任何查看或发布前先运行 `show-current`。只有状态为 `reported` 才可继续；否则
+先完成最新日报汇报。取返回的 `run_date`、`direction`、`snapshot_id`，由 OpenClaw
+作为隐藏的一致性参数传给结构化控制接口。`--user-message` 保存用户原文用于审计，
+不承担命令解析：
 
 ```bash
 /home/admin/.pyenv/versions/3.11.14/bin/python3 /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/talent_pool_control.py \
-  --command "<用户原文>" \
+  --action "<view|publish|reject>" \
+  --indexes "<OpenClaw 判断的展示编号，如 1,2>" \
+  --user-message "<真实飞书用户原文>" \
   --actor "<真实飞书 actor id>" \
   --run-date "<show-current 返回日期>" \
   --direction "<show-current 返回方向>" \
@@ -70,8 +80,11 @@ Lead Rader 从公开的上游经营信号判断哪些公司可能新增总监级
   --context-snapshot-id "<show-current 返回 snapshot_id>"
 ```
 
-查看或跳过到此结束。只有精确的发布命令才可追加 `--execute-real` 及 `SKILL.md` 指定的猎聘参数。若一致性检查提示日报已变化，先向用户展示最新日报，不能沿用旧编号。
-
+查看时只把接口返回的持久化 `job_posting_json` 作为猎聘 JSON 展示；公司关联来自同层 `target_companies`，不得把该元数据塞入职位 JSON，也不得重写字段、在内存中修订，或
+另建一个 JSON 取代数据库版本。发布时在同一次结构化调用追加 `--execute-real`、
+`--python-bin /home/admin/.pyenv/versions/3.11.14/bin/python3` 和
+`--liepin-root /home/admin/.openclaw/workspace/skills`。若一致性检查提示日报已变化，
+先展示最新日报，不能沿用旧编号。
 ## 故障处理
 
 - hook 失败：05:50、06:50 cron 会再次唤醒并读 pending。

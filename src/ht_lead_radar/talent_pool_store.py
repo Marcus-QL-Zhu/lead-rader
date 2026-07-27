@@ -12,7 +12,7 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
-from .talent_pool import canonical_payload_hash
+from .talent_pool import canonical_payload_hash, validate_liepin_payload
 
 
 VALID_STATUSES = frozenset(
@@ -51,6 +51,14 @@ def parse_approval_command(command: str, *, draft_count: int) -> ApprovalCommand
         ):
             return None
         return ApprovalCommand("publish", indexes)
+    match = re.fullmatch(r"跳过 ([1-9]\d*(?:,[1-9]\d*)*)", text)
+    if match:
+        indexes = tuple(sorted(int(item) for item in match.group(1).split(",")))
+        if len(set(indexes)) != len(indexes) or any(
+            item > draft_count for item in indexes
+        ):
+            return None
+        return ApprovalCommand("reject", indexes)
     match = re.fullmatch(r"查看 ([1-9]\d*) 的完整广告 JSON", text)
     if match:
         index = int(match.group(1))
@@ -406,7 +414,11 @@ class TalentPoolStore:
         if len(drafts) != len(raw_drafts):
             raise ValueError("each draft must be an object")
         for draft in drafts:
-            draft["payload_hash"] = canonical_payload_hash(draft["public_payload"])
+            payload = draft.get("public_payload")
+            if not isinstance(payload, Mapping):
+                raise ValueError("each draft public_payload must be an object")
+            validate_liepin_payload(payload)
+            draft["payload_hash"] = canonical_payload_hash(payload)
         normalized_bundle = dict(bundle)
         normalized_bundle["drafts"] = drafts
         bundle_json = json.dumps(
@@ -976,8 +988,10 @@ class TalentPoolStore:
         command: str,
         actor: str,
         expected_snapshot_id: str = "",
+        recorded_command: str = "",
     ) -> dict[str, Any]:
         now = _utcnow()
+        audit_command = recorded_command.strip() or command
         with self._connect() as connection:
             connection.execute("BEGIN IMMEDIATE")
             connection.execute(
@@ -1059,7 +1073,7 @@ class TalentPoolStore:
                         new_status,
                         now if new_status == "approved" else None,
                         actor if new_status == "approved" else None,
-                        command if new_status == "approved" else None,
+                        audit_command if new_status == "approved" else None,
                         now,
                         row["draft_id"],
                         row["payload_hash"],
@@ -1083,7 +1097,7 @@ class TalentPoolStore:
                     (
                         row["draft_id"],
                         actor,
-                        command,
+                        audit_command,
                         parsed.action,
                         row["payload_hash"],
                         row["source_run_id"],

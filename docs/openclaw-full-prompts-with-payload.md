@@ -102,11 +102,9 @@ Director+ 组织缺口。判断顺序是：企业阶段变化 → 新增业务�
 
 ## 阶段二 System：单主题 JD 写作方法
 ```text
-你是高级猎头职位广告编辑。输入是已经由公开证据支持的人才主题。你的任务是把
-该主题写成一条具体、匿名、可公开发布的 Director+ 职位广告 JSON。
-
-每条职责、要求和技术词都应服务于输入主题的 mandate 与 specificity_terms。
-只返回严格 JSON，不输出解释或分析过程。
+你是高级猎头职位广告编辑。输入是已经由公开证据支持的人才主题。把该主题直接
+写成可由 liepin-job-posting 发布的最终 Director+ JSON。职责、要求和技术词都应
+服务于输入主题的 mandate 与 specificity_terms。只返回严格 JSON。
 ```
 
 ## 阶段二 User：单主题与完整示例
@@ -116,14 +114,16 @@ Director+ 组织缺口。判断顺序是：企业阶段变化 → 新增业务�
 {"theme_id":"theme_2ddbfd722857","recommended_title":"机器人运动控制工程化总监","role_family":"研发与算法","shared_mandate":"建立技术研发到规模交付的完整闭环","why_now":"公开事件显示公司进入下一产品阶段","horizon":"near_term","specificity_terms":["运动控制","工程验证","规模交付"],"key_outcomes":["制定技术路线","建立工程验证闭环","搭建跨职能团队"],"must_have_signals":["十年以上相关经验","有技术工程化经验","有规模交付经验"],"preferred_signals":["有从样机验证推进至小批量交付的经验"],"city":"上海","city_basis":"公开研发活动所在地","source_hypothesis_ids":["lead_1_role_1"],"source_lead_indices":[1],"evidence_refs":["ev_3e36d7e7814c"]}
 
 完整输出示例：
-{"drafts":[{"ordinal":1,"talent_persona":"能够承担“建立技术研发到规模交付的完整闭环”的总监级人才","role_family":"研发与算法","attraction_angle":"公开事件显示公司进入下一产品阶段","recommended_title":"机器人运动控制工程化总监","why_now":"公开事件显示公司进入下一产品阶段","public_payload":{"position_name":"机器人运动控制工程化总监","position_scope":"岗位使命：建立技术研发到规模交付的完整闭环。核心职责：1.制定技术路线；2.建立工程验证闭环；3.搭建跨职能团队。任职要求：1.十年以上相关经验；2.有技术工程化经验；3.有规模交付经验。机会亮点：公开事件显示公司进入下一产品阶段。","cities":["上海"],"seniority":"10年以上","work_experience_years":[10],"education":"本科","salary_low":"50k","salary_high":"70k","salary_months":"15个月","must_have_signals":["十年以上相关经验","有技术工程化经验","有规模交付经验"],"preferred_signals":["有从样机验证推进至小批量交付的经验"],"benefits":["参与关键业务能力从验证走向规模化","承担真实的团队和业务结果责任"],"hard_rejects":["仅有个人贡献者经历且无团队管理责任"],"target_count":10,"job_type":"全职","recruit_count":1,"languages":["中文"]}}]}
+{"drafts":[{"ordinal":1,"talent_persona":"能够承担“建立技术研发到规模交付的完整闭环”的总监级人才","role_family":"研发与算法","attraction_angle":"公开事件显示公司进入下一产品阶段","recommended_title":"机器人运动控制工程化总监","why_now":"公开事件显示公司进入下一产品阶段","public_payload":{"position_name":"机器人运动控制工程化总监","position_scope":"【岗位职责】\n• 制定运动控制技术路线\n• 建立工程验证闭环\n• 搭建跨职能团队\n• 拆解年度目标与关键里程碑\n• 建立研发、业务与交付协同机制\n\n【任职要求】\n• 十年以上相关经验\n• 有技术工程化经验\n• 有规模交付经验\n• 具备总监级团队管理经验\n• 能够把复杂任务拆解为可量化结果","cities":["上海"],"seniority":"10年以上","work_experience_years":[10],"education":"本科","salary_low":"50k","salary_high":"70k","must_have_signals":["十年以上相关经验","有技术工程化经验","有规模交付经验","具备总监级团队管理经验","能够把复杂任务拆解为可量化结果"],"preferred_signals":["有从样机验证推进至小批量交付的经验"],"benefits":["五险一金","带薪年假"],"target_count":10,"job_type":"社招","recruit_count":1,"languages":["普通话"]}}]}
 
 任务：
 - 输出恰好一条 draft，ordinal 固定为 1。
 - recommended_title 和 position_name 使用人才主题的具体标题。
-- position_scope 包含岗位使命、5–8 条核心职责、5–8 条任职要求和机会亮点，
-  总长度不超过 500 个字符。
-- public_payload 字段集合、类型和枚举形式与示例完全一致。
+- position_scope 严格使用【岗位职责】和【任职要求】两个章节；每个章节各写
+  5–10 行以“• ”开头的 bullet，总长度不超过 500 个字符。
+- public_payload 是持久化并直接发布的最终 JSON；字段、类型、枚举和值与示例
+  完全一致，包括 job_type=社招、languages=[普通话]、seniority 无空格、
+  benefits 包含五险一金。
 - cities 只含人才主题中的一个城市。
 - 公开内容保持匿名，并自然使用至少两个 specificity_terms。
 - 工龄为 [10]；薪资使用 xxk，最高不超过 85k，区间差不超过 20k。
@@ -138,10 +138,10 @@ Director+ 组织缺口。判断顺序是：企业阶段变化 → 新增业务�
 {"theme_id":"theme_2ddbfd722857","recommended_title":"机器人运动控制工程化总监","role_family":"研发与算法","shared_mandate":"建立技术研发到规模交付的完整闭环","why_now":"公开事件显示公司进入下一产品阶段","horizon":"near_term","specificity_terms":["运动控制","工程验证","规模交付"],"key_outcomes":["制定技术路线","建立工程验证闭环","搭建跨职能团队"],"must_have_signals":["十年以上相关经验","有技术工程化经验","有规模交付经验"],"preferred_signals":["有从样机验证推进至小批量交付的经验"],"city":"上海","city_basis":"公开研发活动所在地","source_hypothesis_ids":["lead_1_role_1"],"source_lead_indices":[1],"evidence_refs":["ev_3e36d7e7814c"]}
 
 字段示例：
-{"position_name":"机器人运动控制工程化总监","position_scope":"岗位使命：建立技术研发到规模交付的完整闭环。核心职责：1.制定技术路线；2.建立工程验证闭环；3.搭建跨职能团队。任职要求：1.十年以上相关经验；2.有技术工程化经验；3.有规模交付经验。机会亮点：公开事件显示公司进入下一产品阶段。","cities":["上海"],"seniority":"10年以上","work_experience_years":[10],"education":"本科","salary_low":"50k","salary_high":"70k","salary_months":"15个月","must_have_signals":["十年以上相关经验","有技术工程化经验","有规模交付经验"],"preferred_signals":["有从样机验证推进至小批量交付的经验"],"benefits":["参与关键业务能力从验证走向规模化","承担真实的团队和业务结果责任"],"hard_rejects":["仅有个人贡献者经历且无团队管理责任"],"target_count":10,"job_type":"全职","recruit_count":1,"languages":["中文"]}
+{"position_name":"机器人运动控制工程化总监","position_scope":"【岗位职责】\n• 制定运动控制技术路线\n• 建立工程验证闭环\n• 搭建跨职能团队\n• 拆解年度目标与关键里程碑\n• 建立研发、业务与交付协同机制\n\n【任职要求】\n• 十年以上相关经验\n• 有技术工程化经验\n• 有规模交付经验\n• 具备总监级团队管理经验\n• 能够把复杂任务拆解为可量化结果","cities":["上海"],"seniority":"10年以上","work_experience_years":[10],"education":"本科","salary_low":"50k","salary_high":"70k","must_have_signals":["十年以上相关经验","有技术工程化经验","有规模交付经验","具备总监级团队管理经验","能够把复杂任务拆解为可量化结果"],"preferred_signals":["有从样机验证推进至小批量交付的经验"],"benefits":["五险一金","带薪年假"],"target_count":10,"job_type":"社招","recruit_count":1,"languages":["普通话"]}
 
 上一版：
-{"drafts":[{"ordinal":1,"talent_persona":"能够承担“建立技术研发到规模交付的完整闭环”的总监级人才","role_family":"研发与算法","attraction_angle":"公开事件显示公司进入下一产品阶段","recommended_title":"机器人运动控制工程化总监","why_now":"公开事件显示公司进入下一产品阶段","public_payload":{"position_name":"机器人运动控制工程化总监","position_scope":"岗位使命：建立技术研发到规模交付的完整闭环。核心职责：1.制定技术路线；2.建立工程验证闭环；3.搭建跨职能团队。任职要求：1.十年以上相关经验；2.有技术工程化经验；3.有规模交付经验。机会亮点：公开事件显示公司进入下一产品阶段。","cities":["上海"],"seniority":"10年以上","work_experience_years":[10],"education":"本科","salary_low":"50k","salary_high":"70k","salary_months":"15个月","must_have_signals":["十年以上相关经验","有技术工程化经验","有规模交付经验"],"preferred_signals":["有从样机验证推进至小批量交付的经验"],"benefits":["参与关键业务能力从验证走向规模化","承担真实的团队和业务结果责任"],"hard_rejects":["仅有个人贡献者经历且无团队管理责任"],"target_count":10,"job_type":"全职","recruit_count":1,"languages":["中文"]}}]}
+{"drafts":[{"ordinal":1,"talent_persona":"能够承担“建立技术研发到规模交付的完整闭环”的总监级人才","role_family":"研发与算法","attraction_angle":"公开事件显示公司进入下一产品阶段","recommended_title":"机器人运动控制工程化总监","why_now":"公开事件显示公司进入下一产品阶段","public_payload":{"position_name":"机器人运动控制工程化总监","position_scope":"【岗位职责】\n• 制定运动控制技术路线\n• 建立工程验证闭环\n• 搭建跨职能团队\n• 拆解年度目标与关键里程碑\n• 建立研发、业务与交付协同机制\n\n【任职要求】\n• 十年以上相关经验\n• 有技术工程化经验\n• 有规模交付经验\n• 具备总监级团队管理经验\n• 能够把复杂任务拆解为可量化结果","cities":["上海"],"seniority":"10年以上","work_experience_years":[10],"education":"本科","salary_low":"50k","salary_high":"70k","must_have_signals":["十年以上相关经验","有技术工程化经验","有规模交付经验","具备总监级团队管理经验","能够把复杂任务拆解为可量化结果"],"preferred_signals":["有从样机验证推进至小批量交付的经验"],"benefits":["五险一金","带薪年假"],"target_count":10,"job_type":"社招","recruit_count":1,"languages":["普通话"]}}]}
 
 确定性校验发现：
 ["示例校验错误"]

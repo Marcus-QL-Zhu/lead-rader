@@ -111,15 +111,35 @@ def test_real_liepin_contract_fields_and_advertisement_shape():
         assert payload["salary_high"].endswith("k")
         assert "人才蓄水" not in payload["position_scope"]
         assert "长期机会储备" not in payload["position_scope"]
-        assert "核心职责：1." in payload["position_scope"]
-        assert "任职要求：1." in payload["position_scope"]
+        assert payload["position_scope"].startswith("【岗位职责】\n• ")
+        assert "\n\n【任职要求】\n• " in payload["position_scope"]
+        assert payload["job_type"] == "社招"
+        assert payload["languages"] == ["普通话"]
+        assert "五险一金" in payload["benefits"]
         assert len(payload["position_scope"]) <= 500
+        assert set(payload) == {
+            "position_name",
+            "position_scope",
+            "cities",
+            "seniority",
+            "work_experience_years",
+            "education",
+            "salary_low",
+            "salary_high",
+            "must_have_signals",
+            "preferred_signals",
+            "benefits",
+            "target_count",
+            "job_type",
+            "recruit_count",
+            "languages",
+        }
 
 
 def test_anonymization_gate_and_contract_reject_invalid_payload():
     draft = generate_draft_bundle(sample_report()).drafts[0]
     with pytest.raises(ValueError, match="leaks"):
-        assert_anonymized(draft.public_payload, forbidden_terms=["岗位使命"])
+        assert_anonymized(draft.public_payload, forbidden_terms=["岗位职责"])
     broken = dict(draft.public_payload)
     broken["seniority"] = "总监"
     with pytest.raises(ValueError, match="seniority"):
@@ -128,6 +148,37 @@ def test_anonymization_gate_and_contract_reject_invalid_payload():
     broken["position_name"] = "研发经理"
     with pytest.raises(ValueError, match="Director"):
         validate_liepin_payload(broken)
+
+
+def test_old_morning_payload_variants_fail_before_persistence():
+    payload = dict(generate_draft_bundle(sample_report()).drafts[0].public_payload)
+
+    invalid_values = (
+        ("job_type", "全职", "job_type"),
+        ("languages", ["中文"], "languages"),
+        ("seniority", "10 年以上", "seniority"),
+        ("benefits", ["参与业务规模化"], "五险一金"),
+        ("position_scope", "岗位使命：建设业务能力。", "two separated sections"),
+    )
+    for key, value, message in invalid_values:
+        broken = dict(payload)
+        broken[key] = value
+        with pytest.raises(ValueError, match=message):
+            validate_liepin_payload(broken)
+
+    broken = dict(payload)
+    broken["source_leads"] = []
+    with pytest.raises(ValueError, match="unsupported Liepin fields"):
+        validate_liepin_payload(broken)
+
+    for legacy_field, value in (
+        ("salary_months", "15个月"),
+        ("hard_rejects", ["仅有个人贡献者经历且无团队管理责任"]),
+    ):
+        broken = dict(payload)
+        broken[legacy_field] = value
+        with pytest.raises(ValueError, match="unsupported Liepin fields"):
+            validate_liepin_payload(broken)
 
 
 def test_local_liepin_executable_contract_is_still_compatible_when_available():
@@ -141,6 +192,7 @@ def test_local_liepin_executable_contract_is_still_compatible_when_available():
     if not publish_script.exists():
         pytest.skip("read-only sibling Liepin Skills checkout is not present")
     source = publish_script.read_text(encoding="utf-8")
+    skill = (publish_script.parents[1] / "SKILL.md").read_text(encoding="utf-8")
     assert "position_name" in source
     assert "position_scope" in source
     assert "seniority" in source
@@ -149,3 +201,7 @@ def test_local_liepin_executable_contract_is_still_compatible_when_available():
     assert "salary_high" in source
     assert "cities" in source
     assert "--no-pipeline" in source
+    assert '"job_type": "社招"' in skill
+    assert '"languages": ["普通话"]' in skill
+    assert "【岗位职责】" in skill and "【任职要求】" in skill
+    assert "seniority 字段必须与猎聘 DOM 选项**逐字匹配**（无空格）" in skill

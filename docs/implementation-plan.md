@@ -336,8 +336,8 @@ Float 失败后跨进程不能 resume，这是有意的数据治理结果：候�
 - [x] 新增按需查询：当前日报、待汇报日报、指定编号的完整公司—岗位—证据—猎聘 JSON。
 - [x] 正常路径由 OpenClaw 在主飞书会话汇报；原飞书 REST 汇总只在 hook/任务/草稿生成失败时兜底。
 - [x] OpenClaw cron 只在 05:50 和 06:50 运行（`50 5,6 * * *`，Asia/Shanghai）；isolated cron turn 仅调用同一个 bridge，由 bridge 唤醒 main session，不使用 heartbeat/system event。
-- [x] 用户仍只需回复 `发布 1,3` 等自然编号；系统内部轻量校验当前显示结果未被同日重跑替换，不要求用户提供 snapshot code。
-- [x] hook 和 cron 均只能汇报、查询和询问；发布必须来自真实飞书入站的精确用户命令。
+- [x] 用户可以自然表达“发布第一个草稿”“把 1 和 3 发掉”或上下文明确后的“确认”；OpenClaw 解析 action/indexes，用户无需复述机器指令或提供 snapshot code。
+- [x] hook 和 cron 均只能汇报、查询和询问；发布必须来自真实飞书入站的批准语义，并记录用户原文、actor 与当前 snapshot。
 - [ ] 独立子代理 full code review。
 - [ ] 推送 GitHub 并等待 exact SHA 的 Actions 通过。
 - [ ] 备份生产源代码与数据库，部署 exact SHA，安装唯一的两次 cron 并执行 reset-safe/飞书冒烟测试。

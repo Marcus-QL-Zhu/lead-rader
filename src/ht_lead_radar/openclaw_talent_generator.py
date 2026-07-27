@@ -19,6 +19,7 @@ from .talent_pool import (
     DraftBundle,
     TalentPoolDraft,
     assert_anonymized,
+    build_liepin_position_scope,
     canonical_payload_hash,
     generate_draft_bundle,
     validate_liepin_payload,
@@ -104,10 +105,10 @@ def _few_shot_example(
     payload.update(
         {
             "position_name": title,
-            "position_scope": (
-                f"岗位使命：{mandate}。核心职责：{_numbered(responsibilities)}。"
-                f"任职要求：{_numbered(must_have)}。机会亮点：{why_now}。"
-            )[:500],
+            "position_scope": build_liepin_position_scope(
+                responsibilities,
+                must_have,
+            ),
             "cities": [str(hypothesis["city"])],
             "must_have_signals": must_have,
             "preferred_signals": preferred,
@@ -147,9 +148,11 @@ def build_openclaw_prompt(
 - 公开 payload 必须彻底匿名：不得出现公司、创始人、投资人、独有产品、
   独家客户、融资轮次、精确办公地点或能反推雇主的组合线索。
 - 文案有吸引力但不得捏造股权、融资、团队规模、汇报关系或薪酬承诺。
-- position_scope 直接用中文完整写出岗位使命、5-8 条职责、
-  5-8 条要求和机会亮点；总长度不超过 500 个字符。
-- public_payload 的字段、字段类型和枚举形式与输出示例完全一致；
+- position_scope 严格使用【岗位职责】和【任职要求】两个章节，各写 5-10 行
+  以“• ”开头的 bullet；总长度不超过 500 个字符。
+- public_payload 是持久化后直接发布的最终 JSON，字段、类型、枚举和值与输出
+  示例完全一致；job_type=社招、languages=[普通话]、seniority 无空格，
+  benefits 包含五险一金；
   work_experience_years 必须为 [10]；薪资保持 xxk，最高不超过 85k，
   区间差不超过 20k。
 
@@ -167,8 +170,7 @@ def build_openclaw_prompt(
 
 def _session_id(bundle: DraftBundle, phase: str) -> str:
     identity = (
-        f"{bundle.source_run_id}\x1f{bundle.run_date}\x1f"
-        f"{bundle.direction}\x1f{phase}"
+        f"{bundle.source_run_id}\x1f{bundle.run_date}\x1f{bundle.direction}\x1f{phase}"
     )
     return str(uuid.uuid5(uuid.NAMESPACE_URL, "lead-rader:" + identity))
 
@@ -234,8 +236,7 @@ def generate_openclaw_draft_bundle(
         )
         if issues:
             raise OpenClawGenerationError(
-                "LLM response failed validation after one repair: "
-                + "; ".join(issues)
+                "LLM response failed validation after one repair: " + "; ".join(issues)
             )
     values = response.get("drafts")
     if not isinstance(values, list) or len(values) != len(seed_bundle.drafts):
@@ -283,7 +284,9 @@ def generate_openclaw_draft_bundle(
             )
         payload = value.get("public_payload")
         if not isinstance(payload, dict):
-            raise OpenClawGenerationError(f"draft {ordinal} public_payload is not an object")
+            raise OpenClawGenerationError(
+                f"draft {ordinal} public_payload is not an object"
+            )
         if set(payload) != set(seed.public_payload):
             raise OpenClawGenerationError(
                 f"draft {ordinal} public_payload fields differ from Liepin contract"
