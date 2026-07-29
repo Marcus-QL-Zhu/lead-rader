@@ -1,0 +1,13 @@
+{
+  "sealed_at": "2026-07-28T09:07:35.8595768+08:00",
+  "label_search_started": false,
+  "snapshot": {
+    "path": ".acceptance/holdout-v12.snapshot.json",
+    "sha256": "0c479c28d9ee11a5f0e21cb8f1e4661c57f8c96724680085b296f802b5383042"
+  },
+  "pre_prediction_seal": "evaluation/holdout-v12/pre-prediction-seal.json",
+  "notes": [
+    "The prediction snapshot was produced before any validation-window job search.",
+    "The independent label researcher must not read the snapshot or any prediction-derived diagnostic."
+  ]
+}

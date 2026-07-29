@@ -13,6 +13,7 @@ from datetime import date, datetime
 from pathlib import Path
 
 from .models import Evidence, OutreachRoute
+from .signals import SIGNALS, infer_signal
 from .taxonomy import classify_seniority, profile_for
 
 
@@ -24,16 +25,10 @@ class SearchResult:
     published_at: str = ''
 
 
-EVENT_PATTERNS: tuple[tuple[str, str, str], ...] = (
-    ('factory_or_capacity', 'strategy_capital', r'工厂|基地|产线|扩产|产能|设备入场|量产|交付'),
-    ('major_order', 'strategy_capital', r'订单|中标|定点|采购|供应商'),
-    ('funding', 'strategy_capital', r'融资|增资|投资|入股|募资|funding|raises?|raised|venture round|seed round|series [a-f]'),
-    ('global_expansion', 'build_organize', r'出海|海外|全球市场|国际化'),
-    ('data_or_model', 'build_organize', r'数据集|数据采集|大模型|vla|vtla|技能库'),
-    ('technical_milestone', 'build_organize', r'发布|首发|突破|试验|样机|迭代|亮相|展示'),
-    ('executive_change', 'build_organize', r'任命|履新|加盟|加入.*(?:ceo|cto|总裁|副总裁)'),
-    ('partnership', 'build_organize', r'战略合作|联合实验室|生态伙伴|合作协议'),
-    ('job_ad', 'recruit', r'招聘|职位|岗位|加入我们'),
+# Kept as a compatibility view for callers that inspect the old constant.
+EVENT_PATTERNS: tuple[tuple[str, str, str], ...] = tuple(
+    (signal.name, signal.phase, signal.pattern.pattern)
+    for signal in SIGNALS
 )
 
 
@@ -50,11 +45,7 @@ def _clean_html(value: str) -> str:
 
 
 def infer_event(text: str) -> tuple[str, str]:
-    lowered = text.lower()
-    for event_type, phase, pattern in EVENT_PATTERNS:
-        if re.search(pattern, lowered, flags=re.I):
-            return event_type, phase
-    return 'other', 'build_organize'
+    return infer_signal(text)
 
 
 def extract_company(title: str) -> str | None:

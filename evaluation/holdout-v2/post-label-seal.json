@@ -1,0 +1,8 @@
+{
+    "holdout_version":  "holdout-v2",
+    "seal_stage":  "labels_collected",
+    "sealed_at":  "2026-07-28T03:24:58.1743237+08:00",
+    "snapshot_sha256":  "8644d7e9a7a230c09d0ed2ebca280ef4a893c2b82da9988dcb43dcaa78d08ab2",
+    "jobs_sha256":  "aedfd3cb1b8e43fe66b8dcebbc901319963eb61233a688a3269f0c03d48d0551",
+    "label_audit_sha256":  "6f1ce7c72bdc3e0dbaa67aa64f875487dccb993e189eae918e3c13af5aadfa4e"
+}

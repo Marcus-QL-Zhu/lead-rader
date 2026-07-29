@@ -1,0 +1,299 @@
+{
+  "search_protocol_version": "uniform-director-plus-v1",
+  "jobs": [
+    {
+      "company": "海辰储能",
+      "title": "Sales Director, North Africa",
+      "exact_title": "Sales Director（North Africa）",
+      "description": "厦门岗位，面向北非市场的销售总监；公开职位记录要求5-10年经验、硕士及以上，发布时间为2026-04-24。",
+      "responsibilities_summary": "负责北非区域市场与客户开发、区域销售策略与目标达成、关键客户关系维护、市场及竞争情报分析，并根据市场反馈优化销售策略。",
+      "published_at": "2026-04-24",
+      "source_url": "https://www.jobui.com/company/17423485/salary/j/ir/",
+      "source_name": "职友集（海辰储能职位记录；海辰储能官方招聘入口交叉核验）"
+    },
+    {
+      "company": "零跑汽车",
+      "title": "质量总监（电芯）",
+      "exact_title": "质量总监（电芯）",
+      "description": "杭州滨江岗位，本科及以上；公开职位记录于2026-05-28发布，职位层级明确为电芯质量总监。",
+      "responsibilities_summary": "职位名称可直接确认其对电芯质量职能承担总监级所有权；公开记录未展示更细职责，因此未对具体质量模块作推测性扩写。",
+      "published_at": "2026-05-28",
+      "source_url": "https://www.jobui.com/company/17255871/salary/j/zhiliang/",
+      "source_name": "职友集（零跑汽车职位记录；零跑汽车官方社会招聘页交叉核验）"
+    },
+    {
+      "company": "空中客车 Airbus",
+      "title": "Commercial Director Services",
+      "exact_title": "Commercial Director Services (CDS)",
+      "description": "空中客车中国北京岗位（JR10404645），负责服务业务的商业拓展与销售活动；职位记录于2026-05-27发布。",
+      "responsibilities_summary": "落实全球客户与服务产品线策略，领导服务销售活动、报价定价、谈判及合同签署；维护销售漏斗与年度规划，并协调商业、市场和合同团队。",
+      "published_at": "2026-05-27",
+      "source_url": "https://www.aerocontact.com/en/aerospace-aviation-jobs/customer-support-and-services-manager-hf~1124920.html",
+      "source_name": "AeroContact（Airbus China职位记录；Airbus官方Workday JR10404645交叉核验）"
+    },
+    {
+      "company": "士卓曼集团 Straumann Group",
+      "title": "Head of Legal, Greater China",
+      "exact_title": "Head of Legal, Greater China",
+      "description": "上海岗位，汇报APAC General Counsel并虚线汇报China Country Manager，管理由三名法律顾问和两名法律专员组成的团队，全面负责大中华区法律事务。",
+      "responsibilities_summary": "作为大中华区管理层的战略法律伙伴，拥有区域法律职能所有权，覆盖法律风险、合同与谈判、合规、监管变化、并购及业务发展投资支持。",
+      "published_at": "2026-04-23",
+      "source_url": "https://www.linkedin.com/posts/anh-huynh-4a541616_were-hiring-activity-7453058671900676096-akc2",
+      "source_name": "Straumann Group招聘人员LinkedIn招聘公告（官方Careers职位20752交叉核验）"
+    }
+  ],
+  "audits": [
+    {
+      "company": "海光芯创",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "海光芯创 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "检索公司官网及官方招聘入口，未发现能同时满足中国大陆、窗口内精确发布日期及Director+/功能Head所有权要求的职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "海光芯创 (总监 OR 负责人 OR VP OR Director OR Head) 招聘 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "公开搜索主要返回公司介绍、校园招聘和工程类职位；没有找到带可核验精确日期的合格Director+职位。"
+        }
+      ]
+    },
+    {
+      "company": "苏州星宇智能制造有限公司",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "苏州星宇智能制造有限公司 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "检查公司官网招聘页及其公开招聘入口，未发现窗口内带精确发布日期的Director+/功能Head职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "苏州星宇智能制造有限公司 (总监 OR 负责人 OR VP OR Director OR Head) 招聘 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "公开招聘聚合页展示多个在招岗位，但未检出同时满足层级、职责所有权和窗口内精确日期条件的职位。"
+        }
+      ]
+    },
+    {
+      "company": "海辰储能",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "matched",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "海辰储能 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "核验海辰储能官网Careers页面及其Moka社会招聘入口，确认官方招聘渠道和雇主身份；历史职位详情在当前入口不可稳定回放。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "海辰储能 (总监 OR 负责人 OR VP OR Director OR Head) 招聘 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "职友集海辰储能职位记录检出厦门Sales Director（North Africa），精确发布日期2026-04-24；另有窗口内总监职位，但仅保留职责证据更充分的一条。"
+        }
+      ]
+    },
+    {
+      "company": "晶瞻半导体",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "晶瞻半导体 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "未找到可访问且能证明窗口内Director+/功能Head职位的官方招聘记录。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "晶瞻半导体 (总监 OR 负责人 OR VP OR Director OR Head) 招聘 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "公开公司与职位页主要为工程师及经理级岗位；没有符合层级并带精确窗口日期的职位。"
+        }
+      ]
+    },
+    {
+      "company": "汇川技术",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "汇川技术 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "检查汇川技术官方招聘入口，未获得满足窗口内精确发布日期要求的Director+/功能Head职位记录。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "汇川技术 (总监 OR 负责人 OR VP OR Director OR Head) 招聘 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "公开聚合结果出现研发总监等标题，但相关页面未提供可核验的窗口内精确发布日期，因此严格排除。"
+        }
+      ]
+    },
+    {
+      "company": "零跑汽车",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "matched",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "零跑汽车 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "检查零跑汽车官方社会招聘页，确认雇主官方招聘渠道；历史具体职位的精确发布日期未在静态页面公开。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "零跑汽车 (总监 OR 负责人 OR VP OR Director OR Head) 招聘 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "职友集零跑汽车质量职位记录检出杭州滨江“质量总监（电芯）”，精确发布日期2026-05-28，标题直接满足Director+标准。"
+        }
+      ]
+    },
+    {
+      "company": "岚图汽车科技有限公司",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "岚图汽车科技有限公司 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "检查岚图汽车官方加入我们/社会招聘入口，未找到窗口内带精确发布日期的合格Director+职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "岚图汽车科技有限公司 (总监 OR 负责人 OR VP OR Director OR Head) 招聘 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "公开聚合结果出现“车型总监”等标题，但缺少可核验的窗口内精确发布日期，未纳入。"
+        }
+      ]
+    },
+    {
+      "company": "安琪酵母股份有限公司",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "安琪酵母股份有限公司 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "检查安琪酵母官方招聘信息和官方发布渠道，窗口内主要可见校园/一般岗位信息，未检出合格Director+职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "安琪酵母股份有限公司 (总监 OR 负责人 OR VP OR Director OR Head) 招聘 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "公开搜索未发现同时具备中国大陆地点、合格层级、职责所有权和窗口内精确发布日期的职位。"
+        }
+      ]
+    },
+    {
+      "company": "空中客车 Airbus",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "matched",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "空中客车 Airbus 官方 careers China Director Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "Airbus官方Workday职位JR10404645确认Commercial Director Services (CDS)、北京地点及完整商业职责；职位现已关闭但官方详情仍可交叉核验。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "空中客车 Airbus (总监 OR VP OR Director OR Head) China job 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "AeroContact的Airbus China职位记录为同一Commercial Director Services岗位提供精确发布日期2026-05-27，落在严格窗口内。"
+        }
+      ]
+    },
+    {
+      "company": "士卓曼集团 Straumann Group",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "matched",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "士卓曼集团 Straumann Group 官方 careers China Director Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "Straumann官方Careers职位20752确认Head of Legal, Greater China；公开职位详情确认上海、五名直接下属及大中华区法律职能完整所有权。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "士卓曼集团 Straumann Group (总监 OR VP OR Director OR Head) China job 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "Straumann招聘人员针对该职位的LinkedIn招聘公告activity 7453058671900676096提供可验证时间戳；按LinkedIn snowflake毫秒时间解码为2026-04-23。"
+        }
+      ]
+    },
+    {
+      "company": "路易达孚集团 Louis Dreyfus Company",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "路易达孚集团 Louis Dreyfus Company 官方 careers China Director Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "检查Louis Dreyfus Company官方职位渠道，未找到窗口内发布且地点为中国大陆的合格Director+/功能Head职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "路易达孚集团 Louis Dreyfus Company (总监 OR VP OR Director OR Head) China job 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "公开搜索未发现能同时核验精确发布日期、地点和Director+/功能Head所有权的职位。"
+        }
+      ]
+    },
+    {
+      "company": "阿尔米拉尔 Almirall",
+      "searched_at": "2026-07-28T20:52:04+08:00",
+      "window_start": "2026-04-01",
+      "window_end_exclusive": "2026-07-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "阿尔米拉尔 Almirall 官方 careers China Director Head VP 2026",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "检查Almirall官方招聘渠道，未发现窗口内发布、工作地点在中国大陆的Director+/功能Head职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "阿尔米拉尔 Almirall (总监 OR VP OR Director OR Head) China job 2026-04 2026-05 2026-06",
+          "executed_at": "2026-07-28T20:52:04+08:00",
+          "outcome_summary": "公开结果以公司业务和中国市场新闻为主，没有可核验的合格高管职位记录。"
+        }
+      ]
+    }
+  ]
+}

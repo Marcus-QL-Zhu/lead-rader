@@ -1,0 +1,57 @@
+{
+  "holdout_version": "holdout-v18",
+  "frozen_at": "2026-07-29",
+  "cutoffs": [
+    "2026-04-01"
+  ],
+  "horizon_months": 3,
+  "prompt_version": "historical-demand-v10-top3-calibrated-ontology",
+  "prediction_max_roles_per_company": 3,
+  "temperature": 0.0,
+  "workforce_precursors_enabled": false,
+  "prediction_inputs_exclude_job_ads": true,
+  "josint_inputs_enabled": false,
+  "candidate_selection": {
+    "window_start": "2024-12-01",
+    "window_end": "2026-03-31",
+    "minimum_candidates": 18,
+    "rule": "Six unlabelled companies per type were selected only from A-grade pre-cutoff non-recruiting operating events. Fifteen were inherited from the sealed but never labelled V13 universe; one each came from the sealed but never labelled V11/V16 universes, and one fresh startup event was added before any V18 validation-window job search."
+  },
+  "companies": [
+    "海柔创新 Hai Robotics",
+    "梅卡曼德机器人 Mech-Mind Robotics",
+    "嬴彻科技 Inceptio Technology",
+    "常州飞鱼机器人科技",
+    "旋光智能机器人",
+    "沃飞长空",
+    "文远知行 WeRide",
+    "速腾聚创 RoboSense",
+    "MiniMax Group",
+    "新松机器人 SIASUN",
+    "福日电子（以诺通讯）",
+    "中微公司",
+    "罗盖特 Roquette",
+    "Gattefossé 嘉法狮",
+    "安费诺 Amphenol",
+    "威猛集团 Wittmann Group",
+    "ABB",
+    "Takeda（武田中国）"
+  ],
+  "acceptance": {
+    "minimum_matches_per_cutoff": 3,
+    "minimum_distinct_matched_jobs": 3,
+    "minimum_distinct_matched_companies": 3,
+    "minimum_candidate_prediction_coverage": 0.75,
+    "minimum_distinct_predicted_titles": 30,
+    "minimum_distinct_predicted_role_families": 12,
+    "minimum_distinct_canonical_role_keys": 30,
+    "required_matched_company_types": [
+      "startup_private",
+      "listed",
+      "foreign"
+    ],
+    "snapshot_audit_required": true,
+    "uniform_label_search_required": true
+  },
+  "freeze_rule": "After seal, do not change evidence, prompt, ontology, matcher, thresholds, label protocol, job adapter or candidate universe. Freeze anonymous predictions before [2026-04-01,2026-07-01) labels."
+}

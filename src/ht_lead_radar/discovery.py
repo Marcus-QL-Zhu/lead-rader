@@ -124,10 +124,13 @@ def extract_company_names(text: str) -> list[str]:
 
 
 def infer_upstream_event(text: str) -> tuple[str, str]:
+    inferred = infer_event(text)
+    if inferred[0] != "other":
+        return inferred
     for event_type, phase, pattern in EVENT_PATTERNS:
         if re.search(pattern, text, flags=re.I):
             return event_type, phase
-    return infer_event(text)
+    return inferred
 
 
 def attributable_context(company: str, result: SearchResult) -> str:

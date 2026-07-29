@@ -1,0 +1,36 @@
+{
+    "holdout_version":  "holdout-v1",
+    "frozen_at":  "2026-07-28",
+    "prompt_version":  "historical-demand-v5-required-functional-coverage",
+    "prediction_max_roles_per_company":  5,
+    "temperature":  0.0,
+    "horizon_months":  3,
+    "workforce_precursors_enabled":  false,
+    "prediction_inputs_exclude_job_ads":  true,
+    "josint_inputs_enabled":  false,
+    "cutoffs":  [
+                    "2026-01-01",
+                    "2026-04-01"
+                ],
+    "companies":  [
+                      "徕木股份",
+                      "英飞凌",
+                      "宁波永基精密科技",
+                      "应用材料"
+                  ],
+    "acceptance":  {
+                       "minimum_matches_per_cutoff":  1,
+                       "minimum_distinct_matched_jobs":  3,
+                       "required_matched_company_types":  [
+                                                              "startup_private",
+                                                              "listed",
+                                                              "foreign"
+                                                          ],
+                       "snapshot_audit_required":  true
+                   },
+    "freeze_rule":  "Do not tune prompts, role ontology, match logic or thresholds after the first holdout prediction is opened.",
+    "cohort_evidence_files":  {
+                                  "2026-01-01":  "cohort-a-evidence.json",
+                                  "2026-04-01":  "cohort-b-evidence.json"
+                              }
+}

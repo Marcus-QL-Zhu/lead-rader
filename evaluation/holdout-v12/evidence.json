@@ -1,0 +1,105 @@
+{
+  "dataset_version": "2026-07-28-holdout-v12",
+  "selection_cutoff": "2026-04-01",
+  "selection_window": ["2025-07-01", "2026-03-31"],
+  "evidence": [
+    {
+      "company": "GE HealthCare（GE医疗）", "event_type": "new_site_or_entity", "phase": "build_organize", "event_date": "2025-12-15", "published_at": "2025-12-16",
+      "title": "GE医疗磁共振东半球总部创新中心在天津投用",
+      "snippet": "创新中心正式投入运营，设20余个磁共振测试平台和4个软硬件实验室，覆盖基础研究、核心部件开发、系统集成测试、临床转化，并与天津制造基地衔接，挂牌研究生工作站和教学基地。",
+      "source_excerpt": "创新中心正式投入运营，设20余个磁共振测试平台和4个软硬件实验室，覆盖基础研究、核心部件开发、系统集成测试、临床转化，并与天津制造基地衔接，挂牌研究生工作站和教学基地。",
+      "source_url": "https://www.tjxq.gov.cn/xwzx/jrgz/202512/t20251216_7199449.html", "source_name": "天津市政府门户", "source_grade": "A", "direction": "磁共振研发制造与临床转化", "independent_source_group": "tianjin-government", "company_type": "foreign", "source_locator": "正文创新中心职能段落"
+    },
+    {
+      "company": "Agilent Technologies（安捷伦）", "event_type": "factory_or_capacity", "phase": "strategy_capital", "event_date": "2025-12-02", "published_at": "2025-12-02",
+      "title": "安捷伦上海色谱柱制造中心正式落成投产",
+      "snippet": "全新色谱柱制造中心正式落成并启动运营生产液相色谱柱；上海制造中心集研发、生产、采购、物流、供应链、创新和客户解决方案于一体。",
+      "source_excerpt": "全新色谱柱制造中心正式落成并启动运营生产液相色谱柱；上海制造中心集研发、生产、采购、物流、供应链、创新和客户解决方案于一体。",
+      "source_url": "https://www.agilent.com/cn/about/newsroom/presrel/2025/1202-1.html", "source_name": "安捷伦官网", "source_grade": "A", "direction": "分析仪器与色谱制造", "independent_source_group": "agilent-official", "company_type": "foreign", "source_locator": "剪彩、制造中心及综合枢纽段落"
+    },
+    {
+      "company": "Nissan Motor（日产汽车）", "event_type": "new_site_or_entity", "phase": "build_organize", "event_date": "2025-10-10", "published_at": "2025-10-13",
+      "title": "日产LCV研发中心在郑州揭牌",
+      "snippet": "日产LCV研发中心在郑州日产正式揭牌，与日产在郑州的两家整车工厂和当地供应链形成研发制造联动。",
+      "source_excerpt": "日产LCV研发中心在郑州日产正式揭牌，与日产在郑州的两家整车工厂和当地供应链形成研发制造联动。",
+      "source_url": "https://www.zhengzhou.gov.cn/news1/9658593.jhtml", "source_name": "郑州市政府", "source_grade": "A", "direction": "轻型商用车研发制造与出口", "independent_source_group": "zhengzhou-government", "company_type": "foreign", "source_locator": "研发中心揭牌及研发制造联动段落"
+    },
+    {
+      "company": "Nissan Motor（日产汽车）", "event_type": "global_expansion", "phase": "build_organize", "event_date": "2025-11-06", "published_at": "2025-11-06",
+      "title": "日产进出口广州公司成立",
+      "snippet": "日产进出口广州公司举行成立仪式，成为外资车企在华设立的首个合资整车进出口公司，将中国区研发制造能力连接全球出口业务。",
+      "source_excerpt": "日产进出口广州公司举行成立仪式，成为外资车企在华设立的首个合资整车进出口公司，将中国区研发制造能力连接全球出口业务。",
+      "source_url": "https://www.nissan.com.cn/all-news/all-pressrelease/5953", "source_name": "日产中国官网", "source_grade": "A", "direction": "轻型商用车研发制造与出口", "independent_source_group": "nissan-china-official", "company_type": "foreign", "source_locator": "成立仪式及出口平台段落"
+    },
+    {
+      "company": "PepsiCo（百事公司）", "event_type": "factory_or_capacity", "phase": "strategy_capital", "event_date": "2025-10-28", "published_at": "2025-10-29",
+      "title": "百事食品陕西生产基地建成投用",
+      "snippet": "总投资约13亿元的陕西生产基地正式投产，配置2条自动化产线、年产能2.5万吨，是百事在西北首个生产基地，并实现投产即达产。",
+      "source_excerpt": "总投资约13亿元的陕西生产基地正式投产，配置2条自动化产线、年产能2.5万吨，是百事在西北首个生产基地，并实现投产即达产。",
+      "source_url": "https://sndrc.shaanxi.gov.cn/sy/ztzl/rdzt/gzlxmtjn/xmjz_002/202512/t20251202_3591495_wap.html", "source_name": "陕西省发改委", "source_grade": "A", "direction": "食品制造与自动化供应链", "independent_source_group": "shaanxi-government", "company_type": "foreign", "source_locator": "项目投产与产能段落"
+    },
+    {
+      "company": "Nestlé（雀巢）", "event_type": "factory_or_capacity", "phase": "strategy_capital", "event_date": "2025-10-28", "published_at": "2025-10-28",
+      "title": "雀巢莱西工厂双产线正式投产",
+      "snippet": "UHT灭菌奶和咖啡两条产线正式投产；基地形成研发、加工、包装、仓储、运输完整产业链，是雀巢大中华区规模最大的生产基地。",
+      "source_excerpt": "UHT灭菌奶和咖啡两条产线正式投产；基地形成研发、加工、包装、仓储、运输完整产业链，是雀巢大中华区规模最大的生产基地。",
+      "source_url": "https://www.nestle.com.cn/media/pressreleases/20251028-qingdao-nestle-laixi-factory-launches-dual-production-lines", "source_name": "雀巢中国官网", "source_grade": "A", "direction": "食品饮料制造与产品创新", "independent_source_group": "nestle-china-official", "company_type": "foreign", "source_locator": "双线投产及完整产业链段落"
+    },
+    {
+      "company": "Swire Coca-Cola（太古可口可乐）", "event_type": "factory_or_capacity", "phase": "strategy_capital", "event_date": "2025-10-16", "published_at": "2025-10-22",
+      "title": "太古可口可乐郑州新厂正式投产",
+      "snippet": "新厂总投资超过9亿元、年产量突破100万吨，采用智能机器人拣配、无人运输、自动化仓储和从订单到发货的数字化调度。",
+      "source_excerpt": "新厂总投资超过9亿元、年产量突破100万吨，采用智能机器人拣配、无人运输、自动化仓储和从订单到发货的数字化调度。",
+      "source_url": "https://swj.zhoukou.gov.cn/sitesources/swj/page_pc/xwdt/swzx/article4f90b2a55834419c907ad0e3fec77973.html", "source_name": "周口市商务局", "source_grade": "A", "direction": "饮料制造与数字供应链", "independent_source_group": "henan-government", "company_type": "foreign", "source_locator": "投产、产能和数字化段落"
+    },
+    {
+      "company": "Swire Coca-Cola（太古可口可乐）", "event_type": "enterprise_system", "phase": "build_organize", "event_date": "2025-10-16", "published_at": "2025-10-29",
+      "title": "郑州新厂打通端到端数字供应链",
+      "snippet": "近30套数字管理系统已打通需求预测、采购、生产、仓储、物流和终端配送全环节。",
+      "source_excerpt": "近30套数字管理系统已打通需求预测、采购、生产、仓储、物流和终端配送全环节。",
+      "source_url": "https://zjic.zj.gov.cn/ywdh/ggkf/202510/t20251028_23770567.shtml", "source_name": "浙江省投资促进中心", "source_grade": "A", "direction": "饮料制造与数字供应链", "independent_source_group": "zhejiang-government", "company_type": "foreign", "source_locator": "数字管理系统端到端段落"
+    },
+    {
+      "company": "ebm-papst（依必安派特）", "event_type": "factory_or_capacity", "phase": "strategy_capital", "event_date": "2025-10-20", "published_at": "2025-10-20",
+      "title": "依必安派特西安全球最大生产基地投产",
+      "snippet": "第三期扩建完成并正式投产，工厂约6万平方米、已有约1000名员工，包含生产车间、办公室和研发中心，承担交流/直流电机及风机研发和生产，并计划新增约500个岗位。",
+      "source_excerpt": "第三期扩建完成并正式投产，工厂约6万平方米、已有约1000名员工，包含生产车间、办公室和研发中心，承担交流/直流电机及风机研发和生产，并计划新增约500个岗位。",
+      "source_url": "https://www.ebmpapst.com.cn/cn/zh/newsroom/news/2025/xi-an-opening.html", "source_name": "依必安派特中国官网", "source_grade": "A", "direction": "风机电机研发制造", "independent_source_group": "ebm-papst-official", "company_type": "foreign", "source_locator": "第三期投产、规模、研发生产及新增岗位段落"
+    },
+    {
+      "company": "SKF", "event_type": "new_site_or_entity", "phase": "build_organize", "event_date": "2026-02-04", "published_at": "2026-02-11",
+      "title": "SKF亚太区总部及研发中心在嘉定启用",
+      "snippet": "项目投资超过2亿元，整合区域总部、销售和研发功能，服务中国、日本、韩国、澳大利亚等20多个国家和地区。",
+      "source_excerpt": "项目投资超过2亿元，整合区域总部、销售和研发功能，服务中国、日本、韩国、澳大利亚等20多个国家和地区。",
+      "source_url": "https://english.jiading.gov.cn/2026-02/11/c_1160657.htm", "source_name": "上海嘉定政府英文门户", "source_grade": "A", "direction": "工业技术亚太总部与研发", "independent_source_group": "jiading-government", "company_type": "foreign", "source_locator": "总部及研发中心功能段落"
+    },
+    {
+      "company": "Solvay（索尔维）", "event_type": "factory_or_capacity", "phase": "strategy_capital", "event_date": "2025-09-15", "published_at": "2025-09-15",
+      "title": "索尔维镇江电子级高纯过氧化氢扩产项目启用",
+      "snippet": "重大扩产项目正式启用，将电子级高纯过氧化氢年产能翻倍，服务半导体、面板、光伏和MEMS/LED制造客户。",
+      "source_excerpt": "重大扩产项目正式启用，将电子级高纯过氧化氢年产能翻倍，服务半导体、面板、光伏和MEMS/LED制造客户。",
+      "source_url": "https://www.solvay.com/en/press-release/solvay-doubles-zhenjiang-production-capacity-high-purity-electronic-grade-hydrogen", "source_name": "索尔维官网", "source_grade": "A", "direction": "电子化学品与半导体材料", "independent_source_group": "solvay-official", "company_type": "foreign", "source_locator": "扩产启用、产能和客户行业段落"
+    },
+    {
+      "company": "Clariant（科莱恩）", "event_type": "factory_or_capacity", "phase": "strategy_capital", "event_date": "2025-11-05", "published_at": "2025-11-05",
+      "title": "科莱恩大亚湾护理化学品扩建设施启用",
+      "snippet": "完成8000万瑞郎投资并启用扩建设施，新增医药辅料喷雾塔和多用途工厂反应器，同时扩大个人护理、家居护理及工业特化品产能。",
+      "source_excerpt": "完成8000万瑞郎投资并启用扩建设施，新增医药辅料喷雾塔和多用途工厂反应器，同时扩大个人护理、家居护理及工业特化品产能。",
+      "source_url": "https://www.clariant.com/es/Corporate/News/2025/11/Clariant-celebrates-Care-Chemicals-expansion-at-Daya-Bay-strengthening-its-position-in-China", "source_name": "科莱恩官网", "source_grade": "A", "direction": "医药辅料与特种化学品", "independent_source_group": "clariant-official", "company_type": "foreign", "source_locator": "扩建设施启用及新增产能段落"
+    },
+    {
+      "company": "Air Liquide（液化空气集团）", "event_type": "new_site_or_entity", "phase": "build_organize", "event_date": "2026-01-15", "published_at": "2026-01-28",
+      "title": "液化空气中国北区总部落地并贯通客户新管线",
+      "snippet": "新建氧气管线全线贯通并接入客户二期生产项目，开始满足生产用气需求；同月集团完成中国业务区域重组，将中国北区总部设在天津。",
+      "source_excerpt": "新建氧气管线全线贯通并接入客户二期生产项目，开始满足生产用气需求；同月集团完成中国业务区域重组，将中国北区总部设在天津。",
+      "source_url": "https://www.teda.gov.cn/contents/13/101027.html", "source_name": "天津经开区管委会", "source_grade": "A", "direction": "工业气体区域运营与项目交付", "independent_source_group": "teda-government", "company_type": "foreign", "source_locator": "新管线贯通、客户供气和北区总部段落"
+    },
+    {
+      "company": "幸星电子（泰州）有限公司", "event_type": "factory_or_capacity", "phase": "strategy_capital", "event_date": "2026-01-15", "published_at": "2026-03-24",
+      "title": "幸星电子二期智能工厂正式投产",
+      "snippet": "韩资企业二期现代化智能工厂于2026年1月正式投产，自动化水平提升至约90%，产能正在全面释放；公司是LG电子核心供应商。",
+      "source_excerpt": "韩资企业二期现代化智能工厂于2026年1月正式投产，自动化水平提升至约90%，产能正在全面释放；公司是LG电子核心供应商。",
+      "source_url": "https://www.tzhl.gov.cn/xwzx/hlyw/art/2026/art_472151b5c2184f77bede6b04f90c979b.html", "source_name": "泰州市海陵区政府", "source_grade": "A", "direction": "电子制造与智能工厂", "independent_source_group": "taizhou-government", "company_type": "foreign", "source_locator": "韩资身份、二期投产和自动化产能段落"
+    }
+  ]
+}

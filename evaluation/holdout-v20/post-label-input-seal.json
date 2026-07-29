@@ -1,0 +1,10 @@
+{
+  "seal_type": "post-label-v1",
+  "sealed_at": "2026-07-28T19:35:17.232874+00:00",
+  "holdout_version": "holdout-v20",
+  "files": {
+    "evaluation/holdout-v20/jobs.json": "42d1714d10036833e2663eac2f663986fc1bf3840653ee01358c24f16c6c4df9",
+    "evaluation/holdout-v20/label-audit.json": "a2e095eb74e190ad8fc5046d3e348fc311ed0bb171d9cadf69e421bbca7f18a5"
+  },
+  "notes": "Labels were opened only after the V20 prediction-side gate passed. Relative publication dates retain an explicit precision field."
+}

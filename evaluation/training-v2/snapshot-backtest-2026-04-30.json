@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "created_at": "2026-07-28T16:04:17.032779+00:00",
+  "simulated_cutoff": "2026-04-30",
+  "horizon_end_inclusive": "2026-07-31",
+  "leakage_policy": "Only strict non-recruiting evidence dated on or before cutoff enters prediction inputs. Job results are outcome labels only and are never included in model evidence.",
+  "label_policy": "This snapshot accepts only direct Director+ job-page search captures inside the horizon. Relative dates remain explicitly estimated and require page-level archiving before final strict-label promotion.",
+  "counts": {
+    "evidence_rows": 9,
+    "evidence_companies": 9,
+    "positive_label_candidates": 5,
+    "positive_label_companies": 4,
+    "event_types": 4,
+    "by_split": {
+      "train": {
+        "pool_companies": 36,
+        "companies_with_strict_precursor_evidence": 5,
+        "companies_with_positive_job_candidate": 3
+      },
+      "calibration": {
+        "pool_companies": 6,
+        "companies_with_strict_precursor_evidence": 2,
+        "companies_with_positive_job_candidate": 0
+      },
+      "test": {
+        "pool_companies": 18,
+        "companies_with_strict_precursor_evidence": 2,
+        "companies_with_positive_job_candidate": 1
+      }
+    }
+  },
+  "evidence": [
+    {
+      "company": "傲意科技",
+      "split": "train",
+      "event_date": "2026-03-26",
+      "event_type": "factory_or_capacity",
+      "title": "工业灵巧手可靠企业｜傲意科技：年量产近万台，技术与交付双标杆_ OYMotion Touch The Future OYMotion Touch The Future",
+      "source_url": "https://oymotion.com/news8/448",
+      "source_grade": "A",
+      "content_sha256": "2a52fc90d91ea5e67056df124796f8eb927eafdd4c801c18c76ff1a418d511d6",
+      "storage_path": "data/training-v2-web-news-artifacts/2a52fc90d91ea5e67056df124796f8eb927eafdd4c801c18c76ff1a418d511d6.html"
+    },
+    {
+      "company": "因时机器人",
+      "split": "train",
+      "event_date": "2026-02-25",
+      "event_type": "factory_or_capacity",
+      "title": "因时机器人_机器人零部件及整机解决方案提供商|投资界",
+      "source_url": "https://m.pedaily.cn/vc/company/17636.html",
+      "source_grade": "B",
+      "content_sha256": "144ebf5a35d9fac2716753eb47a75d20673da0bf07e37021c9dc50661132886a",
+      "storage_path": "data/training-v2-web-news-artifacts/144ebf5a35d9fac2716753eb47a75d20673da0bf07e37021c9dc50661132886a.html"
+    },
+    {
+      "company": "众擎机器人",
+      "split": "test",
+      "event_date": "2026-04-07",
+      "event_type": "factory_or_capacity",
+      "title": "中创智领“牵手”众擎机器人 开拓“人工智能+制造”新蓝海 - 郑州市人民政府",
+      "source_url": "https://www.zhengzhou.gov.cn/news1/9984606.jhtml",
+      "source_grade": "A",
+      "content_sha256": "6dd99a53be300109bafa5f97c6655c4577752dce2c5c3b3802eb3a539980f934",
+      "storage_path": "data/training-v2-web-news-artifacts/6dd99a53be300109bafa5f97c6655c4577752dce2c5c3b3802eb3a539980f934.html"
+    },
+    {
+      "company": "星环聚能",
+      "split": "test",
+      "event_date": "2026-01-13",
+      "event_type": "new_site_or_entity",
+      "title": "国资领投10亿元A轮融资，星环聚能核聚变新项目落户上海",
+      "source_url": "https://m.yicai.com/news/103002257.html",
+      "source_grade": "B",
+      "content_sha256": "d460ff84c6d09cd354107d4c85995e31f340339e958dfd1d70599d18a06d4e59",
+      "storage_path": "data/training-v2-web-news-artifacts/d460ff84c6d09cd354107d4c85995e31f340339e958dfd1d70599d18a06d4e59.html"
+    },
+    {
+      "company": "华虹半导体",
+      "split": "train",
+      "event_date": "2026-02-13",
+      "event_type": "other",
+      "title": "华虹半导体有限公司 关于聘任高级管理人员的公告|华虹半导体_新浪财经_新浪网",
+      "source_url": "https://finance.sina.com.cn/jjxw/2026-02-14/doc-inhmtrys8551599.shtml",
+      "source_grade": "B",
+      "content_sha256": "a8daf8b86e3d29b4dbc44c1659b69ba0358631c779fc511f636353f7b54bba14",
+      "storage_path": "data/training-v2-web-news-artifacts/a8daf8b86e3d29b4dbc44c1659b69ba0358631c779fc511f636353f7b54bba14.html"
+    },
+    {
+      "company": "寒武纪",
+      "split": "train",
+      "event_date": "2026-04-22",
+      "event_type": "factory_or_capacity",
+      "title": "寒武纪回应代工产能保障：与供应链上下游长期合作 并做好各项应对工作",
+      "source_url": "https://www.yicai.com/news/103145793.html",
+      "source_grade": "B",
+      "content_sha256": "0fc6b8867bb1e378405ea1953e95d83e227670d6a21544e7b61bc5a1cb7dcd4d",
+      "storage_path": "data/training-v2-web-news-artifacts/0fc6b8867bb1e378405ea1953e95d83e227670d6a21544e7b61bc5a1cb7dcd4d.html"
+    },
+    {
+      "company": "博世（中国）",
+      "split": "train",
+      "event_date": "2026-04-27",
+      "event_type": "joint_venture_or_spinout",
+      "title": "赛目科技携手博世成立合资公司 布局具身智能工业新赛道|博世_新浪财经_新浪网",
+      "source_url": "https://finance.sina.com.cn/roll/2026-04-27/doc-inhvyeey8958117.shtml",
+      "source_grade": "B",
+      "content_sha256": "731b7d817cd4a6b1f634e93ab3cccd27775a30da94bad6960352b8b3ec82adde",
+      "storage_path": "data/training-v2-web-news-artifacts/731b7d817cd4a6b1f634e93ab3cccd27775a30da94bad6960352b8b3ec82adde.html"
+    },
+    {
+      "company": "罗克韦尔自动化（中国）",
+      "split": "calibration",
+      "event_date": "2026-04-01",
+      "event_type": "factory_or_capacity",
+      "title": "对话罗克韦尔自动化石安：中国企业破局“工厂四面墙” - 21世纪经济报道",
+      "source_url": "https://m.21jingji.com/article/20260506/herald/687d7aebc27af420c5bb4aa73ab2957e_zaker.html",
+      "source_grade": "B",
+      "content_sha256": "26dc31c4cec110f30908e5328b19882a25cb7b5d8ddfe23ecf7b8c9371456c8e",
+      "storage_path": "data/training-v2-web-news-artifacts/26dc31c4cec110f30908e5328b19882a25cb7b5d8ddfe23ecf7b8c9371456c8e.html"
+    },
+    {
+      "company": "库卡（中国）",
+      "split": "calibration",
+      "event_date": "2026-04-22",
+      "event_type": "new_site_or_entity",
+      "title": "美的库卡华东智能制造中心落户昆山 | 昆山市人民政府",
+      "source_url": "https://www.ks.gov.cn/kss/ksyw/202604/4d59f51983114debaa49ce4fb2a69e85.shtml",
+      "source_grade": "A",
+      "content_sha256": "4259b430d592f88e7de4bc33899e50924bdb9152b6a0170458681f5d50a21466",
+      "storage_path": "data/training-v2-web-news-artifacts/4259b430d592f88e7de4bc33899e50924bdb9152b6a0170458681f5d50a21466.html"
+    }
+  ],
+  "job_label_candidates": [
+    {
+      "company": "ABB（中国）",
+      "split": "train",
+      "title": "阿西布朗勃法瑞公司（ABB）正在招聘Global Head of Operations – Motion Drive Products Division (Location: Asia, US, Europe) (北京市) | 领英",
+      "published_at_estimate": "2026-06-28",
+      "publication_date_basis": "relative_months_estimate",
+      "source_url": "https://cn.linkedin.com/jobs/view/global-head-of-operations-%E2%80%93-motion-drive-products-division-location-asia-us-europe-at-abb-4431731114",
+      "result_sha256": "c72feff4d6d60fb8ba710355c39008f1e48a72eb2a2e6cfef28bdc236d4b8c5c",
+      "label_status": "verified_search_snapshot_candidate"
+    },
+    {
+      "company": "ASML（中国）",
+      "split": "train",
+      "title": "ASML正在招聘Head of CS China DUV/YS (上海市) | 领英",
+      "published_at_estimate": "2026-06-28",
+      "publication_date_basis": "relative_months_estimate",
+      "source_url": "https://cn.linkedin.com/jobs/view/head-of-cs-china-duv-ys-at-asml-4342727908",
+      "result_sha256": "b98be8b790f9ec5e683ed41c5ff2c135db8f095bb968a37f5a93b67d4b51e4b4",
+      "label_status": "verified_search_snapshot_candidate"
+    },
+    {
+      "company": "西门子（中国）",
+      "split": "train",
+      "title": "西门子医疗正在招聘Head of Marketing and Corporate Communications, China (上海市, 中国) | 领英",
+      "published_at_estimate": "2026-05-29",
+      "publication_date_basis": "relative_months_estimate",
+      "source_url": "https://cn.linkedin.com/jobs/view/head-of-marketing-and-corporate-communications-china-at-siemens-healthineers-4401724759",
+      "result_sha256": "cbbea469da639ca006e93cf7f80bd6749f19578451567729388a9f29f2d32fe9",
+      "label_status": "verified_search_snapshot_candidate"
+    },
+    {
+      "company": "西门子（中国）",
+      "split": "train",
+      "title": "Siemens Electronic Systems Design & Manufacturing正在招聘Head of Sustainability & Service (上海市) | 领英",
+      "published_at_estimate": "2026-05-29",
+      "publication_date_basis": "relative_months_estimate",
+      "source_url": "https://cn.linkedin.com/jobs/view/head-of-sustainability-service-at-siemens-electronic-systems-design-manufacturing-4413406270",
+      "result_sha256": "3caa3089a645d45a0d9c2bba30c818381ec58f2e438e50640a52c7aa20865940",
+      "label_status": "verified_search_snapshot_candidate"
+    },
+    {
+      "company": "采埃孚（中国）",
+      "split": "test",
+      "title": "ZF 集团正在招聘Head of BU Test Systems China (上海市) | 领英",
+      "published_at_estimate": "2026-05-29",
+      "publication_date_basis": "relative_months_estimate",
+      "source_url": "https://cn.linkedin.com/jobs/view/head-of-bu-test-systems-china-at-zf-%E9%9B%86%E5%9B%A2-4401277529",
+      "result_sha256": "c48c79f5f8c0920538d88bef569704e7e9e284add251eaa8a21bbc79d71c31d1",
+      "label_status": "verified_search_snapshot_candidate"
+    }
+  ],
+  "source_hashes": {
+    "pool": "15e3ea949dd30bdcefe93359965330ff58118eea79c8ca5243451007030aff56",
+    "news": "8ea26caca7aea66b194be6d069329107046bf33b41196bee6bd8655dd9aaee28",
+    "jobs": "9e4791e6a889455da567a84997685bf4cfc28e06a76c1c21826eab9efdea8332"
+  }
+}

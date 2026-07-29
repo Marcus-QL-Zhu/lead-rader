@@ -1,0 +1,10 @@
+{
+  "holdout_version": "holdout-v10",
+  "seal_stage": "labels_frozen",
+  "sealed_at": "2026-07-28T08:14:08.1960731+08:00",
+  "prediction_snapshot_sha256": "9ab31574f54be5dbd7621e2d427b52fea7002aa63da6712791e98dfe1f63454e",
+  "pre_label_seal_sha256": "13cd7e8e77caf3fa7e31e655f71388b37dd7e3976ea6a79efd0327ad1d2ffa3a",
+  "jobs_sha256": "322bde3923d9b17e9345fce7787a3789f1704694c26059b07304cc8bd9f981f3",
+  "label_audit_sha256": "d92748bed78b331d286d81bc9a7e067fceee695ae9a41ed55594536dae3e8fc6",
+  "uniform_label_search_complete": true
+}

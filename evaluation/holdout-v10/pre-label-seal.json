@@ -1,0 +1,9 @@
+{
+  "holdout_version": "holdout-v10",
+  "seal_stage": "predictions_frozen_pre_labels",
+  "sealed_at": "2026-07-28T08:05:06.3691871+08:00",
+  "pre_prediction_seal_verified": true,
+  "snapshot_path": ".acceptance/holdout-v10.snapshot.json",
+  "snapshot_sha256": "9ab31574f54be5dbd7621e2d427b52fea7002aa63da6712791e98dfe1f63454e",
+  "label_search_started": false
+}

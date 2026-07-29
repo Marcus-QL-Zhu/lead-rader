@@ -1,0 +1,31 @@
+{
+    "sealed_at":  "2026-07-29T03:04:47+08:00",
+    "label_search_started":  false,
+    "snapshot":  {
+                     "path":  ".acceptance/holdout-v19.snapshot.json",
+                     "sha256":  "92b71bf1e96f35d40ba94953a937bc96137653a8c5c2d63c88ba076ebf6b1d3f"
+                 },
+    "protocol_repair":  {
+                            "invalid_snapshots":  [
+                                                      ".acceptance/holdout-v19.invalid-source-kind.snapshot.json",
+                                                      ".acceptance/holdout-v19.invalid-incomplete-universe.snapshot.json"
+                                                  ],
+                            "reason":  "Initial prediction omitted eight companies because replayable media evidence used a non-whitelisted source_kind.",
+                            "action":  "Reclassified captured A/B media artifacts as mainstream_media and normalized three event types before any future-job label was opened.",
+                            "labels_opened_before_repair":  false
+                        },
+    "prediction_summary":  {
+                               "candidate_count":  18,
+                               "analyzed_company_count":  16,
+                               "failed_company_count":  2,
+                               "companies_with_hypotheses":  11,
+                               "candidate_prediction_coverage":  0.61111111111111116,
+                               "raw_hypothesis_count":  30,
+                               "maximum_hypotheses_per_company":  3,
+                               "distinct_raw_title_count":  30,
+                               "distinct_predicted_role_families":  12,
+                               "distinct_canonical_role_keys":  30,
+                               "snapshot_audit_verified":  true
+                           },
+    "declaration":  "The audited V19 snapshot was hashed before any [2026-05-01,2026-08-01) recruiting label was opened. V19 already fails the preregistered 0.75 prediction coverage gate."
+}

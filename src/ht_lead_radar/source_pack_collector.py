@@ -39,7 +39,11 @@ _EVENT_TERMS = re.compile(
     r"订单|中标|定点|采购|招标|预算|意向|项目|申报|揭榜|试点|"
     r"政策|指南|标准|名单|获批|注册|临床|试验|发布|首发|突破|"
     r"样机|迭代|合作|签约|任命|履新|加盟|出海|海外|投产|建设|"
-    r"环评|环境影响|发射|首飞|点火|试车|投运|专有权|登记|funding|raises?|raised|venture round|seed round|series [a-f]"
+    r"环评|环境影响|发射|首飞|点火|试车|投运|专有权|登记|"
+    r"并购|收购|控制权|合资|分拆|上市辅导|招股书|区域总部|子公司|"
+    r"事业部|客户验证|供应商认证|渠道|经销商|研究院|知识产权|"
+    r"数字化转型|信息化|\bERP\b|\bMES\b|\bPLM\b|\bCRM\b|"
+    r"funding|raises?|raised|venture round|seed round|series [a-f]"
 )
 
 _EARLY_EVENT_RULES: tuple[tuple[str, str, re.Pattern[str]], ...] = (
@@ -85,6 +89,36 @@ _EVENT_SIGNAL_COMPATIBILITY: Mapping[str, frozenset[str]] = {
         "industry_event", "award",
     }),
     "executive_change": frozenset({"executive_change", "leadership"}),
+    "merger_acquisition": frozenset({
+        "merger_acquisition", "investment", "company_activity",
+    }),
+    "joint_venture_or_spinout": frozenset({
+        "merger_acquisition", "partnership", "company_activity",
+    }),
+    "ipo_or_listing": frozenset({
+        "ipo", "listing", "company_activity", "investment",
+    }),
+    "new_site_or_entity": frozenset({
+        "regional_hq", "new_subsidiary", "company_activity",
+        "facility_opening", "market_expansion",
+    }),
+    "customer_validation": frozenset({
+        "customer_validation", "product_validation", "delivery",
+        "contract_award", "supply_chain",
+    }),
+    "channel_expansion": frozenset({
+        "market_expansion", "partnership", "supply_chain", "company_activity",
+    }),
+    "research_or_ip": frozenset({
+        "research_program", "technology_asset", "technology_milestone",
+        "partnership", "company_activity",
+    }),
+    "enterprise_system": frozenset({
+        "digital_transformation", "company_activity", "project_buildout",
+    }),
+    "workforce_cluster": frozenset({
+        "talent_program", "company_activity",
+    }),
     "partnership": frozenset({
         "partnership", "international_cooperation", "supply_chain",
     }),

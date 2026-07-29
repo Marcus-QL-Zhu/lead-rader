@@ -1,0 +1,59 @@
+{
+    "dataset_version":  "2026-07-28-holdout-v1-b",
+    "evidence":  [
+                     {
+                         "company":  "宁波永基精密科技",
+                         "event_type":  "channel_expansion",
+                         "phase":  "build_organize",
+                         "event_date":  "2026-01-07",
+                         "title":  "高端密封件业务拓展至半导体芯片等新领域",
+                         "snippet":  "余姚融媒体报道，永基科技2025年产值近亿元、同比增长10%，持续投入研发和人才引进，产品线已从传统领域拓展至新能源、半导体芯片等新兴产业。",
+                         "source_url":  "https://www.yynews.com.cn/yy/202601/t20260108_6575258.shtml",
+                         "source_name":  "余姚新闻网",
+                         "source_grade":  "A",
+                         "direction":  "半导体",
+                         "independent_source_group":  "yuyao-media",
+                         "company_type":  "startup_private",
+                         "published_at":  "2026-01-08",
+                         "source_excerpt":  "余姚融媒体报道，永基科技2025年产值近亿元、同比增长10%，持续投入研发和人才引进，产品线已从传统领域拓展至新能源、半导体芯片等新兴产业。",
+                         "source_locator":  "余姚新闻网 | 2026-01-08 | 永基科技高端密封件领跑者",
+                         "analyst_note":  "公司进入对材料、工艺、洁净度要求更高的半导体市场。"
+                     },
+                     {
+                         "company":  "宁波永基精密科技",
+                         "event_type":  "project_buildout",
+                         "phase":  "build_organize",
+                         "event_date":  "2026-01-07",
+                         "title":  "计划投入三千万元建设研发中心大楼",
+                         "snippet":  "永基科技披露计划在2026年投入3000万元建设研发中心大楼，继续聚焦新材料和新技术研发应用；公司已建博士后工作站并与高校建立产学研基地。",
+                         "source_url":  "https://www.yynews.com.cn/yy/202601/t20260108_6575258.shtml",
+                         "source_name":  "余姚新闻网",
+                         "source_grade":  "A",
+                         "direction":  "半导体",
+                         "independent_source_group":  "yuyao-media",
+                         "company_type":  "startup_private",
+                         "published_at":  "2026-01-08",
+                         "source_excerpt":  "永基科技披露计划在2026年投入3000万元建设研发中心大楼，继续聚焦新材料和新技术研发应用；公司已建博士后工作站并与高校建立产学研基地。",
+                         "source_locator":  "余姚新闻网 | 2026-01-08 | 计划建设研发中心大楼",
+                         "analyst_note":  "新研发载体将增加研发平台、材料与工艺组织责任。"
+                     },
+                     {
+                         "company":  "应用材料",
+                         "event_type":  "new_site_or_entity",
+                         "phase":  "scale",
+                         "event_date":  "2025-03-31",
+                         "title":  "中国新总部大楼建成并投入使用",
+                         "snippet":  "应用材料中国新总部大楼于2025年在上海张江投入使用，办公及实验空间用于支持在华员工、客户协作和半导体材料工程业务。",
+                         "source_url":  "https://www.appliedmaterials.com/cn/zh_cn/about/china-shanghai-xian.html",
+                         "source_name":  "应用材料官网",
+                         "source_grade":  "A",
+                         "direction":  "半导体",
+                         "independent_source_group":  "applied-materials-official",
+                         "company_type":  "foreign",
+                         "published_at":  "2025-03-31",
+                         "source_excerpt":  "应用材料中国新总部大楼于2025年在上海张江投入使用，办公及实验空间用于支持在华员工、客户协作和半导体材料工程业务。",
+                         "source_locator":  "应用材料官网 | 2025-03-31 | 上海总部和西安公司概况",
+                         "analyst_note":  "总部及实验空间扩展可能带来中国区客户服务和运营责任。"
+                     }
+                 ]
+}

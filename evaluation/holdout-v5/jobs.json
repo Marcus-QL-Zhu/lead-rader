@@ -1,0 +1,33 @@
+{
+  "dataset_version": "2026-07-28-holdout-v5-labels",
+  "label_window": ["2026-04-01", "2026-07-01"],
+  "label_search_started_at": "2026-07-28T05:03:00+08:00",
+  "label_search_completed_at": "2026-07-28T05:15:00+08:00",
+  "uniform_search_completed_for_all_candidates": true,
+  "jobs": [
+    {
+      "company": "麦格纳（中国）",
+      "title": "VP, Sales & Business Development, China",
+      "description": "Leads China sales, business development and corporate strategy; builds executive relationships with Chinese OEMs, leads business cases, financial analysis and commercial negotiations, and drives revenue, profit and China market growth.",
+      "published_at": "2026-04-22",
+      "source_url": "https://magna.wd3.myworkdayjobs.com/en-US/Magna/job/VP--Sales---Business-Development--China_R00236434",
+      "source_name": "Magna official Workday",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "珀金埃尔默（中国）",
+      "title": "China Head of Legal",
+      "description": "Leads Greater China legal, corporate governance, regulatory compliance, enterprise risk, data and cross-border data, export controls, commercial contracts, disputes, anti-corruption compliance and investigations, with team-management responsibility.",
+      "published_at": "2026-06-29",
+      "source_url": "https://newperkinelmer.wd1.myworkdayjobs.com/External/job/Shanghai/China-Head-of-Legal_REQ-057842",
+      "source_name": "PerkinElmer official Workday",
+      "observed_at": "2026-07-28"
+    }
+  ],
+  "no_observed_director_plus_job": [
+    "采埃孚（中国）",
+    "尼得科（中国）",
+    "赢创（中国）",
+    "丹佛斯（中国）"
+  ]
+}

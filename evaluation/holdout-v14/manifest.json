@@ -1,0 +1,16 @@
+{
+  "holdout_version":"holdout-v14",
+  "frozen_at":"2026-07-28",
+  "cutoffs":["2026-04-01"],
+  "horizon_months":3,
+  "prompt_version":"historical-demand-v8-anonymized",
+  "prediction_max_roles_per_company":5,
+  "temperature":0.0,
+  "workforce_precursors_enabled":false,
+  "prediction_inputs_exclude_job_ads":true,
+  "josint_inputs_enabled":false,
+  "candidate_selection":{"window_start":"2025-04-01","window_end":"2026-03-31","minimum_candidates":12,"rule":"A blinded researcher selected four previously unused startup/private, four listed and four foreign companies only from A-grade pre-cutoff non-recruiting operating events, before any validation-window job search."},
+  "companies":["海光芯创","苏州星宇智能制造有限公司","海辰储能","晶瞻半导体","汇川技术","零跑汽车","岚图汽车科技有限公司","安琪酵母股份有限公司","空中客车 Airbus","士卓曼集团 Straumann Group","路易达孚集团 Louis Dreyfus Company","阿尔米拉尔 Almirall"],
+  "acceptance":{"minimum_matches_per_cutoff":3,"minimum_distinct_matched_jobs":3,"minimum_distinct_matched_companies":3,"minimum_candidate_prediction_coverage":0.75,"minimum_distinct_predicted_titles":30,"minimum_distinct_predicted_role_families":12,"minimum_distinct_canonical_role_keys":30,"required_matched_company_types":["startup_private","listed","foreign"],"snapshot_audit_required":true,"uniform_label_search_required":true},
+  "freeze_rule":"After code, evidence and manifest are sealed, do not change evidence, prompt, ontology, matcher, thresholds, label protocol, job adapter or candidate universe. Freeze anonymized predictions before any [2026-04-01, 2026-07-01) job-label search."
+}

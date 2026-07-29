@@ -1,0 +1,59 @@
+{
+  "holdout_version": "holdout-v7",
+  "label_window": {
+    "start_inclusive": "2026-01-01",
+    "end_exclusive": "2026-04-01"
+  },
+  "searched_at": "2026-07-28T06:17:50.9341622+08:00",
+  "eligibility_rule": "China-based public openings posted in the label window; exact Director, Senior Director, Executive Director, VP, CxO, or an unambiguous functional Head who owns the function. Managers, experts, engineers, and ambiguous Head titles are excluded.",
+  "jobs": [
+    {
+      "company": "Dassault Systèmes (Greater China)",
+      "employer_brand": "Medidata, a Dassault Systèmes company",
+      "company_type": "foreign",
+      "exact_title": "APAC Financial Planning & Analysis Director",
+      "location": "Shanghai, China",
+      "published_at": "2026-01-12",
+      "seniority_basis": "The exact title is Director; the official description assigns leadership of all APAC FP&A, regional budgeting, forecasting, long-range planning, financial governance, and business partnering.",
+      "source_name": "Dassault Systèmes Careers",
+      "source_url": "https://www.3ds.com/careers/jobs/APAC-Financial-Planning-Analysis-Director-546567",
+      "source_locator": "Key Job Details: China, SH, Shanghai; Posted on: 1/12/2026; Ref ID: 546567. About the Team and Regional Leadership & Strategy sections.",
+      "requisition_id": "546567",
+      "evidence_quality": "A",
+      "verification_urls": [
+        "https://www.medidata.com/en/careers/apac-financial-planning-analysis-director-546567/job/"
+      ],
+      "discovery_queries": [
+        "\"APAC Financial Planning & Analysis Director\" \"Posted on\"",
+        "\"546567\" \"Posted on\" Dassault",
+        "site:3ds.com/careers/jobs/ \"China,\" \"Director\" \"Posted on:1/\""
+      ],
+      "searched_at": "2026-07-28T06:17:50.9341622+08:00"
+    },
+    {
+      "company": "Dassault Systèmes (Greater China)",
+      "employer_brand": "Medidata, a Dassault Systèmes company",
+      "company_type": "foreign",
+      "exact_title": "Government Affairs Director, China",
+      "location": "Beijing, China",
+      "published_at": "2026-02-02",
+      "seniority_basis": "The exact title is Director; the role reports directly to VP, North Asia Sales and owns China government and stakeholder relations, policy strategy, advocacy, risk monitoring, and compliance coordination.",
+      "source_name": "Dassault Systèmes Careers",
+      "source_url": "https://www.3ds.com/fr/careers/jobs/government-affairs-director-china-546714",
+      "source_locator": "Key Job Details: China, BJ, Beijing; Posted on: 2/2/2026; Ref ID: 546714. About the Team and Responsibilities sections.",
+      "requisition_id": "546714",
+      "evidence_quality": "A-",
+      "verification_urls": [
+        "https://cn.linkedin.com/jobs/view/government-affairs-director-china-at-dassault-syst%C3%A8mes-4368497128",
+        "https://www.medidata.com/en/careers/marketing-specialist-china-546118/job/"
+      ],
+      "discovery_queries": [
+        "Dassault Systemes Greater China Director Head job Shanghai 2026 January February March",
+        "site:3ds.com/careers/jobs China Director Shanghai 2026 job",
+        "\"Government Affairs Director, China\" \"546714\"",
+        "\"546714\" \"2/2/2026\" Dassault"
+      ],
+      "searched_at": "2026-07-28T06:17:50.9341622+08:00"
+    }
+  ]
+}

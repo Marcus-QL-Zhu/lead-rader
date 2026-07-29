@@ -1,0 +1,424 @@
+{
+  "holdout_version": "holdout-v9",
+  "label_window": {
+    "start_inclusive": "2026-04-01",
+    "end_exclusive": "2026-07-01",
+    "timezone": "Asia/Shanghai"
+  },
+  "searched_at": "2026-07-28T07:39:29.5975860+08:00",
+  "eligibility_rule": {
+    "geography": "Publicly posted role located in mainland China",
+    "accepted_seniority": "Director, Senior Director, Executive Director, Vice President, CxO, or an explicit functional Head with ownership of a standalone function",
+    "excluded": [
+      "Manager",
+      "Expert",
+      "Engineer",
+      "ordinary Lead",
+      "Associate Director",
+      "ambiguous mixed-level titles that do not guarantee Director level",
+      "Head titles without clear independent functional ownership"
+    ],
+    "date_requirement": "An exact public posting date must be independently verifiable and fall in [2026-04-01, 2026-07-01). Relative ages alone are insufficient.",
+    "fabrication_policy": "No inferred dates, reconstructed dates, lowered seniority thresholds, or synthetic postings."
+  },
+  "jobs": [
+    {
+      "company": "阿斯利康（中国）",
+      "employer_brand": "AstraZeneca",
+      "company_type": "foreign",
+      "exact_title": "Head of Central GA",
+      "title": "Head of Central GA",
+      "published_at": "2026-04-09",
+      "location": "Beijing Yizhuang, China",
+      "responsibilities_summary": "Leads the Central Government Affairs team and owns engagement with central Party and government bodies, major national policy and conference platforms, embassies, chambers of commerce and foundations; provides policy analysis and advocacy while coordinating internal and external stakeholders.",
+      "seniority_basis": "Explicit functional Head; leads a team and owns the standalone Central Government Affairs function.",
+      "source_name": "AstraZeneca official Workday careers",
+      "source_url": "https://astrazeneca.wd3.myworkdayjobs.com/it-IT/Careers/job/Beijing-Yizhuang/Executive-Director--Central-Government-Affairs_R-249735",
+      "requisition_id": "R-249735",
+      "verification": {
+        "exact_date_visible": true,
+        "location_visible": true,
+        "duties_visible": true,
+        "official_ats": true
+      },
+      "discovery_queries": [
+        "AstraZeneca China Director Head job April May June 2026 Shanghai Beijing",
+        "site:astrazeneca.wd3.myworkdayjobs.com \"Head of Central GA\" R-249735"
+      ],
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "阿斯利康（中国）",
+      "employer_brand": "AstraZeneca / Evinova",
+      "company_type": "foreign",
+      "exact_title": "Director, AI Solution Consulting",
+      "title": "Director, AI Solution Consulting",
+      "published_at": "2026-04-22",
+      "location": "Shanghai or Beijing, China",
+      "responsibilities_summary": "Leads AI solution consulting and presales for strategic China opportunities, shapes AI-enabled clinical-development solutions, qualifies customer needs, runs discovery workshops and executive presentations, and converts complex pharmaceutical R&D problems into scalable offerings.",
+      "seniority_basis": "Explicit Director title with China-wide strategic solution-consulting ownership.",
+      "source_name": "AstraZeneca China official careers",
+      "source_url": "https://job-search.astrazeneca.cn/%E5%B7%A5%E4%BD%9C/%E4%B8%8A%E6%B5%B7/director-ai-solution-consulting/12977/94245123536",
+      "requisition_id": "TP23180",
+      "verification": {
+        "exact_date_visible": true,
+        "location_visible": true,
+        "duties_visible": true,
+        "official_ats": true
+      },
+      "discovery_queries": [
+        "site:job-search.astrazeneca.cn Director China 2026 AstraZeneca",
+        "site:job-search.astrazeneca.cn/工作/上海/director 发布日期 04 2026"
+      ],
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "阿斯利康（中国）",
+      "employer_brand": "AstraZeneca / Gracell",
+      "company_type": "foreign",
+      "exact_title": "Director, Project Lead for Cell Therapy",
+      "title": "Director, Project Lead for Cell Therapy",
+      "published_at": "2026-04-22",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Leads clinical-trial execution within the cell-therapy development and operations team, coordinates cross-functional delivery across the development lifecycle, resolves trial-execution issues, and plans and controls assigned clinical-trial budgets.",
+      "seniority_basis": "Explicit Director title with clinical-project leadership and budget accountability.",
+      "source_name": "AstraZeneca China official careers",
+      "source_url": "https://job-search.astrazeneca.cn/%E5%B7%A5%E4%BD%9C/%E4%B8%8A%E6%B5%B7/director-project-lead-for-cell-therapy/12977/88927194592",
+      "requisition_id": "TP21147",
+      "verification": {
+        "exact_date_visible": true,
+        "location_visible": true,
+        "duties_visible": true,
+        "official_ats": true
+      },
+      "discovery_queries": [
+        "site:job-search.astrazeneca.cn Director China 2026 AstraZeneca",
+        "site:job-search.astrazeneca.cn/工作/上海/director 发布日期 04 2026"
+      ],
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "阿斯利康（中国）",
+      "employer_brand": "AstraZeneca",
+      "company_type": "foreign",
+      "exact_title": "Marketing Director, GUGY",
+      "title": "Marketing Director, GUGY",
+      "published_at": "2026-06-02",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Owns product-portfolio and brand-marketing strategy for GUGY, leads launch readiness and lifecycle planning, aligns China priorities with global plans, manages resources and budgets, and provides leadership and direction to staff and cross-functional brand teams.",
+      "seniority_basis": "Explicit Director title with portfolio, budget, team and functional marketing ownership.",
+      "source_name": "AstraZeneca China official careers",
+      "source_url": "https://job-search.astrazeneca.cn/%E5%B7%A5%E4%BD%9C/%E4%B8%8A%E6%B5%B7/marketing-director-gugy/12977/95113292016",
+      "requisition_id": "TP23471",
+      "verification": {
+        "exact_date_visible": true,
+        "location_visible": true,
+        "duties_visible": true,
+        "official_ats": true
+      },
+      "discovery_queries": [
+        "site:job-search.astrazeneca.cn/工作/上海/director 发布日期 06 2026",
+        "site:astrazeneca.wd3.myworkdayjobs.com China Director Date Posted Jun-2026"
+      ],
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "阿斯利康（中国）",
+      "employer_brand": "AstraZeneca",
+      "company_type": "foreign",
+      "exact_title": "Executive Director – Central Market Access Strategy & Regional Market Access (North Region)",
+      "title": "Executive Director – Central Market Access Strategy & Regional Market Access (North Region)",
+      "published_at": "2026-06-04",
+      "location": "Beijing Yizhuang, China",
+      "responsibilities_summary": "Owns national and North-region market-access strategy, reimbursement and healthcare-policy engagement, regional tender and VBP strategy, implementation of access policies, and leadership and succession planning for a high-performing access team.",
+      "seniority_basis": "Explicit Executive Director title with strategy, regional execution and team ownership.",
+      "source_name": "AstraZeneca official Workday careers",
+      "source_url": "https://astrazeneca.wd3.myworkdayjobs.com/en-US/Careers/job/Beijing-Yizhuang/Executive-Director---Central-Market-Access-Strategy---Regional-Market-Access--North-Region-_R-253742",
+      "requisition_id": "R-253742",
+      "verification": {
+        "exact_date_visible": true,
+        "location_visible": true,
+        "duties_visible": true,
+        "official_ats": true
+      },
+      "discovery_queries": [
+        "site:astrazeneca.wd3.myworkdayjobs.com China Director Date Posted Jun-2026",
+        "site:astrazeneca.wd3.myworkdayjobs.com \"Executive Director – Central Market Access Strategy\" R-253742"
+      ],
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "阿斯利康（中国）",
+      "employer_brand": "AstraZeneca",
+      "company_type": "foreign",
+      "exact_title": "Senior Director/ Executive Director, Safety Sciences China",
+      "title": "Senior Director/ Executive Director, Safety Sciences China",
+      "published_at": "2026-06-04",
+      "location": "Shanghai Jing'an, China",
+      "responsibilities_summary": "Builds and leads the China Safety Sciences team, serves as China site head for Clinical Pharmacology and Safety Sciences, owns toxicology strategy and study oversight for China-developed assets, connects China with global CPSS leadership, and develops external CRO, academic and biotech partnerships.",
+      "seniority_basis": "Explicit Senior Director/Executive Director title with China site-head, team and functional leadership.",
+      "source_name": "AstraZeneca official Workday careers",
+      "source_url": "https://astrazeneca.wd3.myworkdayjobs.com/Careers/job/Shanghai-JingAn-Office/Senior-Director--Executive-Director--Safety-Science-China_R-253635",
+      "requisition_id": "R-253635",
+      "verification": {
+        "exact_date_visible": true,
+        "location_visible": true,
+        "duties_visible": true,
+        "official_ats": true
+      },
+      "discovery_queries": [
+        "site:astrazeneca.wd3.myworkdayjobs.com China Director Date Posted Jun-2026",
+        "site:astrazeneca.wd3.myworkdayjobs.com \"Senior Director/ Executive Director, Safety Sciences China\" R-253635"
+      ],
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    }
+  ],
+  "company_audits": [
+    {
+      "company": "Momenta",
+      "company_type": "startup_private",
+      "queries": [
+        "Momenta China Director Head job April May June 2026",
+        "site:linkedin.com/jobs/view Momenta China Director Head 2026",
+        "\"解决方案高级总监\" Momenta 2026"
+      ],
+      "sources_checked": [
+        "https://www.momenta.cn/news.html",
+        "https://cn.linkedin.com/jobs/view/%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E9%AB%98%E7%BA%A7%E6%80%BB%E7%9B%91-at-momenta-4399355509"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "解决方案高级总监",
+          "location": "Beijing, China",
+          "reason": "Substantively Director-level, but the accessible public archive exposed only a relative posting age; no exact publication date could be independently verified."
+        }
+      ],
+      "audit_result": "No exact-date in-window qualifying posting accepted.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "宇树科技",
+      "company_type": "startup_private",
+      "queries": [
+        "Unitree Robotics China Director Head job April May June 2026",
+        "site:unitree.com/position 总监 宇树 科技"
+      ],
+      "sources_checked": [
+        "https://www.unitree.com/cn/position/"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "大客户销售经理/总监(J10036)",
+          "location": "Hangzhou, China",
+          "reason": "Mixed Manager/Director level and the official page exposed no exact publication date; strict Director-level status and window date were not both verifiable."
+        }
+      ],
+      "audit_result": "No exact-date in-window qualifying posting accepted.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "元戎启行",
+      "company_type": "startup_private",
+      "queries": [
+        "DeepRoute.ai China Director Head job April May June 2026",
+        "site:linkedin.com/jobs/view DeepRoute.ai China Director Head 2026"
+      ],
+      "sources_checked": [
+        "https://www.deeproute.ai/",
+        "https://cn.linkedin.com/company/deeproute-ai-ltd"
+      ],
+      "qualifying_jobs": 0,
+      "audit_result": "No mainland-China Director+/VP/CxO or independently owned functional-Head vacancy with an exact in-window publication date was found.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "蓝箭航天",
+      "company_type": "startup_private",
+      "queries": [
+        "LandSpace 蓝箭航天 总监 招聘 2026 4月 5月 6月",
+        "site:landspace.com 招聘 总监 蓝箭航天"
+      ],
+      "sources_checked": [
+        "https://www.landspace.com/index.php?lang=gbjob"
+      ],
+      "qualifying_jobs": 0,
+      "audit_result": "The official join-us page and indexed public results exposed no qualifying exact-date Q2 2026 senior posting.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "小鹏汽车",
+      "company_type": "listed",
+      "queries": [
+        "XPeng China Director Head job April May June 2026",
+        "site:linkedin.com/jobs/view 小鹏汽车 总监 招聘 2026"
+      ],
+      "sources_checked": [
+        "https://xiaopeng.jobs.feishu.cn/campus/position/list"
+      ],
+      "qualifying_jobs": 0,
+      "audit_result": "Current and historical public results did not provide a qualifying mainland-China Director+ posting with an exact in-window publication date.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "禾赛科技",
+      "company_type": "listed",
+      "queries": [
+        "Hesai Technology China Director Head job April May June 2026",
+        "site:linkedin.com/jobs/view 禾赛科技 总监 招聘 2026"
+      ],
+      "sources_checked": [
+        "https://www.hesaitech.com/",
+        "https://investor.hesaitech.com/"
+      ],
+      "qualifying_jobs": 0,
+      "audit_result": "No qualifying exact-date Q2 2026 Director+/VP/CxO or independent functional-Head vacancy was found.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "摩尔线程",
+      "company_type": "listed",
+      "queries": [
+        "Moore Threads 摩尔线程 总监 招聘 2026 4月 5月 6月",
+        "site:linkedin.com/jobs/view 摩尔线程 总监 招聘 2026"
+      ],
+      "sources_checked": [
+        "https://developer.mthreads.com/news"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "深度学习框架研发负责人/工程师（北京/上海/杭州/深圳）",
+          "reason": "Mixed head/engineer title; it does not prove ownership of an independent function and is explicitly partly an Engineer role."
+        },
+        {
+          "exact_title": "高级平台技术专家",
+          "reason": "Expert-level role; expressly excluded."
+        }
+      ],
+      "audit_result": "No qualifying exact-date Q2 2026 senior posting accepted.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "小马智行",
+      "company_type": "listed",
+      "queries": [
+        "Pony.ai China Director Head job April May June 2026",
+        "site:linkedin.com/jobs/view 小马智行 总监 招聘 2026",
+        "\"战略投资- AI Agent、具身智能方向\" 小马智行 2026"
+      ],
+      "sources_checked": [
+        "https://careers.pony.ai/",
+        "https://cn.linkedin.com/jobs/view/%E6%88%98%E7%95%A5%E6%8A%95%E8%B5%84-ai-agent%E3%80%81%E5%85%B7%E8%BA%AB%E6%99%BA%E8%83%BD%E6%96%B9%E5%90%91-at-%E5%B0%8F%E9%A9%AC%E6%99%BA%E8%A1%8Cpony-ai-4414079134"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "战略投资- AI Agent、具身智能方向",
+          "location": "Beijing, China",
+          "reason": "The title itself does not guarantee Director level or independent functional-head ownership, and the archive exposed only a relative posting age."
+        }
+      ],
+      "audit_result": "No exact-date in-window qualifying posting accepted.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "米其林（中国）",
+      "company_type": "foreign",
+      "queries": [
+        "Michelin China Director Head job April May June 2026 Shanghai",
+        "site:jobs.michelinman.com China Shanghai Director Head 2026",
+        "site:linkedin.com/jobs/view Michelin China Director Head Shanghai 2026"
+      ],
+      "sources_checked": [
+        "https://www.michelin.com.cn/"
+      ],
+      "qualifying_jobs": 0,
+      "audit_result": "No qualifying exact-date Q2 2026 senior posting was found.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "阿斯利康（中国）",
+      "company_type": "foreign",
+      "queries": [
+        "AstraZeneca China Director Head job April May June 2026 Shanghai Beijing",
+        "site:astrazeneca.wd3.myworkdayjobs.com China Director Date Posted Apr-2026",
+        "site:astrazeneca.wd3.myworkdayjobs.com China Director Date Posted May-2026",
+        "site:astrazeneca.wd3.myworkdayjobs.com China Director Date Posted Jun-2026",
+        "site:job-search.astrazeneca.cn Director China 2026 AstraZeneca",
+        "site:job-search.astrazeneca.cn/工作/上海/director 发布日期 06 2026"
+      ],
+      "sources_checked": [
+        "https://job-search.astrazeneca.cn/%E6%B1%82%E8%81%8C",
+        "https://astrazeneca.wd3.myworkdayjobs.com/Careers"
+      ],
+      "qualifying_jobs": 6,
+      "notable_rejections": [
+        {
+          "exact_title": "(Associate) Director, Pharmacometrics",
+          "published_at": "2026-05-14",
+          "reason": "Mixed Associate Director/Director level; strict Director level was not guaranteed."
+        },
+        {
+          "exact_title": "Associate Director, Regulatory Affairs - Cell Therapy",
+          "published_at": "2026-06-30",
+          "reason": "Associate Director is below the strict Director threshold."
+        }
+      ],
+      "audit_result": "Six official, exact-date, in-window Director+/functional-Head postings accepted.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "恩骅力（中国）",
+      "company_type": "foreign",
+      "queries": [
+        "Envalior China Director Head job April May June 2026 Shanghai",
+        "site:jobs.envalior.com China Director Head 2026 Shanghai",
+        "site:linkedin.com/jobs/view Envalior China Director Head Shanghai 2026"
+      ],
+      "sources_checked": [
+        "https://www.envalior.com/en-us/contact-us/other-enquiries/locate-our-nearest-office",
+        "https://www.linkedin.com/company/envalior/jobs"
+      ],
+      "qualifying_jobs": 0,
+      "audit_result": "Current China openings surfaced below the accepted level; no qualifying exact-date Q2 2026 senior posting was found.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    },
+    {
+      "company": "先正达集团（中国）",
+      "company_type": "foreign",
+      "queries": [
+        "Syngenta Group China Director Head job April May June 2026 Shanghai Beijing",
+        "site:jobs.syngenta.com China Director Head 2026 Shanghai",
+        "site:linkedin.com/jobs/view Syngenta China Director Head 2026 Shanghai Beijing",
+        "先正达 中国 招聘 总监 2026 4月 5月 6月"
+      ],
+      "sources_checked": [
+        "https://www.syngentagroup.cn/",
+        "https://www.syngentagroup.com/about/governance/board-of-directors"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "Team Lead - China Sourcing Team",
+          "location": "Shanghai, China",
+          "reason": "Ordinary Lead title; expressly excluded."
+        }
+      ],
+      "audit_result": "No qualifying exact-date Q2 2026 senior posting was found.",
+      "searched_at": "2026-07-28T07:39:29.5975860+08:00"
+    }
+  ],
+  "summary": {
+    "companies_audited": 12,
+    "accepted_jobs": 6,
+    "companies_with_accepted_jobs": 1,
+    "accepted_by_company_type": {
+      "startup_private": 0,
+      "listed": 0,
+      "foreign": 6
+    },
+    "strict_empty_company_results": 11
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "ready": false,
+  "checks": {
+    "train_positive_companies": {
+      "actual": 10,
+      "required": 25,
+      "passed": false
+    },
+    "calibration_positive_companies": {
+      "actual": 7,
+      "required": 8,
+      "passed": false
+    },
+    "test_positive_companies": {
+      "actual": 0,
+      "required": 12,
+      "passed": false
+    },
+    "positive_role_families": {
+      "actual": 16,
+      "required": 10,
+      "passed": true
+    },
+    "replayable_negative_rows": {
+      "actual": 0,
+      "required": 1,
+      "passed": false
+    }
+  },
+  "headline_metrics_allowed": false,
+  "propensity_training_allowed": false
+}

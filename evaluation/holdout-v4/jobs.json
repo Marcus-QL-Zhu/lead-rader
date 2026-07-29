@@ -1,0 +1,113 @@
+{
+  "dataset_version": "2026-07-28-holdout-v4-labels",
+  "label_window": ["2026-04-01", "2026-07-01"],
+  "uniform_search_completed_for_all_candidates": true,
+  "jobs": [
+    {
+      "company": "智元机器人",
+      "title": "销售总监-教育-上海/北京/深圳",
+      "description": "教育行业销售领导岗位，工作地点覆盖上海、北京和深圳。",
+      "published_at": "2026-04-09",
+      "source_url": "https://www.jobui.com/company/24607887/jobs/all/beijing/",
+      "source_name": "职友集招聘聚合页",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "乐聚智能",
+      "title": "机器人技术项目总监",
+      "description": "机器人技术项目管理领导岗位，工作地点北京。",
+      "published_at": "2026-04-08",
+      "source_url": "https://www.jobui.com/company/24981503/salary/j/xiangmuzong/",
+      "source_name": "职友集招聘聚合页",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "亿纬锂能",
+      "title": "大客户销售总监",
+      "description": "面向大客户的销售领导岗位，工作地点惠州。",
+      "published_at": "2026-04-09",
+      "source_url": "https://www.jobui.com/company/994658/salary/j/xiaoshou/",
+      "source_name": "职友集招聘聚合页",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "亿纬锂能",
+      "title": "商用车销售总监（吉利客户）",
+      "description": "面向吉利客户的商用车销售领导岗位，工作地点惠州。",
+      "published_at": "2026-05-19",
+      "source_url": "https://www.jobui.com/company/994658/salary/j/xiaoshou/",
+      "source_name": "职友集招聘聚合页",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "亿纬锂能",
+      "title": "销售总监",
+      "description": "销售领导岗位，工作地点南通启东。",
+      "published_at": "2026-05-30",
+      "source_url": "https://www.jobui.com/company/994658/salary/j/xiaoshou/",
+      "source_name": "职友集招聘聚合页",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "亿纬锂能",
+      "title": "乘用车销售总监",
+      "description": "乘用车客户销售领导岗位，工作地点成都龙泉驿。",
+      "published_at": "2026-05-30",
+      "source_url": "https://www.jobui.com/company/994658/salary/j/xiaoshou/",
+      "source_name": "职友集招聘聚合页",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "亿纬锂能",
+      "title": "财务总监",
+      "description": "财务职能领导岗位，工作地点荆门。",
+      "published_at": "2026-05-18",
+      "source_url": "https://www.jobui.com/company/994658/salary/j/caiwu/",
+      "source_name": "职友集招聘聚合页",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "亿纬锂能",
+      "title": "产品线财务总",
+      "description": "产品线财务职能负责人岗位，工作地点惠州。",
+      "published_at": "2026-05-19",
+      "source_url": "https://www.jobui.com/company/994658/salary/j/caiwu/",
+      "source_name": "职友集招聘聚合页",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "亿纬锂能",
+      "title": "海外财务总监",
+      "description": "海外业务财务职能领导岗位，工作地点惠州。",
+      "published_at": "2026-05-19",
+      "source_url": "https://www.jobui.com/company/994658/salary/j/caiwu/",
+      "source_name": "职友集招聘聚合页",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "亿纬锂能",
+      "title": "财务BP总监",
+      "description": "财务业务伙伴职能领导岗位，工作地点惠州。",
+      "published_at": "2026-05-30",
+      "source_url": "https://www.jobui.com/company/994658/salary/j/caiwu/",
+      "source_name": "职友集招聘聚合页",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "科思创（中国）",
+      "title": "Head of Growth Excellence (m/f/d)",
+      "description": "上海增长战略与商业卓越职能负责人岗位，Career Level标注为Director，requisition JR-2026-00642。",
+      "published_at": "2026-04-15",
+      "source_url": "https://www.marketingmonk.so/jobboard/jobs/head-of-growth-excellence-mfd-at-covestro-kj2ckv",
+      "source_name": "MarketingMonk对Covestro Workday职位的留档",
+      "observed_at": "2026-07-28"
+    }
+  ],
+  "no_observed_director_plus_job": [
+    "逐际动力",
+    "优必选",
+    "地平线机器人",
+    "巴斯夫（中国）",
+    "意法半导体（中国）"
+  ]
+}

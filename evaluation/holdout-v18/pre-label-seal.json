@@ -1,0 +1,32 @@
+{
+    "sealed_at":  "2026-07-29T02:21:42+08:00",
+    "label_search_started":  false,
+    "snapshot":  {
+                     "path":  ".acceptance/holdout-v18.snapshot.json",
+                     "sha256":  "48aba1af73dbae19a718ba50c4e858c9cde85518e4adf47a19b6bb18144e466c"
+                 },
+    "protocol_repair":  {
+                            "invalid_snapshot_preserved_at":  ".acceptance/holdout-v18.invalid-topk.snapshot.json",
+                            "reason":  "One model response returned four hypotheses despite the frozen top-3 instruction.",
+                            "action":  "Applied the tested deterministic top-3 normalization to stored analyses while preserving raw responses and prompt hashes.",
+                            "labels_opened_before_repair":  false
+                        },
+    "prediction_summary":  {
+                               "candidate_count":  18,
+                               "analyzed_company_count":  18,
+                               "failed_company_count":  0,
+                               "companies_with_hypotheses":  18,
+                               "candidate_prediction_coverage":  1,
+                               "raw_hypothesis_count":  54,
+                               "maximum_hypotheses_per_company":  3,
+                               "distinct_raw_title_count":  54,
+                               "distinct_predicted_role_families":  17,
+                               "distinct_canonical_role_keys":  54,
+                               "snapshot_audit_verified":  true
+                           },
+    "anonymization_check":  {
+                                "real_company_or_source_domain_hits_in_user_prompts":  0,
+                                "all_model_packet_source_urls_blank":  true
+                            },
+    "declaration":  "The repaired, audited V18 prediction snapshot was hashed before any validation-window job search. No future label was used in the deterministic top-3 repair."
+}

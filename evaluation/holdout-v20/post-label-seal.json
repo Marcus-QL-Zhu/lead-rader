@@ -1,0 +1,15 @@
+{
+  "seal_type": "post-label-v1",
+  "sealed_at": "2026-07-28T19:36:09.258267+00:00",
+  "holdout_version": "holdout-v20",
+  "passed": true,
+  "files": {
+    ".acceptance/holdout-v20.snapshot.json": "6f3316c145feba814a50a722f5a21f04d5530de51df142699a7c709b126b421f",
+    "evaluation/holdout-v20/pre-label-seal.json": "949cc76d0ec9472ac185f84a09936066c9e2ca48c50cc2a26eca3e211233286d",
+    "evaluation/holdout-v20/jobs.json": "42d1714d10036833e2663eac2f663986fc1bf3840653ee01358c24f16c6c4df9",
+    "evaluation/holdout-v20/label-audit.json": "a2e095eb74e190ad8fc5046d3e348fc311ed0bb171d9cadf69e421bbca7f18a5",
+    ".acceptance/holdout-v20.report.json": "9a17c52a34b911f74d5f1c90012fe9f0821eec0b115809cea19086df57c5a51e",
+    "evaluation/holdout-v20/acceptance-summary.json": "660de929b1617c541100e096ce53811b371eda0f8a253e1e87bef8622ae63dd2"
+  },
+  "notes": "V20 passed the preregistered gate. Relative job publication times retain explicit precision metadata in jobs.json."
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "purpose": "Search-only aliases. They do not change the frozen company split.",
+  "aliases": {
+    "ASML（中国）": ["ASML"],
+    "瑞萨电子（中国）": ["瑞萨电子", "Renesas", "Renesas Electronics"],
+    "恩智浦（中国）": ["恩智浦", "NXP", "NXP Semiconductors"],
+    "英伟达（中国）": ["英伟达", "NVIDIA"],
+    "AMD（中国）": ["AMD"],
+    "英特尔（中国）": ["英特尔", "Intel"],
+    "高通（中国）": ["高通", "Qualcomm"],
+    "博世（中国）": ["博世", "Bosch"],
+    "西门子（中国）": ["西门子", "Siemens"],
+    "ABB（中国）": ["ABB"],
+    "霍尼韦尔（中国）": ["霍尼韦尔", "Honeywell"],
+    "艾默生（中国）": ["艾默生", "Emerson"],
+    "罗克韦尔自动化（中国）": ["罗克韦尔自动化", "Rockwell Automation"],
+    "库卡（中国）": ["库卡", "KUKA"],
+    "发那科（中国）": ["发那科", "FANUC"],
+    "安川电机（中国）": ["安川电机", "Yaskawa"],
+    "特斯拉中国": ["特斯拉", "Tesla"],
+    "大陆集团（中国）": ["大陆集团", "Continental"],
+    "采埃孚（中国）": ["采埃孚", "ZF", "ZF Group"],
+    "安波福（中国）": ["安波福", "Aptiv"]
+  }
+}

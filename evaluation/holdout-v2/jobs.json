@@ -1,0 +1,18 @@
+{
+  "dataset_version": "2026-07-28-holdout-v2-labels",
+  "label_window": ["2026-04-01", "2026-07-01"],
+  "uniform_search_completed_for_all_candidates": true,
+  "jobs": [],
+  "no_observed_director_plus_job": [
+    "松延动力",
+    "艾利特机器人",
+    "银河通用",
+    "比亚迪",
+    "宁德时代",
+    "小米集团",
+    "华为",
+    "大众汽车集团（中国）",
+    "博格华纳（中国）",
+    "S&STech苏州项目公司"
+  ]
+}

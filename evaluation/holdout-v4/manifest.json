@@ -1,0 +1,38 @@
+{
+  "holdout_version": "holdout-v4",
+  "frozen_at": "2026-07-28",
+  "cutoffs": ["2026-04-01"],
+  "horizon_months": 3,
+  "prompt_version": "historical-demand-v5-required-functional-coverage",
+  "prediction_max_roles_per_company": 5,
+  "temperature": 0.0,
+  "workforce_precursors_enabled": false,
+  "prediction_inputs_exclude_job_ads": true,
+  "josint_inputs_enabled": false,
+  "candidate_selection": {
+    "window_start": "2025-07-01",
+    "window_end": "2026-03-31",
+    "minimum_candidates": 9,
+    "rule": "Nine new candidates, three per company type, selected by a blinded agent before future-job search. Each candidate has at least two diverse upstream event types, except one foreign candidate admitted by the predeclared single A-grade operational-event rule."
+  },
+  "companies": [
+    "智元机器人",
+    "乐聚智能",
+    "逐际动力",
+    "优必选",
+    "亿纬锂能",
+    "地平线机器人",
+    "巴斯夫（中国）",
+    "科思创（中国）",
+    "意法半导体（中国）"
+  ],
+  "acceptance": {
+    "minimum_matches_per_cutoff": 3,
+    "minimum_distinct_matched_jobs": 3,
+    "minimum_distinct_matched_companies": 3,
+    "required_matched_company_types": ["startup_private", "listed", "foreign"],
+    "snapshot_audit_required": true,
+    "uniform_label_search_required": true
+  },
+  "freeze_rule": "After the pre-prediction seal, do not change evidence, prompt, ontology, matcher, thresholds or candidate universe. Run and freeze predictions before any future-job label search."
+}

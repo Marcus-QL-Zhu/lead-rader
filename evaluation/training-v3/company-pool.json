@@ -1,0 +1,789 @@
+{
+  "schema_version": 3,
+  "seed": "historical-training-v3-2026-07-28",
+  "selection_policy": "The 60-company expansion list and deterministic within-type split were frozen before collecting recruiting outcomes.",
+  "base_pool_count": 60,
+  "added_count": 60,
+  "companies": [
+    {
+      "company": "银河通用机器人",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train"
+    },
+    {
+      "company": "加速进化",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train"
+    },
+    {
+      "company": "开普勒机器人",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train"
+    },
+    {
+      "company": "傲意科技",
+      "company_type": "startup_private",
+      "sector": "dexterous_hand",
+      "split": "train"
+    },
+    {
+      "company": "因时机器人",
+      "company_type": "startup_private",
+      "sector": "dexterous_hand",
+      "split": "train"
+    },
+    {
+      "company": "戴盟机器人",
+      "company_type": "startup_private",
+      "sector": "dexterous_hand",
+      "split": "train"
+    },
+    {
+      "company": "灵心巧手",
+      "company_type": "startup_private",
+      "sector": "dexterous_hand",
+      "split": "train"
+    },
+    {
+      "company": "卓驭科技",
+      "company_type": "startup_private",
+      "sector": "autonomous_driving",
+      "split": "train"
+    },
+    {
+      "company": "轻舟智航",
+      "company_type": "startup_private",
+      "sector": "autonomous_driving",
+      "split": "train"
+    },
+    {
+      "company": "酷哇科技",
+      "company_type": "startup_private",
+      "sector": "autonomous_driving",
+      "split": "train"
+    },
+    {
+      "company": "星河动力航天",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "train"
+    },
+    {
+      "company": "天兵科技",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "train"
+    },
+    {
+      "company": "珞石机器人",
+      "company_type": "startup_private",
+      "sector": "industrial_robotics",
+      "split": "calibration"
+    },
+    {
+      "company": "斯坦德机器人",
+      "company_type": "startup_private",
+      "sector": "industrial_robotics",
+      "split": "calibration"
+    },
+    {
+      "company": "众擎机器人",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "test"
+    },
+    {
+      "company": "千寻智能",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "test"
+    },
+    {
+      "company": "东方空间",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "test"
+    },
+    {
+      "company": "深蓝航天",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "test"
+    },
+    {
+      "company": "星环聚能",
+      "company_type": "startup_private",
+      "sector": "nuclear_fusion",
+      "split": "test"
+    },
+    {
+      "company": "能量奇点",
+      "company_type": "startup_private",
+      "sector": "nuclear_fusion",
+      "split": "test"
+    },
+    {
+      "company": "越疆科技",
+      "company_type": "listed",
+      "sector": "industrial_robotics",
+      "split": "train"
+    },
+    {
+      "company": "地平线机器人",
+      "company_type": "listed",
+      "sector": "autonomous_driving_chip",
+      "split": "train"
+    },
+    {
+      "company": "黑芝麻智能",
+      "company_type": "listed",
+      "sector": "autonomous_driving_chip",
+      "split": "train"
+    },
+    {
+      "company": "中芯国际",
+      "company_type": "listed",
+      "sector": "semiconductor",
+      "split": "train"
+    },
+    {
+      "company": "华虹半导体",
+      "company_type": "listed",
+      "sector": "semiconductor",
+      "split": "train"
+    },
+    {
+      "company": "寒武纪",
+      "company_type": "listed",
+      "sector": "ai_chip",
+      "split": "train"
+    },
+    {
+      "company": "芯原股份",
+      "company_type": "listed",
+      "sector": "semiconductor",
+      "split": "train"
+    },
+    {
+      "company": "中控技术",
+      "company_type": "listed",
+      "sector": "industrial_automation",
+      "split": "train"
+    },
+    {
+      "company": "汇川技术",
+      "company_type": "listed",
+      "sector": "industrial_automation",
+      "split": "train"
+    },
+    {
+      "company": "埃斯顿",
+      "company_type": "listed",
+      "sector": "industrial_robotics",
+      "split": "train"
+    },
+    {
+      "company": "先导智能",
+      "company_type": "listed",
+      "sector": "advanced_manufacturing",
+      "split": "train"
+    },
+    {
+      "company": "海康威视",
+      "company_type": "listed",
+      "sector": "machine_vision",
+      "split": "train"
+    },
+    {
+      "company": "理想汽车",
+      "company_type": "listed",
+      "sector": "new_energy_vehicle",
+      "split": "calibration"
+    },
+    {
+      "company": "零跑汽车",
+      "company_type": "listed",
+      "sector": "new_energy_vehicle",
+      "split": "calibration"
+    },
+    {
+      "company": "埃夫特",
+      "company_type": "listed",
+      "sector": "industrial_robotics",
+      "split": "test"
+    },
+    {
+      "company": "宁德时代",
+      "company_type": "listed",
+      "sector": "battery",
+      "split": "test"
+    },
+    {
+      "company": "国轩高科",
+      "company_type": "listed",
+      "sector": "battery",
+      "split": "test"
+    },
+    {
+      "company": "航天彩虹",
+      "company_type": "listed",
+      "sector": "aerospace",
+      "split": "test"
+    },
+    {
+      "company": "中国卫星",
+      "company_type": "listed",
+      "sector": "commercial_space",
+      "split": "test"
+    },
+    {
+      "company": "吉利汽车",
+      "company_type": "listed",
+      "sector": "new_energy_vehicle",
+      "split": "test"
+    },
+    {
+      "company": "ASML（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor_equipment",
+      "split": "train"
+    },
+    {
+      "company": "瑞萨电子（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "train"
+    },
+    {
+      "company": "恩智浦（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "train"
+    },
+    {
+      "company": "英伟达（中国）",
+      "company_type": "foreign",
+      "sector": "ai_chip",
+      "split": "train"
+    },
+    {
+      "company": "AMD（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "train"
+    },
+    {
+      "company": "英特尔（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "train"
+    },
+    {
+      "company": "高通（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "train"
+    },
+    {
+      "company": "博世（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "train"
+    },
+    {
+      "company": "西门子（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_automation",
+      "split": "train"
+    },
+    {
+      "company": "ABB（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_robotics",
+      "split": "train"
+    },
+    {
+      "company": "霍尼韦尔（中国）",
+      "company_type": "foreign",
+      "sector": "aerospace_industrial",
+      "split": "train"
+    },
+    {
+      "company": "艾默生（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_automation",
+      "split": "train"
+    },
+    {
+      "company": "罗克韦尔自动化（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_automation",
+      "split": "calibration"
+    },
+    {
+      "company": "库卡（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_robotics",
+      "split": "calibration"
+    },
+    {
+      "company": "发那科（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_robotics",
+      "split": "test"
+    },
+    {
+      "company": "安川电机（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_robotics",
+      "split": "test"
+    },
+    {
+      "company": "特斯拉中国",
+      "company_type": "foreign",
+      "sector": "new_energy_vehicle",
+      "split": "test"
+    },
+    {
+      "company": "大陆集团（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "test"
+    },
+    {
+      "company": "采埃孚（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "test"
+    },
+    {
+      "company": "安波福（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "test"
+    },
+    {
+      "company": "原力灵机",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "智平方",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "鹿明机器人",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "星动纪元",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "星海图",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "帕西尼感知科技",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "本末科技",
+      "company_type": "startup_private",
+      "sector": "robotics",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "中科宇航",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "极智嘉",
+      "company_type": "startup_private",
+      "sector": "warehouse_robotics",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "星尘智能",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "海柔创新",
+      "company_type": "startup_private",
+      "sector": "warehouse_robotics",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "自变量机器人",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "傅利叶智能",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "calibration",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "小鹏汇天",
+      "company_type": "startup_private",
+      "sector": "low_altitude_mobility",
+      "split": "calibration",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "微纳星空",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "普渡机器人",
+      "company_type": "startup_private",
+      "sector": "service_robotics",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "梅卡曼德机器人",
+      "company_type": "startup_private",
+      "sector": "industrial_robotics",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "仙工智能",
+      "company_type": "startup_private",
+      "sector": "industrial_robotics",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "星际荣耀",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "跨维智能",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "舜宇光学科技",
+      "company_type": "listed",
+      "sector": "optics",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "新时达",
+      "company_type": "listed",
+      "sector": "industrial_robotics",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "上汽集团",
+      "company_type": "listed",
+      "sector": "new_energy_vehicle",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "赛力斯",
+      "company_type": "listed",
+      "sector": "new_energy_vehicle",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "拓荆科技",
+      "company_type": "listed",
+      "sector": "semiconductor_equipment",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "通富微电",
+      "company_type": "listed",
+      "sector": "semiconductor",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "大族激光",
+      "company_type": "listed",
+      "sector": "industrial_equipment",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "盛美上海",
+      "company_type": "listed",
+      "sector": "semiconductor_equipment",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "欣旺达",
+      "company_type": "listed",
+      "sector": "battery",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "北方华创",
+      "company_type": "listed",
+      "sector": "semiconductor_equipment",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "机器人（新松）",
+      "company_type": "listed",
+      "sector": "industrial_robotics",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "韦尔股份",
+      "company_type": "listed",
+      "sector": "semiconductor",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "兆易创新",
+      "company_type": "listed",
+      "sector": "semiconductor",
+      "split": "calibration",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "澜起科技",
+      "company_type": "listed",
+      "sector": "semiconductor",
+      "split": "calibration",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "立讯精密",
+      "company_type": "listed",
+      "sector": "electronics_manufacturing",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "京东方",
+      "company_type": "listed",
+      "sector": "display",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "沪硅产业",
+      "company_type": "listed",
+      "sector": "semiconductor_materials",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "广汽集团",
+      "company_type": "listed",
+      "sector": "new_energy_vehicle",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "华海清科",
+      "company_type": "listed",
+      "sector": "semiconductor_equipment",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "中微公司",
+      "company_type": "listed",
+      "sector": "semiconductor_equipment",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "费斯托（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_automation",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "罗氏诊断（中国）",
+      "company_type": "foreign",
+      "sector": "diagnostics",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "佛吉亚（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "江森自控（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_technology",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "赛默飞世尔（中国）",
+      "company_type": "foreign",
+      "sector": "life_science_tools",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "美敦力（中国）",
+      "company_type": "foreign",
+      "sector": "medical_technology",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "SMC（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_automation",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "伊顿（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_technology",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "奥托立夫（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "东京电子（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor_equipment",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "史赛克（中国）",
+      "company_type": "foreign",
+      "sector": "medical_technology",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "法雷奥（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "train",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "亚德诺半导体（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "calibration",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "泛林集团（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor_equipment",
+      "split": "calibration",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "西门子医疗（中国）",
+      "company_type": "foreign",
+      "sector": "medical_technology",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "瓦里安（中国）",
+      "company_type": "foreign",
+      "sector": "medical_technology",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "科磊（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor_equipment",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "派克汉尼汾（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_technology",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "博格华纳（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    },
+    {
+      "company": "李尔（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "test",
+      "pool_generation": "v3_expansion"
+    }
+  ]
+}

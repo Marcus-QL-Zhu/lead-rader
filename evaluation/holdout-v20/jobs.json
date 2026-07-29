@@ -1,0 +1,37 @@
+{
+  "search_protocol_version": "uniform-director-plus-v1",
+  "label_quality_protocol": "v20-conservative-correction",
+  "verification_status": "not_replayable",
+  "jobs": [
+    {
+      "company": "国轩高科",
+      "title": "电芯生产工艺总监(新站一厂)",
+      "exact_title": "电芯生产工艺总监(新站一厂)",
+      "description": "负责电芯生产工艺、制造过程改进与团队管理；职位页明确显示雇主为国轩高科。",
+      "published_at": "2026-06-28",
+      "published_at_precision": "bounded_relative_month_estimate",
+      "publication_interval_start": "2026-05-29",
+      "publication_interval_end_exclusive": "2026-06-30",
+      "observed_at": "2026-07-28",
+      "source_url": "https://bebee.com/cn/jobs/job--techmap_cn_82813479",
+      "source_name": "BeBee公开职位镜像（雇主、标题、职责和相对日期同页）",
+      "employer_evidence": "职位页雇主字段为国轩高科",
+      "scope_evidence": "职位正文含生产工艺、过程改进和团队管理职责"
+    },
+    {
+      "company": "Boston Scientific（波士顿科学）",
+      "title": "Director, Ops",
+      "exact_title": "Director, Ops",
+      "description": "全面负责上海制造基地运营与本地制造，领导制造团队、质量改进、成本控制和产能交付。",
+      "published_at": "2026-07-09",
+      "published_at_precision": "bounded_relative_days_estimate",
+      "publication_interval_start": "2026-07-08",
+      "publication_interval_end_exclusive": "2026-07-11",
+      "observed_at": "2026-07-29",
+      "source_url": "https://jobs.bostonscientific.com/go/%E6%9F%A5%E7%9C%8B%E9%A2%86%E5%AF%BC%E6%9C%BA%E4%BC%9A/4065600/?q=&sortColumn=sort_location&sortDirection=desc",
+      "source_name": "Boston Scientific官方职位页（职责）+公开日期镜像",
+      "employer_evidence": "官方Boston Scientific招聘页列出上海Director, Ops",
+      "scope_evidence": "官方职位正文显示制造基地整体运营和团队领导责任"
+    }
+  ]
+}

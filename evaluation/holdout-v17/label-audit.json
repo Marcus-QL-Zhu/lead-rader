@@ -1,0 +1,383 @@
+{
+  "search_protocol_version": "uniform-director-plus-v1",
+  "audits": [
+    {
+      "company": "东京电子（中国）",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "东京电子（中国） 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "TEL官方全球职业入口及中国入口可访问；未检出验证窗口内带可核日期的中国区Director+/功能Head职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "东京电子（中国） (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "TEL官方全球职业入口及中国入口可访问；未检出验证窗口内带可核日期的中国区Director+/功能Head职位。"
+        }
+      ]
+    },
+    {
+      "company": "佛吉亚（中国）",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "matched",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "佛吉亚（中国） 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "佛吉亚中国官网招聘入口可访问；公开网页复核到佛吉亚智永科技（重庆）财务总监，结构化发布时间为2026-07-22。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "佛吉亚（中国） (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "佛吉亚中国官网招聘入口可访问；公开网页复核到佛吉亚智永科技（重庆）财务总监，结构化发布时间为2026-07-22。"
+        }
+      ]
+    },
+    {
+      "company": "博格华纳（中国）",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "博格华纳（中国） 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "博格华纳官方中国职位搜索逐条给出日期；窗口内检出的中国职位主要为工程师和经理，未发现Director+/功能Head。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "博格华纳（中国） (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "博格华纳官方中国职位搜索逐条给出日期；窗口内检出的中国职位主要为工程师和经理，未发现Director+/功能Head。"
+        }
+      ]
+    },
+    {
+      "company": "天津大冢饮料有限公司",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "天津大冢饮料有限公司 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "未发现独立官方职位系统中的窗口内Director+职位；认证公司职位页主要为专员、主管等非目标层级。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "天津大冢饮料有限公司 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "未发现独立官方职位系统中的窗口内Director+职位；认证公司职位页主要为专员、主管等非目标层级。"
+        }
+      ]
+    },
+    {
+      "company": "罗氏制药（中国）",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "matched",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "罗氏制药（中国） 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "罗氏官方职位编号ROCHGLOBAL202605111730及LinkedIn同职位镜像共同确认上海Head of Manufacturing；职位属于站点领导团队并拥有团队、预算及运营责任。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "罗氏制药（中国） (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "罗氏官方职位编号ROCHGLOBAL202605111730及LinkedIn同职位镜像共同确认上海Head of Manufacturing；职位属于站点领导团队并拥有团队、预算及运营责任。"
+        }
+      ]
+    },
+    {
+      "company": "西门子医疗（中国）",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "西门子医疗（中国） 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "西门子医疗中国官方招聘入口可访问；未检出验证窗口内带可核日期的Director+/功能Head职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "西门子医疗（中国） (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "西门子医疗中国官方招聘入口可访问；未检出验证窗口内带可核日期的Director+/功能Head职位。"
+        }
+      ]
+    },
+    {
+      "company": "上汽集团",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "上汽集团 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "检查集团/相关官方招聘入口及公开网页，未发现窗口内可核验的目标层级职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "上汽集团 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "检查集团/相关官方招聘入口及公开网页，未发现窗口内可核验的目标层级职位。"
+        }
+      ]
+    },
+    {
+      "company": "北方华创",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "matched",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "北方华创 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "北方华创官方加入我们页面及认证招聘公司页均可核；公开职位仓储总监内嵌发布时间为2026-07-28。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "北方华创 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "北方华创官方加入我们页面及认证招聘公司页均可核；公开职位仓储总监内嵌发布时间为2026-07-28。"
+        }
+      ]
+    },
+    {
+      "company": "宁德时代",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "宁德时代 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "宁德时代官方社招入口可访问；公开结果未检出窗口内带可核日期的Director+/功能Head职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "宁德时代 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "宁德时代官方社招入口可访问；公开结果未检出窗口内带可核日期的Director+/功能Head职位。"
+        }
+      ]
+    },
+    {
+      "company": "欣旺达",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "欣旺达 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "欣旺达官方人才页面及认证招聘页已检查；发现的产品线副总经理职位发布时间为2025-09-28，早于验证窗口，不计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "欣旺达 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "欣旺达官方人才页面及认证招聘页已检查；发现的产品线副总经理职位发布时间为2025-09-28，早于验证窗口，不计入。"
+        }
+      ]
+    },
+    {
+      "company": "汇川技术",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "汇川技术 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "检查官方人才入口及公开招聘结果，未发现窗口内可核验的目标层级职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "汇川技术 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "检查官方人才入口及公开招聘结果，未发现窗口内可核验的目标层级职位。"
+        }
+      ]
+    },
+    {
+      "company": "立讯精密",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "立讯精密 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "立讯精密官方社会招聘入口可访问；未检出窗口内带可核日期的Director+/功能Head职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "立讯精密 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "立讯精密官方社会招聘入口可访问；未检出窗口内带可核日期的Director+/功能Head职位。"
+        }
+      ]
+    },
+    {
+      "company": "后摩智能",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "后摩智能 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "后摩官网只提供简历投递邮箱，公开搜索未发现窗口内可核验的Director+/功能Head职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "后摩智能 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "后摩官网只提供简历投递邮箱，公开搜索未发现窗口内可核验的Director+/功能Head职位。"
+        }
+      ]
+    },
+    {
+      "company": "小鹏汇天",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "小鹏汇天 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "检查小鹏官方社招入口及小鹏汇天公开职位页；窗口内结果主要为经理、专家和工程师，按验收协议不计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "小鹏汇天 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "检查小鹏官方社招入口及小鹏汇天公开职位页；窗口内结果主要为经理、专家和工程师，按验收协议不计入。"
+        }
+      ]
+    },
+    {
+      "company": "斯克斯机器人科技有限公司",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "斯克斯机器人科技有限公司 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "斯克斯官网未提供带日期的高阶职位；公开招聘结果主要为工程师岗位，未发现窗口内目标层级职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "斯克斯机器人科技有限公司 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "斯克斯官网未提供带日期的高阶职位；公开招聘结果主要为工程师岗位，未发现窗口内目标层级职位。"
+        }
+      ]
+    },
+    {
+      "company": "星动纪元",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "星动纪元 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "星动纪元官方加入我们页面可访问；公开结果以校招/工程岗位为主，未发现窗口内可核验的Director+/功能Head职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "星动纪元 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "星动纪元官方加入我们页面可访问；公开结果以校招/工程岗位为主，未发现窗口内可核验的Director+/功能Head职位。"
+        }
+      ]
+    },
+    {
+      "company": "星际荣耀",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "星际荣耀 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "检查星际荣耀及全资海南发射子公司公开职位。采购部长、发射技术中心主任等标题存在，但当前冻结的Director+层级规则不自动等同这些头衔，且未取得满足协议的精确职位发布时间，因此不计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "星际荣耀 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "检查星际荣耀及全资海南发射子公司公开职位。采购部长、发射技术中心主任等标题存在，但当前冻结的Director+层级规则不自动等同这些头衔，且未取得满足协议的精确职位发布时间，因此不计入。"
+        }
+      ]
+    },
+    {
+      "company": "普渡机器人",
+      "searched_at": "2026-07-29T02:15:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "普渡机器人 官方 careers 社会招聘 Director 总监 Head VP 2026",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "检查普渡官网及官方招聘入口；窗口内公开结果主要是校招/工程岗位，未发现可核验的Director+/功能Head职位。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "普渡机器人 (总监 OR Director OR Head OR VP) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T02:15:00+08:00",
+          "outcome_summary": "检查普渡官网及官方招聘入口；窗口内公开结果主要是校招/工程岗位，未发现可核验的Director+/功能Head职位。"
+        }
+      ]
+    }
+  ]
+}

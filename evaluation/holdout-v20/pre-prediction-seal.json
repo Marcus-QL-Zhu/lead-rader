@@ -1,0 +1,17 @@
+{
+  "holdout_version": "holdout-v20",
+  "sealed_at": "2026-07-29T03:00:00+08:00",
+  "prediction_started": false,
+  "future_label_search_started": false,
+  "files": {
+    "evaluation/holdout-v20/evidence.json": "9ea07d6bad033dd7d095db20dc762cc045250e851461b8057e91418b43f148dc",
+    "evaluation/holdout-v20/manifest.json": "42f3856f4c45539480d3a885eb0a666fb6710918cd73fa6abd8dba712e0e787e",
+    "evaluation/holdout-v20/README.md": "3dd53420c9e21404a75fe787771b531ade2ab6131daa3ce89af2f64f960f22bc",
+    "src/ht_lead_radar/backtest.py": "7381545d58f95318915857334c6a094ac771676104ca3b8a29aad5a775320ec8",
+    "src/ht_lead_radar/taxonomy.py": "164ce2b53de401d3849d33907ac5ea2cbb4713fffe6b54156a45630cb8e188a1",
+    "src/ht_lead_radar/company_demand_v2.py": "9a3047810c368ebef777b681edfdb889ebfb83769ca680ce6ce19dea816bac2f",
+    "scripts/run_historical_backtest.py": "9dc5f2d04893758dd8200babcc86af9a2b9fd245a57a2fce887257bf39f5fdee",
+    "scripts/evaluate_holdout_reports.py": "e2f28621870b2d164c266db8288a2e301400615e573e3124d434d785fa16cbbd"
+  },
+  "declaration": "No V19 validation-window recruiting label was opened before this seal."
+}

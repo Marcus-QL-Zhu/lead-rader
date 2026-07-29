@@ -1,0 +1,460 @@
+{
+  "schema_version": 1,
+  "seed": "historical-training-v1",
+  "policy": {
+    "company_level_isolation": true,
+    "train_and_calibration_are_development_only": true,
+    "test_labels_open_after_model_freeze": true,
+    "excluded_from_development": [
+      "holdout-v14"
+    ]
+  },
+  "companies": [
+    {
+      "company_id": "co_0a74f53c0edbc476",
+      "company": "旋光智能机器人",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_109ea461223ae688",
+      "company": "海柔创新 Hai Robotics",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_1b9bd2c8270d1775",
+      "company": "赛富乐斯半导体",
+      "company_type": "startup_private",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_1e22e25d817bb6d6",
+      "company": "阿斯利康（中国）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_2116a9b77a3141ab",
+      "company": "麦格纳（中国）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_25bf64178f520441",
+      "company": "长电科技",
+      "company_type": "listed",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_26bc77e7e27875e7",
+      "company": "立邦 Nippon Paint",
+      "company_type": "foreign",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_27d75c89ac3c29ed",
+      "company": "斯克斯机器人科技有限公司",
+      "company_type": "startup_private",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_2a3463384a2b7a90",
+      "company": "禾赛科技",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_2bd99ac781326551",
+      "company": "申能股份",
+      "company_type": "listed",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_2d9805be28376985",
+      "company": "Agilent Technologies（安捷伦）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_2e164a17cab35e3a",
+      "company": "云深处科技",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_30081094f2a8c83d",
+      "company": "优必选",
+      "company_type": "listed",
+      "split": "calibration",
+      "aliases": []
+    },
+    {
+      "company_id": "co_32df9c897cc3b789",
+      "company": "天津大冢饮料有限公司",
+      "company_type": "foreign",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_377897de06db6c19",
+      "company": "科思创（中国）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_412b57e712039032",
+      "company": "摩尔线程",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_419f235341c49e7c",
+      "company": "徕木股份",
+      "company_type": "listed",
+      "split": "calibration",
+      "aliases": []
+    },
+    {
+      "company_id": "co_4407ec542c92020a",
+      "company": "宁波永基精密科技",
+      "company_type": "startup_private",
+      "split": "calibration",
+      "aliases": []
+    },
+    {
+      "company_id": "co_47f234938e7106df",
+      "company": "文远知行 WeRide",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_486f742480794328",
+      "company": "元戎启行",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_48f9fc0b5310e2c8",
+      "company": "非夕科技",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_4c4fe73765359470",
+      "company": "BD（碧迪医疗）",
+      "company_type": "foreign",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_4c71f73f54d932d6",
+      "company": "丹佛斯（中国）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_51531a08c9683810",
+      "company": "蓝箭航天",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_589ed56418ad8785",
+      "company": "隆基绿能",
+      "company_type": "listed",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_5a8d76cdf7e2598d",
+      "company": "珀金埃尔默（中国）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_5d2bdb36399b4e5e",
+      "company": "速腾聚创 RoboSense",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_6420f768dc429c7c",
+      "company": "逐际动力",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_6d076d002ca9f915",
+      "company": "京东方华灿光电",
+      "company_type": "listed",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_7117fa8d72fb99b9",
+      "company": "长安汽车",
+      "company_type": "listed",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_7282b05d402e58d4",
+      "company": "汉可智能装备有限公司",
+      "company_type": "startup_private",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_75492dff094b3aad",
+      "company": "DataMesh",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_759845673e2a0850",
+      "company": "蔚来",
+      "company_type": "listed",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_7eec5b36fafc1571",
+      "company": "海东红狮半导体有限公司",
+      "company_type": "startup_private",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_7f6e47ce1bcb222d",
+      "company": "应用材料",
+      "company_type": "foreign",
+      "split": "calibration",
+      "aliases": []
+    },
+    {
+      "company_id": "co_82eaaba81d9dcc54",
+      "company": "华为",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_86fbebe2492b6e72",
+      "company": "英飞凌",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_8cda102fcea4e11f",
+      "company": "意法半导体（中国）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_9b5a3eea72c018cc",
+      "company": "模塑科技",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_a2f05a90a2b3c59a",
+      "company": "Huba Control",
+      "company_type": "foreign",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_a4de3a0231cca63a",
+      "company": "后摩智能",
+      "company_type": "startup_private",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_a7b6519b9025824c",
+      "company": "乐聚智能",
+      "company_type": "startup_private",
+      "split": "calibration",
+      "aliases": []
+    },
+    {
+      "company_id": "co_b088afe50cc9939c",
+      "company": "宝马集团 BMW Group",
+      "company_type": "foreign",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_b42d5db86724ed72",
+      "company": "福日电子（以诺通讯）",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_bc0b9aa40ce8ae1d",
+      "company": "GSK（葛兰素史克中国）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_beb9e2636fe9ce4e",
+      "company": "松延动力",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_c1b5bdc5539e19a3",
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "split": "calibration",
+      "aliases": []
+    },
+    {
+      "company_id": "co_c39f63e5334dd589",
+      "company": "瓦克化学 WACKER",
+      "company_type": "foreign",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_c404c46096e95a98",
+      "company": "伯芯微电子（天津）有限公司",
+      "company_type": "startup_private",
+      "split": "test",
+      "aliases": []
+    },
+    {
+      "company_id": "co_c580a626b8f7287c",
+      "company": "比亚迪",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_c650efcadc6ae0c1",
+      "company": "MiniMax Group",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_d15ff95eec38ec81",
+      "company": "小鹏汽车",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_d1ec3d76d07862d9",
+      "company": "小马智行",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_d313afa8015479b2",
+      "company": "新松机器人 SIASUN",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_d73804df17d19750",
+      "company": "阿特拉斯·科普柯（中国）",
+      "company_type": "foreign",
+      "split": "calibration",
+      "aliases": []
+    },
+    {
+      "company_id": "co_e9e7e9c121f5e408",
+      "company": "Momenta",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_ecd8385be8ff4122",
+      "company": "GE HealthCare（GE医疗）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_ed0ecc1cefa680fe",
+      "company": "小米集团",
+      "company_type": "listed",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_ed71c3420dbf50a9",
+      "company": "智元机器人",
+      "company_type": "startup_private",
+      "split": "calibration",
+      "aliases": []
+    },
+    {
+      "company_id": "co_ef9f5b8951cd0f07",
+      "company": "Danaher（丹纳赫中国）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_f0818cd4a041042e",
+      "company": "亿纬锂能",
+      "company_type": "listed",
+      "split": "calibration",
+      "aliases": []
+    },
+    {
+      "company_id": "co_f527e2a4ac166321",
+      "company": "施耐德电气（中国）",
+      "company_type": "foreign",
+      "split": "train",
+      "aliases": []
+    },
+    {
+      "company_id": "co_fe4533c9f15072de",
+      "company": "梅卡曼德机器人 Mech-Mind Robotics",
+      "company_type": "startup_private",
+      "split": "train",
+      "aliases": []
+    }
+  ],
+  "counts": {
+    "train": 36,
+    "calibration": 9,
+    "test": 18
+  }
+}

@@ -1,0 +1,596 @@
+{
+  "holdout_version": "holdout-v10",
+  "label_window": {
+    "start_inclusive": "2026-04-01",
+    "end_exclusive": "2026-07-01",
+    "timezone": "Asia/Shanghai"
+  },
+  "searched_at": "2026-07-28T08:10:02.1670104+08:00",
+  "eligibility_rule": {
+    "geography": "A publicly posted role located in mainland China",
+    "accepted_seniority": "Director, Senior Director, Executive Director, Vice President, CxO, or an explicit functional Head with ownership of a standalone function",
+    "excluded": [
+      "Manager",
+      "Expert",
+      "Engineer",
+      "ordinary Lead",
+      "Associate Director",
+      "ambiguous mixed-level titles that do not guarantee Director level",
+      "Head titles without clear independent functional ownership"
+    ],
+    "date_requirement": "An exact public posting or official recruitment-campaign date must be verifiable and fall in [2026-04-01, 2026-07-01). Relative ages alone are insufficient.",
+    "fabrication_policy": "No inferred dates, reconstructed relative dates, lowered seniority thresholds, or synthetic postings."
+  },
+  "jobs": [
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "Portfolio Strategy and Partnership Head - China",
+      "published_at": "2026-04-23",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Owns China portfolio strategy and partnership coordination for Biomedical Research, leads cross-functional due diligence assignments and external-asset integration, and bridges local and global development teams and scientific partners.",
+      "seniority_basis": "Explicit China functional Head with people-management requirements and ownership of portfolio strategy and partnerships.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/us-en/careers/career-search/job/details/req-10075923-portfolio-strategy-and-partnership-head-china",
+      "requisition_id": "REQ-10075923",
+      "date_basis": "Exact date, location and duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Director 2026 Shanghai Beijing",
+        "site:novartis.com/careers/career-search/job/details \"Portfolio Strategy and Partnership Head - China\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "Head, TCO (Translational Clinical Oncology) China",
+      "published_at": "2026-04-28",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Leads the Translational Clinical Oncology China organization, guides early-oncology portfolio selection and execution, oversees due diligence and external collaborations, ensures trial readiness and resourcing, and develops the local team.",
+      "seniority_basis": "Explicit China organization Head with strategic, operational and people leadership.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/careers/career-search/job/details/req-10075344-head-tco-translational-clinical-oncology-china",
+      "requisition_id": "REQ-10075344",
+      "date_basis": "Exact date, location and duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Director 2026 Shanghai Beijing",
+        "site:novartis.com/careers/career-search/job/details \"Head, TCO\" China"
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "Site Quality Head Changping",
+      "published_at": "2026-04-28",
+      "location": "Changping County, Beijing, China",
+      "responsibilities_summary": "Leads the site Quality organization and provides strategic and technical ownership for quality and cGMP compliance, regulatory inspections, product release, site quality risk, third-party quality agreements and staff development.",
+      "seniority_basis": "Explicit site functional Head with standalone Quality organization ownership and qualified-person accountability.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/es-es/careers/career-search/job/details/req-10076386-site-quality-head-changping",
+      "requisition_id": "REQ-10076386",
+      "date_basis": "Exact date, China location and duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Head 2026 Beijing",
+        "site:novartis.com/careers/career-search/job/details \"Site Quality Head Changping\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "Director, Program Management",
+      "published_at": "2026-06-22",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Coordinates China oncology compound prioritization, due diligence and integration planning, builds external early-oncology partnerships, introduces new technologies and manages program plans, risks, budgets and resources.",
+      "seniority_basis": "Explicit Director title.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/careers/career-search/job/details/req-10080264-director-program-management",
+      "requisition_id": "REQ-10080264",
+      "date_basis": "Exact date, location and duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Director 2026 Shanghai Beijing",
+        "site:novartis.com/careers/career-search/job/details \"Director, Program Management\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "TMDP China Head",
+      "published_at": "2026-06-22",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Directs translational medicine analysis and biomarker strategy, manages multiple development projects and project teams, allocates resources, oversees scientific groups and quality compliance, and selects and develops personnel.",
+      "seniority_basis": "Explicit China functional Head; member of the functional leadership team with project-team and personnel ownership.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/careers/career-search/job/details/req-10076613-tmdp-china-head",
+      "requisition_id": "REQ-10076613",
+      "date_basis": "Exact date, China location and functional duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Head 2026 Shanghai",
+        "site:novartis.com/careers/career-search/job/details \"TMDP China Head\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "Director, Preclinical Safety (Toxicology) China Head",
+      "published_at": "2026-06-22",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Leads nonclinical-safety due diligence and cross-disciplinary safety teams, identifies and communicates development risks, aligns mitigation and development plans with global safety leadership, and supports integration and talent development.",
+      "seniority_basis": "Explicit Director title and China Head scope.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/careers/career-search/job/details/req-10077754-director-preclinical-safety-toxicology-china-head",
+      "requisition_id": "REQ-10077754",
+      "date_basis": "Exact date, China location and duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Director 2026 Shanghai Beijing",
+        "site:novartis.com/careers/career-search/job/details \"Director, Preclinical Safety\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "Director - Chemistry Scientific Due Diligence",
+      "published_at": "2026-06-22",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Leads chemistry search, evaluation and scientific due diligence for external industrial and academic opportunities, evaluates technical and development risks, manages deal-team stakeholders and supports asset acquisition and alliance integration.",
+      "seniority_basis": "Explicit Director title.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/careers/career-search/job/details/req-10076995-director-chemistry-scientific-due-diligence",
+      "requisition_id": "REQ-10076995",
+      "date_basis": "Exact date, China location and duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Director 2026 Shanghai Beijing",
+        "site:novartis.com/careers/career-search/job/details \"Director - Chemistry Scientific Due Diligence\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "Head ERC, China",
+      "published_at": "2026-06-22",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Sets and executes the China Ethics, Risk and Compliance strategy, builds the ERC team, designs governance and controls, integrates risk intelligence into business planning, and manages regulator and stakeholder trust.",
+      "seniority_basis": "Explicit country functional Head with independent ERC strategy and team ownership.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/careers/career-search/job/details/req-10063581-head-erc-china",
+      "requisition_id": "REQ-10063581",
+      "date_basis": "Exact date, location and duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Head 2026 Shanghai",
+        "site:novartis.com/careers/career-search/job/details \"Head ERC, China\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "Marketing Head",
+      "published_at": "2026-06-22",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Owns brand marketing strategy, marketing mix, operational plans and ROI, leads execution with Sales, Medical, Regulatory, Finance and other functions, and presents competitive-response strategy to senior management.",
+      "seniority_basis": "Explicit functional Head responsible for the marketing function and brand portfolio.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/careers/career-search/job/details/req-10081104-marketing-head",
+      "requisition_id": "REQ-10081104",
+      "date_basis": "Exact date, China location and duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Head 2026 Shanghai",
+        "site:novartis.com/careers/career-search/job/details \"Marketing Head\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "Head of New Product, International China",
+      "published_at": "2026-06-22",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Owns China portfolio and pre-launch product strategy, forms and leads the cross-functional launch team, creates governance and launch mechanisms, aligns China and global commercial and development organizations, and builds launch-excellence capability.",
+      "seniority_basis": "Explicit China functional Head with independent portfolio, pre-launch governance and capability ownership.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/careers/career-search/job/details/req-10071116-head-new-product-international-china",
+      "requisition_id": "REQ-10071116",
+      "date_basis": "Exact date, China location and duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Head 2026 Shanghai",
+        "site:novartis.com/careers/career-search/job/details \"Head of New Product, International China\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "exact_title": "PK Director (临床药理总监）",
+      "published_at": "2026-06-22",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Guides cross-disciplinary clinical-pharmacology teams and functional communities, enables portfolio evaluation and development decisions, serves on leadership or decision boards and builds scientific and technical capability.",
+      "seniority_basis": "Explicit Director title.",
+      "source_name": "Novartis official careers",
+      "source_url": "https://www.novartis.com/careers/career-search/job/details/req-10075924-pk-director-linchuangyaolizongjian",
+      "requisition_id": "REQ-10075924",
+      "date_basis": "Exact date, China location and duties shown on official job-detail page.",
+      "discovery_queries": [
+        "site:novartis.com/careers/career-search China Director 2026 Shanghai Beijing",
+        "site:novartis.com/careers/career-search/job/details \"PK Director\" \"Jun 22, 2026\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Danaher（丹纳赫中国）",
+      "company_type": "foreign",
+      "exact_title": "Senior Director, Clinical Translation, Danaher China",
+      "published_at": "2026-04-10",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Owns China clinical-translation strategy across oncology, neurology and immunology, leads China clinical studies for diagnostics, devices and bioprocess systems, integrates China evidence into global development and builds external clinical partnerships.",
+      "seniority_basis": "Explicit Senior Director title.",
+      "source_name": "Danaher official Workday ATS; Danaher Recruitment public campaign archive for exact date",
+      "source_url": "https://danaher.wd1.myworkdayjobs.com/en-US/DanaherJobs/job/Senior-Director--Clinical-Translation--Danaher-China_R1307301",
+      "date_verification_url": "https://jobs.niuqizp.com/job-vw855CtN5.html",
+      "requisition_id": "R1307301",
+      "date_basis": "The exact 2026-04-10 public Danaher Recruitment campaign lists this title and requisition; official ATS verifies title, location and duties.",
+      "discovery_queries": [
+        "site:jobs.danaher.com/global/en/job/China Director 2026 Shanghai Beijing Suzhou",
+        "\"R1307301\" \"Senior Director, Clinical Translation\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Danaher（丹纳赫中国）",
+      "company_type": "foreign",
+      "exact_title": "Senior Director, Technology Innovation, Danaher China",
+      "published_at": "2026-04-10",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Develops China open-innovation strategy, sources technologies and partners in precision hardware, software, AI and digital health, leads technical due diligence and alliance structuring, and connects China partners with global R&D and product teams.",
+      "seniority_basis": "Explicit Senior Director title.",
+      "source_name": "Danaher official Workday ATS; Danaher Recruitment public campaign archive for exact date",
+      "source_url": "https://danaher.wd1.myworkdayjobs.com/en-US/DanaherJobs/job/Senior-Director--Technology-Innovation--Danaher-China_R1307300",
+      "date_verification_url": "https://jobs.niuqizp.com/job-vw855CtN5.html",
+      "requisition_id": "R1307300",
+      "date_basis": "The exact 2026-04-10 public Danaher Recruitment campaign lists this title and requisition; official ATS verifies title, location and duties.",
+      "discovery_queries": [
+        "site:jobs.danaher.com/global/en/job/China Director 2026 Shanghai Beijing Suzhou",
+        "\"R1307300\" \"Senior Director, Technology Innovation\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Danaher（丹纳赫中国）",
+      "company_type": "foreign",
+      "exact_title": "Director, LBS CH R&D SHA",
+      "published_at": "2026-04-10",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Leads Leica Biosystems China R&D strategy and operations, manages multidisciplinary mechanical, electronics, software, systems and verification teams, owns product-development delivery and regulatory quality, and builds the R&D organization.",
+      "seniority_basis": "Explicit Director title with independent China R&D organization ownership.",
+      "source_name": "Danaher official Workday ATS; Danaher Recruitment public campaign archive for exact date",
+      "source_url": "https://danaher.wd1.myworkdayjobs.com/en-US/DanaherJobs/job/Director--LBS-CH-R-D-SHA_R1303140",
+      "date_verification_url": "https://jobs.niuqizp.com/job-vw855CtN5.html",
+      "requisition_id": "R1303140",
+      "date_basis": "The exact 2026-04-10 public Danaher Recruitment campaign lists this title and requisition; official ATS verifies title, location and duties.",
+      "discovery_queries": [
+        "site:jobs.danaher.com/global/en/job/Shanghai Director Danaher 2026",
+        "\"R1303140\" \"Director, LBS CH R&D SHA\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Danaher（丹纳赫中国）",
+      "company_type": "foreign",
+      "exact_title": "Science and Technology Innovation Director, Danaher China",
+      "published_at": "2026-05-15",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Develops Danaher China science and technology strategy, identifies innovation opportunities in major disease and bioprocess areas, evaluates external partners, leads cross-functional innovation programs and runs the China Innovation Community.",
+      "seniority_basis": "Explicit Director title.",
+      "source_name": "Danaher official Workday ATS; Danaher Recruitment public campaign archive for exact date",
+      "source_url": "https://danaher.wd1.myworkdayjobs.com/fr-FR/DanaherJobs/job/Shanghai-China/Science-and-Technology-Innovation-Director--Danaher-China_R1295430",
+      "date_verification_url": "https://jobs.niuqizp.com/job-vws55Ma5a.html",
+      "requisition_id": "R1295430",
+      "date_basis": "The exact 2026-05-15 public Danaher Recruitment campaign lists this title and requisition; official ATS verifies title, location and duties.",
+      "discovery_queries": [
+        "site:jobs.danaher.com/global/en/job/China Director 2026 Shanghai Beijing Suzhou",
+        "\"R1295430\" \"Science and Technology Innovation Director\""
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Danaher（丹纳赫中国）",
+      "company_type": "foreign",
+      "exact_title": "Senior Director, Growth & Innovation (DBSL)",
+      "published_at": "2026-05-15",
+      "location": "Shanghai, China",
+      "responsibilities_summary": "Owns deployment of the Danaher Business System across the China Diagnostics Platform, drives quality, delivery, cost, innovation and growth targets, develops the DBS roadmap, leads training and kaizen governance and coaches site leadership.",
+      "seniority_basis": "Explicit Senior Director title.",
+      "source_name": "Danaher official Workday ATS; Danaher Recruitment public campaign archive for exact date",
+      "source_url": "https://danaher.wd1.myworkdayjobs.com/en-US/DanaherJobs/job/Senior-Director--Growth---Innovation---DBSL-_R1310428-1",
+      "date_verification_url": "https://jobs.niuqizp.com/job-vws55Ma5a.html",
+      "requisition_id": "R1310428",
+      "date_basis": "The exact 2026-05-15 public Danaher Recruitment campaign lists this title and requisition; official ATS verifies title, location and duties.",
+      "discovery_queries": [
+        "site:jobs.danaher.com/global/en/job/China Director 2026 Shanghai Beijing Suzhou",
+        "\"R1310428\" \"Senior Director, Growth & Innovation\" Danaher China"
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "GSK（葛兰素史克中国）",
+      "company_type": "foreign",
+      "exact_title": "VP & Country Medical Director China",
+      "published_at": "2026-06-29",
+      "location": "Shanghai Qiantan Plaza, Shanghai, China",
+      "responsibilities_summary": "Leads the China Medical function across Medical Affairs, Medical Information, Pharmacovigilance and medical governance; owns medical strategy, evidence plans, patient safety, budgets and resource planning, and represents Medical on the country leadership team.",
+      "seniority_basis": "Explicit Vice President and Country Medical Director title with full China Medical-function ownership.",
+      "source_name": "Public job archive with exact date and full duties; GSK official job ID corroboration",
+      "source_url": "https://swooped.co/job-postings/vp-country-medical-director-china-shanghai-qiantan-plaza-gsk-d8d67",
+      "official_job_url": "https://jobs.gsk.com/us/en/job/443890/VP-Country-Medical-Director-China",
+      "requisition_id": "443890",
+      "date_basis": "Public archive records the exact 2026-06-29 posting date, Shanghai location and full duties; official GSK URL independently corroborates the exact title and job ID but is now marked filled.",
+      "discovery_queries": [
+        "site:jobs.gsk.com/en-gb/jobs China Director 2026 Shanghai Beijing job",
+        "\"VP & Country Medical Director China\" \"Posted Date\"",
+        "\"VP Country Medical Director China\" GSK 443890"
+      ],
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    }
+  ],
+  "company_audits": [
+    {
+      "company": "Sanofi（赛诺菲中国）",
+      "company_type": "foreign",
+      "queries": [
+        "site:jobs.sanofi.com China Director Apr May Jun 2026 Shanghai Beijing Chengdu",
+        "site:jobs.sanofi.com/en/job/china Director 2026 China",
+        "site:jobs.sanofi.com/en/job/shanghai Director 2026",
+        "\"Senior Director & Asia Pacific Regional Lead, External R&D\" 2026"
+      ],
+      "sources_checked": [
+        "https://jobs.sanofi.com/en/location/china-jobs/2649/1814991/2/4",
+        "https://jobs.sanofi.cn/zh-hans/%E4%BD%8D%E7%BD%AE/china-country-jobs/2649/1814991/2",
+        "https://jobs.sanofi.com/en/search_jobs/China/2649/2/1814991/35/105/50/2"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "Senior Director & Asia Pacific Regional Lead, External R&D",
+          "location": "Beijing, China",
+          "reason": "Official page confirmed title and location but no exact posting date was publicly verifiable."
+        },
+        {
+          "exact_title": "Marketing Director, Dupixent Dermatology",
+          "published_at": "2026-07-09",
+          "reason": "Outside the label window."
+        }
+      ],
+      "audit_result": "No qualifying exact-date in-window posting found.",
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Merck KGaA（默克医药健康中国）",
+      "company_type": "foreign",
+      "queries": [
+        "site:careers.merckgroup.com China Director 2026 Shanghai Beijing job",
+        "Merck KGaA China Director job Shanghai 2026 careers",
+        "默克 医药健康 中国 招聘 总监 2026 上海",
+        "site:linkedin.com/jobs/view Merck KGaA China Director Shanghai 2026"
+      ],
+      "sources_checked": [
+        "https://careers.merckgroup.com/global/en/home",
+        "https://cn.linkedin.com/company/merck-group/jobs",
+        "https://cn.linkedin.com/jobs/view/head-of-regulatory-management-china-at-merck-life-science-4416932341"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "Head of Regulatory Management China",
+          "location": "Shanghai, China",
+          "reason": "Duties showed functional ownership, but only a relative LinkedIn age was available; no exact in-window date was verified."
+        },
+        {
+          "exact_title": "OLED中国业务负责人",
+          "location": "Shanghai, China",
+          "reason": "Only a relative public date was available, and the role belongs to Merck Electronics rather than the manifest's Healthcare China scope."
+        }
+      ],
+      "audit_result": "No qualifying exact-date in-window posting found.",
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Pfizer（辉瑞中国）",
+      "company_type": "foreign",
+      "queries": [
+        "site:pfizer.com/about/careers China Director job 2026 Shanghai Beijing",
+        "site:pfizer.com/about/careers/job China Shanghai Director Posted 2026",
+        "site:pfizer.com/about/careers/job China Beijing Director Posted 2026",
+        "site:linkedin.com/jobs/view Pfizer China Director Shanghai Beijing 2026"
+      ],
+      "sources_checked": [
+        "https://www.pfizer.com/about/careers/search-results?langcode=zh",
+        "https://pfizer.wd1.myworkdayjobs.com/en-US/PfizerCareers/job/China---Shanghai---Shanghai/Pfizer-Strategy---Innovation-Director-SH_4953034?q=senior+director"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "Pfizer-Strategy & Innovation Director-SH",
+          "location": "Shanghai, China",
+          "reason": "Official ATS verified title, location and duties but displayed only a relative posting age; no exact date was independently verified."
+        },
+        {
+          "exact_title": "Associate Director, Clinician",
+          "location": "Beijing, China",
+          "reason": "Associate Director is expressly excluded."
+        }
+      ],
+      "audit_result": "No qualifying exact-date in-window posting found.",
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Medtronic（美敦力中国）",
+      "company_type": "foreign",
+      "queries": [
+        "site:jobs.medtronic.com/jobs China Director 2026 Shanghai",
+        "site:jobs.medtronic.com/jobs China Head Shanghai 2026 Medtronic",
+        "site:linkedin.com/jobs/view Medtronic China Director Shanghai 2026",
+        "\"General Manager, MiniMed Greater China\" 2026"
+      ],
+      "sources_checked": [
+        "https://medtronic.wd1.myworkdayjobs.com/medtroniccareers/job/shanghai-shanghai-china/general-manager--minimed-greater-china_r65078",
+        "https://cn.linkedin.com/jobs/view/general-manager-minimed-greater-china-at-medtronic-4414566181"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "General Manager, MiniMed Greater China",
+          "location": "Shanghai, China",
+          "reason": "Official ATS and LinkedIn confirmed CxO-equivalent business ownership, but both exposed only relative posting ages and the current ATS age indicates a July repost; no exact Q2 date was verified."
+        },
+        {
+          "exact_title": "Surgical_Associate Market Access Director",
+          "location": "Shanghai, China",
+          "reason": "Associate Director level and historical posting; excluded."
+        }
+      ],
+      "audit_result": "No qualifying exact-date in-window posting found.",
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novo Nordisk（诺和诺德中国）",
+      "company_type": "foreign",
+      "queries": [
+        "site:careers.novonordisk.com China Director 2026 Beijing Shanghai Tianjin",
+        "site:careers.novonordisk.com/job/Shanghai Director Novo Nordisk 2026",
+        "site:careers.novonordisk.com/job/Beijing Head Novo Nordisk 2026",
+        "site:linkedin.com/jobs/view Novo Nordisk China Director Shanghai Beijing 2026"
+      ],
+      "sources_checked": [
+        "https://careers.novonordisk.com/",
+        "https://www.linkedin.com/jobs/novo-nordisk-jobs-china",
+        "https://www.linkedin.com/jobs/view/sourcing-director-china-external-innovation-at-novo-nordisk-4411185740"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "Sourcing Director, China External Innovation",
+          "location": "Shanghai, China",
+          "reason": "Title and duties qualified, but only a relative LinkedIn age was available and no exact in-window date was verified."
+        },
+        {
+          "exact_title": "(Asst.) Director, Biomolecular Technologies",
+          "location": "Beijing, China",
+          "reason": "Mixed Assistant Director/Director title does not guarantee the strict Director threshold, and no exact public date was verified."
+        }
+      ],
+      "audit_result": "No qualifying exact-date in-window posting found.",
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Novartis（诺华中国）",
+      "company_type": "foreign",
+      "queries": [
+        "site:novartis.com/careers/career-search China Director 2026 Shanghai Beijing",
+        "site:novartis.com/careers/career-search China Head 2026 Shanghai Beijing",
+        "site:novartis.com/careers/career-search/tag/LOC_CN order Date Posted",
+        "site:novartis.com/careers/career-search/job/details China Jun 22 2026 Director Head"
+      ],
+      "sources_checked": [
+        "https://www.novartis.com/careers/career-search/tag/LOC_CN?order=Date+Posted&page=0&sort=asc",
+        "https://www.novartis.com/careers/career-search/tag/DIV_SZ",
+        "https://www.novartis.com/careers/career-search/tag/LOC_CN?order=Division&page=0&sort=asc"
+      ],
+      "qualifying_jobs": 11,
+      "notable_rejections": [
+        {
+          "exact_title": "Associate Director, CMC Competitive Intelligence Management",
+          "published_at": "2026-04-08",
+          "reason": "Associate Director is expressly excluded."
+        },
+        {
+          "exact_title": "AD/D, Early Development Physician/CVM",
+          "published_at": "2026-06-22",
+          "reason": "Mixed Associate Director/Director title does not guarantee the strict Director threshold."
+        },
+        {
+          "exact_title": "Medical Hema Head",
+          "published_at": "2026-06-22",
+          "reason": "Public duties did not clearly establish independent functional ownership or people leadership."
+        },
+        {
+          "exact_title": "Medical TA Head-NS",
+          "published_at": "2026-06-22",
+          "reason": "Public duties did not clearly establish independent functional ownership or people leadership."
+        }
+      ],
+      "audit_result": "Eleven official exact-date Director+/independent functional-Head postings accepted.",
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "GSK（葛兰素史克中国）",
+      "company_type": "foreign",
+      "queries": [
+        "site:jobs.gsk.com China Director 2026 Shanghai Beijing",
+        "site:jobs.gsk.com China Head 2026 Shanghai Beijing",
+        "\"VP & Country Medical Director China\" \"Posted Date\"",
+        "\"VP Country Medical Director China\" GSK 443890"
+      ],
+      "sources_checked": [
+        "https://jobs.gsk.com/us/en/job/443890/VP-Country-Medical-Director-China",
+        "https://swooped.co/job-postings/vp-country-medical-director-china-shanghai-qiantan-plaza-gsk-d8d67"
+      ],
+      "qualifying_jobs": 1,
+      "audit_result": "One exact-date VP posting accepted through a full public archive and official GSK job-ID corroboration.",
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    },
+    {
+      "company": "Danaher（丹纳赫中国）",
+      "company_type": "foreign",
+      "queries": [
+        "site:jobs.danaher.com/global/en/job/China Director 2026 Shanghai Beijing Suzhou",
+        "site:jobs.danaher.com/global/en/job/Shanghai Director Danaher 2026",
+        "site:linkedin.com/jobs/view Danaher China Director Shanghai Beijing 2026",
+        "丹纳赫招聘 2026 总监 上海 北京 4月 5月 6月"
+      ],
+      "sources_checked": [
+        "https://danaher.wd1.myworkdayjobs.com/en-US/DanaherJobs",
+        "https://jobs.niuqizp.com/job-vw855CtN5.html",
+        "https://jobs.niuqizp.com/job-vws55Ma5a.html",
+        "https://jobs.niuqizp.com/job-vmy55nCtZ.html"
+      ],
+      "qualifying_jobs": 5,
+      "notable_rejections": [
+        {
+          "exact_title": "National Sales Director, Clinical Flow",
+          "published_at": "2026-04-10",
+          "reason": "Exact campaign date and title were verified, but a sufficiently detailed official duties page was not found."
+        },
+        {
+          "exact_title": "Director, Strategy, Market Development & Microbiology BU",
+          "published_at": "2026-05-15",
+          "reason": "Exact campaign date and title were verified, but a sufficiently detailed official duties page was not found."
+        },
+        {
+          "exact_title": "Director, Plant Operations China",
+          "location": "Beijing, China",
+          "reason": "Only relative public posting ages were found; no exact Q2 date was verified."
+        }
+      ],
+      "audit_result": "Five Director+/Senior Director postings accepted using exact Danaher Recruitment campaign dates cross-checked against official ATS detail pages.",
+      "searched_at": "2026-07-28T08:10:02.1670104+08:00"
+    }
+  ],
+  "summary": {
+    "companies_audited": 8,
+    "accepted_jobs": 17,
+    "companies_with_accepted_jobs": 3,
+    "accepted_by_company_type": {
+      "foreign": 17
+    },
+    "accepted_by_company": {
+      "Novartis（诺华中国）": 11,
+      "Danaher（丹纳赫中国）": 5,
+      "GSK（葛兰素史克中国）": 1
+    },
+    "strict_empty_company_results": 5
+  }
+}

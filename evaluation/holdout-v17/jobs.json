@@ -1,0 +1,39 @@
+{
+  "search_protocol_version": "uniform-director-plus-v1",
+  "jobs": [
+    {
+      "company": "北方华创",
+      "title": "仓储总监(J16075)",
+      "exact_title": "仓储总监(J16075)",
+      "description": "北方华创公开职位。职位标题明确为仓储总监，属于供应链/仓储职能。智联职位页内嵌结构化数据给出发布时间2026-07-28 01:42:31。",
+      "responsibilities_summary": "负责仓储职能；公开职位标题直接标明总监层级。",
+      "published_at": "2026-07-28",
+      "observed_at": "2026-07-29",
+      "source_url": "https://www.zhaopin.com/jobdetail/CC135196350J40920116812.htm",
+      "source_name": "智联招聘（北方华创认证公司职位页）"
+    },
+    {
+      "company": "佛吉亚（中国）",
+      "title": "财务总监",
+      "exact_title": "财务总监",
+      "description": "佛吉亚智永科技（重庆）有限公司公开职位，职位标题为财务总监。智联职位页内嵌结构化数据给出发布时间2026-07-22 09:26:03。该实体为佛吉亚相关合资经营实体；此标签用于公司层真实高阶招聘审计，不预设其与预测职能匹配。",
+      "responsibilities_summary": "负责财务职能并承担总监层级责任。",
+      "published_at": "2026-07-22",
+      "observed_at": "2026-07-29",
+      "source_url": "https://www.zhaopin.com/jobdetail/CCL1502393540J40862298309.htm",
+      "source_name": "智联招聘（佛吉亚智永科技认证职位页）"
+    },
+    {
+      "company": "罗氏制药（中国）",
+      "title": "Head of Manufacturing",
+      "exact_title": "Head of Manufacturing",
+      "description": "Roche Shanghai site leadership role. Accountable for safe, cost-effective and efficient manufacturing operations; leads, coaches and develops the manufacturing team, owns the production budget, GMP/SHE compliance, production strategy and delivery. Roche requisition identifier ROCHGLOBAL202605111730 and the official URL freeze the posting to May 2026; LinkedIn independently showed the same role in Shanghai within the validation window.",
+      "responsibilities_summary": "Owns Shanghai manufacturing operations, people leadership, production budget, compliance and delivery.",
+      "published_at": "2026-05-01",
+      "published_at_precision": "month",
+      "observed_at": "2026-07-29",
+      "source_url": "https://careers.roche.com/global/en/job/ROCHGLOBAL202605111730EXTERNALENGLOBAL/Head-of-Manufacturing",
+      "source_name": "Roche Careers official requisition; LinkedIn mirror 4359975761 used for full responsibilities"
+    }
+  ]
+}

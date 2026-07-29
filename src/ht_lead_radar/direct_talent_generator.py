@@ -254,7 +254,7 @@ def generate_direct_talent_bundle(
         try:
             ensure_deadline()
             raw = active_runner.run(
-                build_single_company_demand_prompt(packet),
+                build_single_company_demand_prompt(packet, max_roles=5),
                 system_prompt=COMPANY_DEMAND_SYSTEM_PROMPT,
                 session_id=_session_id(
                     source_run_id,

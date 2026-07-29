@@ -1,0 +1,33 @@
+{
+  "dataset_version": "2026-07-28-holdout-v6-labels",
+  "label_window": ["2026-01-01", "2026-04-01"],
+  "label_search_completed_at": "2026-07-28T05:53:36+08:00",
+  "uniform_search_completed_for_all_candidates": true,
+  "jobs": [
+    {
+      "company": "阿特拉斯·科普柯（中国）",
+      "title": "Head of Automation Business",
+      "description": "Independent automation business functional head role in Shanghai, China, under Atlas Copco (Shanghai) Trading Co Ltd; official functional area is Management.",
+      "published_at": "2026-02-09",
+      "source_url": "https://www.atlascopcogroup.com/en/careers/jobs/job-overview/job-detail/head-of-automation-business/163722",
+      "source_name": "Atlas Copco official careers",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "施耐德电气（中国）",
+      "title": "IA Strategy Director",
+      "description": "Defines and executes the overall plan for IA China Hub and Operations, drives business transformation, M&A and strategic partnerships, owns five-year segment strategies and manages the strategy team.",
+      "published_at": "2026-01-30",
+      "source_url": "https://cn.linkedin.com/jobs/view/ia-strategy-director-at-%E6%96%BD%E8%80%90%E5%BE%B7%E7%94%B5%E6%B0%94-4346011661",
+      "source_name": "LinkedIn job archive cross-checked with Expertini date archive",
+      "observed_at": "2026-07-28"
+    }
+  ],
+  "no_observed_director_plus_job": [
+    "Hitachi Energy（中国）",
+    "ZEISS（中国）",
+    "恩福中国",
+    "Scania（中国）",
+    "舍弗勒（中国）"
+  ]
+}

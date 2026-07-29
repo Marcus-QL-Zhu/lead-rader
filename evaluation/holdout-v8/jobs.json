@@ -1,0 +1,214 @@
+{
+  "holdout_version": "v8",
+  "label_window": {
+    "start_inclusive": "2026-01-01",
+    "end_exclusive": "2026-04-01",
+    "timezone": "Asia/Shanghai"
+  },
+  "searched_at": "2026-07-28T06:56:46.6447928+08:00",
+  "eligibility_rule": {
+    "geography": "Publicly posted role located in mainland China",
+    "seniority": "Director, Senior Director, Vice President, CxO, or an explicit functional Head with ownership of a standalone function",
+    "excluded_titles": [
+      "Manager",
+      "Expert",
+      "Engineer",
+      "ordinary Lead",
+      "Head titles without clear ownership of an independent function"
+    ],
+    "date_requirement": "An exact public posting date must be independently verifiable and fall in [2026-01-01, 2026-04-01). Relative ages alone are insufficient.",
+    "fabrication_policy": "No inferred dates, reconstructed dates, lowered seniority thresholds, or synthetic postings."
+  },
+  "jobs": [],
+  "company_audits": [
+    {
+      "company": "Mitsubishi Electric Intelligent Manufacturing Technology (China) Group Co., Ltd.",
+      "employer_brand": "Mitsubishi Electric",
+      "company_type": "Foreign multinational, China operating group",
+      "queries": [
+        "Mitsubishi Electric China Director Head job Shanghai 2026 January February March",
+        "site:mitsubishielectric.com.cn 招聘 总监 2026 三菱电机 中国"
+      ],
+      "sources_checked": [
+        "https://www.mitsubishielectric.com.cn/"
+      ],
+      "qualifying_jobs": 0,
+      "audit_result": "No public mainland-China Director+/VP/CxO or independently owned functional-Head posting with an exact in-window publication date was found.",
+      "searched_at": "2026-07-28T06:56:46.6447928+08:00"
+    },
+    {
+      "company": "Garrett Motion China",
+      "employer_brand": "Garrett Motion",
+      "company_type": "Foreign multinational, China operations",
+      "queries": [
+        "Garrett Motion China Director Head job Shanghai Wuhan 2026 January February March",
+        "site:careers.garrettmotion.com China Director 2026 job"
+      ],
+      "sources_checked": [
+        "https://careers.garrettmotion.com/"
+      ],
+      "qualifying_jobs": 0,
+      "audit_result": "No qualifying public opening was found. Corporate leadership or historical organization references were not treated as job postings.",
+      "searched_at": "2026-07-28T06:56:46.6447928+08:00"
+    },
+    {
+      "company": "Ion Beam Applications S.A. China",
+      "employer_brand": "IBA",
+      "company_type": "Foreign multinational, China operations",
+      "queries": [
+        "Ion Beam Applications IBA China Director Head job Beijing 2026 January February March",
+        "site:careers.iba-worldwide.com Beijing Director Head 2026"
+      ],
+      "sources_checked": [
+        "https://careers.iba-worldwide.com/"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "Irradiation Market Business Development Manager",
+          "location": "Beijing, China",
+          "requisition": "3313",
+          "reason": "Manager-level role; expressly excluded by the seniority rule."
+        }
+      ],
+      "audit_result": "No qualifying public opening was found.",
+      "searched_at": "2026-07-28T06:56:46.6447928+08:00"
+    },
+    {
+      "company": "WIKA China",
+      "employer_brand": "WIKA",
+      "company_type": "Foreign multinational, China operations",
+      "queries": [
+        "WIKA China Director Head job Shanghai 2026 January February March",
+        "site:wika.com career China Director Head 2026 Shanghai Suzhou"
+      ],
+      "sources_checked": [
+        "https://www.wika.com/en-en/career.WIKA"
+      ],
+      "qualifying_jobs": 0,
+      "audit_result": "Company and factory pages surfaced, but no qualifying public opening with an exact in-window publication date was found.",
+      "searched_at": "2026-07-28T06:56:46.6447928+08:00"
+    },
+    {
+      "company": "bioMérieux China",
+      "employer_brand": "bioMérieux",
+      "company_type": "Foreign multinational, China operations",
+      "queries": [
+        "bioMérieux China Director Head job Shanghai 2026 January February March",
+        "site:careers.biomerieux.com China Shanghai Director 2026 bioMérieux",
+        "site:careers.biomerieux.com \"Senior Director, Commercial Operations Excellence\"",
+        "\"Senior Director, Commercial Operations Excellence\" bioMérieux Shanghai",
+        "\"Chief Technology Officer, Greater China\" bioMérieux Shanghai Suzhou",
+        "site:linkedin.com/jobs/view \"Chief Technology Officer, Greater China\"",
+        "site:hiring.cafe \"Chief Technology Officer, Greater China\""
+      ],
+      "sources_checked": [
+        "https://careers.biomerieux.com/search/jobs/in/shanghai-sherbrooke",
+        "https://cn.linkedin.com/jobs/view/senior-director-commercial-operations-excellence-at-biom%C3%A9rieux-4368604163",
+        "https://www.linkedin.com/jobs-guest/jobs/api/jobPosting/4368604163",
+        "https://hiring.cafe/viewjob/2ava7rzlfs6ip9ej",
+        "https://bebee.com/cn/jobs/chief-technology-officer-greater-china-biomerieux-website-shanghai--ss-cn-ytyg08"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "Senior Director, Commercial Operations Excellence",
+          "location": "Shanghai, China",
+          "responsibilities_summary": "Leads the integrated Commercial Excellence and Distribution Channel Management function in China, including distributor governance, CRM360, pricing/process excellence, commercial capability building, and digital commerce enablement.",
+          "seniority_assessment": "Would satisfy the Director+/independent-function threshold.",
+          "public_date_evidence": "The accessible LinkedIn page displayed only “4 months ago”; HiringCafe displayed only “Posted 3w ago” in a search snapshot.",
+          "reason": "Excluded because no exact publication date was exposed by the official page or accessible public metadata. The relative ages were not converted into a guessed calendar date."
+        },
+        {
+          "exact_title": "Chief Technology Officer, Greater China",
+          "location": "Shanghai or Suzhou, China",
+          "responsibilities_summary": "Owns China R&D technology strategy and end-to-end R&D execution, leads R&D operations, represents China R&D in global governance, and oversees localization, portfolio, budget, IP, regulatory and clinical alignment.",
+          "seniority_assessment": "Would satisfy the CxO/independent-function threshold.",
+          "public_date_evidence": "Official indexed search pages confirmed the title and location but exposed no exact posting date; later aggregations showed a later repost/expiry cycle outside the label window.",
+          "reason": "Excluded because an exact publication date for an in-window posting could not be independently verified."
+        }
+      ],
+      "audit_result": "Two senior titles were substantively eligible, but neither had a verifiable exact in-window publication date. Strict label count remains zero.",
+      "searched_at": "2026-07-28T06:56:46.6447928+08:00"
+    },
+    {
+      "company": "Döhler Group China",
+      "employer_brand": "DöhlerGroup",
+      "company_type": "Foreign multinational, China operations",
+      "queries": [
+        "Döhler Group China Director Head job Shanghai 2026 January February March",
+        "site:careers.doehler.com/jobs China Shanghai Director Head Döhler",
+        "site:linkedin.com/jobs/view Döhler China Shanghai Director Head 2026"
+      ],
+      "sources_checked": [
+        "https://cn.linkedin.com/jobs/view/head-of-sales-beverage-at-d%C3%B6hlergroup-4316921413"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "Head of Sales - Beverage",
+          "location": "Shanghai, China",
+          "responsibilities_summary": "Leads the beverage sales team, defines channel sales strategy, owns sales planning, resources, budgets, distributor/customer development and revenue/profit delivery.",
+          "seniority_assessment": "Independent sales-function Head.",
+          "public_date_evidence": "Public page displayed only “7 months ago” at the July 2026 audit.",
+          "reason": "The displayed age places the posting before the strict Q1 2026 window, and no exact in-window publication date was found."
+        }
+      ],
+      "audit_result": "No qualifying in-window public opening was found.",
+      "searched_at": "2026-07-28T06:56:46.6447928+08:00"
+    },
+    {
+      "company": "GVS Group China",
+      "employer_brand": "GVS",
+      "company_type": "Foreign multinational, China operations",
+      "queries": [
+        "GVS Group China Director Head job Suzhou 2026 January February March",
+        "site:gvs.com careers China Suzhou Director Head 2026 GVS Group"
+      ],
+      "sources_checked": [
+        "https://www.gvs.com/en/contact-us/careers/"
+      ],
+      "qualifying_jobs": 0,
+      "audit_result": "The official careers page exposes exact dates for listed openings, but no mainland-China Director+/VP/CxO or independently owned functional-Head posting in the label window was found.",
+      "searched_at": "2026-07-28T06:56:46.6447928+08:00"
+    },
+    {
+      "company": "Bayer China",
+      "employer_brand": "Bayer",
+      "company_type": "Foreign multinational, China operations",
+      "queries": [
+        "Bayer China Director Head job Shanghai Beijing 2026 January February March",
+        "site:career.bayer.com OR site:jobs.bayer.com China Shanghai Director Head 2026 Bayer",
+        "site:jobs.bayer.com/en/job/ Shanghai China Director Bayer 2026",
+        "site:linkedin.com/jobs/view Bayer Shanghai Director China 2026 \"Bayer\"",
+        "Bayer Shanghai Director job \"Date posted\" \"2026\"",
+        "Bayer China Head job \"Date posted\" \"2026\" Shanghai"
+      ],
+      "sources_checked": [
+        "https://jobs.bayer.com/viewalljobs/?locale=zh_CN"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        {
+          "exact_title": "Digital Workplace Lead China",
+          "location": "Beijing or Shanghai, China",
+          "reason": "Historical posting shown as approximately one year old; outside the label window."
+        },
+        {
+          "exact_title": "Head of China & North East Asia (NEA) Business Strategy, Bayer Crop Science",
+          "location": "Beijing, China",
+          "reason": "Historical posting with no evidence of a new exact-date Q1 2026 publication."
+        }
+      ],
+      "audit_result": "No qualifying public opening with an exact in-window publication date was found.",
+      "searched_at": "2026-07-28T06:56:46.6447928+08:00"
+    }
+  ],
+  "summary": {
+    "companies_audited": 8,
+    "accepted_jobs": 0,
+    "companies_with_accepted_jobs": 0,
+    "strict_empty_company_results": 8,
+    "date_unverified_senior_candidates_rejected": 2
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "holdout_version": "holdout-v11",
+  "seal_stage": "predictions_frozen_pre_labels",
+  "sealed_at": "2026-07-28T08:38:37.4959427+08:00",
+  "pre_prediction_seal_verified": true,
+  "snapshot_path": ".acceptance/holdout-v11.snapshot.json",
+  "snapshot_sha256": "7eea0eae5c2566ae436fe1595c2842b7c150baa983a7668e4f52d306cc18c6b9",
+  "label_search_started": false,
+  "label_search_skipped": "Prediction coverage and diversity gates failed before labels."
+}

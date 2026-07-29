@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "iteration": "post-v15-calibration-r1",
+  "created_at": "2026-07-29",
+  "purpose": "Calibrate the historical role-family ranker without changing or evaluating holdout-v15 and the final test partition.",
+  "inputs": {
+    "dataset": {
+      "path": "evaluation/training-v1/dataset.json",
+      "sha256": "06b931dc77de64cb914c94835d19bec0a9c8c5c4a26319741c851554abd8ba8f"
+    },
+    "allowed_splits": [
+      "train",
+      "calibration"
+    ],
+    "forbidden_split": "test"
+  },
+  "frozen_references": [
+    {
+      "path": "evaluation/training-v1/model-report.json",
+      "sha256": "6c9fff684daf8a6d2b69dbb87d291b7be1894716557bf3a0dd279dfa9fbc9040"
+    },
+    {
+      "path": "evaluation/holdout-v15/manifest.json",
+      "sha256": "00c20f5769c0271c1a690e599f667391018825eb39474fd1b39d7cc5020ff6a1"
+    },
+    {
+      "path": ".acceptance/holdout-v15.report.json",
+      "sha256": "4e09c958819b4a00f9733f271150ea2df4d4b8a59bc17f919c61a29b3b95b3a0"
+    }
+  ],
+  "candidate_grid": {
+    "feature_policies": [
+      "full",
+      "portable"
+    ],
+    "l2_values": [
+      0.03,
+      0.1,
+      0.3,
+      1.0,
+      3.0
+    ],
+    "learned_weights": [
+      0.25,
+      0.5,
+      0.75,
+      1.0
+    ],
+    "learning_rate": 0.05,
+    "iterations": 800,
+    "top_k": 5
+  },
+  "acceptance_gate": {
+    "primary_metrics": [
+      "top1_accuracy",
+      "precision_at_20",
+      "macro_f1_top1"
+    ],
+    "minimum_strictly_improved_primary_metrics": 2,
+    "maximum_company_type_top1_regression": 0.125,
+    "propensity_model_must_remain_disabled_without_replayable_negatives": true
+  },
+  "selection_order": [
+    "improved_primary_metric_count",
+    "top1_accuracy",
+    "macro_f1_top1",
+    "precision_at_20",
+    "mean_reciprocal_rank",
+    "negative_brier_score"
+  ],
+  "freeze_rules": {
+    "holdout_v15_must_not_be_modified": true,
+    "holdout_v15_labels_must_not_be_used_for_selection": true,
+    "test_labels_must_not_be_read_or_evaluated": true,
+    "no_prompt_or_role_ontology_change": true,
+    "no_provisional_training_v3_labels": true
+  }
+}

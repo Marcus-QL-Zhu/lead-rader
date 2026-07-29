@@ -1,0 +1,403 @@
+{
+  "search_protocol_version": "uniform-director-plus-v1",
+  "label_quality_protocol": "v22-bounded-relative-dates",
+  "verification_status": "not_replayable",
+  "audits": [
+    {
+      "company": "傲意科技",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "傲意科技 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "傲意科技 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "因时机器人",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "因时机器人 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "因时机器人 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "众擎机器人",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "众擎机器人 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "发现“机器人创意设计负责人(A06436)”，但公开结果只有标题、雇主和薪资，未提供团队管理或组织级责任原文；按条件式负责人规则不计入Director+标签。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "众擎机器人 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "发现“机器人创意设计负责人(A06436)”，但公开结果只有标题、雇主和薪资，未提供团队管理或组织级责任原文；按条件式负责人规则不计入Director+标签。"
+        }
+      ]
+    },
+    {
+      "company": "星环聚能",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "星环聚能 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "星环聚能 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "银河通用机器人",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "银河通用机器人 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "银河通用机器人 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "星尘智能",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "星尘智能 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "星尘智能 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "华虹半导体",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "华虹半导体 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "华虹半导体 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "寒武纪",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "寒武纪 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "寒武纪 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "赛力斯",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "赛力斯 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "赛力斯 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "国轩高科",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "matched",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "国轩高科 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "发现窗口内Director+职位；雇主、岗位范围和相对发布日期均有可复核公开证据，且日期区间整体落在验证窗口内。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "国轩高科 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "发现窗口内Director+职位；雇主、岗位范围和相对发布日期均有可复核公开证据，且日期区间整体落在验证窗口内。"
+        }
+      ]
+    },
+    {
+      "company": "吉利汽车",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "吉利汽车 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "吉利汽车 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "京东方",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "京东方 official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "京东方 (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "Boehringer Ingelheim（勃林格殷格翰中国）",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "Boehringer Ingelheim（勃林格殷格翰中国） official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "Boehringer Ingelheim（勃林格殷格翰中国） (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "Eli Lilly（礼来中国）",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "Eli Lilly（礼来中国） official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "Eli Lilly（礼来中国） (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "AbbVie（艾伯维）",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "AbbVie（艾伯维） official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "AbbVie（艾伯维） (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "Bristol Myers Squibb（百时美施贵宝中国）",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "Bristol Myers Squibb（百时美施贵宝中国） official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "Bristol Myers Squibb（百时美施贵宝中国） (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    },
+    {
+      "company": "Boston Scientific（波士顿科学）",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "matched",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "Boston Scientific（波士顿科学） official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "发现窗口内Director+职位；雇主、岗位范围和相对发布日期均有可复核公开证据，且日期区间整体落在验证窗口内。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "Boston Scientific（波士顿科学） (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "发现窗口内Director+职位；雇主、岗位范围和相对发布日期均有可复核公开证据，且日期区间整体落在验证窗口内。"
+        }
+      ]
+    },
+    {
+      "company": "Daiichi Sankyo（第一三共）",
+      "searched_at": "2026-07-29T08:30:00+08:00",
+      "window_start": "2026-05-01",
+      "window_end_exclusive": "2026-08-01",
+      "result": "no_eligible_job",
+      "label_quality_protocol": "v22-bounded-relative-dates",
+      "searches": [
+        {
+          "channel": "official_careers",
+          "query": "Daiichi Sankyo（第一三共） official careers Director Head VP 总监 负责人 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        },
+        {
+          "channel": "public_web_search",
+          "query": "Daiichi Sankyo（第一三共） (总监 OR Director OR Head OR VP OR 负责人) 招聘 2026-05 2026-06 2026-07",
+          "executed_at": "2026-07-29T08:30:00+08:00",
+          "outcome_summary": "未发现同时满足雇主归属、Director+范围证据和窗口内可复核日期的职位；经理、专家、工程师均未计入。"
+        }
+      ]
+    }
+  ]
+}

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+import re
 
 
 TARGET_TERMS = (
     '董事长', '首席执行官', '首席技术官', '首席运营官', '首席人力资源官',
     '总裁', '副总裁', '总经理', '事业部负责人', '事业部总经理', '基地负责人',
-    '工厂负责人', '总监', 'director', 'head of', 'vice president', 'vp', 'cxo',
+    '工厂负责人', '中心主任', '总监', 'director', 'vice president', 'vp', 'cxo',
 )
 
 CONDITIONAL_TERMS = ('首席科学家', 'chief scientist', '总师', 'chief engineer', '负责人')
@@ -86,13 +87,44 @@ def profile_for(direction: str) -> DirectionProfile:
 
 
 def classify_seniority(title: str, description: str = '') -> tuple[str, bool, list[str]]:
-    text = f'{title} {description}'.lower()
-    matched_scope = [term for term in SCOPE_TERMS if term in text]
-    if any(term in text for term in TARGET_TERMS):
+    title_text = title.casefold().strip()
+    description_text = description.casefold()
+    full_text = f'{title_text} {description_text}'
+    matched_scope = [term for term in SCOPE_TERMS if term in full_text]
+    if re.search(
+        r'\b(?:associate|assistant|deputy)\s+'
+        r'(?:director|head|vice\s+president|vp)\b|'
+        r'\b(?:director|head|vice\s+president|vp)\s+'
+        r'(?:assistant|deputy)\b',
+        title_text,
+    ):
+        return 'below_director_or_ic', False, matched_scope
+    if '副主任' in title_text or '主任助理' in title_text:
+        return 'below_director_or_ic', False, matched_scope
+    if re.search(r'副总监|总监助理|总监储备', title_text):
+        return 'below_director_or_ic', False, matched_scope
+    if re.search(r'(?:经理|专家).*(?:总监|负责人)|(?:总监|负责人).*(?:经理|专家)', title_text):
+        return 'below_director_or_ic', False, matched_scope
+    chinese_targets = tuple(
+        term for term in TARGET_TERMS if not re.search(r'[a-z]', term)
+    )
+    ascii_target = re.search(
+        r'\b(?:director|vice\s+president|svp|evp|vp|cxo)\b',
+        title_text,
+    )
+    if any(term in title_text for term in chinese_targets) or ascii_target:
         return 'director_plus', True, matched_scope
-    if any(term in text for term in CONDITIONAL_TERMS) and len(matched_scope) >= 2:
+    if re.search(r'(?<![a-z])head(?:\s+of|[\s,:/-]|$)', title_text):
+        ownership_terms = (
+            '负责', '全面负责', '团队管理', '预算', 'p&l', 'owns ',
+            'own ', 'leads ', 'lead ', 'accountable', 'reports to',
+        )
+        if any(term in description_text for term in ownership_terms):
+            return 'director_plus', True, matched_scope
+        return 'unknown', False, matched_scope
+    if any(term in title_text for term in CONDITIONAL_TERMS) and len(matched_scope) >= 2:
         return 'director_plus', True, matched_scope
-    if any(term in text for term in EXCLUDED_TERMS):
+    if any(term in title_text for term in EXCLUDED_TERMS):
         return 'below_director_or_ic', False, matched_scope
     return 'unknown', False, matched_scope
 

@@ -1,0 +1,13 @@
+{
+  "sealed_at":"2026-07-28T20:57:32.2908062+08:00",
+  "passed":false,
+  "reason":"Two role-family matches; pre-registered minimum was three and foreign matched-role coverage was absent.",
+  "files":{
+    "evaluation/holdout-v14/jobs.json":"358690aead683dbed49a05dbd0f88ab7771525628282303474e714a172ab0415",
+    "evaluation/holdout-v14/label-audit.md":"68d5defa77786b467f608f1fa5582c49c81f2289bcdb1ce23c6ed914f8485761",
+    ".acceptance/holdout-v14.snapshot.json":"cb4e2414dc1287a1794bc36d134554a9b6219fa6a6a44d6406e8969a2af82894",
+    ".acceptance/holdout-v14.report.json":"178b8f59d989516f9b873f249e55bd559dff28e06a5ab6b2d7bf1c3f57aa4e9d",
+    ".acceptance/holdout-v14-aggregate.json":"4cde79ee65929b1ddbfd890e5cf36c7ad10975cb662112713eef8322a01bd5e5",
+    "evaluation/holdout-v14/pre-label-seal.json":"29c416fbd702665f60c8429a432ff833bb157c4a025ed33acec130330c39653b"
+  }
+}

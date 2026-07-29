@@ -1,0 +1,22 @@
+{
+  "sealed_at": "2026-07-29T01:12:00+08:00",
+  "label_search_started": false,
+  "status": "INVALID_PRELABEL",
+  "snapshot": {
+    "path": ".acceptance/holdout-v16.snapshot.json",
+    "sha256": "a2983499caa203e44f91a149716b09db98fa9f55be8b8c03a7e85fc9bcf76d30"
+  },
+  "prediction_summary": {
+    "candidate_count": 15,
+    "analyzed_company_count": 15,
+    "failed_company_count": 0,
+    "raw_hypothesis_count": 34,
+    "distinct_raw_title_count": 34
+  },
+  "anonymization_check": {
+    "real_company_or_source_domain_hits_in_user_prompts": 0,
+    "all_model_packet_source_urls_blank": true
+  },
+  "invalidation_reason": "The frozen manifest required 18 companies, but three evidence rows used source_kind values outside the runtime whitelist and were silently excluded. The actual prediction universe was 15, so future-label search is prohibited.",
+  "declaration": "V16 was invalidated and sealed before any validation-window job search."
+}

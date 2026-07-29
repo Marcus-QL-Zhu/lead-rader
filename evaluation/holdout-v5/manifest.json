@@ -1,0 +1,36 @@
+{
+  "holdout_version": "holdout-v5",
+  "frozen_at": "2026-07-28",
+  "cutoffs": ["2026-04-01"],
+  "horizon_months": 3,
+  "prompt_version": "historical-demand-v5-required-functional-coverage",
+  "prediction_max_roles_per_company": 5,
+  "temperature": 0.0,
+  "workforce_precursors_enabled": false,
+  "prediction_inputs_exclude_job_ads": true,
+  "josint_inputs_enabled": false,
+  "candidate_selection": {
+    "window_start": "2025-07-01",
+    "window_end": "2026-03-31",
+    "minimum_candidates": 6,
+    "rule": "Six new foreign-company China operations selected by a blinded agent before future-job search. Four have two upstream event types and two satisfy the predeclared single A-grade operational-event rule."
+  },
+  "companies": [
+    "采埃孚（中国）",
+    "麦格纳（中国）",
+    "尼得科（中国）",
+    "赢创（中国）",
+    "丹佛斯（中国）",
+    "珀金埃尔默（中国）"
+  ],
+  "acceptance": {
+    "minimum_matches_per_cutoff": 2,
+    "minimum_distinct_matched_jobs": 2,
+    "minimum_distinct_matched_companies": 2,
+    "minimum_candidate_prediction_coverage": 0.75,
+    "required_matched_company_types": ["foreign"],
+    "snapshot_audit_required": true,
+    "uniform_label_search_required": true
+  },
+  "freeze_rule": "After the pre-prediction seal, do not change evidence, prompt, ontology, matcher, thresholds or candidate universe. Run and freeze predictions before any future-job label search."
+}

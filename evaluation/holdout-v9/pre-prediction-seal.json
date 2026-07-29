@@ -1,0 +1,17 @@
+{
+  "holdout_version": "holdout-v9",
+  "seal_stage": "pre_prediction_pre_labels",
+  "sealed_at": "2026-07-28T07:11:52.2858549+08:00",
+  "label_search_started": false,
+  "files": {
+    "evaluation/holdout-v9/evidence.json": "e36cce26b020d5c5846c0ef40edb83a3408949428df2a0037e8e15f260db1d9b",
+    "evaluation/holdout-v9/manifest.json": "15f16fb2b4c434c86b54b594174307ae7e2b38f827ea15441f677a300b0561cd",
+    "src/ht_lead_radar/company_demand_v2.py": "3c94f301deac4d4865912696b1e148e96a9f56aa3f3ef2e480fbb968e3b88364",
+    "src/ht_lead_radar/backtest.py": "17bc68f62c82c15c09d04f77941ec1f9d0e5220a9619d260b6d9fe27c2b28c98",
+    "src/ht_lead_radar/openclaw_llm.py": "7ba82a72a76c4b5c1c1afe440f9200680640ba188d3f652e8dc09ad9355d0500",
+    "src/ht_lead_radar/signals.py": "97c737e3d6600e78611b336deb70a593b9d69a3ba72c582b8634d8232e478d57",
+    "src/ht_lead_radar/holdout_evaluation.py": "189545191a819362b812110f71b8ee4d78460dab01b380fa724083d46c222ba0",
+    "scripts/run_historical_backtest.py": "39a09dd22f4ac5c4860a42455512891b9de1db516c916dd418723d92634f692c",
+    "scripts/evaluate_holdout_reports.py": "e2f28621870b2d164c266db8288a2e301400615e573e3124d434d785fa16cbbd"
+  }
+}

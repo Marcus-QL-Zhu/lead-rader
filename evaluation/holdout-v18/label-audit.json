@@ -1,0 +1,383 @@
+{
+    "search_protocol_version":  "uniform-director-plus-v1",
+    "audits":  [
+                   {
+                       "company":  "海柔创新 Hai Robotics",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "海柔创新 Hai Robotics 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方公司/招聘入口及公开职位页已检查；窗口内检出的内容以校招、顾问、经理、专家和工程师为主，未发现带可靠发布日期的Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "海柔创新 Hai Robotics (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方公司/招聘入口及公开职位页已检查；窗口内检出的内容以校招、顾问、经理、专家和工程师为主，未发现带可靠发布日期的Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "梅卡曼德机器人 Mech-Mind Robotics",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "梅卡曼德机器人 Mech-Mind Robotics 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官网提供career邮箱并发布业务新闻；官方及公开搜索未发现窗口内带可靠发布日期的Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "梅卡曼德机器人 Mech-Mind Robotics (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官网提供career邮箱并发布业务新闻；官方及公开搜索未发现窗口内带可靠发布日期的Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "嬴彻科技 Inceptio Technology",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "matched",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "嬴彻科技 Inceptio Technology 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官网与认证公司职位页已检查；公开职位量产项目交付高级经理/总监（L2+商用车）在2026-06-21公司职位页快照中存在。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "嬴彻科技 Inceptio Technology (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官网与认证公司职位页已检查；公开职位量产项目交付高级经理/总监（L2+商用车）在2026-06-21公司职位页快照中存在。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "常州飞鱼机器人科技",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "常州飞鱼机器人科技 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "政府和公开网页可核公司经营信息；未发现官方职位系统或窗口内可核验Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "常州飞鱼机器人科技 (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "政府和公开网页可核公司经营信息；未发现官方职位系统或窗口内可核验Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "旋光智能机器人",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "旋光智能机器人 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方与公开搜索未发现窗口内带可靠发布日期的Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "旋光智能机器人 (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方与公开搜索未发现窗口内带可靠发布日期的Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "沃飞长空",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "沃飞长空 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官网可访问并展示业务进展；官方及公开搜索未发现窗口内带可靠发布日期的Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "沃飞长空 (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官网可访问并展示业务进展；官方及公开搜索未发现窗口内带可靠发布日期的Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "文远知行 WeRide",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "文远知行 WeRide 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方中国/全球社招入口已检查；窗口内结果以校园与非目标层级岗位为主，未发现可核验Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "文远知行 WeRide (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方中国/全球社招入口已检查；窗口内结果以校园与非目标层级岗位为主，未发现可核验Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "速腾聚创 RoboSense",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "速腾聚创 RoboSense 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官网加入我们入口和公开职位已检查；EMEA汽车业务拓展总监仅有不稳定相对日期且无法证明落入窗口，按协议不计入。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "速腾聚创 RoboSense (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官网加入我们入口和公开职位已检查；EMEA汽车业务拓展总监仅有不稳定相对日期且无法证明落入窗口，按协议不计入。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "MiniMax Group",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "MiniMax Group 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方社招入口已检查；公开信息显示商业化负责人于3月加入，但未发现4-6月带可靠发布日期的新Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "MiniMax Group (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方社招入口已检查；公开信息显示商业化负责人于3月加入，但未发现4-6月带可靠发布日期的新Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "新松机器人 SIASUN",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "新松机器人 SIASUN 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "集团官网及公开招聘结果已检查；窗口内检出岗位主要为校园/工程师级，未发现可核验Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "新松机器人 SIASUN (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "集团官网及公开招聘结果已检查；窗口内检出岗位主要为校园/工程师级，未发现可核验Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "福日电子（以诺通讯）",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "matched",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "福日电子（以诺通讯） 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "公开的公司2026招聘公告于2026-04-02发布，包含事业部总经理/副总裁（非手机业务）。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "福日电子（以诺通讯） (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "公开的公司2026招聘公告于2026-04-02发布，包含事业部总经理/副总裁（非手机业务）。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "中微公司",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "中微公司 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方公司/人才入口及公开搜索已检查；物料采购及计划总监仅能确认7月当前在线，无法证明在4-6月发布，未计入。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "中微公司 (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方公司/人才入口及公开搜索已检查；物料采购及计划总监仅能确认7月当前在线，无法证明在4-6月发布，未计入。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "罗盖特 Roquette",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "matched",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "罗盖特 Roquette 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方职位R0025755 Head of Customer Marketing China明确标注2026-04-30发布。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "罗盖特 Roquette (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "官方职位R0025755 Head of Customer Marketing China明确标注2026-04-30发布。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "Gattefossé 嘉法狮",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "Gattefossé 嘉法狮 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "中国及集团职业页面已检查；未发现窗口内带可靠发布日期的中国Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "Gattefossé 嘉法狮 (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "中国及集团职业页面已检查；未发现窗口内带可靠发布日期的中国Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "安费诺 Amphenol",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "安费诺 Amphenol 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "集团与中国官方职业页已检查；窗口内可核职位为算法工程师等非目标层级，未发现Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "安费诺 Amphenol (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "集团与中国官方职业页已检查；窗口内可核职位为算法工程师等非目标层级，未发现Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "威猛集团 Wittmann Group",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "威猛集团 Wittmann Group 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "集团官方中国职业页面已检查；公开岗位为销售工程师等非目标层级，未发现窗口内Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "威猛集团 Wittmann Group (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "集团官方中国职业页面已检查；公开岗位为销售工程师等非目标层级，未发现窗口内Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "ABB",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "no_eligible_job",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "ABB 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "ABB中国官方职业入口已检查；未发现窗口内带可靠发布日期的中国Director+职位。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "ABB (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "ABB中国官方职业入口已检查；未发现窗口内带可靠发布日期的中国Director+职位。"
+                                        }
+                                    ]
+                   },
+                   {
+                       "company":  "Takeda（武田中国）",
+                       "searched_at":  "2026-07-29T02:27:10+08:00",
+                       "window_start":  "2026-04-01",
+                       "window_end_exclusive":  "2026-07-01",
+                       "result":  "matched",
+                       "searches":  [
+                                        {
+                                            "channel":  "official_careers",
+                                            "query":  "Takeda（武田中国） 官方 careers 社会招聘 Director 总监 Head VP 中心主任 2026",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "武田官方职位R0176839 Head of Specialty BU明确标注2026-04-10发布，地点上海/北京。"
+                                        },
+                                        {
+                                            "channel":  "public_web_search",
+                                            "query":  "Takeda（武田中国） (总监 OR Director OR Head OR VP OR 中心主任) 招聘 2026-04 2026-05 2026-06",
+                                            "executed_at":  "2026-07-29T02:27:10+08:00",
+                                            "outcome_summary":  "武田官方职位R0176839 Head of Specialty BU明确标注2026-04-10发布，地点上海/北京。"
+                                        }
+                                    ]
+                   }
+               ]
+}

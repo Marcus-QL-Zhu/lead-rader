@@ -22,6 +22,15 @@ class Evidence:
     event_id: str = ''
     statement_ids: tuple[str, ...] = ()
     independent_source_group: str = ''
+    published_at: str = ''
+    observed_at: str = ''
+    content_sha256: str = ''
+    company_type: str = ''
+    source_excerpt: str = ''
+    source_locator: str = ''
+    analyst_note: str = ''
+    source_kind: str = ''
+    is_recruiting_input: bool = False
 
 
 @dataclass(frozen=True)

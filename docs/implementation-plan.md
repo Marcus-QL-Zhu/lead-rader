@@ -123,9 +123,9 @@
 | P5-06 | BLOCKED-EXTERNAL | 飞书状态→OpenClaw webhook 仍需要事件回调、订阅权限和 OpenClaw 接收端配置 |
 | P5-07 | DONE | 后端 checkpoint、Feishu projection state、增量变化/撤选 |
 
-### Phase 6 — 原生业务结果学习
+### Phase 6 — 历史样本与预测校准
 
-P6-01 至 P6-05 全部为 `NOT-PLANNED`：不建设业务结果数据模型、Precision@K 仪表板、自动调权、训练集、Float 转化漏斗。用户根据实际判断直接要求 Agent 修改规则、来源或展示。
+2026-07-28 决策更新：原“不建设训练集和自动调权”的范围决定已被用户明确推翻。现在建设基于公开历史事实的公司—月份训练集、可解释权重校准和 Precision@K 等离线验收；仍不把人工 BD 结果评分或 Float 转化漏斗做成系统原生能力。
 
 ### Phase 7 — 合规、可靠性与运维
 
@@ -341,3 +341,100 @@ Float 失败后跨进程不能 resume，这是有意的数据治理结果：候�
 - [ ] 独立子代理 full code review。
 - [ ] 推送 GitHub 并等待 exact SHA 的 Actions 通过。
 - [ ] 备份生产源代码与数据库，部署 exact SHA，安装唯一的两次 cron 并执行 reset-safe/飞书冒烟测试。
+# 2026-07-28：前置信号扩展与即时历史回测
+
+状态：本地实现和验收完成；按用户要求尚未同步服务器或 GitHub。
+
+- [x] 统一扩展高管变动、并购、合资/分拆、上市、新实体/基地、扩产、项目建设、项目征集、环评许可、采购意向/招标、重大订单、客户验证、融资、海外/渠道扩张、技术里程碑、数据/模型、法规/临床、科研/IP、企业系统、合作和政策/标准等前置信号。
+- [x] 不新增负面信号；终止、撤回、暂停、停产、裁员等文本只做极性防误判，不形成扣分或负面预测。
+- [x] 经理/专家/工程师 workforce cluster 已接入生产信号面，但在本轮 Director+ 验收预测中强制关闭。
+- [x] MiniMax 先做阶段变化和职能依赖展开，再生成具体 Director+ 岗位；A 级工厂/扩产、重大订单、新实体、高管更替和上市事件必须覆盖相应基础职能。
+- [x] MiniMax 请求温度降为 0.0，以提高重复运行稳定性和结构化 JSON 一致性。
+- [x] 历史回放只向 MiniMax 提供 cutoff 之前、具有公开可用时间戳及内容哈希的非招聘证据；职位广告只在预测冻结后用于未来三个月验证。
+- [x] 快照冻结输入包、完整 system/user prompt、原始响应、修复响应、Provider/模型、公司类型和所有哈希；证据和验证职位的内容哈希均校验。
+- [x] 验收不依赖 JOSINT，也不把经理、专家、工程师岗位作为测试信号。
+- [x] 三个时间切片岗位命中分别为 2、3、3；共 74 个不同标题、72 个规范岗位键、16 个岗位族、5 个不同真实后续职位。
+- [x] 初创民企、上市公司、外企三类均有真实岗位命中；`.acceptance/v7-aggregate.json` 全部门槛通过。
+- [x] 本轮只改本地；未同步服务器或 GitHub；完成后不关机，以免打断其他会话长任务。
+## 2026-07-28：冻结提示词后的独立盲测
+
+- [x] 将 v3-v7 明确降级为开发期 pilot：它验证了回放基础设施，但因同一批未来职位参与多轮调参，不能单独证明泛化能力。
+- [x] 在首次调用 MiniMax 前冻结 `holdout-v1` 的两组互不重叠时间窗、四家全新公司和计数门槛。
+- [x] 盲测输入仅含 cutoff 前公开的非招聘证据，不含职位、JOSINT、分析师备注或 workforce cluster。
+- [x] MiniMax-M3 在 A 组生成 9 个、B 组生成 6 个具体 Director+ 假设，共 15 个不同标题和 9 个岗位族。
+- [x] 盲测暴露并修复英文 `Director` 内部字符 `cto` 被误当 CTO 的词边界缺陷；增加通用 `application_solutions` 岗位族并保留模型原始快照不变。
+- [x] 修复后的确定性验证命中 4 个不同后续职位：A 组 3 个、B 组 1 个；上市、初创民企、外企三类均覆盖。
+- [x] `.acceptance/holdout-v1-aggregate.json` 机械计数通过，但独立审计判定科学验收无效：标签打开后修改了 matcher，且候选全为已知正例；保留为失败诊断，不作为最终结论。`validator` 仍已增加响应重解析和 analyses 一致性校验。
+- [ ] 严格 holdout-v2：先由 cutoff 前信号冻结完整候选全集、对照公司和所有哈希，再运行预测，最后才统一搜索未来职位标签。
+- [x] 本轮保持本地、服务器持续运行；不关机，也未同步服务器或 GitHub。
+
+## 2026-07-28：严格基线结论与数据驱动换挡
+
+状态：现有 prompt/规则路线的最终基线已完成；未达到预测准确性目标，不再机械创建 v16/v17。下一阶段改为立即历史回填、信源扩展和权重校准。
+
+### 冻结基线的真实结论
+
+- `holdout-v1`：标签打开后修改 matcher，且候选存在正例选择，科学验收无效。
+- `holdout-v2` 至 `holdout-v13`：用于发现泄漏、层级判断、来源审计、岗位映射和编码等问题；均不得作为最终泛化结论。
+- `holdout-v14`：首个完整审查的严格盲测。12 家公司全部生成，58 个不同岗位、16 个岗位族；未来窗口观察到 4 家 Director+ 职位，只匹配 2 个岗位族，未达到 3 个匹配及三类公司覆盖门槛。
+- `holdout-v15`：18 家全新公司、三类各 6 家；18/18 分析成功，84 个不同岗位、16 个岗位族、0 生成失败，模型输入无真实公司名或来源网址。
+- v15 标签侧在预测快照冻结后，统一完成 18 家公司、36 次搜索；未来三个月只观察到 1 个合格 Director+ 职位（隆基绿能“设计总监”），与冻结的 5 个隆基岗位假设均不同族，因此为 0 个岗位匹配。
+- v15 是内部记录一致、按预注册门槛明确失败的回溯盲法实验，但不是强前瞻有效性证据：预测发生在历史标签窗口结束后，历史招聘页面也没有逐页快照和内容哈希。它证明岗位生成具有多样性，但没有证明预测准确；仅靠继续修改同一输入下的提示词无法解决信息不足和公开职位可观测性问题。
+
+### 新实施方向
+
+- [x] 冻结 v15，不根据已经打开的标签调 matcher 或 prompt。
+- [x] 新建 `docs/data-driven-calibration-plan.md`，明确历史样本、信源增量、标签可观测性、数据划分、轻量权重模型和验收指标。
+- [x] 采用历史回填，不等待生产系统运行三个月：从真实历史 Director+ 职位反向抓取发布前 1—6 个月的信息，并按自然月生成多个公司—cutoff 样本。
+- [x] 确定首轮公司级划分：40—50 家训练/校准公司，15—20 家完全隔离测试公司；同一公司的全部月份只能进入同一分区。
+- [x] 建立历史数据账本 schema、来源快照契约、月度切片器、标签可观测性字段、逐行哈希和数据版本哈希。
+- [x] 建立首批公司级隔离池：36 家训练、9 家校准、18 家测试；三类公司等比例，holdout-v14 排除开发、holdout-v15 全部固定为测试。覆盖不足的样本标为 `unknown`。
+- [ ] 为开发池补齐可重放负例：当前只有 search-only 审计，没有同时带 URL、抓取时间、原始页面和 SHA-256 的确认负例，因此招聘倾向模型保持禁用。
+- [ ] 批量回填公司新闻、公告、审批、招投标、融资、客户、组织和高管变动事件，严格使用当时的 `available_at`。
+- [x] 训练首个加权逻辑回归岗位族排序基线；将招聘倾向和岗位族排序拆成两阶段，低权重对比负例不得冒充确认市场负例。必要时再比较小型梯度提升树，不先微调大模型。
+- [ ] 以 `Precision@20`、`Recall@20`、岗位族 macro-F1、Brier 校准、提前量、公司类型切片和信源消融做冻结验收。
+- [ ] 最终测试集只在特征、权重和阈值全部冻结后打开；失败后不得继续在同一测试集调参并声称仍为独立验收。
+
+详细方案：[data-driven-calibration-plan.md](data-driven-calibration-plan.md)。
+
+### training-v1 当前结果
+
+- 数据集：63 家公司、24,986 条公司—月份—岗位族记录、116 条正标签、1,522 条低权重对比负例、23,348 条 unknown、0 条可重放确认负例。
+- 开发池 45 家中，18 家已有历史 Director+ 职位锚点，27 家已生成一次一公司的历史职位发现任务；已知职位另外展开为前 1—4 个月的前置信号回填任务，共 211 个任务。
+- 校准基线：24 个可评价公司—月份，Top-1 20.8%、Top-5 100%、macro-F1 2.9%、Precision@20 25%；上市与初创民企 Top-1 均为 0，明确判定不可生产使用。
+- 测试分区尚无可映射的严格正标签，指标全部为 null；不宣称通过测试。
+- MetaSo 候选发现器已实现预算账本、幂等检查点和多轮搜索标识。用户批准最多 300 积分后，首轮 27 次搜索记账 162 积分；另有一次失败语法试验和一次成功但全无关的详情搜索，累计记账 174 积分，保存 280 条候选。因实测边际价值接近零，剩余 126 积分未继续消耗。
+- 确定性候选初筛已实现并运行。真实页面核验发现猎聘 `/s/` 链接是动态 SEO 聚合页而非对应公司历史职位，因此已收紧规则；最终为 0 条高优先级、14 条中优先级、266 条低优先级。MetaSo 搜索摘要、结果日期和 SEO 聚合页绝不直接成为标签；只有可归属公司的职位详情页经归档后才能补入训练集。
+- 详细状态见 `evaluation/training-v1/README.md`；当前仍只在本地，未同步服务器或 GitHub。
+
+## 2026-07-29: Post-V15 data-driven calibration round 1
+
+Status: completed locally; rejected by the preregistered promotion gate; not synchronized to the server or GitHub.
+
+- [x] Kept holdout-v15, its labels, the final test partition, prompt, ontology, matcher, and threshold frozen.
+- [x] Added a development-only calibration runner which reads only `train` and `calibration`; raw test rows are skipped before their label or features are materialized.
+- [x] Preregistered 40 candidates across two feature policies, five L2 values, and four learned/rule blend weights.
+- [x] Required strict improvement in at least two of Top-1, Precision@20, and macro-F1, with no company-type Top-1 regression above 12.5 percentage points.
+- [x] Preserved the disabled hiring-propensity model because replayable confirmed negatives remain zero.
+- [x] Excluded provisional `training-v3` labels from model fitting and selection.
+- [x] Ran the full grid. No candidate passed; the current logistic role ranker remains the baseline and no new model is promoted.
+- [x] Diagnosed the binding data limitation: all strict positive companies in the training partition are foreign; strict listed and startup/private positives exist only in calibration.
+- [ ] Before the next model iteration, add independent strict Director+ labels for listed and startup/private companies to the training partition without moving already-observed calibration companies.
+
+Artifacts: `evaluation/calibration-r1/manifest.json`, `evaluation/calibration-r1/report.json`, and `evaluation/calibration-r1/README.md`.
+## 2026-07-29: Strict holdout iteration V16–V23
+
+Status: maximum iteration V23 reached locally. Independent review found the V20–V23 replay scientifically invalid as well as below the accuracy gate; nothing was synchronized before this review.
+
+- [x] Preserved V15 and every later frozen snapshot; failed and invalid rounds remain auditable.
+- [x] V16 was invalidated for its source whitelist; V17 and V18 failed the three-match gate; V19 failed prediction coverage before labels were opened.
+- [x] V20 froze 18 companies (six startup/private, six listed, six foreign), Top-3 hypotheses, a three-month future window, no JOSINT, no job-ad prediction inputs, and no workforce-precursor acceptance signal.
+- [x] V20 mechanical prediction-side counts were 14/18 companies with hypotheses (77.8%), 39 distinct titles, 12 role families, and 39 canonical role keys. Independent review then found dynamic mainstream-media profiles without pre-cutoff capture timestamps, so these counts cannot support a leakage-safe scientific conclusion.
+- [x] Completion audit invalidated the first mechanical V20 pass. The public result for 众擎机器人“机器人创意设计负责人” exposed employer, title, and salary, but no source-backed team-management or organization-level scope. Its earlier description had added unsupported scope and cannot be a Director+ label.
+- [x] Rebuilt V20 conservatively with two defensible matches: 国轩高科“电芯生产工艺总监(新站一厂)” and Boston Scientific “Director, Ops”. V20 therefore fails the minimum three matches, three companies, and all-company-types gates.
+- [x] V21 added mandatory source-backed seniority scope; V22 added publication intervals that must fall wholly inside the three-month window; V23 added complete employer, scope, and date evidence. Review showed the stored search summaries and scope statements lacked replayable source artifacts, so the validator now requires artifact path, SHA-256 and excerpt verification and marks all four iterations unverified.
+- [x] V21–V23 deliberately reuse the already-frozen V20 predictions as label-quality audits and are not claimed as independent prediction holdouts. They mechanically retain two conservative matches, but uniform search and label quality are both unverified because raw captures are absent; all iterations are scientifically invalid and fail closed.
+- [x] Fixed the review findings: stable source-group pseudonyms, dynamic-media capture-date guard, conservative Chinese seniority exclusions, replayable label artifact contract, tracked frozen snapshot, and mandatory label-quality runtime gate.
+- [x] Stopped at the preregistered maximum V23 without lowering the acceptance threshold or manufacturing a third label.
+
+Artifacts: `evaluation/holdout-v20/prediction-snapshot.json`, `evaluation/holdout-v20/mechanical-acceptance-summary.invalid.json`, and `evaluation/holdout-v20` through `evaluation/holdout-v23`. Local generated reports remain under `.acceptance/` and are not canonical.

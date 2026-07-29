@@ -99,7 +99,7 @@ def test_direct_runner_calls_provider_without_openclaw_agent():
             {"role": "user", "content": "structured prompt"},
         ],
         "stream": False,
-        "temperature": 0.2,
+        "temperature": 0.0,
         "max_completion_tokens": 2048,
         "reasoning_split": True,
     }
@@ -132,6 +132,25 @@ def test_direct_runner_fails_closed_on_missing_assistant_text():
     )
     with pytest.raises(DirectLLMError, match="no choices"):
         runner.run("prompt", session_id="ignored")
+
+
+def test_direct_runner_retries_one_transient_empty_assistant_response():
+    responses = iter([
+        {"choices": [{"message": {"content": ""}}]},
+        {"choices": [{"message": {"content": '{"drafts":[]}'}}]},
+    ])
+    runner = OpenClawConfiguredLLMRunner(
+        config=OpenClawLLMConfig(
+            provider="minimax",
+            model="MiniMax-M3",
+            base_url="https://api.minimaxi.com/v1",
+            api_kind="openai-completions",
+            api_key="test-secret",
+        ),
+        transport=lambda request, timeout: next(responses),
+    )
+
+    assert runner.run("prompt", session_id="ignored") == '{"drafts":[]}'
 
 
 def test_explicit_configured_model_override_uses_same_provider(tmp_path):

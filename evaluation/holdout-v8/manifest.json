@@ -1,0 +1,41 @@
+{
+  "holdout_version": "holdout-v8",
+  "frozen_at": "2026-07-28",
+  "cutoffs": ["2026-01-01"],
+  "horizon_months": 3,
+  "prompt_version": "historical-demand-v7-regional-hub-enablers",
+  "prediction_max_roles_per_company": 5,
+  "temperature": 0.0,
+  "workforce_precursors_enabled": false,
+  "prediction_inputs_exclude_job_ads": true,
+  "josint_inputs_enabled": false,
+  "candidate_selection": {
+    "window_start": "2025-04-01",
+    "window_end": "2025-12-31",
+    "minimum_candidates": 8,
+    "rule": "Eight new foreign-company China or APAC operational cross-functional hubs selected by a blinded agent from A-grade pre-cutoff events before future-job search."
+  },
+  "companies": [
+    "三菱电机智能制造科技（中国）集团有限公司",
+    "Garrett Motion（盖瑞特）",
+    "Ion Beam Applications S.A.（IBA）",
+    "WIKA（威卡）",
+    "bioMérieux（梅里埃）",
+    "Döhler Group（德乐集团）",
+    "GVS Group（中国）",
+    "拜耳（中国）"
+  ],
+  "acceptance": {
+    "minimum_matches_per_cutoff": 1,
+    "minimum_distinct_matched_jobs": 1,
+    "minimum_distinct_matched_companies": 1,
+    "minimum_candidate_prediction_coverage": 0.75,
+    "minimum_distinct_predicted_titles": 30,
+    "minimum_distinct_predicted_role_families": 10,
+    "minimum_distinct_canonical_role_keys": 30,
+    "required_matched_company_types": ["foreign"],
+    "snapshot_audit_required": true,
+    "uniform_label_search_required": true
+  },
+  "freeze_rule": "After the pre-prediction seal, do not change evidence, prompt, ontology, matcher, thresholds or candidate universe. Run and freeze predictions before any future-job label search."
+}

@@ -1,0 +1,45 @@
+{
+  "holdout_version": "holdout-v9",
+  "frozen_at": "2026-07-28",
+  "cutoffs": ["2026-04-01"],
+  "horizon_months": 3,
+  "prompt_version": "historical-demand-v7-regional-hub-enablers",
+  "prediction_max_roles_per_company": 5,
+  "temperature": 0.0,
+  "workforce_precursors_enabled": false,
+  "prediction_inputs_exclude_job_ads": true,
+  "josint_inputs_enabled": false,
+  "candidate_selection": {
+    "window_start": "2025-07-01",
+    "window_end": "2026-03-31",
+    "minimum_candidates": 12,
+    "rule": "Twelve new companies, four per company type, selected by a blinded agent only from A-grade positive pre-cutoff events before future-job search."
+  },
+  "companies": [
+    "Momenta",
+    "宇树科技",
+    "元戎启行",
+    "蓝箭航天",
+    "小鹏汽车",
+    "禾赛科技",
+    "摩尔线程",
+    "小马智行",
+    "米其林（中国）",
+    "阿斯利康（中国）",
+    "恩骅力（中国）",
+    "先正达集团（中国）"
+  ],
+  "acceptance": {
+    "minimum_matches_per_cutoff": 3,
+    "minimum_distinct_matched_jobs": 3,
+    "minimum_distinct_matched_companies": 3,
+    "minimum_candidate_prediction_coverage": 0.75,
+    "minimum_distinct_predicted_titles": 30,
+    "minimum_distinct_predicted_role_families": 12,
+    "minimum_distinct_canonical_role_keys": 30,
+    "required_matched_company_types": ["startup_private", "listed", "foreign"],
+    "snapshot_audit_required": true,
+    "uniform_label_search_required": true
+  },
+  "freeze_rule": "After the pre-prediction seal, do not change evidence, prompt, ontology, matcher, thresholds or candidate universe. Run and freeze predictions before any future-job label search."
+}

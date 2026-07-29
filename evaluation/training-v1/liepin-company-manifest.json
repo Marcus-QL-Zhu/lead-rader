@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "source": "Liepin mobile company pages, guest access",
+  "companies": [
+    {"company": "旋光智能机器人", "company_page_url": null, "discovery_status": "pending"},
+    {"company": "海柔创新 Hai Robotics", "company_page_url": "https://m.liepin.com/company/9720613/", "discovery_status": "verified"},
+    {"company": "禾赛科技", "company_page_url": "https://m.liepin.com/company/8399607/", "discovery_status": "verified"},
+    {"company": "云深处科技", "company_page_url": "https://m.liepin.com/company/9485537/", "discovery_status": "verified"},
+    {"company": "优必选", "company_page_url": "https://m.liepin.com/company/8095160/", "discovery_status": "verified"},
+    {"company": "摩尔线程", "company_page_url": "https://m.liepin.com/company/12566499/", "discovery_status": "verified"},
+    {"company": "文远知行 WeRide", "company_page_url": "https://m.liepin.com/company/9491766/", "discovery_status": "verified"},
+    {"company": "元戎启行", "company_page_url": "https://m.liepin.com/company/10051709/", "discovery_status": "verified"},
+    {"company": "非夕科技", "company_page_url": null, "discovery_status": "pending"},
+    {"company": "丹佛斯（中国）", "company_page_url": "https://m.liepin.com/company/7525102/", "discovery_status": "verified"},
+    {"company": "蓝箭航天", "company_page_url": "https://m.liepin.com/company/8557441/", "discovery_status": "verified"},
+    {"company": "速腾聚创 RoboSense", "company_page_url": null, "discovery_status": "pending"},
+    {"company": "逐际动力", "company_page_url": "https://m.liepin.com/company/13423055/", "discovery_status": "verified"},
+    {"company": "DataMesh", "company_page_url": "https://m.liepin.com/company/8351130/", "discovery_status": "verified"},
+    {"company": "华为", "company_page_url": "https://m.liepin.com/company/954482/", "discovery_status": "verified"},
+    {"company": "意法半导体（中国）", "company_page_url": "https://m.liepin.com/company/13720509/", "discovery_status": "verified"},
+    {"company": "模塑科技", "company_page_url": null, "discovery_status": "pending"},
+    {"company": "福日电子（以诺通讯）", "company_page_url": "https://m.liepin.com/company/8109887/", "discovery_status": "verified"},
+    {"company": "松延动力", "company_page_url": null, "discovery_status": "pending"},
+    {"company": "比亚迪", "company_page_url": "https://m.liepin.com/company/434237/", "discovery_status": "verified"},
+    {"company": "MiniMax Group", "company_page_url": null, "discovery_status": "pending"},
+    {"company": "小鹏汽车", "company_page_url": "https://m.liepin.com/company/8908817/", "discovery_status": "verified"},
+    {"company": "小马智行", "company_page_url": "https://m.liepin.com/company/9351988/", "discovery_status": "verified"},
+    {"company": "新松机器人 SIASUN", "company_page_url": "https://m.liepin.com/company/8805279/", "discovery_status": "verified"},
+    {"company": "Momenta", "company_page_url": "https://m.liepin.com/company/9123859/", "discovery_status": "verified"},
+    {"company": "小米集团", "company_page_url": "https://m.liepin.com/company/8785513/", "discovery_status": "verified"},
+    {"company": "梅卡曼德机器人 Mech-Mind Robotics", "company_page_url": null, "discovery_status": "pending"}
+  ]
+}

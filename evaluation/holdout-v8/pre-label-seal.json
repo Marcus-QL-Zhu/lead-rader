@@ -1,0 +1,13 @@
+{
+  "holdout_version": "holdout-v8",
+  "seal_stage": "predictions_frozen_pre_labels",
+  "sealed_at": "2026-07-28T06:45:10.0054190+08:00",
+  "pre_prediction_seal_verified": true,
+  "snapshot_path": ".acceptance/holdout-v8.snapshot.json",
+  "snapshot_sha256": "0403d08994995a90ec17fbef3c50c399abcb2d12464c01a5c515f6f5a4c1b70a",
+  "label_search_started": false,
+  "prediction_attempts": {
+    "attempt_1": "provider returned no assistant text; no snapshot was written",
+    "attempt_2": "completed with the same frozen inputs and code"
+  }
+}

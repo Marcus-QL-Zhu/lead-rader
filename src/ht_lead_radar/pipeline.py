@@ -99,7 +99,14 @@ def build_leads(
             and classify_seniority(item.title, item.snippet)[1]
         ]
         event_types = {item.event_type for item in upstream}
-        roles = roles_for(direction, event_types)
+        company_context = " ".join(
+            f"{item.title} {item.snippet}" for item in upstream
+        )
+        roles = roles_for(
+            direction,
+            event_types,
+            company_context=company_context,
+        )
         related_ads = [
             item for item in director_ads
             if _job_ad_matches_roles(item, roles)
@@ -273,7 +280,7 @@ def build_late_opportunities(
 
 
 def _is_director_plus_role(role: str) -> bool:
-    return any(term in role.lower() for term in ('总监', '总经理', '平台主管', '总师', '首席', 'director', 'head', 'vp', 'cxo'))
+    return any(term in role.lower() for term in ('总监', '总经理', '总裁', '平台主管', '总师', '首席', 'director', 'head', 'vp', 'cxo'))
 
 
 def _job_ad_matches_roles(item: Evidence, roles: list[str]) -> bool:

@@ -1,0 +1,20 @@
+{
+  "sealed_at": "2026-07-28T21:28:00+08:00",
+  "label_search_started": false,
+  "snapshot": {
+    "path": ".acceptance/holdout-v15.snapshot.json",
+    "sha256": "8a3825552b69ee52eb33706d43571c9306ea7bd2abfcfd3208680b645115ec10"
+  },
+  "prediction_summary": {
+    "candidate_count": 18,
+    "analyzed_company_count": 18,
+    "failed_company_count": 0,
+    "raw_hypothesis_count": 84,
+    "distinct_raw_title_count": 84
+  },
+  "anonymization_check": {
+    "real_company_or_source_domain_hits_in_user_prompts": 0,
+    "all_model_packet_source_urls_blank": true
+  },
+  "declaration": "The final v15 prediction snapshot was completed and hashed before any validation-window job search."
+}

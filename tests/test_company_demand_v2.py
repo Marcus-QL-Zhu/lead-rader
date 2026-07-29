@@ -128,6 +128,16 @@ def test_prompt_has_three_diverse_few_shots_and_shanghai_fallback():
     assert COMPANY_DEMAND_SYSTEM_PROMPT.count("示例二") == 1
     assert COMPANY_DEMAND_SYSTEM_PROMPT.count("示例三") == 1
     assert "单一融资事件不足以生成岗位" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "职能依赖展开" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "跨职能 hub" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "中国区业务战略" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "财务规划与分析" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "政府事务" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "治理/使能岗位" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "采购、" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "战略联盟责任" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "事业部总经理" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "量产项目交付" in COMPANY_DEMAND_SYSTEM_PROMPT
     assert "不确定时填上海" in build_single_company_demand_prompt(packet)
 
 

@@ -1,0 +1,16 @@
+{
+  "dataset_version": "2026-07-28-holdout-v3-labels",
+  "label_window": ["2026-04-01", "2026-07-01"],
+  "uniform_search_completed_for_all_candidates": true,
+  "jobs": [],
+  "no_observed_director_plus_job": [
+    "DataMesh",
+    "矩阵超智",
+    "云深处科技",
+    "非夕科技",
+    "金马游乐",
+    "模塑科技",
+    "博世力士乐（中国）",
+    "西门子（中国）"
+  ]
+}

@@ -28,6 +28,12 @@ delivery-validation/
 *.tar.gz
 logs/
 backups/
+evaluation/training-*/dataset.json
+evaluation/training-*/model-report.json
+evaluation/training-*/backfill-tasks.json
+evaluation/training-*/metaso-job-candidates.json
+evaluation/training-*/historical-job-review-queue.json
+evaluation/training-*/artifacts/
 
 # Internal deployment notes
 docs/delivery-status-*.md

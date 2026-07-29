@@ -1,0 +1,50 @@
+{
+  "dataset_version": "2026-07-28-holdout-v1",
+  "jobs": [
+    {
+      "company": "徕木股份",
+      "title": "机器人产品研发总监",
+      "description": "组建和管理机器人研发团队，统筹关节模组电机、灵巧手等项目团队，推进机器人产品研发和产业化。",
+      "published_at": "2026-01-13",
+      "source_url": "https://caifuhao.eastmoney.com/news/20260113154609512692880",
+      "source_name": "东方财富财富号对猎聘职位的留档",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "徕木股份",
+      "title": "销售总监（机器人）",
+      "description": "负责机器人整机及相关产品的市场推广、客户开发和销售目标，推动机器人新业务商业化。",
+      "published_at": "2026-01-13",
+      "source_url": "https://caifuhao.eastmoney.com/news/20260113154609512692880",
+      "source_name": "东方财富财富号对猎聘职位的留档",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "英飞凌",
+      "title": "Director Application Management - Edge Computing",
+      "description": "Own the Edge Computing and power supply application business, define and deploy global go-to-market strategy, manage application lifecycle, develop strategic customer and partner relationships, and identify growth opportunities.",
+      "published_at": "2026-03-07",
+      "source_url": "https://jobs.joinimagine.com/companies/infineon-technologies/jobs/69625886-director-application-management-_7162",
+      "source_name": "Imagine job-board archive of Infineon role",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "宁波永基精密科技",
+      "title": "技术总监（半导体行业）",
+      "description": "负责半导体行业高端密封材料及产品技术路线、研发团队和工艺开发，推进高洁净、耐高温及耐腐蚀产品开发和客户应用。",
+      "published_at": "2026-05-08",
+      "source_url": "https://www.sohu.com/a/1019856201_121123778",
+      "source_name": "招聘信息聚合转载",
+      "observed_at": "2026-07-28"
+    },
+    {
+      "company": "应用材料",
+      "title": "Director, Customer Engineer",
+      "description": "Own all business issues across a customer site including customer satisfaction, P&L and budget; anticipate customer needs, direct service commitments, lead site managers and define account performance metrics.",
+      "published_at": "2026-06-22",
+      "source_url": "https://jobs.appliedmaterials.com/job/shanghai/director-customer-engineer/95/96768950000",
+      "source_name": "Applied Materials careers",
+      "observed_at": "2026-07-28"
+    }
+  ]
+}

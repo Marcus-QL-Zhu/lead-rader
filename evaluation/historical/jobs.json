@@ -1,0 +1,75 @@
+{
+  "dataset_version": "2026-07-28-v3",
+  "jobs": [
+    {
+      "company": "四川九洲",
+      "title": "产品总监（人形/四足机器人）",
+      "description": "负责人形/四足机器人核心部件整体规划、研发管理和产品落地，带领技术、研发和产品团队推进0到1产业化。",
+      "published_at": "2026-01-27",
+      "source_url": "https://www.gaoxiaojob.com/job/detail/1996819.html",
+      "source_name": "高校人才网（据官方公告整理）",
+      "observed_at": "2026-07-28",
+      "content_sha256": "bc1a3a4cb4225b964e05847a8fc7c7f906bf8fb34ca9d0204112e5d8d03918a0"
+    },
+    {
+      "company": "凯奇具身智能",
+      "title": "技术总监",
+      "description": "制定机器人技术路线，组建软件、算法、硬件、电气和控制团队，主导机器人核心模块研发、系统集成和工程落地。",
+      "published_at": "2026-02-24",
+      "source_url": "https://kailongtec.com/news_23/1044.html",
+      "source_name": "凯龙高科官网",
+      "observed_at": "2026-07-28",
+      "content_sha256": "53c908436939352addd628196ed003034d9de02c2b321635e620b8d2cd0917d5"
+    },
+    {
+      "company": "重庆万国半导体",
+      "title": "采购总监",
+      "description": "建立采购和供应商管理流程，支持日常采购及扩产计划，负责重大采购项目、关键采购策略和跨部门管理。",
+      "published_at": "2026-05-06",
+      "source_url": "https://www.sohu.com/a/1018983003_121123984",
+      "source_name": "招聘信息聚合转载",
+      "observed_at": "2026-07-28",
+      "content_sha256": "738a3baa7f38a7208c50f27dffbd697de7f8c9539b53011d30a54c157b8790be"
+    },
+    {
+      "company": "高科启芯",
+      "title": "采购总监（半导体设备/原材料方向）",
+      "description": "制定封测设备、晶圆和辅料采购战略，建立双源供应体系并搭建采购团队，支撑NPI、产能建设和量产交付。",
+      "published_at": "2026-05-14",
+      "source_url": "https://caifuhao.eastmoney.com/news/20260524081326897030040",
+      "source_name": "东方财富财富号对猎聘职位的留档",
+      "observed_at": "2026-07-28",
+      "content_sha256": "91f3550defd0d25ae66a57d929a0abb9c5156ee7157449130ffa8176f07c3e35"
+    },
+    {
+      "company": "瑞萨电子",
+      "title": "Strategy Alliance Lead - Director / Senior Manager 战略合作负责人",
+      "description": "建立政府和行业合作关系，搭建战略伙伴关系，跟踪政策，推动高校及人才合作并协调跨团队执行。",
+      "published_at": "2026-05-18",
+      "source_url": "https://jobs.renesas.com/job/strategy-alliance-lead-director-senior-manager-in-shenzhen-guangdong-province-china-jid-5846",
+      "source_name": "瑞萨电子招聘官网",
+      "observed_at": "2026-07-28",
+      "content_sha256": "f7f790b7f1b93936f2c07ebd94c276bfc250a1366a7298ad33400b7147922c30"
+    },
+    {
+      "company": "宇树科技",
+      "title": "大客户销售经理/总监",
+      "description": "负责政企大客户开发、售前方案、投标宣讲和机器人项目落地。",
+      "published_at": "2026-06-18",
+      "source_url": "https://www.sohu.com/a/1038533691_121124331",
+      "source_name": "招聘信息聚合转载（链接回宇树招聘页）",
+      "observed_at": "2026-07-28",
+      "content_sha256": "360471ac6e6617ff67de5777364953b5fa94eb8d2101196cc7a1ab7ef7db243a"
+    },
+    {
+      "company": "瑞萨电子",
+      "title": "Sr. Manager/Director of Robotics Architect team",
+      "description": "Define and lead semiconductor-based system architectures for industrial, mobile, collaborative and humanoid robots, connecting market needs, customer applications and product engineering across MCUs, SoCs, power, sensing and connectivity.",
+      "published_at": "2026-02-06",
+      "source_url": "https://jobs.renesas.com/job/sr-manager-director-of-robotics-architect-team-in-shanghai-china-jid-4004",
+      "source_name": "瑞萨电子招聘官网",
+      "observed_at": "2026-07-28",
+      "content_sha256": "0f703c21a68909abdd7bc79bff8e6e5859b4dc5435b1a79a6329d7ec0a583ee5"
+    }
+  ]
+}

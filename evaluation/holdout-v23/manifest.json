@@ -1,0 +1,62 @@
+{
+  "holdout_version": "holdout-v23",
+  "frozen_at": "2026-07-29",
+  "cutoffs": [
+    "2026-05-01"
+  ],
+  "horizon_months": 3,
+  "prompt_version": "historical-demand-v12-top3-evidence-quality",
+  "prediction_max_roles_per_company": 3,
+  "temperature": 0.0,
+  "workforce_precursors_enabled": false,
+  "prediction_inputs_exclude_job_ads": true,
+  "josint_inputs_enabled": false,
+  "candidate_selection": {
+    "window_start": "2025-10-01",
+    "window_end": "2026-04-30",
+    "minimum_candidates": 18,
+    "rule": "Six companies per type selected from replayable A/B pre-cutoff non-recruiting operating evidence before opening any V19 future-job labels."
+  },
+  "companies": [
+    "傲意科技",
+    "因时机器人",
+    "众擎机器人",
+    "星环聚能",
+    "银河通用机器人",
+    "星尘智能",
+    "华虹半导体",
+    "寒武纪",
+    "赛力斯",
+    "国轩高科",
+    "吉利汽车",
+    "京东方",
+    "Boehringer Ingelheim（勃林格殷格翰中国）",
+    "Eli Lilly（礼来中国）",
+    "AbbVie（艾伯维）",
+    "Bristol Myers Squibb（百时美施贵宝中国）",
+    "Boston Scientific（波士顿科学）",
+    "Daiichi Sankyo（第一三共）"
+  ],
+  "acceptance": {
+    "minimum_matches_per_cutoff": 3,
+    "minimum_distinct_matched_jobs": 3,
+    "minimum_distinct_matched_companies": 3,
+    "minimum_candidate_prediction_coverage": 0.75,
+    "minimum_distinct_predicted_titles": 30,
+    "minimum_distinct_predicted_role_families": 12,
+    "minimum_distinct_canonical_role_keys": 30,
+    "required_matched_company_types": [
+      "startup_private",
+      "listed",
+      "foreign"
+    ],
+    "snapshot_audit_required": true,
+    "uniform_label_search_required": true,
+    "label_quality_required": true
+  },
+  "freeze_rule": "After seal, do not change evidence, prompt, ontology, matcher, thresholds, label protocol, job adapter or candidate universe. Freeze predictions before [2026-05-01,2026-08-01) labels.",
+  "iteration_type": "frozen_prediction_label_quality_audit",
+  "prediction_snapshot_origin": "holdout-v20",
+  "label_quality_protocol": "v23-employer-scope-date-complete",
+  "scientific_status": "invalid: prediction evidence contains non-replayable dynamic sources; label search and job scope artifacts are not replayable"
+}

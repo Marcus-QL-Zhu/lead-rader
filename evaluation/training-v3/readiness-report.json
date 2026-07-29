@@ -1,0 +1,46 @@
+{
+  "ready": false,
+  "policy": "Positive-company counts include verified search-snapshot candidates only as provisional feasibility counts. Production readiness still requires replayable exact job-page artifacts.",
+  "checks": {
+    "train_positive_companies": {
+      "observed": 13,
+      "required": 25,
+      "passed": false
+    },
+    "calibration_positive_companies": {
+      "observed": 7,
+      "required": 8,
+      "passed": false
+    },
+    "test_positive_companies": {
+      "observed": 2,
+      "required": 12,
+      "passed": false
+    },
+    "strict_precursor_evidence_companies": {
+      "observed": 17,
+      "required": 30,
+      "passed": false
+    },
+    "event_types": {
+      "observed": 7,
+      "required": 10,
+      "passed": false
+    },
+    "replayable_job_labels": {
+      "observed": 0,
+      "required": 1,
+      "passed": false
+    }
+  },
+  "strict_historical_positive_companies": {
+    "train": 10,
+    "calibration": 7,
+    "test": 0
+  },
+  "provisional_positive_companies": {
+    "train": 13,
+    "calibration": 7,
+    "test": 2
+  }
+}

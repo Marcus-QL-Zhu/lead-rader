@@ -1,0 +1,15 @@
+{
+  "sealed_at": "2026-07-28T21:49:00+08:00",
+  "passed": false,
+  "reason": "The only observable Director+ label was a design director role at LONGi; none of the five frozen LONGi hypotheses matched its role family. The pre-registered minimum was three matches across all three company types.",
+  "interpretation": "Internally consistent retrospective blinded replay that failed its pre-registered gates, not strong prospective validity evidence. Eighteen companies produced 84 distinct predictions across 16 role families, but the historical label search observed only one eligible public job and zero strict role-family matches. Historical negative labels lack archived result pages, so not_observed is not a confirmed market negative. Do not tune another prompt version against this label set.",
+  "files": {
+    "evaluation/holdout-v15/jobs.json": "71a1c6c6fff749f1d5acc1919605e5ec4daa5097a72024709cca9aa08b7e5f50",
+    "evaluation/holdout-v15/label-audit.md": "b6a9137be90a366e48eed2095b4329810ffb939208f5e72b7cc9d72c4a9b953e",
+    ".acceptance/holdout-v15.snapshot.json": "8a3825552b69ee52eb33706d43571c9306ea7bd2abfcfd3208680b645115ec10",
+    ".acceptance/holdout-v15.report.json": "4e09c958819b4a00f9733f271150ea2df4d4b8a59bc17f919c61a29b3b95b3a0",
+    ".acceptance/holdout-v15-aggregate.json": "71f475ef2d47c206122d9189ff5b50b8c3be327f2bcd93fab19f5289b0b268a3",
+    "evaluation/holdout-v15/pre-label-seal.json": "05800aeeeca669c4da0e9e112fc1f0e0a319726748d1d6c56c5c69075e34b389",
+    ".acceptance/holdout-v15-prelabel-diagnostic.json": "62423ab76e5b5929d3cd3734914ff0e0f17b1ec628c106393b68aa1b11c552b7"
+  }
+}

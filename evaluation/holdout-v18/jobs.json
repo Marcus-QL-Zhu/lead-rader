@@ -1,0 +1,50 @@
+{
+    "search_protocol_version":  "uniform-director-plus-v1",
+    "jobs":  [
+                 {
+                     "company":  "Takeda（武田中国）",
+                     "title":  "Head of Specialty BU",
+                     "exact_title":  "Head of Specialty BU",
+                     "description":  "Takeda official role R0176839, posted 2026-04-10 for Shanghai/Beijing. Owns end-to-end commercial performance of the China Specialty BU, leads sales, marketing, medical and access teams, defines BU strategy, owns P\u0026L and GTM.",
+                     "responsibilities_summary":  "Owns China Specialty BU sales, marketing, product management, P\u0026L, GTM and cross-functional people leadership.",
+                     "published_at":  "2026-04-10",
+                     "observed_at":  "2026-07-29",
+                     "source_url":  "https://www.jp.takedajobs.com/job/shanghai/head-of-specialty-bu/5111/93796974608",
+                     "source_name":  "Takeda official careers"
+                 },
+                 {
+                     "company":  "嬴彻科技 Inceptio Technology",
+                     "title":  "量产项目交付高级经理/总监（L2+ 商用车）",
+                     "exact_title":  "量产项目交付高级经理/总监（L2+ 商用车）",
+                     "description":  "嬴彻科技认证公司职位页。负责L2+商用车智能驾驶产品线全部在手及新立项目的整体量产交付，并对产品线交付质量和项目管理体系负责。搜索快照记录公司职位页于2026-06-21更新。",
+                     "responsibilities_summary":  "全面负责L2+商用车智能驾驶产品线项目的量产交付、质量与项目管理体系。",
+                     "published_at":  "2026-06-21",
+                     "published_at_precision":  "company_page_update",
+                     "observed_at":  "2026-07-29",
+                     "source_url":  "https://www.zhipin.com/zhaopin/dad0c492a927d2e033J63tS4/",
+                     "source_name":  "BOSS直聘（嬴彻科技认证公司职位页与搜索快照）"
+                 },
+                 {
+                     "company":  "福日电子（以诺通讯）",
+                     "title":  "事业部总经理/副总裁(非手机业务)",
+                     "exact_title":  "事业部总经理/副总裁(非手机业务)",
+                     "description":  "福建福日电子股份有限公司2026招聘公告，发布日期2026-04-02。岗位牵头非手机业务团队组建，负责销售、产品、研发等运营管理，开拓市场和关键客户并统筹产品规划与研发方向。",
+                     "responsibilities_summary":  "组建并统筹非手机业务事业部，负责销售、产品、研发、市场及整体经营。",
+                     "published_at":  "2026-04-02",
+                     "observed_at":  "2026-07-29",
+                     "source_url":  "https://fj.xbcjy.com/gqzp/zkgg/5626816.html",
+                     "source_name":  "福建福日电子股份有限公司2026招聘公告公开镜像"
+                 },
+                 {
+                     "company":  "罗盖特 Roquette",
+                     "title":  "Head of Customer Marketing China",
+                     "exact_title":  "Head of Customer Marketing China",
+                     "description":  "Roquette official role R0025755, posted 2026-04-30 in Shanghai. Leads China customer marketing, commercialization, GTM, sales funnel conversion, business development and a 4-5 person marketing team.",
+                     "responsibilities_summary":  "Leads China customer marketing, new-product commercialization, GTM, sales funnel conversion and a marketing team.",
+                     "published_at":  "2026-04-30",
+                     "observed_at":  "2026-07-29",
+                     "source_url":  "https://www.roquette.com/careers/job-opportunities/head-of-customer-marketing-china",
+                     "source_name":  "Roquette official careers"
+                 }
+             ]
+}

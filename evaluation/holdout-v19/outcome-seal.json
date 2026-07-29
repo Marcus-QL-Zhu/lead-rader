@@ -1,0 +1,11 @@
+{
+    "sealed_at":  "2026-07-29T03:06:21+08:00",
+    "passed":  false,
+    "labels_opened":  false,
+    "reason":  "Prediction coverage was 11/18 (0.6111), below the preregistered 0.75 gate, so future job labels were not opened.",
+    "next_iteration":  "V20 changes only the pre-label evidence universe/quality; thresholds and Top-3 contract remain unchanged.",
+    "files":  {
+                  "evaluation/holdout-v19/pre-label-seal.json":  "d0a3561a5908b3c18f3a6e35e7c8e2521509d10bf90da48b5551163a0710f904",
+                  ".acceptance/holdout-v19.snapshot.json":  "92b71bf1e96f35d40ba94953a937bc96137653a8c5c2d63c88ba076ebf6b1d3f"
+              }
+}

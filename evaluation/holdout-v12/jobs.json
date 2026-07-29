@@ -1,0 +1,321 @@
+{
+  "holdout_version": "holdout-v12",
+  "label_search_window": {
+    "start_inclusive": "2026-04-01",
+    "end_exclusive": "2026-07-01",
+    "geography": "Mainland China",
+    "seniority_rule": "Director+/VP/CxO or an unambiguous functional Head; managers, experts, engineers, ordinary Leads, Associate Directors, mixed/ambiguous titles, and unclear Heads are excluded"
+  },
+  "generated_at": "2026-07-28",
+  "independence_statement": "Labels were produced without reading the holdout-v12 acceptance snapshot, predictions, diagnostics, reports, evaluation results, system prompts, or source-code prediction content.",
+  "jobs": [
+    {
+      "company": "GE HealthCare（GE医疗）",
+      "company_type": "foreign",
+      "exact_title": "MA Director",
+      "title": "MA Director",
+      "published_at": "2026-05-08",
+      "location": "Shanghai, Mainland China",
+      "responsibilities_summary": "Leads East China market-access work for all business units across eight provinces; leads a four-person team; drives cross-modality and cross-BU volume-based-procurement projects; and maintains senior relationships with provincial and municipal health, medical-insurance, development-and-reform, and finance authorities.",
+      "description": "East China market-access director with direct team leadership, cross-business strategic accountability, government-stakeholder ownership, and responsibility for shaping VBP business strategy.",
+      "seniority_basis": "The exact official title is Director; the role leads a four-person team and owns cross-BU regional market-access strategy and government engagement.",
+      "source_name": "GE HealthCare official Workday career page",
+      "source_url": "https://gehc.wd5.myworkdayjobs.com/en-US/gehc_externalsite/job/Shanghai/MA-Director_R4040924-1",
+      "date_verification_url": "https://gehc.wd5.myworkdayjobs.com/en-US/gehc_externalsite/job/Shanghai/MA-Director_R4040924-1",
+      "requisition_id": "R4040924",
+      "date_basis": "Exact datePosted value in the official page's structured JobPosting metadata.",
+      "discovery_queries": [
+        "site:gehc.wd5.myworkdayjobs.com \"MA Director\" China GE HealthCare",
+        "site:gehc.wd5.myworkdayjobs.com \"Director\" \"Shanghai\" GE HealthCare",
+        "site:linkedin.com/jobs/view/ \"MA Director\" \"GE HealthCare\" Shanghai"
+      ],
+      "searched_at": "2026-07-28"
+    },
+    {
+      "company": "GE HealthCare（GE医疗）",
+      "company_type": "foreign",
+      "exact_title": "Customs & Trade Compliance Director – China",
+      "title": "Customs & Trade Compliance Director – China",
+      "published_at": "2026-06-10",
+      "location": "Shanghai / Beijing, Mainland China",
+      "responsibilities_summary": "Leads all customs and trade-compliance activity across China; builds and develops the China trade-compliance organization; defines China strategy aligned to global policy; owns GACC, MOFCOM, import/export, tariff, valuation, origin and licensing compliance; represents the company in audits, inspections and negotiations; and advises senior leadership on regulatory risk.",
+      "description": "China-wide customs and trade-compliance director with organization-building, external-regulator representation, strategic governance, audit, risk-management, and operational-excellence accountability.",
+      "seniority_basis": "The exact official title is Director and the role explicitly builds and leads a China-wide organization, defines strategy, and represents the company to regulators.",
+      "source_name": "GE HealthCare official Workday career page",
+      "source_url": "https://gehc.wd5.myworkdayjobs.com/en-US/GEHC_ExternalSite/job/Customs---Trade-Compliance-Director---China_R4042035",
+      "date_verification_url": "https://gehc.wd5.myworkdayjobs.com/en-US/GEHC_ExternalSite/job/Customs---Trade-Compliance-Director---China_R4042035",
+      "requisition_id": "R4042035",
+      "date_basis": "Exact datePosted value in the official page's structured JobPosting metadata.",
+      "discovery_queries": [
+        "site:gehc.wd5.myworkdayjobs.com China Director GE HealthCare",
+        "site:gehc.wd5.myworkdayjobs.com \"Director\" \"Beijing\" GE HealthCare 2026",
+        "site:gehc.wd5.myworkdayjobs.com \"Director\" \"Shanghai\" GE HealthCare 2026"
+      ],
+      "searched_at": "2026-07-28"
+    },
+    {
+      "company": "Agilent Technologies（安捷伦）",
+      "company_type": "foreign",
+      "exact_title": "Director of China Innovation Center",
+      "title": "Director of China Innovation Center",
+      "published_at": "2026-05-19",
+      "location": "Shanghai, Mainland China",
+      "responsibilities_summary": "Defines and executes Agilent's unified China innovation strategy; serves as the China innovation voice to global stakeholders; leads and scales a multidisciplinary team of about 16 software, automation, AI, technology-scouting and customer-engagement staff; builds external partnerships; governs rapid prototyping and commercialization; and drives global scaling and KPI governance.",
+      "description": "China Innovation Center director with enterprise strategy ownership, a roughly 16-person multidisciplinary organization, external ecosystem leadership, product scaling, and governance responsibility.",
+      "seniority_basis": "The originally indexed official title and official URL slug are Director of China Innovation Center; the duties also show functional-head scope through leadership of an approximately 16-person multidisciplinary center and ownership of the China innovation strategy.",
+      "source_name": "Agilent official Workday career page",
+      "source_url": "https://agilent.wd5.myworkdayjobs.com/en-US/Agilent_Careers/job/China-Remote-Location-Shanghai/Director-of-China-Innovation-Center_4037976",
+      "date_verification_url": "https://agilent.wd5.myworkdayjobs.com/en-US/Agilent_Careers/job/China-Remote-Location-Shanghai/Director-of-China-Innovation-Center_4037976",
+      "requisition_id": "4037976",
+      "date_basis": "Exact datePosted value in the official page's structured JobPosting metadata.",
+      "title_verification_note": "The official page was indexed under Director of China Innovation Center and retains that exact title in its canonical URL slug. The live display was later changed to China Innovation Center Leader while retaining requisition 4037976 and the original 2026-05-19 date; this label preserves the original published title and records the later retitle transparently.",
+      "discovery_queries": [
+        "site:agilent.wd5.myworkdayjobs.com/en-US/Agilent_Careers/job/China Director Agilent",
+        "site:linkedin.com/jobs/view/ \"Director of China Innovation Center\" Agilent",
+        "site:cn.linkedin.com/jobs/view/ 安捷伦 \"China Innovation Center\""
+      ],
+      "searched_at": "2026-07-28"
+    }
+  ],
+  "company_audits": [
+    {
+      "company": "GE HealthCare（GE医疗）",
+      "queries": [
+        "site:gehc.wd5.myworkdayjobs.com China Director GE HealthCare",
+        "site:gehc.wd5.myworkdayjobs.com \"MA Director\" China GE HealthCare",
+        "site:linkedin.com/jobs/view/ GE HealthCare Director Shanghai China 2026"
+      ],
+      "sources_checked": [
+        "https://gehc.wd5.myworkdayjobs.com/en-US/GEHC_ExternalSite",
+        "https://career.gehealthcare.cn/",
+        "https://cn.linkedin.com/jobs/view/ma-director-at-ge-healthcare-4412158607"
+      ],
+      "qualifying_jobs": 2,
+      "notable_rejections": [
+        "Regulatory Affairs Director (R4037630): official datePosted 2026-03-12, before the window.",
+        "GA Senior Director (R4043263): official datePosted 2026-07-03, after the window.",
+        "Director, East Asia Strategy and Growth Initiatives (R4039432): no qualifying exact in-window official publication date could be verified; a later LinkedIn posting date was 2026-07-09.",
+        "Strategic Project Director (R4043157): published after the window.",
+        "China Supply Chain Strategy Director search result: live requisition was retitled to Strategy Senior Manager – ISC China and dated after the window."
+      ],
+      "audit_result": "Two strict in-window Director roles accepted."
+    },
+    {
+      "company": "Agilent Technologies（安捷伦）",
+      "queries": [
+        "site:agilent.wd5.myworkdayjobs.com/en-US/Agilent_Careers/job/China Director Agilent",
+        "site:agilent.wd5.myworkdayjobs.com China \"Head of\" Agilent",
+        "site:linkedin.com/jobs/view/ \"Director of China Innovation Center\" Agilent"
+      ],
+      "sources_checked": [
+        "https://careers.agilent.com/locations/asia-pacific/china/",
+        "https://agilent.wd5.myworkdayjobs.com/en-US/Agilent_Careers/job/China-Remote-Location-Shanghai/Director-of-China-Innovation-Center_4037976",
+        "https://cn.linkedin.com/jobs/view/director-of-china-innovation-center-at-%E5%AE%89%E6%8D%B7%E4%BC%A6-4411804054"
+      ],
+      "qualifying_jobs": 1,
+      "notable_rejections": [
+        "Head, Global Supply Planning: old/out-of-window posting; application language referenced March 31, 2026.",
+        "Other Director results were located outside Mainland China."
+      ],
+      "audit_result": "One strict in-window Director role accepted; original Director title and later live-page retitle are documented."
+    },
+    {
+      "company": "Nissan Motor（日产汽车）",
+      "queries": [
+        "site:careers.nissanmotor.jobs China Director Head 2026",
+        "site:cn.linkedin.com/jobs/view/ Nissan China Director 2026",
+        "site:cn.linkedin.com/jobs/view/ 日产汽车 Director 中国"
+      ],
+      "sources_checked": [
+        "https://www.nissanmotor.jobs/apac/ch/",
+        "LinkedIn public job results for Nissan and Nissan China"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        "No Nissan Director+/VP/CxO or clearly functional-Head Mainland China posting with an exact in-window publication date was found."
+      ],
+      "audit_result": "Strict empty result."
+    },
+    {
+      "company": "PepsiCo（百事公司）",
+      "queries": [
+        "site:pepsicojobs.com/china/jobs/ Director Shanghai China PepsiCo 2026",
+        "site:pepsicojobs.com/china/jobs/ \"Head of\" Shanghai China PepsiCo",
+        "site:cn.linkedin.com/jobs/view/ 百事 Director 上海 2026 -Associate"
+      ],
+      "sources_checked": [
+        "https://www.pepsicojobs.com/china",
+        "https://www.pepsicojobs.com/china/jobs/locations?lang=en-US",
+        "LinkedIn public PepsiCo China job results"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        "Multiple Associate Director / 副总监 roles were excluded by rule.",
+        "Revenue Management Manager and other Manager roles were excluded.",
+        "Global Executive Talent Acquisition Lead was excluded as an ordinary Lead title rather than Director+/functional Head."
+      ],
+      "audit_result": "Strict empty result."
+    },
+    {
+      "company": "Nestlé（雀巢）",
+      "queries": [
+        "site:jobdetails.nestle.com China Shanghai Director 2026 Nestlé",
+        "site:jobdetails.nestle.com China \"Head of\" 2026 Nestlé",
+        "site:cn.linkedin.com/jobs/view/ 雀巢 Director Shanghai 2026"
+      ],
+      "sources_checked": [
+        "https://www.nestle.com/jobs/search-jobs",
+        "Nestlé jobdetails public results",
+        "LinkedIn public Nestlé China job results"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        "No Nestlé Mainland China Director+/VP/CxO or clearly functional-Head posting with an exact in-window publication date was found."
+      ],
+      "audit_result": "Strict empty result."
+    },
+    {
+      "company": "Swire Coca-Cola（太古可口可乐）",
+      "queries": [
+        "site:swirecocacola.com career Director China job 2026",
+        "site:careers.swire.com \"Swire Coca-Cola\" China Director job",
+        "site:cn.linkedin.com/jobs/view/ \"太古可口可乐\" 总监 招聘"
+      ],
+      "sources_checked": [
+        "https://careers.swire.com/en",
+        "https://www.swirecocacola.com/",
+        "LinkedIn public Swire Coca-Cola China job results"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        "Cyber Security Director was located in Hong Kong SAR, not Mainland China.",
+        "Mainland results found were Senior Manager, supervisor, representative, or other sub-Director roles."
+      ],
+      "audit_result": "Strict empty result."
+    },
+    {
+      "company": "ebm-papst（依必安派特）",
+      "queries": [
+        "site:jobs.ebmpapst.com China Director job 2026",
+        "site:jobs.ebmpapst.com China \"Head of\" job",
+        "site:cn.linkedin.com/jobs/view/ 依必安派特 总监 招聘"
+      ],
+      "sources_checked": [
+        "https://jobs.ebmpapst.com/",
+        "ebm-papst public career results",
+        "LinkedIn public ebm-papst China job results"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        "Public China openings found were specialist/engineer roles, including IoT IT specialist and IT software application engineer.",
+        "No exact in-window Director+/VP/CxO or clearly functional-Head job was found."
+      ],
+      "audit_result": "Strict empty result."
+    },
+    {
+      "company": "SKF",
+      "queries": [
+        "site:career.skf.com/job/Shanghai Director SKF",
+        "site:skf.wd3.myworkdayjobs.com Shanghai \"Head of\" SKF",
+        "site:cn.linkedin.com/jobs/view/ 斯凯孚 Director 上海 2026"
+      ],
+      "sources_checked": [
+        "https://career.skf.com/",
+        "SKF China public career results",
+        "LinkedIn public SKF China job results"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        "Global Industry Director – Wind was a 2024 posting.",
+        "Head of Controlling, APAC – Automotive was about one year old and outside the window."
+      ],
+      "audit_result": "Strict empty result."
+    },
+    {
+      "company": "Solvay（索尔维）",
+      "queries": [
+        "site:solvay.com/en/career/job-opportunities/ China Director Shanghai 2026 Solvay",
+        "site:solvay.com/en/career/job-opportunities/ China \"Head of\" Solvay",
+        "site:cn.linkedin.com/jobs/view/ 索尔维 Director Shanghai 2026"
+      ],
+      "sources_checked": [
+        "https://www.solvay.com/en/career/job-opportunities/33661",
+        "https://cn.linkedin.com/jobs/view/director-government-public-affairs-china-and-apac-f-m-x-at-%E7%B4%A2%E5%B0%94%E7%BB%B4-4422774578"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        "Director Government & Public Affairs China and APAC was dated 2026-07-07 on its exact-date LinkedIn page, after the window."
+      ],
+      "audit_result": "Strict empty result."
+    },
+    {
+      "company": "Clariant（科莱恩）",
+      "queries": [
+        "site:careers.clariant.com/job/Shanghai Director Clariant 2026",
+        "site:careers.clariant.com/job/China \"Head of\" Clariant 2026",
+        "site:cn.linkedin.com/jobs/view/ 科莱恩 Director Shanghai 2026"
+      ],
+      "sources_checked": [
+        "https://careers.clariant.com/",
+        "https://careers.clariant.com/job/Shanghai-Procurement-Manager/1375530533/",
+        "LinkedIn public Clariant China job results"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        "Procurement Manager and other Manager/specialist/engineer roles were below the required level.",
+        "No exact in-window Director+/VP/CxO or clearly functional-Head job was found."
+      ],
+      "audit_result": "Strict empty result."
+    },
+    {
+      "company": "Air Liquide（液化空气集团）",
+      "queries": [
+        "site:airliquidehr.wd3.myworkdayjobs.com China Director 2026 Air Liquide",
+        "site:airliquidehr.wd3.myworkdayjobs.com China \"Head of\" Air Liquide",
+        "site:cn.linkedin.com/jobs/view/ 液空 Director Shanghai 2026"
+      ],
+      "sources_checked": [
+        "https://airliquidehr.wd3.myworkdayjobs.com/AirLiquideExternalCareer",
+        "https://cn.linkedin.com/jobs/view/director-of-business-development-at-%E6%B6%B2%E7%A9%BA-4379759281",
+        "https://airliquidehr.wd3.myworkdayjobs.com/en-CA/AirLiquideExternalCareer/job/China-Shanghai/Business-Development-Director-Senior-Manager_R10086146"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        "Director of Business Development had exact LinkedIn publication date 2026-03-27, before the window.",
+        "Business Development Director/Senior Manager was excluded because the title is explicitly mixed/ambiguous and its timing did not establish a qualifying in-window Director posting."
+      ],
+      "audit_result": "Strict empty result."
+    },
+    {
+      "company": "幸星电子（泰州）有限公司",
+      "queries": [
+        "\"幸星电子\" 招聘 总监 2026 泰州",
+        "\"幸星电子（泰州）有限公司\" 负责人 招聘",
+        "site:zhaopin.com/companydetail/jobs-CZ215338910 幸星电子"
+      ],
+      "sources_checked": [
+        "https://www.zhaopin.com/companydetail/jobs-CZ215338910/",
+        "Public search results for 幸星电子（泰州）有限公司"
+      ],
+      "qualifying_jobs": 0,
+      "notable_rejections": [
+        "The current company page showed one Korean-translator opening, not a senior functional leadership role.",
+        "No exact in-window Director+/VP/CxO or clearly functional-Head job was found."
+      ],
+      "audit_result": "Strict empty result."
+    }
+  ],
+  "summary": {
+    "companies_audited": 12,
+    "accepted_jobs": 3,
+    "companies_with_accepted_jobs": 2,
+    "accepted_by_company_type": {
+      "foreign": 3
+    },
+    "accepted_by_company": {
+      "GE HealthCare（GE医疗）": 2,
+      "Agilent Technologies（安捷伦）": 1
+    },
+    "strict_empty_company_results": 10
+  }
+}

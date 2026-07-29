@@ -1,0 +1,20 @@
+{
+  "sealed_at": "2026-07-28T19:40:42.3586265+08:00",
+  "prediction_started": false,
+  "future_label_search_started": false,
+  "files": {
+    "evaluation/holdout-v13/evidence.json": "d1d22a206eb7cf2ad33d1b7fda89745f2ed2a245bcab1b7835c7bf88774a5fb4",
+    "evaluation/holdout-v13/manifest.json": "934ffe687c007bf8703486cda6ecd8f9f28ae41c4b636ba959117aabfead41c2",
+    "evaluation/holdout-v13/README.md": "ca292e9f0b6eed7c76286d66bf11aed436a6cbe01c1c9f690776de400983e79d",
+    "src/ht_lead_radar/backtest.py": "018a33b5102be9db280832ecb8441a4871e40db66778bd4df61240719bd15485",
+    "src/ht_lead_radar/company_demand_v2.py": "3c94f301deac4d4865912696b1e148e96a9f56aa3f3ef2e480fbb968e3b88364",
+    "src/ht_lead_radar/holdout_evaluation.py": "f541012eb475729c6e125fe7ecd49d8fa4216d8e0fa2509258362f50e5380601",
+    "src/ht_lead_radar/signals.py": "aade6bca95d205b2c187c68ddef05ad4775fd62a1e6f2bbe36dfa1759611b1de",
+    "src/ht_lead_radar/taxonomy.py": "11b9eab57e77de98b03f8cdf8646317a0c0beb47e20e33a44e30617bd5f6bddc",
+    "src/ht_lead_radar/models.py": "acd392da67e103afea1aba79095a5afca4874ea2ceb630e8cf6d3066eaf6f494",
+    "src/ht_lead_radar/openclaw_llm.py": "7ba82a72a76c4b5c1c1afe440f9200680640ba188d3f652e8dc09ad9355d0500",
+    "scripts/run_historical_backtest.py": "588aac949d75a4e83636eee21b39495cdaa1df7282671e7070ee9d1b1766f3e8",
+    "scripts/evaluate_holdout_reports.py": "e2f28621870b2d164c266db8288a2e301400615e573e3124d434d785fa16cbbd"
+  },
+  "declaration": "Candidate selection used only pre-cutoff non-recruiting evidence. No v13 validation-window job search or label was opened before this seal."
+}

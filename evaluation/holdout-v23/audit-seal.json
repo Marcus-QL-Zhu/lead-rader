@@ -1,0 +1,11 @@
+{
+  "holdout_version": "holdout-v23",
+  "sealed_at": "2026-07-29T08:30:00+08:00",
+  "files": {
+    "evaluation/holdout-v23/manifest.json": "a173d4b8f182d3868744f8244753c53d60679383744a189418f899b1ee399d1f",
+    "evaluation/holdout-v23/jobs.json": "1f5ab3d7ee49533bbcbe11f1f9744945a0399454d0c330f36840cfce46cec21e",
+    "evaluation/holdout-v23/label-audit.json": "0dd6e7944397cad25484ed8732926f6a65acfb3642d0310bff3798ab48074525",
+    "evaluation/holdout-v20/prediction-snapshot.json": "6f3316c145feba814a50a722f5a21f04d5530de51df142699a7c709b126b421f"
+  },
+  "declaration": "Predictions are the already-frozen V20 snapshot. Labels use only conservative Director+ labels, but source captures are not replayable; this iteration is scientifically invalid."
+}

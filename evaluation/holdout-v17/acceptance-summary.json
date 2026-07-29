@@ -1,0 +1,64 @@
+{
+  "passed": false,
+  "gates": {
+    "enough_historical_cutoffs": true,
+    "leakage_safe_configuration": true,
+    "report_integrity": true,
+    "stable_role_generation": false,
+    "role_diversity": true,
+    "role_family_diversity": true,
+    "canonical_role_diversity": true,
+    "independent_job_support": false,
+    "company_type_coverage": false,
+    "distinct_company_support": false,
+    "candidate_prediction_coverage": true,
+    "registered_cutoffs_only": true,
+    "one_report_per_registered_cutoff": true,
+    "pre_registered_runtime_contract": true
+  },
+  "counts": {
+    "historical_cutoffs": 1,
+    "distinct_predicted_titles": 45,
+    "distinct_predicted_role_families": 12,
+    "distinct_canonical_role_keys": 45,
+    "distinct_matched_jobs": 1,
+    "verified_company_types": 1,
+    "distinct_matched_companies": 1,
+    "candidate_count": 18,
+    "companies_with_hypotheses": 15,
+    "candidate_prediction_coverage": 0.8333333333333334
+  },
+  "cutoffs": [
+    {
+      "cutoff": "2026-05-01",
+      "role_matches": 1,
+      "stable_gate_passed": false
+    }
+  ],
+  "verified_company_types": [
+    "listed"
+  ],
+  "missing_company_types": [
+    "foreign",
+    "startup_private"
+  ],
+  "criteria": {
+    "minimum_cutoffs": 1,
+    "minimum_role_matches_per_cutoff": 3,
+    "minimum_distinct_titles": 30,
+    "minimum_distinct_role_families": 12,
+    "minimum_distinct_canonical_role_keys": 30,
+    "minimum_distinct_matched_jobs": 3,
+    "required_company_types": [
+      "foreign",
+      "listed",
+      "startup_private"
+    ],
+    "minimum_distinct_matched_companies": 3,
+    "minimum_candidate_prediction_coverage": 0.75
+  },
+  "holdout_version": "holdout-v17",
+  "registered_cutoffs": [
+    "2026-05-01"
+  ]
+}

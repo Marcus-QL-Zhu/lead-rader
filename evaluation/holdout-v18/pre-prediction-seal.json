@@ -1,0 +1,17 @@
+{
+  "holdout_version": "holdout-v18",
+  "sealed_at": "2026-07-29T02:50:00+08:00",
+  "prediction_started": false,
+  "future_label_search_started": false,
+  "files": {
+    "evaluation/holdout-v18/evidence.json": "c76dfe95d10046f507134ddfa765a14ed8c049f8b09e136eb09a41b1ca91d65d",
+    "evaluation/holdout-v18/manifest.json": "f2a8bb92df9b7a5511db46c3b5649737a7ec2b758cfdca4239884ec0492eae58",
+    "evaluation/holdout-v18/README.md": "4ab63de1121e5a3e92efd11c6e048a7e063b762465c38d7841976e4f70de99ea",
+    "src/ht_lead_radar/backtest.py": "e49b4ddc4dba658db4cc3b0aecb8f46370a4c5c918c8b6b93f8112467c7a4994",
+    "src/ht_lead_radar/taxonomy.py": "164ce2b53de401d3849d33907ac5ea2cbb4713fffe6b54156a45630cb8e188a1",
+    "src/ht_lead_radar/company_demand_v2.py": "3c94f301deac4d4865912696b1e148e96a9f56aa3f3ef2e480fbb968e3b88364",
+    "scripts/run_historical_backtest.py": "9dc5f2d04893758dd8200babcc86af9a2b9fd245a57a2fce887257bf39f5fdee",
+    "scripts/evaluate_holdout_reports.py": "e2f28621870b2d164c266db8288a2e301400615e573e3124d434d785fa16cbbd"
+  },
+  "declaration": "No V18 validation-window job search or label was opened before this seal."
+}

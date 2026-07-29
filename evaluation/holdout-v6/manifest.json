@@ -1,0 +1,37 @@
+{
+  "holdout_version": "holdout-v6",
+  "frozen_at": "2026-07-28",
+  "cutoffs": ["2026-01-01"],
+  "horizon_months": 3,
+  "prompt_version": "historical-demand-v5-required-functional-coverage",
+  "prediction_max_roles_per_company": 5,
+  "temperature": 0.0,
+  "workforce_precursors_enabled": false,
+  "prediction_inputs_exclude_job_ads": true,
+  "josint_inputs_enabled": false,
+  "candidate_selection": {
+    "window_start": "2025-04-01",
+    "window_end": "2025-12-31",
+    "minimum_candidates": 7,
+    "rule": "Seven new foreign-company China operations selected by a blinded agent from official pre-cutoff operational signals before future-job search."
+  },
+  "companies": [
+    "阿特拉斯·科普柯（中国）",
+    "Hitachi Energy（中国）",
+    "ZEISS（中国）",
+    "施耐德电气（中国）",
+    "恩福中国",
+    "Scania（中国）",
+    "舍弗勒（中国）"
+  ],
+  "acceptance": {
+    "minimum_matches_per_cutoff": 1,
+    "minimum_distinct_matched_jobs": 1,
+    "minimum_distinct_matched_companies": 1,
+    "minimum_candidate_prediction_coverage": 0.75,
+    "required_matched_company_types": ["foreign"],
+    "snapshot_audit_required": true,
+    "uniform_label_search_required": true
+  },
+  "freeze_rule": "After the pre-prediction seal, do not change evidence, prompt, ontology, matcher, thresholds or candidate universe. Run and freeze predictions before any future-job label search."
+}

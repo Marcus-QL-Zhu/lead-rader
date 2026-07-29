@@ -1,0 +1,4211 @@
+{
+  "schema_version": 1,
+  "pool_sha256": "15e3ea949dd30bdcefe93359965330ff58118eea79c8ca5243451007030aff56",
+  "counts": {
+    "companies": 60,
+    "tasks": 60,
+    "queries": 840
+  },
+  "tasks": [
+    {
+      "task_id": "task_51d9736b23671c3ea760",
+      "kind": "precursor_news_timeline",
+      "company": "银河通用机器人",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"银河通用机器人\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"银河通用机器人\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"银河通用机器人\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"银河通用机器人\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"银河通用机器人\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"银河通用机器人\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"银河通用机器人\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"银河通用机器人\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"银河通用机器人\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"银河通用机器人\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"银河通用机器人\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"银河通用机器人\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"银河通用机器人\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"银河通用机器人\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_3511c8d39db16ee6099d",
+      "kind": "precursor_news_timeline",
+      "company": "加速进化",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"加速进化\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"加速进化\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"加速进化\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"加速进化\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"加速进化\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"加速进化\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"加速进化\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"加速进化\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"加速进化\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"加速进化\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"加速进化\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"加速进化\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"加速进化\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"加速进化\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_61ad96f6bd3a76f5e7de",
+      "kind": "precursor_news_timeline",
+      "company": "开普勒机器人",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"开普勒机器人\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"开普勒机器人\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"开普勒机器人\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"开普勒机器人\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"开普勒机器人\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"开普勒机器人\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"开普勒机器人\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"开普勒机器人\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"开普勒机器人\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"开普勒机器人\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"开普勒机器人\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"开普勒机器人\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"开普勒机器人\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"开普勒机器人\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_ef37dc18db434f16517b",
+      "kind": "precursor_news_timeline",
+      "company": "傲意科技",
+      "company_type": "startup_private",
+      "sector": "dexterous_hand",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"傲意科技\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"傲意科技\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"傲意科技\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"傲意科技\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"傲意科技\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"傲意科技\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"傲意科技\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"傲意科技\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"傲意科技\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"傲意科技\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"傲意科技\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"傲意科技\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"傲意科技\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"傲意科技\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_4b3bb92e4b6040f4ad85",
+      "kind": "precursor_news_timeline",
+      "company": "因时机器人",
+      "company_type": "startup_private",
+      "sector": "dexterous_hand",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"因时机器人\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"因时机器人\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"因时机器人\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"因时机器人\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"因时机器人\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"因时机器人\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"因时机器人\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"因时机器人\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"因时机器人\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"因时机器人\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"因时机器人\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"因时机器人\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"因时机器人\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"因时机器人\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_3b2a41a4bc931cbe4a09",
+      "kind": "precursor_news_timeline",
+      "company": "戴盟机器人",
+      "company_type": "startup_private",
+      "sector": "dexterous_hand",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"戴盟机器人\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"戴盟机器人\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"戴盟机器人\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"戴盟机器人\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"戴盟机器人\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"戴盟机器人\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"戴盟机器人\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"戴盟机器人\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"戴盟机器人\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"戴盟机器人\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"戴盟机器人\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"戴盟机器人\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"戴盟机器人\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"戴盟机器人\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_342dd581fb801a82042a",
+      "kind": "precursor_news_timeline",
+      "company": "灵心巧手",
+      "company_type": "startup_private",
+      "sector": "dexterous_hand",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"灵心巧手\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"灵心巧手\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"灵心巧手\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"灵心巧手\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"灵心巧手\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"灵心巧手\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"灵心巧手\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"灵心巧手\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"灵心巧手\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"灵心巧手\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"灵心巧手\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"灵心巧手\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"灵心巧手\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"灵心巧手\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_6cbdd9adb6bb2b0b699d",
+      "kind": "precursor_news_timeline",
+      "company": "卓驭科技",
+      "company_type": "startup_private",
+      "sector": "autonomous_driving",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"卓驭科技\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"卓驭科技\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"卓驭科技\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"卓驭科技\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"卓驭科技\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"卓驭科技\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"卓驭科技\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"卓驭科技\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"卓驭科技\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"卓驭科技\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"卓驭科技\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"卓驭科技\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"卓驭科技\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"卓驭科技\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_049b60a5c03fd7c8db31",
+      "kind": "precursor_news_timeline",
+      "company": "轻舟智航",
+      "company_type": "startup_private",
+      "sector": "autonomous_driving",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"轻舟智航\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"轻舟智航\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"轻舟智航\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"轻舟智航\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"轻舟智航\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"轻舟智航\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"轻舟智航\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"轻舟智航\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"轻舟智航\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"轻舟智航\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"轻舟智航\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"轻舟智航\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"轻舟智航\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"轻舟智航\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_09dbb3bd526190d4c819",
+      "kind": "precursor_news_timeline",
+      "company": "酷哇科技",
+      "company_type": "startup_private",
+      "sector": "autonomous_driving",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"酷哇科技\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"酷哇科技\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"酷哇科技\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"酷哇科技\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"酷哇科技\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"酷哇科技\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"酷哇科技\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"酷哇科技\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"酷哇科技\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"酷哇科技\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"酷哇科技\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"酷哇科技\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"酷哇科技\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"酷哇科技\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_2fd64cfade59f2705a8f",
+      "kind": "precursor_news_timeline",
+      "company": "星河动力航天",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"星河动力航天\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"星河动力航天\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"星河动力航天\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"星河动力航天\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"星河动力航天\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"星河动力航天\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"星河动力航天\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"星河动力航天\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"星河动力航天\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"星河动力航天\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"星河动力航天\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"星河动力航天\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"星河动力航天\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"星河动力航天\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_8a7a5db95ce500714570",
+      "kind": "precursor_news_timeline",
+      "company": "天兵科技",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"天兵科技\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"天兵科技\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"天兵科技\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"天兵科技\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"天兵科技\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"天兵科技\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"天兵科技\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"天兵科技\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"天兵科技\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"天兵科技\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"天兵科技\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"天兵科技\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"天兵科技\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"天兵科技\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_f03080a02eeb9b7cf125",
+      "kind": "precursor_news_timeline",
+      "company": "珞石机器人",
+      "company_type": "startup_private",
+      "sector": "industrial_robotics",
+      "split": "calibration",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"珞石机器人\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"珞石机器人\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"珞石机器人\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"珞石机器人\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"珞石机器人\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"珞石机器人\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"珞石机器人\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"珞石机器人\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"珞石机器人\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"珞石机器人\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"珞石机器人\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"珞石机器人\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"珞石机器人\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"珞石机器人\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_c60ed93a9350e6265621",
+      "kind": "precursor_news_timeline",
+      "company": "斯坦德机器人",
+      "company_type": "startup_private",
+      "sector": "industrial_robotics",
+      "split": "calibration",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"斯坦德机器人\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"斯坦德机器人\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"斯坦德机器人\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"斯坦德机器人\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"斯坦德机器人\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"斯坦德机器人\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"斯坦德机器人\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"斯坦德机器人\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"斯坦德机器人\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"斯坦德机器人\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"斯坦德机器人\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"斯坦德机器人\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"斯坦德机器人\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"斯坦德机器人\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_fbfd242dc91b98d3f7a5",
+      "kind": "precursor_news_timeline",
+      "company": "众擎机器人",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"众擎机器人\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"众擎机器人\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"众擎机器人\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"众擎机器人\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"众擎机器人\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"众擎机器人\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"众擎机器人\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"众擎机器人\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"众擎机器人\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"众擎机器人\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"众擎机器人\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"众擎机器人\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"众擎机器人\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"众擎机器人\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_7843c1dc83c1561c5cec",
+      "kind": "precursor_news_timeline",
+      "company": "千寻智能",
+      "company_type": "startup_private",
+      "sector": "embodied_ai",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"千寻智能\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"千寻智能\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"千寻智能\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"千寻智能\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"千寻智能\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"千寻智能\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"千寻智能\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"千寻智能\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"千寻智能\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"千寻智能\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"千寻智能\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"千寻智能\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"千寻智能\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"千寻智能\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_5d2ba16ed5c09fbcd084",
+      "kind": "precursor_news_timeline",
+      "company": "东方空间",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"东方空间\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"东方空间\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"东方空间\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"东方空间\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"东方空间\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"东方空间\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"东方空间\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"东方空间\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"东方空间\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"东方空间\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"东方空间\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"东方空间\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"东方空间\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"东方空间\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_18597420a64f7d5387eb",
+      "kind": "precursor_news_timeline",
+      "company": "深蓝航天",
+      "company_type": "startup_private",
+      "sector": "commercial_space",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"深蓝航天\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"深蓝航天\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"深蓝航天\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"深蓝航天\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"深蓝航天\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"深蓝航天\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"深蓝航天\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"深蓝航天\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"深蓝航天\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"深蓝航天\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"深蓝航天\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"深蓝航天\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"深蓝航天\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"深蓝航天\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_e1d938eabe75de2802eb",
+      "kind": "precursor_news_timeline",
+      "company": "星环聚能",
+      "company_type": "startup_private",
+      "sector": "nuclear_fusion",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"星环聚能\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"星环聚能\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"星环聚能\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"星环聚能\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"星环聚能\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"星环聚能\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"星环聚能\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"星环聚能\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"星环聚能\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"星环聚能\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"星环聚能\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"星环聚能\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"星环聚能\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"星环聚能\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_5f6fd47d0cd746959e25",
+      "kind": "precursor_news_timeline",
+      "company": "能量奇点",
+      "company_type": "startup_private",
+      "sector": "nuclear_fusion",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"能量奇点\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"能量奇点\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"能量奇点\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"能量奇点\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"能量奇点\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"能量奇点\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"能量奇点\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"能量奇点\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"能量奇点\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"能量奇点\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"能量奇点\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"能量奇点\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"能量奇点\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"能量奇点\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_46a177d4db490537ada0",
+      "kind": "precursor_news_timeline",
+      "company": "越疆科技",
+      "company_type": "listed",
+      "sector": "industrial_robotics",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"越疆科技\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"越疆科技\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"越疆科技\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"越疆科技\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"越疆科技\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"越疆科技\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"越疆科技\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"越疆科技\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"越疆科技\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"越疆科技\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"越疆科技\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"越疆科技\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"越疆科技\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"越疆科技\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_c59838a1544f47559557",
+      "kind": "precursor_news_timeline",
+      "company": "地平线机器人",
+      "company_type": "listed",
+      "sector": "autonomous_driving_chip",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"地平线机器人\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"地平线机器人\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"地平线机器人\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"地平线机器人\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"地平线机器人\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"地平线机器人\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"地平线机器人\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"地平线机器人\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"地平线机器人\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"地平线机器人\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"地平线机器人\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"地平线机器人\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"地平线机器人\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"地平线机器人\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_a7ae1f7aa44f7c3bf13b",
+      "kind": "precursor_news_timeline",
+      "company": "黑芝麻智能",
+      "company_type": "listed",
+      "sector": "autonomous_driving_chip",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"黑芝麻智能\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"黑芝麻智能\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"黑芝麻智能\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"黑芝麻智能\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"黑芝麻智能\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"黑芝麻智能\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"黑芝麻智能\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"黑芝麻智能\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"黑芝麻智能\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"黑芝麻智能\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"黑芝麻智能\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"黑芝麻智能\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"黑芝麻智能\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"黑芝麻智能\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_b7ffe7e6bf59a09dd59c",
+      "kind": "precursor_news_timeline",
+      "company": "中芯国际",
+      "company_type": "listed",
+      "sector": "semiconductor",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"中芯国际\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"中芯国际\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"中芯国际\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"中芯国际\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"中芯国际\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"中芯国际\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"中芯国际\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"中芯国际\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"中芯国际\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"中芯国际\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"中芯国际\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"中芯国际\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"中芯国际\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"中芯国际\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_bd9f824d4f2f6aa52625",
+      "kind": "precursor_news_timeline",
+      "company": "华虹半导体",
+      "company_type": "listed",
+      "sector": "semiconductor",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"华虹半导体\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"华虹半导体\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"华虹半导体\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"华虹半导体\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"华虹半导体\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"华虹半导体\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"华虹半导体\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"华虹半导体\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"华虹半导体\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"华虹半导体\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"华虹半导体\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"华虹半导体\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"华虹半导体\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"华虹半导体\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_f5926b5ddc9f2aac16d5",
+      "kind": "precursor_news_timeline",
+      "company": "寒武纪",
+      "company_type": "listed",
+      "sector": "ai_chip",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"寒武纪\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"寒武纪\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"寒武纪\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"寒武纪\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"寒武纪\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"寒武纪\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"寒武纪\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"寒武纪\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"寒武纪\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"寒武纪\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"寒武纪\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"寒武纪\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"寒武纪\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"寒武纪\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_0db5e603337bc9d246b2",
+      "kind": "precursor_news_timeline",
+      "company": "芯原股份",
+      "company_type": "listed",
+      "sector": "semiconductor",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"芯原股份\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"芯原股份\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"芯原股份\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"芯原股份\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"芯原股份\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"芯原股份\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"芯原股份\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"芯原股份\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"芯原股份\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"芯原股份\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"芯原股份\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"芯原股份\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"芯原股份\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"芯原股份\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_db71366ff7549a3d9902",
+      "kind": "precursor_news_timeline",
+      "company": "中控技术",
+      "company_type": "listed",
+      "sector": "industrial_automation",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"中控技术\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"中控技术\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"中控技术\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"中控技术\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"中控技术\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"中控技术\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"中控技术\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"中控技术\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"中控技术\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"中控技术\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"中控技术\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"中控技术\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"中控技术\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"中控技术\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_5107dfd570e74ea1e21c",
+      "kind": "precursor_news_timeline",
+      "company": "汇川技术",
+      "company_type": "listed",
+      "sector": "industrial_automation",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"汇川技术\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"汇川技术\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"汇川技术\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"汇川技术\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"汇川技术\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"汇川技术\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"汇川技术\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"汇川技术\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"汇川技术\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"汇川技术\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"汇川技术\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"汇川技术\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"汇川技术\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"汇川技术\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_a05c91655840057cae5d",
+      "kind": "precursor_news_timeline",
+      "company": "埃斯顿",
+      "company_type": "listed",
+      "sector": "industrial_robotics",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"埃斯顿\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"埃斯顿\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"埃斯顿\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"埃斯顿\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"埃斯顿\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"埃斯顿\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"埃斯顿\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"埃斯顿\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"埃斯顿\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"埃斯顿\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"埃斯顿\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"埃斯顿\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"埃斯顿\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"埃斯顿\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_105a9edb80028c4789d8",
+      "kind": "precursor_news_timeline",
+      "company": "先导智能",
+      "company_type": "listed",
+      "sector": "advanced_manufacturing",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"先导智能\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"先导智能\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"先导智能\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"先导智能\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"先导智能\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"先导智能\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"先导智能\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"先导智能\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"先导智能\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"先导智能\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"先导智能\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"先导智能\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"先导智能\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"先导智能\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_89af153f62658ab9ed05",
+      "kind": "precursor_news_timeline",
+      "company": "海康威视",
+      "company_type": "listed",
+      "sector": "machine_vision",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"海康威视\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"海康威视\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"海康威视\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"海康威视\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"海康威视\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"海康威视\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"海康威视\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"海康威视\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"海康威视\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"海康威视\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"海康威视\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"海康威视\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"海康威视\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"海康威视\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_2b918277d197b78fda94",
+      "kind": "precursor_news_timeline",
+      "company": "理想汽车",
+      "company_type": "listed",
+      "sector": "new_energy_vehicle",
+      "split": "calibration",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"理想汽车\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"理想汽车\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"理想汽车\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"理想汽车\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"理想汽车\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"理想汽车\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"理想汽车\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"理想汽车\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"理想汽车\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"理想汽车\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"理想汽车\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"理想汽车\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"理想汽车\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"理想汽车\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_ba37e8cedbe6f1406cc0",
+      "kind": "precursor_news_timeline",
+      "company": "零跑汽车",
+      "company_type": "listed",
+      "sector": "new_energy_vehicle",
+      "split": "calibration",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"零跑汽车\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"零跑汽车\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"零跑汽车\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"零跑汽车\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"零跑汽车\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"零跑汽车\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"零跑汽车\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"零跑汽车\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"零跑汽车\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"零跑汽车\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"零跑汽车\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"零跑汽车\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"零跑汽车\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"零跑汽车\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_8a5797e6f5cfeddfa8ce",
+      "kind": "precursor_news_timeline",
+      "company": "埃夫特",
+      "company_type": "listed",
+      "sector": "industrial_robotics",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"埃夫特\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"埃夫特\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"埃夫特\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"埃夫特\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"埃夫特\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"埃夫特\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"埃夫特\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"埃夫特\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"埃夫特\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"埃夫特\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"埃夫特\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"埃夫特\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"埃夫特\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"埃夫特\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_c8eabe65cf030af054b6",
+      "kind": "precursor_news_timeline",
+      "company": "宁德时代",
+      "company_type": "listed",
+      "sector": "battery",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"宁德时代\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"宁德时代\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"宁德时代\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"宁德时代\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"宁德时代\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"宁德时代\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"宁德时代\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"宁德时代\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"宁德时代\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"宁德时代\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"宁德时代\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"宁德时代\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"宁德时代\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"宁德时代\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_f0bfde1f90784086aaa6",
+      "kind": "precursor_news_timeline",
+      "company": "国轩高科",
+      "company_type": "listed",
+      "sector": "battery",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"国轩高科\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"国轩高科\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"国轩高科\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"国轩高科\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"国轩高科\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"国轩高科\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"国轩高科\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"国轩高科\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"国轩高科\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"国轩高科\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"国轩高科\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"国轩高科\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"国轩高科\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"国轩高科\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_f8597669baf508bb379e",
+      "kind": "precursor_news_timeline",
+      "company": "航天彩虹",
+      "company_type": "listed",
+      "sector": "aerospace",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"航天彩虹\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"航天彩虹\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"航天彩虹\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"航天彩虹\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"航天彩虹\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"航天彩虹\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"航天彩虹\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"航天彩虹\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"航天彩虹\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"航天彩虹\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"航天彩虹\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"航天彩虹\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"航天彩虹\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"航天彩虹\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_ba5f06a6993fdef0c229",
+      "kind": "precursor_news_timeline",
+      "company": "中国卫星",
+      "company_type": "listed",
+      "sector": "commercial_space",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"中国卫星\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"中国卫星\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"中国卫星\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"中国卫星\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"中国卫星\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"中国卫星\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"中国卫星\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"中国卫星\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"中国卫星\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"中国卫星\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"中国卫星\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"中国卫星\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"中国卫星\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"中国卫星\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_01cf4ec9618679ba5c42",
+      "kind": "precursor_news_timeline",
+      "company": "吉利汽车",
+      "company_type": "listed",
+      "sector": "new_energy_vehicle",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"吉利汽车\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"吉利汽车\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"吉利汽车\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"吉利汽车\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"吉利汽车\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"吉利汽车\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"吉利汽车\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"吉利汽车\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"吉利汽车\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"吉利汽车\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"吉利汽车\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"吉利汽车\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"吉利汽车\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"吉利汽车\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_562c1822433efc44aff6",
+      "kind": "precursor_news_timeline",
+      "company": "ASML（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor_equipment",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"ASML（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"ASML（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"ASML（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"ASML（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"ASML（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"ASML（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"ASML（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"ASML（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"ASML（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"ASML（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"ASML（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"ASML（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"ASML（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"ASML（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_4953423bc47ced656463",
+      "kind": "precursor_news_timeline",
+      "company": "瑞萨电子（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"瑞萨电子（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"瑞萨电子（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"瑞萨电子（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"瑞萨电子（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"瑞萨电子（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"瑞萨电子（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"瑞萨电子（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"瑞萨电子（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"瑞萨电子（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"瑞萨电子（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"瑞萨电子（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"瑞萨电子（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"瑞萨电子（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"瑞萨电子（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_993b5bbb8474dff79f41",
+      "kind": "precursor_news_timeline",
+      "company": "恩智浦（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"恩智浦（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"恩智浦（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"恩智浦（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"恩智浦（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"恩智浦（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"恩智浦（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"恩智浦（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"恩智浦（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"恩智浦（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"恩智浦（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"恩智浦（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"恩智浦（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"恩智浦（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"恩智浦（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_ce17fdfeef6d561919c7",
+      "kind": "precursor_news_timeline",
+      "company": "英伟达（中国）",
+      "company_type": "foreign",
+      "sector": "ai_chip",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"英伟达（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"英伟达（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"英伟达（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"英伟达（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"英伟达（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"英伟达（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"英伟达（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"英伟达（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"英伟达（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"英伟达（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"英伟达（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"英伟达（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"英伟达（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"英伟达（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_19abfa033a0128433980",
+      "kind": "precursor_news_timeline",
+      "company": "AMD（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"AMD（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"AMD（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"AMD（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"AMD（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"AMD（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"AMD（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"AMD（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"AMD（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"AMD（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"AMD（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"AMD（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"AMD（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"AMD（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"AMD（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_5e1bb8a9a8cd3b8ce649",
+      "kind": "precursor_news_timeline",
+      "company": "英特尔（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"英特尔（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"英特尔（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"英特尔（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"英特尔（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"英特尔（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"英特尔（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"英特尔（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"英特尔（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"英特尔（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"英特尔（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"英特尔（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"英特尔（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"英特尔（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"英特尔（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_901409f2e7e030e606fe",
+      "kind": "precursor_news_timeline",
+      "company": "高通（中国）",
+      "company_type": "foreign",
+      "sector": "semiconductor",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"高通（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"高通（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"高通（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"高通（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"高通（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"高通（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"高通（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"高通（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"高通（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"高通（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"高通（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"高通（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"高通（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"高通（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_1987aaa97e308444e60a",
+      "kind": "precursor_news_timeline",
+      "company": "博世（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"博世（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"博世（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"博世（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"博世（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"博世（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"博世（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"博世（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"博世（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"博世（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"博世（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"博世（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"博世（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"博世（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"博世（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_9d7cb93bc726038f2b1a",
+      "kind": "precursor_news_timeline",
+      "company": "西门子（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_automation",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"西门子（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"西门子（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"西门子（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"西门子（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"西门子（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"西门子（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"西门子（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"西门子（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"西门子（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"西门子（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"西门子（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"西门子（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"西门子（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"西门子（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_f96cd041fa74e9f8c230",
+      "kind": "precursor_news_timeline",
+      "company": "ABB（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_robotics",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"ABB（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"ABB（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"ABB（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"ABB（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"ABB（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"ABB（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"ABB（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"ABB（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"ABB（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"ABB（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"ABB（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"ABB（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"ABB（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"ABB（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_69d030bd6c8d43136f4a",
+      "kind": "precursor_news_timeline",
+      "company": "霍尼韦尔（中国）",
+      "company_type": "foreign",
+      "sector": "aerospace_industrial",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"霍尼韦尔（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"霍尼韦尔（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"霍尼韦尔（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"霍尼韦尔（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"霍尼韦尔（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"霍尼韦尔（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"霍尼韦尔（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"霍尼韦尔（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"霍尼韦尔（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"霍尼韦尔（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"霍尼韦尔（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"霍尼韦尔（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"霍尼韦尔（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"霍尼韦尔（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_265b6d2caf8489d30b59",
+      "kind": "precursor_news_timeline",
+      "company": "艾默生（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_automation",
+      "split": "train",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"艾默生（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"艾默生（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"艾默生（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"艾默生（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"艾默生（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"艾默生（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"艾默生（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"艾默生（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"艾默生（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"艾默生（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"艾默生（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"艾默生（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"艾默生（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"艾默生（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_b49dafdc92015ff7372a",
+      "kind": "precursor_news_timeline",
+      "company": "罗克韦尔自动化（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_automation",
+      "split": "calibration",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"罗克韦尔自动化（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"罗克韦尔自动化（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"罗克韦尔自动化（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"罗克韦尔自动化（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"罗克韦尔自动化（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"罗克韦尔自动化（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"罗克韦尔自动化（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"罗克韦尔自动化（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"罗克韦尔自动化（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"罗克韦尔自动化（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"罗克韦尔自动化（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"罗克韦尔自动化（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"罗克韦尔自动化（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"罗克韦尔自动化（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_12307c21027fd951657b",
+      "kind": "precursor_news_timeline",
+      "company": "库卡（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_robotics",
+      "split": "calibration",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"库卡（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"库卡（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"库卡（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"库卡（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"库卡（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"库卡（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"库卡（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"库卡（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"库卡（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"库卡（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"库卡（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"库卡（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"库卡（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"库卡（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_aa1cfdf2252ed034ed05",
+      "kind": "precursor_news_timeline",
+      "company": "发那科（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_robotics",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"发那科（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"发那科（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"发那科（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"发那科（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"发那科（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"发那科（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"发那科（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"发那科（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"发那科（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"发那科（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"发那科（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"发那科（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"发那科（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"发那科（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_836508bf3faca2a41bbc",
+      "kind": "precursor_news_timeline",
+      "company": "安川电机（中国）",
+      "company_type": "foreign",
+      "sector": "industrial_robotics",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"安川电机（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"安川电机（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"安川电机（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"安川电机（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"安川电机（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"安川电机（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"安川电机（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"安川电机（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"安川电机（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"安川电机（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"安川电机（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"安川电机（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"安川电机（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"安川电机（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_01887200df1df1b01aec",
+      "kind": "precursor_news_timeline",
+      "company": "特斯拉中国",
+      "company_type": "foreign",
+      "sector": "new_energy_vehicle",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"特斯拉中国\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"特斯拉中国\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"特斯拉中国\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"特斯拉中国\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"特斯拉中国\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"特斯拉中国\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"特斯拉中国\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"特斯拉中国\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"特斯拉中国\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"特斯拉中国\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"特斯拉中国\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"特斯拉中国\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"特斯拉中国\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"特斯拉中国\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_4928cc5e290854319d7d",
+      "kind": "precursor_news_timeline",
+      "company": "大陆集团（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"大陆集团（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"大陆集团（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"大陆集团（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"大陆集团（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"大陆集团（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"大陆集团（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"大陆集团（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"大陆集团（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"大陆集团（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"大陆集团（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"大陆集团（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"大陆集团（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"大陆集团（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"大陆集团（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_625260539ccf28f2d501",
+      "kind": "precursor_news_timeline",
+      "company": "采埃孚（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"采埃孚（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"采埃孚（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"采埃孚（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"采埃孚（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"采埃孚（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"采埃孚（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"采埃孚（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"采埃孚（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"采埃孚（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"采埃孚（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"采埃孚（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"采埃孚（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"采埃孚（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"采埃孚（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    },
+    {
+      "task_id": "task_640f8baa78a084717b18",
+      "kind": "precursor_news_timeline",
+      "company": "安波福（中国）",
+      "company_type": "foreign",
+      "sector": "automotive_technology",
+      "split": "test",
+      "window_start": "2026-01-01",
+      "window_end_inclusive": "2026-06-30",
+      "query_groups": [
+        {
+          "group": "leadership_organization",
+          "queries": [
+            "\"安波福（中国）\" 任命 履新 换帅 高管 事业部 区域负责人 组织架构 after:2026-01-01 before:2026-07-01",
+            "\"安波福（中国）\" appointed president executive business unit organization after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "capital_structure",
+          "queries": [
+            "\"安波福（中国）\" 融资 并购 合资 上市 资金用途 after:2026-01-01 before:2026-07-01",
+            "\"安波福（中国）\" funding acquisition joint venture IPO proceeds after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "operations_capacity",
+          "queries": [
+            "\"安波福（中国）\" 落户 总部 工厂 产线 扩产 投产 环评 施工 设备 after:2026-01-01 before:2026-07-01",
+            "\"安波福（中国）\" headquarters site factory capacity production permit after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "customer_revenue",
+          "queries": [
+            "\"安波福（中国）\" 订单 定点 中标 客户验证 供应商准入 渠道 交付 after:2026-01-01 before:2026-07-01",
+            "\"安波福（中国）\" order award customer validation supplier delivery channel after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "technology_product",
+          "queries": [
+            "\"安波福（中国）\" 产品发布 样机 流片 临床 注册证 认证 专利 技术突破 after:2026-01-01 before:2026-07-01",
+            "\"安波福（中国）\" product launch prototype tapeout approval patent milestone after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "partnership_expansion",
+          "queries": [
+            "\"安波福（中国）\" 战略合作 联合研发 生态 出海 海外 市场进入 after:2026-01-01 before:2026-07-01",
+            "\"安波福（中国）\" partnership joint development ecosystem overseas market entry after:2026-01-01 before:2026-07-01"
+          ]
+        },
+        {
+          "group": "enterprise_system",
+          "queries": [
+            "\"安波福（中国）\" ERP MES PLM CRM 数字化 招标 上线 after:2026-01-01 before:2026-07-01",
+            "\"安波福（中国）\" ERP MES PLM CRM digital transformation tender go-live after:2026-01-01 before:2026-07-01"
+          ]
+        }
+      ],
+      "required_artifacts": [
+        "source URL",
+        "published_at or observed_at",
+        "raw page or snapshot",
+        "content_sha256",
+        "event type and phase"
+      ],
+      "prediction_boundary": "Job advertisements are labels only and must not enter news evidence.",
+      "status": "pending"
+    }
+  ]
+}

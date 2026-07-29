@@ -1,0 +1,41 @@
+{
+  "holdout_version": "holdout-v11",
+  "frozen_at": "2026-07-28",
+  "cutoffs": ["2026-04-01"],
+  "horizon_months": 3,
+  "prompt_version": "historical-demand-v7-regional-hub-enablers",
+  "prediction_max_roles_per_company": 5,
+  "temperature": 0.0,
+  "workforce_precursors_enabled": false,
+  "prediction_inputs_exclude_job_ads": true,
+  "josint_inputs_enabled": false,
+  "candidate_selection": {
+    "window_start": "2025-07-01",
+    "window_end": "2026-03-31",
+    "minimum_candidates": 8,
+    "rule": "Eight new foreign life-science companies selected by a blinded agent only from A-grade positive pre-cutoff events without searching or opening future jobs."
+  },
+  "companies": [
+    "Takeda（武田中国）",
+    "Boehringer Ingelheim（勃林格殷格翰中国）",
+    "Eli Lilly（礼来中国）",
+    "AbbVie（艾伯维）",
+    "Bristol Myers Squibb（百时美施贵宝中国）",
+    "Johnson & Johnson Innovative Medicine（强生创新制药）",
+    "Boston Scientific（波士顿科学）",
+    "Daiichi Sankyo（第一三共）"
+  ],
+  "acceptance": {
+    "minimum_matches_per_cutoff": 3,
+    "minimum_distinct_matched_jobs": 3,
+    "minimum_distinct_matched_companies": 2,
+    "minimum_candidate_prediction_coverage": 0.75,
+    "minimum_distinct_predicted_titles": 30,
+    "minimum_distinct_predicted_role_families": 12,
+    "minimum_distinct_canonical_role_keys": 30,
+    "required_matched_company_types": ["foreign"],
+    "snapshot_audit_required": true,
+    "uniform_label_search_required": true
+  },
+  "freeze_rule": "After the pre-prediction seal, do not change evidence, prompt, ontology, matcher, thresholds, job-field adapter or candidate universe. Run and freeze predictions before any future-job label search."
+}

@@ -1,0 +1,1817 @@
+{
+  "schema_version": 1,
+  "iteration": "post-v15-calibration-r1",
+  "manifest_sha256": "0c4887b084dc93506b46b402c636476fbc696174ed9b93f1f22483f38bf01fa8",
+  "dataset_sha256": "06b931dc77de64cb914c94835d19bec0a9c8c5c4a26319741c851554abd8ba8f",
+  "scope": {
+    "development_splits": [
+      "calibration",
+      "train"
+    ],
+    "test_labels_accessed": false,
+    "holdout_v15_accessed_for_model_selection": false,
+    "propensity_model_trained": false
+  },
+  "baseline": {
+    "candidate_id": "frozen-current-logistic",
+    "feature_policy": "full",
+    "l2": 0.1,
+    "learned_weight": 1.0,
+    "metrics": {
+      "split": "calibration",
+      "evaluated_company_cutoffs": 24,
+      "top1_accuracy": 0.20833333333333334,
+      "top5_accuracy": 1.0,
+      "mean_reciprocal_rank": 0.4861111111111112,
+      "brier_score": 0.09296551779065555,
+      "macro_f1_top1": 0.02873563218390805,
+      "precision_at_20": 0.25,
+      "recall_at_20": 0.20833333333333334,
+      "company_type_slices": {
+        "foreign": {
+          "evaluated": 8,
+          "top1_accuracy": 0.625,
+          "top5_accuracy": 1.0
+        },
+        "listed": {
+          "evaluated": 7,
+          "top1_accuracy": 0.0,
+          "top5_accuracy": 1.0
+        },
+        "startup_private": {
+          "evaluated": 9,
+          "top1_accuracy": 0.0,
+          "top5_accuracy": 1.0
+        }
+      }
+    }
+  },
+  "rule_baseline": {
+    "split": "calibration",
+    "evaluated_company_cutoffs": 24,
+    "top1_accuracy": 0.08333333333333333,
+    "top5_accuracy": 0.25,
+    "mean_reciprocal_rank": 0.2158399470899471,
+    "brier_score": 0.09383776228988334,
+    "macro_f1_top1": 0.03125,
+    "precision_at_20": 0.1,
+    "recall_at_20": 0.08333333333333333,
+    "company_type_slices": {
+      "foreign": {
+        "evaluated": 8,
+        "top1_accuracy": 0.25,
+        "top5_accuracy": 0.5
+      },
+      "listed": {
+        "evaluated": 7,
+        "top1_accuracy": 0.0,
+        "top5_accuracy": 0.14285714285714285
+      },
+      "startup_private": {
+        "evaluated": 9,
+        "top1_accuracy": 0.0,
+        "top5_accuracy": 0.1111111111111111
+      }
+    }
+  },
+  "candidates": [
+    {
+      "candidate_id": "full-l2-0.03-learned-0.25",
+      "feature_policy": "full",
+      "l2": 0.03,
+      "learned_weight": 0.25,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33614417989417994,
+        "brier_score": 0.08742602313017543,
+        "macro_f1_top1": 0.03549783549783549,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.03-learned-0.5",
+      "feature_policy": "full",
+      "l2": 0.03,
+      "learned_weight": 0.5,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.3418650793650793,
+        "brier_score": 0.0841723110706304,
+        "macro_f1_top1": 0.04126984126984127,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.03-learned-0.75",
+      "feature_policy": "full",
+      "l2": 0.03,
+      "learned_weight": 0.75,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 0.875,
+        "mean_reciprocal_rank": 0.4104166666666667,
+        "brier_score": 0.08407662611124737,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.6666666666666666
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.03-learned-1",
+      "feature_policy": "full",
+      "l2": 0.03,
+      "learned_weight": 1.0,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 1.0,
+        "mean_reciprocal_rank": 0.4861111111111112,
+        "brier_score": 0.08713896825202704,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.1-learned-0.25",
+      "feature_policy": "full",
+      "l2": 0.1,
+      "learned_weight": 0.25,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08777264171573289,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.1-learned-0.5",
+      "feature_policy": "full",
+      "l2": 0.1,
+      "learned_weight": 0.5,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.3365575396825397,
+        "brier_score": 0.08560556077447755,
+        "macro_f1_top1": 0.03549783549783549,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.1-learned-0.75",
+      "feature_policy": "full",
+      "l2": 0.1,
+      "learned_weight": 0.75,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.6666666666666666,
+        "mean_reciprocal_rank": 0.35381944444444446,
+        "brier_score": 0.08733651946611835,
+        "macro_f1_top1": 0.02142857142857143,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.5555555555555556
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.1-learned-1",
+      "feature_policy": "full",
+      "l2": 0.1,
+      "learned_weight": 1.0,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 1.0,
+        "mean_reciprocal_rank": 0.4861111111111112,
+        "brier_score": 0.09296551779065555,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.3-learned-0.25",
+      "feature_policy": "full",
+      "l2": 0.3,
+      "learned_weight": 0.25,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08799844371596596,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.3-learned-0.5",
+      "feature_policy": "full",
+      "l2": 0.3,
+      "learned_weight": 0.5,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08667177097264925,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.3-learned-0.75",
+      "feature_policy": "full",
+      "l2": 0.3,
+      "learned_weight": 0.75,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.3365575396825397,
+        "brier_score": 0.0898577440599331,
+        "macro_f1_top1": 0.03549783549783549,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-0.3-learned-1",
+      "feature_policy": "full",
+      "l2": 0.3,
+      "learned_weight": 1.0,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 1.0,
+        "mean_reciprocal_rank": 0.4861111111111112,
+        "brier_score": 0.09755636297781853,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-1-learned-0.25",
+      "feature_policy": "full",
+      "l2": 1.0,
+      "learned_weight": 0.25,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08806701463560221,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-1-learned-0.5",
+      "feature_policy": "full",
+      "l2": 1.0,
+      "learned_weight": 0.5,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08722615439444041,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-1-learned-0.75",
+      "feature_policy": "full",
+      "l2": 1.0,
+      "learned_weight": 0.75,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.0913151815663992,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-1-learned-1",
+      "feature_policy": "full",
+      "l2": 1.0,
+      "learned_weight": 1.0,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 1.0,
+        "mean_reciprocal_rank": 0.4861111111111112,
+        "brier_score": 0.10033409615147823,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-3-learned-0.25",
+      "feature_policy": "full",
+      "l2": 3.0,
+      "learned_weight": 0.25,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.3857473544973545,
+        "brier_score": 0.08808177001935949,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-3-learned-0.5",
+      "feature_policy": "full",
+      "l2": 3.0,
+      "learned_weight": 0.5,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.3857473544973545,
+        "brier_score": 0.0874019504470068,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-3-learned-0.75",
+      "feature_policy": "full",
+      "l2": 3.0,
+      "learned_weight": 0.75,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.3857473544973545,
+        "brier_score": 0.09179830357282505,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "full-l2-3-learned-1",
+      "feature_policy": "full",
+      "l2": 3.0,
+      "learned_weight": 1.0,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 1.0,
+        "mean_reciprocal_rank": 0.5416666666666666,
+        "brier_score": 0.10127082939681405,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.03-learned-0.25",
+      "feature_policy": "portable",
+      "l2": 0.03,
+      "learned_weight": 0.25,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.335978835978836,
+        "brier_score": 0.08763339130451236,
+        "macro_f1_top1": 0.03549783549783549,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.03-learned-0.5",
+      "feature_policy": "portable",
+      "l2": 0.03,
+      "learned_weight": 0.5,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.625,
+        "mean_reciprocal_rank": 0.34598214285714285,
+        "brier_score": 0.0859220699073848,
+        "macro_f1_top1": 0.04921968787515006,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.4444444444444444
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.03-learned-0.75",
+      "feature_policy": "portable",
+      "l2": 0.03,
+      "learned_weight": 0.75,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 0.875,
+        "mean_reciprocal_rank": 0.4327546296296297,
+        "brier_score": 0.08870379809849929,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.6666666666666666
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.03-learned-1",
+      "feature_policy": "portable",
+      "l2": 0.03,
+      "learned_weight": 1.0,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 1.0,
+        "mean_reciprocal_rank": 0.4861111111111112,
+        "brier_score": 0.09597857587785714,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.1-learned-0.25",
+      "feature_policy": "portable",
+      "l2": 0.1,
+      "learned_weight": 0.25,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.0878693885992406,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.1-learned-0.5",
+      "feature_policy": "portable",
+      "l2": 0.1,
+      "learned_weight": 0.5,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.3365575396825397,
+        "brier_score": 0.08659903022639834,
+        "macro_f1_top1": 0.03549783549783549,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.1-learned-0.75",
+      "feature_policy": "portable",
+      "l2": 0.1,
+      "learned_weight": 0.75,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.6666666666666666,
+        "mean_reciprocal_rank": 0.3524305555555556,
+        "brier_score": 0.09002668717135817,
+        "macro_f1_top1": 0.02040816326530612,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.5555555555555556
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.1-learned-1",
+      "feature_policy": "portable",
+      "l2": 0.1,
+      "learned_weight": 1.0,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 1.0,
+        "mean_reciprocal_rank": 0.4861111111111112,
+        "brier_score": 0.09815235943411842,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.3-learned-0.25",
+      "feature_policy": "portable",
+      "l2": 0.3,
+      "learned_weight": 0.25,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08800501861101508,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.3-learned-0.5",
+      "feature_policy": "portable",
+      "l2": 0.3,
+      "learned_weight": 0.5,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08702515832751222,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.3-learned-0.75",
+      "feature_policy": "portable",
+      "l2": 0.3,
+      "learned_weight": 0.75,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.3365575396825397,
+        "brier_score": 0.09089818143937475,
+        "macro_f1_top1": 0.03549783549783549,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-0.3-learned-1",
+      "feature_policy": "portable",
+      "l2": 0.3,
+      "learned_weight": 1.0,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 1.0,
+        "mean_reciprocal_rank": 0.4861111111111112,
+        "brier_score": 0.09962408794660321,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-1-learned-0.25",
+      "feature_policy": "portable",
+      "l2": 1.0,
+      "learned_weight": 0.25,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08806026556174809,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-1-learned-0.5",
+      "feature_policy": "portable",
+      "l2": 1.0,
+      "learned_weight": 0.5,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08730830953360275,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-1-learned-0.75",
+      "feature_policy": "portable",
+      "l2": 1.0,
+      "learned_weight": 0.75,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.09158189420544668,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-1-learned-1",
+      "feature_policy": "portable",
+      "l2": 1.0,
+      "learned_weight": 1.0,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 1.0,
+        "mean_reciprocal_rank": 0.4861111111111112,
+        "brier_score": 0.10088101957728009,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-3-learned-0.25",
+      "feature_policy": "portable",
+      "l2": 3.0,
+      "learned_weight": 0.25,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08807905937229682,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-3-learned-0.5",
+      "feature_policy": "portable",
+      "l2": 3.0,
+      "learned_weight": 0.5,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.08742173949737528,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-3-learned-0.75",
+      "feature_policy": "portable",
+      "l2": 3.0,
+      "learned_weight": 0.75,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.125,
+        "top5_accuracy": 0.5833333333333334,
+        "mean_reciprocal_rank": 0.33713624338624343,
+        "brier_score": 0.09186580266512052,
+        "macro_f1_top1": 0.03696303696303697,
+        "precision_at_20": 0.15,
+        "recall_at_20": 0.125,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.375,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.42857142857142855
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 0.3333333333333333
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [
+          "macro_f1_top1"
+        ],
+        "improved_primary_metric_count": 1,
+        "largest_company_type_top1_regression": 0.25,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    },
+    {
+      "candidate_id": "portable-l2-3-learned-1",
+      "feature_policy": "portable",
+      "l2": 3.0,
+      "learned_weight": 1.0,
+      "metrics": {
+        "split": "calibration",
+        "evaluated_company_cutoffs": 24,
+        "top1_accuracy": 0.20833333333333334,
+        "top5_accuracy": 1.0,
+        "mean_reciprocal_rank": 0.4861111111111112,
+        "brier_score": 0.10141124887553252,
+        "macro_f1_top1": 0.02873563218390805,
+        "precision_at_20": 0.25,
+        "recall_at_20": 0.20833333333333334,
+        "company_type_slices": {
+          "foreign": {
+            "evaluated": 8,
+            "top1_accuracy": 0.625,
+            "top5_accuracy": 1.0
+          },
+          "listed": {
+            "evaluated": 7,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          },
+          "startup_private": {
+            "evaluated": 9,
+            "top1_accuracy": 0.0,
+            "top5_accuracy": 1.0
+          }
+        }
+      },
+      "passed_gate": false,
+      "gate": {
+        "improved_primary_metrics": [],
+        "improved_primary_metric_count": 0,
+        "largest_company_type_top1_regression": 0.0,
+        "minimum_improved_metrics": 2,
+        "maximum_slice_regression": 0.125
+      }
+    }
+  ],
+  "decision": {
+    "promoted": false,
+    "selected_candidate_id": null,
+    "reason": "no_candidate_passed_preregistered_gate"
+  },
+  "selected_model": null
+}

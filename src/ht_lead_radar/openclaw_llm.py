@@ -234,7 +234,7 @@ class OpenClawConfiguredLLMRunner:
             "model": self.config.model,
             "messages": messages,
             "stream": False,
-            "temperature": 0.2,
+            "temperature": 0.0,
             "max_completion_tokens": self.max_completion_tokens,
             "reasoning_split": True,
         }
@@ -247,7 +247,15 @@ class OpenClawConfiguredLLMRunner:
             },
             method="POST",
         )
-        return _message_text(self.transport(request, self.timeout_seconds))
+        last_error: DirectLLMError | None = None
+        for _attempt in range(2):
+            payload = self.transport(request, self.timeout_seconds)
+            try:
+                return _message_text(payload)
+            except DirectLLMError as error:
+                last_error = error
+        assert last_error is not None
+        raise last_error
 
 
 __all__ = [

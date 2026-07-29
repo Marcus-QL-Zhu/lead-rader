@@ -1,0 +1,14 @@
+{
+    "sealed_at":  "2026-07-29T02:33:16+08:00",
+    "passed":  false,
+    "reason":  "V18 missed the pre-registered minimum: two evaluator family matches, only foreign-company support, and fewer than three distinct matched jobs/companies. Manual audit further identified the Takeda match as an over-broad business-unit taxonomy match, so conservative support is one role match.",
+    "interpretation":  "Coverage and diversity gates passed, but independent job support and company-type coverage failed. V18 remains immutable; generic corrections are applied only to V19 and later.",
+    "files":  {
+                  "evaluation/holdout-v18/jobs.json":  "641a42cd06a8f8a59ce574b67265327918553f513e98ae56d3f73fec0bc6b509",
+                  "evaluation/holdout-v18/label-audit.json":  "5a6b311d13905fc7bee8fefd73da9546a3697d5e207cbf9fe3a32a4e5e4b957f",
+                  ".acceptance/holdout-v18.snapshot.json":  "48aba1af73dbae19a718ba50c4e858c9cde85518e4adf47a19b6bb18144e466c",
+                  ".acceptance/holdout-v18.report.json":  "b140a5978369aad62e31d9eb35251b2f16b791880d3a51c8d4c8a897716356e1",
+                  "evaluation/holdout-v18/acceptance-summary.json":  "100083121abafb536b08c5d1dc15c54cff59da880aa7c45cf36a29e650821df6",
+                  "evaluation/holdout-v18/pre-label-seal.json":  "603be7001cbcd4f82f9d480186495f5b72d88ec51c9f7e13740ca302ee9e8618"
+              }
+}

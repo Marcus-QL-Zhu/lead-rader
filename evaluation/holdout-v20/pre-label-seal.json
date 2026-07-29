@@ -1,0 +1,27 @@
+{
+    "sealed_at":  "2026-07-29T03:24:40+08:00",
+    "label_search_started":  false,
+    "snapshot":  {
+                     "path":  ".acceptance/holdout-v20.snapshot.json",
+                     "sha256":  "6f3316c145feba814a50a722f5a21f04d5530de51df142699a7c709b126b421f"
+                 },
+    "ontology_repair":  {
+                            "reason":  "A generic scoring tie classified 新设项目公司总经理 as program_delivery because 项目 and 总经理 each matched once.",
+                            "action":  "Added a tested title-level precedence rule for 总经理/总裁/president/managing director before any future-job label was opened.",
+                            "labels_opened_before_repair":  false
+                        },
+    "prediction_summary":  {
+                               "candidate_count":  18,
+                               "analyzed_company_count":  16,
+                               "failed_company_count":  2,
+                               "companies_with_hypotheses":  14,
+                               "candidate_prediction_coverage":  0.77777777777777779,
+                               "raw_hypothesis_count":  39,
+                               "maximum_hypotheses_per_company":  3,
+                               "distinct_raw_title_count":  39,
+                               "distinct_predicted_role_families":  12,
+                               "distinct_canonical_role_keys":  39,
+                               "snapshot_audit_verified":  true
+                           },
+    "declaration":  "The audited V20 prediction snapshot and pre-label ontology repair were sealed before opening any [2026-05-01,2026-08-01) recruiting labels."
+}

@@ -1,0 +1,39 @@
+{
+  "holdout_version": "holdout-v2",
+  "frozen_at": "2026-07-28",
+  "cutoffs": ["2026-04-01"],
+  "horizon_months": 3,
+  "prompt_version": "historical-demand-v5-required-functional-coverage",
+  "prediction_max_roles_per_company": 5,
+  "temperature": 0.0,
+  "workforce_precursors_enabled": false,
+  "prediction_inputs_exclude_job_ads": true,
+  "josint_inputs_enabled": false,
+  "candidate_selection": {
+    "window_start": "2026-02-01",
+    "window_end": "2026-03-31",
+    "minimum_candidates": 10,
+    "rule": "Stratified by company type; include every reviewed hard-tech company meeting at least one of: funding >= CNY 200m, new factory opened, flagship platform/product launch with concrete metrics, or scoped strategic partnership. Selection agent was prohibited from job searches."
+  },
+  "companies": [
+    "松延动力",
+    "艾利特机器人",
+    "银河通用",
+    "比亚迪",
+    "宁德时代",
+    "小米集团",
+    "华为",
+    "大众汽车集团（中国）",
+    "博格华纳（中国）",
+    "S&STech苏州项目公司"
+  ],
+  "acceptance": {
+    "minimum_matches_per_cutoff": 3,
+    "minimum_distinct_matched_jobs": 3,
+    "minimum_distinct_matched_companies": 3,
+    "required_matched_company_types": ["startup_private", "listed", "foreign"],
+    "snapshot_audit_required": true,
+    "uniform_label_search_required": true
+  },
+  "freeze_rule": "After the pre-prediction seal, do not change evidence, prompt, ontology, matcher, thresholds or candidate universe. Run and freeze predictions before any future-job label search."
+}
