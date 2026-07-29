@@ -22,7 +22,7 @@ where = ["src"]
 ht_lead_radar = ["data/*.json"]
 
 [tool.pytest.ini_options]
-pythonpath = ["src"]
+pythonpath = [".", "src"]
 testpaths = ["tests"]
 
 [tool.ruff.lint]
