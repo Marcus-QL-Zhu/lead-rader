@@ -199,7 +199,7 @@ def test_store_rejects_noncanonical_or_inconsistent_expiry_before_writing(tmp_pa
     draft["expires_at"] = ""
     invalid = {**bundle.to_dict(), "drafts": [draft]}
 
-    with pytest.raises(ValueError, match="expires_at must be an ISO date"):
+    with pytest.raises(ValueError, match="expires_at must use YYYY-MM-DD"):
         store.save_bundle(invalid)
 
     draft["expires_at"] = "20260802"

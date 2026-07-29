@@ -407,12 +407,12 @@ class TalentPoolStore:
 
     def save_bundle(self, bundle: Mapping[str, Any]) -> int:
         run_date = str(bundle.get("run_date") or "")
-        try:
-            canonical_run_date = date.fromisoformat(run_date).isoformat()
-        except ValueError as error:
-            raise ValueError("draft bundle run_date must be an ISO date") from error
-        if run_date != canonical_run_date:
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", run_date):
             raise ValueError("draft bundle run_date must use YYYY-MM-DD")
+        try:
+            date.fromisoformat(run_date)
+        except ValueError as error:
+            raise ValueError("draft bundle run_date must be a valid date") from error
         direction = str(bundle.get("direction") or "")
         source_run_id = str(bundle.get("source_run_id") or "")
         if not source_run_id:
@@ -433,12 +433,12 @@ class TalentPoolStore:
                 raise ValueError("each draft run_date must equal bundle run_date")
             draft["run_date"] = run_date
             expiry = str(draft.get("expires_at") or "").strip()
+            if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", expiry):
+                raise ValueError("each draft expires_at must use YYYY-MM-DD")
             try:
                 canonical_expiry = date.fromisoformat(expiry).isoformat()
             except ValueError as error:
-                raise ValueError("each draft expires_at must be an ISO date") from error
-            if expiry != canonical_expiry:
-                raise ValueError("each draft expires_at must use YYYY-MM-DD")
+                raise ValueError("each draft expires_at must be a valid date") from error
             if canonical_expiry != draft_expiry_date(run_date):
                 raise ValueError("each draft expires_at must equal run_date plus 7 days")
             draft["expires_at"] = canonical_expiry
