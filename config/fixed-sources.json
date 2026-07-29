@@ -58,7 +58,7 @@
       "grade": "B",
       "fetch_detail": true,
       "max_items": 40,
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "cls-telegraph",

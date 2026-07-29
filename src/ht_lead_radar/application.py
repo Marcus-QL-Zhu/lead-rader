@@ -160,7 +160,9 @@ class LeadRadarApplication:
             },
         )
 
-    def run(self, payload: Mapping[str, Any], idempotency_key: str) -> ApplicationResult:
+    def run(
+        self, payload: Mapping[str, Any], idempotency_key: str
+    ) -> ApplicationResult:
         normalized = apply_defaults(payload)
         run_id = make_run_id(idempotency_key)
         plan = json.loads(json.dumps(normalized.get("request_plan") or {}))
@@ -168,13 +170,17 @@ class LeadRadarApplication:
         candidate_data = request.get("candidate_profile")
         if str(request.get("mode", "")).upper() == "CANDIDATE_FLOAT":
             if not candidate_data:
-                raise ValueError("Candidate Float requires an ephemeral candidate profile")
+                raise ValueError(
+                    "Candidate Float requires an ephemeral candidate profile"
+                )
             self._ephemeral_candidates[run_id] = _candidate_from_dict(candidate_data)
-            request.update({
-                "raw_text": "[Candidate Float request redacted: runtime-only]",
-                "target_role": None,
-                "candidate_profile": None,
-            })
+            request.update(
+                {
+                    "raw_text": "[Candidate Float request redacted: runtime-only]",
+                    "target_role": None,
+                    "candidate_profile": None,
+                }
+            )
             plan["request"] = request
             normalized["request_plan"] = plan
         _drop_candidate_fields(normalized)
@@ -186,8 +192,13 @@ class LeadRadarApplication:
 
     def resume(self, run_id: str) -> ApplicationResult:
         record = self.runtime_store.get_run(run_id)
-        plan = record.input.get("request_plan") if isinstance(record.input, dict) else {}
-        if _request_mode(plan or {}) == "candidate_float" and run_id not in self._ephemeral_candidates:
+        plan = (
+            record.input.get("request_plan") if isinstance(record.input, dict) else {}
+        )
+        if (
+            _request_mode(plan or {}) == "candidate_float"
+            and run_id not in self._ephemeral_candidates
+        ):
             raise RuntimeError(
                 "Candidate Float profile was intentionally not persisted; rerun the Float "
                 "request with the candidate description to resume."
@@ -215,6 +226,8 @@ class LeadRadarApplication:
     def _collect(self, context: StageContext) -> dict[str, Any]:
         payload = dict(context.value)
         direction = str(payload["direction"])
+        source_topics = _source_topics(payload, direction)
+        collection_topic = "|".join(source_topics)
         plan = dict(payload.get("request_plan") or {})
         as_of = date.today()
         metadata: dict[str, Any] = {
@@ -223,6 +236,12 @@ class LeadRadarApplication:
             "request_mode": _request_mode(plan),
             "source_runs": [],
             "source_failures": [],
+            "source_topics": list(source_topics),
+            "collection_strategy": (
+                "single_pass_multi_topic"
+                if len(source_topics) > 1
+                else "targeted_topic"
+            ),
         }
         evidence: list[Evidence] = []
 
@@ -251,10 +270,12 @@ class LeadRadarApplication:
                 fixed_items, fixed_summary = self._collect_fixed(
                     context,
                     payload,
-                    direction,
+                    collection_topic,
                     as_of.year,
                 )
-                evidence.extend(fixed_items)
+                evidence.extend(
+                    replace(item, direction=direction) for item in fixed_items
+                )
                 metadata["source_runs"].extend(fixed_summary.get("runs", ()))
                 metadata["source_failures"].extend(fixed_summary.get("failures", ()))
 
@@ -284,11 +305,13 @@ class LeadRadarApplication:
                         ],
                     )
                     evidence.extend(evidence_from_dict(item) for item in searched)
-                    metadata["source_runs"].append({
-                        "provider": search_provider.provider_name,
-                        "status": "ok",
-                        "evidence_count": len(searched),
-                    })
+                    metadata["source_runs"].append(
+                        {
+                            "provider": search_provider.provider_name,
+                            "status": "ok",
+                            "evidence_count": len(searched),
+                        }
+                    )
                 except Exception as error:
                     metadata["source_failures"].append(
                         f"public-search-discovery: {type(error).__name__}: {error}"
@@ -299,7 +322,14 @@ class LeadRadarApplication:
 
         josint_db = payload.get("josint_db")
         if josint_db and Path(str(josint_db)).exists():
-            evidence.extend(collect_josint(str(josint_db), direction))
+            evidence.extend(
+                replace(item, direction=direction)
+                for item in collect_josint(
+                    str(josint_db),
+                    direction,
+                    topics=source_topics,
+                )
+            )
             mode += "+josint-late-validation"
 
         return {
@@ -327,7 +357,10 @@ class LeadRadarApplication:
                 if _request_mode(plan) == "candidate_float"
                 else "market_scan"
             )
-            if suppression and suppression.check_company(entry_point, item.company).suppressed:
+            if (
+                suppression
+                and suppression.check_company(entry_point, item.company).suppressed
+            ):
                 excluded.append({"company": item.company, "reason": "suppression"})
                 continue
             key = (
@@ -344,7 +377,7 @@ class LeadRadarApplication:
         grouped: dict[str, list[Evidence]] = {}
         for item in deduplicated:
             grouped.setdefault(item.company, []).append(item)
-        geography = ((plan.get("request") or {}).get("geography") or {})
+        geography = (plan.get("request") or {}).get("geography") or {}
         geography_code = geography.get("code", "CN_MAINLAND_HIRING_MARKET")
         mainland_relevance: dict[str, str] = {}
         qualified_companies: set[str] = set()
@@ -356,10 +389,12 @@ class LeadRadarApplication:
                 qualified_companies.add(company)
                 mainland_relevance[company] = "中国大陆招聘市场相关"
             else:
-                excluded.append({
-                    "company": company,
-                    "reason": "未找到中国大陆招聘市场相关性",
-                })
+                excluded.append(
+                    {
+                        "company": company,
+                        "reason": "未找到中国大陆招聘市场相关性",
+                    }
+                )
 
         industry_layers: dict[str, str] = {}
         adjacent_watchlist: list[str] = []
@@ -398,13 +433,15 @@ class LeadRadarApplication:
         entity_ids: set[str] = set()
         for item in evidence:
             result = fact_store.ingest_legacy_evidence(item)
-            annotated.append(replace(
-                item,
-                document_id=result.document.id,
-                event_id=result.event.id,
-                statement_ids=(result.statement.id,),
-                independent_source_group=result.document.independent_source_key,
-            ))
+            annotated.append(
+                replace(
+                    item,
+                    document_id=result.document.id,
+                    event_id=result.event.id,
+                    statement_ids=(result.statement.id,),
+                    independent_source_group=result.document.independent_source_key,
+                )
+            )
             document_ids.add(result.document.id)
             event_ids.add(result.event.id)
             entity_ids.add(result.entity.id)
@@ -429,8 +466,13 @@ class LeadRadarApplication:
             as_of=as_of,
             minimum_score=float(payload["minimum_score"]),
             limit=int(payload["top"]),
+            source_topics=_source_topics(payload, value["direction"]),
         )
-        enrich_industry_roles(leads, value["direction"])
+        enrich_industry_roles(
+            leads,
+            value["direction"],
+            source_topics=_source_topics(value["payload"], value["direction"]),
+        )
         value["leads"] = [lead.to_dict() for lead in leads]
         value["late_opportunities"] = build_late_opportunities(
             value["direction"], evidence
@@ -482,18 +524,20 @@ class LeadRadarApplication:
                     if not classify_seniority(result.title, result.snippet)[1]:
                         continue
                     matches.append(result)
-                    evidence.append(Evidence(
-                        company=lead.company,
-                        event_type="job_ad",
-                        phase="recruit",
-                        event_date=result.published_at,
-                        title=result.title,
-                        snippet=result.snippet[:800],
-                        source_url=result.url,
-                        source_name=research_provider.provider_name,
-                        source_grade="C",
-                        direction=value["direction"],
-                    ))
+                    evidence.append(
+                        Evidence(
+                            company=lead.company,
+                            event_type="job_ad",
+                            phase="recruit",
+                            event_date=result.published_at,
+                            title=result.title,
+                            snippet=result.snippet[:800],
+                            source_url=result.url,
+                            source_name=research_provider.provider_name,
+                            source_grade="C",
+                            direction=value["direction"],
+                        )
+                    )
                 metadata["ad_checks"][lead.company] = {
                     "checked_at": value["as_of"],
                     "queries": [query],
@@ -510,13 +554,15 @@ class LeadRadarApplication:
                 annotated.append(item)
                 continue
             result = fact_store.ingest_legacy_evidence(item)
-            annotated.append(replace(
-                item,
-                document_id=result.document.id,
-                event_id=result.event.id,
-                statement_ids=(result.statement.id,),
-                independent_source_group=result.document.independent_source_key,
-            ))
+            annotated.append(
+                replace(
+                    item,
+                    document_id=result.document.id,
+                    event_id=result.event.id,
+                    statement_ids=(result.statement.id,),
+                    independent_source_group=result.document.independent_source_key,
+                )
+            )
         evidence = annotated
 
         leads = build_leads(
@@ -526,8 +572,13 @@ class LeadRadarApplication:
             as_of=date.fromisoformat(value["as_of"]),
             minimum_score=float(payload["minimum_score"]),
             limit=int(payload["top"]),
+            source_topics=_source_topics(payload, value["direction"]),
         )
-        enrich_industry_roles(leads, value["direction"])
+        enrich_industry_roles(
+            leads,
+            value["direction"],
+            source_topics=_source_topics(value["payload"], value["direction"]),
+        )
 
         verification = self._metaso_verify(
             context,
@@ -545,8 +596,13 @@ class LeadRadarApplication:
                 as_of=date.fromisoformat(value["as_of"]),
                 minimum_score=float(payload["minimum_score"]),
                 limit=int(payload["top"]),
+                source_topics=_source_topics(payload, value["direction"]),
             )
-            enrich_industry_roles(leads, value["direction"])
+            enrich_industry_roles(
+                leads,
+                value["direction"],
+                source_topics=_source_topics(value["payload"], value["direction"]),
+            )
 
         value["metaso_points_this_run"] = sum(
             max(int(result.get("query_count", 0)), 0)
@@ -610,8 +666,7 @@ class LeadRadarApplication:
                     )
                 ]
                 order = {
-                    item["company"]: index
-                    for index, item in enumerate(float_payload)
+                    item["company"]: index for index, item in enumerate(float_payload)
                 }
                 leads.sort(key=lambda lead: order.get(lead.company, 10_000))
 
@@ -624,10 +679,14 @@ class LeadRadarApplication:
         self._ephemeral_float_results[context.run_id] = float_payload
         value["float_matches"] = []
         value["deep_research"] = deep_reports
-        value["budget_status"] = SearchBudgetLedger(payload["budget_db"]).status(
-            configured_limit=int(payload["metaso_daily_point_budget"]),
-            provider_limit=int(payload["metaso_provider_daily_limit"]),
-        ).to_dict()
+        value["budget_status"] = (
+            SearchBudgetLedger(payload["budget_db"])
+            .status(
+                configured_limit=int(payload["metaso_daily_point_budget"]),
+                provider_limit=int(payload["metaso_provider_daily_limit"]),
+            )
+            .to_dict()
+        )
         return value
 
     def _publish(self, context: StageContext) -> dict[str, Any]:
@@ -641,11 +700,14 @@ class LeadRadarApplication:
                 lead.basic_research["deep_research"] = report
         request_plan = value.get("request_plan") or {}
         output_dir = Path(payload["output_dir"])
-        slug = re.sub(
-            r"[^0-9A-Za-z\u4e00-\u9fff-]+",
-            "-",
-            value["direction"],
-        ).strip("-") or "direction"
+        slug = (
+            re.sub(
+                r"[^0-9A-Za-z\u4e00-\u9fff-]+",
+                "-",
+                value["direction"],
+            ).strip("-")
+            or "direction"
+        )
         stem = f"lead-radar-{slug}-{value['as_of']}"
         integration_status: dict[str, Any] = {}
 
@@ -655,14 +717,10 @@ class LeadRadarApplication:
             payload.get("feishu_app_secret") or env.get("FEISHU_APP_SECRET") or ""
         )
         app_token = str(
-            payload.get("feishu_app_token")
-            or env.get("FEISHU_BITABLE_APP_TOKEN")
-            or ""
+            payload.get("feishu_app_token") or env.get("FEISHU_BITABLE_APP_TOKEN") or ""
         )
         table_id = str(
-            payload.get("feishu_table_id")
-            or env.get("FEISHU_BITABLE_TABLE_ID")
-            or ""
+            payload.get("feishu_table_id") or env.get("FEISHU_BITABLE_TABLE_ID") or ""
         )
         dry_run_path = str(
             payload.get("feishu_dry_run_path")
@@ -712,12 +770,12 @@ class LeadRadarApplication:
         source_summary = {
             "runs": (value.get("metadata") or {}).get("source_runs", []),
             "failures": (value.get("metadata") or {}).get("source_failures", []),
-            "normalization_exclusions": (
-                value.get("metadata") or {}
-            ).get("normalization_exclusions", []),
-            "adjacent_watchlist": (
-                value.get("metadata") or {}
-            ).get("adjacent_watchlist", []),
+            "normalization_exclusions": (value.get("metadata") or {}).get(
+                "normalization_exclusions", []
+            ),
+            "adjacent_watchlist": (value.get("metadata") or {}).get(
+                "adjacent_watchlist", []
+            ),
             "metaso_budget": value.get("budget_status", {}),
         }
         float_matches = self._ephemeral_float_results.get(context.run_id, [])
@@ -786,9 +844,7 @@ class LeadRadarApplication:
                     source_id,
                     recorded_at=datetime.now(timezone.utc),
                     ok=source_run.get("status") == "ok",
-                    yield_count=max(
-                        int(source_run.get("evidence_count", 0)), 0
-                    ),
+                    yield_count=max(int(source_run.get("evidence_count", 0)), 0),
                 )
         except Exception:
             pass
@@ -849,14 +905,14 @@ class LeadRadarApplication:
                     ],
                 )
                 evidence.extend(evidence_from_dict(item) for item in serialized)
-                summary["runs"].append({
-                    "provider": collector.provider_name,
-                    "status": "ok",
-                    "evidence_count": len(serialized),
-                })
-                summary["failures"].extend(
-                    collector.last_run_summary.get("errors", [])
+                summary["runs"].append(
+                    {
+                        "provider": collector.provider_name,
+                        "status": "ok",
+                        "evidence_count": len(serialized),
+                    }
                 )
+                summary["failures"].extend(collector.last_run_summary.get("errors", []))
             except Exception as error:
                 summary["failures"].append(
                     f"legacy-fixed-sources: {type(error).__name__}: {error}"
@@ -885,20 +941,20 @@ class LeadRadarApplication:
                 )
                 pack_health = pack_collector.source_health_summary()
             evidence.extend(evidence_from_dict(item) for item in serialized)
-            summary["runs"].append({
-                "provider": "reusable-source-packs",
-                "status": "ok",
-                "evidence_count": len(serialized),
-                "health": pack_health,
-            })
+            summary["runs"].append(
+                {
+                    "provider": "reusable-source-packs",
+                    "status": "ok",
+                    "evidence_count": len(serialized),
+                    "health": pack_health,
+                }
+            )
         except ImportError:
             summary["failures"].append(
                 "source-pack collector module unavailable; legacy fixed sources used"
             )
         except Exception as error:
-            summary["failures"].append(
-                f"source-pack:{type(error).__name__}: {error}"
-            )
+            summary["failures"].append(f"source-pack:{type(error).__name__}: {error}")
         return evidence, summary
 
     def _metaso_verify(
@@ -954,7 +1010,8 @@ class LeadRadarApplication:
                         "status": f"error: {type(error).__name__}: {error}",
                     }
                 matched = [
-                    item for item in results
+                    item
+                    for item in results
                     if company_mentioned(
                         lead.company,
                         f"{item.title} {item.snippet}",
@@ -997,7 +1054,9 @@ def apply_defaults(payload: Mapping[str, Any]) -> dict[str, Any]:
     return output
 
 
-def default_idempotency_key(payload: Mapping[str, Any], *, refresh: bool = False) -> str:
+def default_idempotency_key(
+    payload: Mapping[str, Any], *, refresh: bool = False
+) -> str:
     canonical = json.dumps(
         {
             "date": date.today().isoformat(),
@@ -1005,9 +1064,10 @@ def default_idempotency_key(payload: Mapping[str, Any], *, refresh: bool = False
             "direction": payload.get("direction"),
             "request_plan": payload.get("request_plan"),
             "provider": payload.get("provider", "auto"),
-            "skip_feishu_projection": bool(
-                payload.get("skip_feishu_projection")
+            "source_topics": list(
+                _source_topics(payload, str(payload.get("direction") or ""))
             ),
+            "skip_feishu_projection": bool(payload.get("skip_feishu_projection")),
         },
         ensure_ascii=False,
         sort_keys=True,
@@ -1017,6 +1077,25 @@ def default_idempotency_key(payload: Mapping[str, Any], *, refresh: bool = False
     if refresh:
         return f"manual-refresh:{digest}:{datetime.now(timezone.utc).isoformat()}"
     return f"daily:{digest}"
+
+
+def _source_topics(
+    payload: Mapping[str, Any],
+    direction: str,
+) -> tuple[str, ...]:
+    raw = payload.get("source_topics")
+    if isinstance(raw, str):
+        values = raw.split("|")
+    elif isinstance(raw, (list, tuple)):
+        values = raw
+    else:
+        values = (direction,)
+    topics = tuple(
+        dict.fromkeys(str(item).strip() for item in values if str(item).strip())
+    )
+    if not topics:
+        raise ValueError("source_topics must contain at least one topic")
+    return topics
 
 
 def _request_mode(plan: Mapping[str, Any]) -> str:
@@ -1033,9 +1112,11 @@ def _search_provider(
     providers: list[Any] = []
     requested = force or str(payload.get("provider") or "auto")
     if requested in {"auto", "searxng", "fixed"}:
-        providers.append(SearXNGCollector(
-            base_url=env.get("SEARXNG_URL", "http://localhost:8080"),
-        ))
+        providers.append(
+            SearXNGCollector(
+                base_url=env.get("SEARXNG_URL", "http://localhost:8080"),
+            )
+        )
     if requested in {"auto", "bing", "fixed"} or not providers:
         providers.append(BingRSSCollector())
     return FallbackSearchProvider(providers)
@@ -1058,7 +1139,9 @@ def _load_replay_any(path: Path, direction: str) -> tuple[list[Evidence], dict]:
             metadata["as_of"] = manifest["as_of"]
         return evidence, metadata
     if not isinstance(payload, list):
-        raise ValueError("replay JSON must be a legacy lead array or schema v2 envelope")
+        raise ValueError(
+            "replay JSON must be a legacy lead array or schema v2 envelope"
+        )
     evidence = []
     metadata = {"routes": {}, "ad_checks": {}}
     for raw_lead in payload:
@@ -1073,9 +1156,7 @@ def _load_replay_any(path: Path, direction: str) -> tuple[list[Evidence], dict]:
 def _has_mainland_relevance(company: str, items: Iterable[Evidence]) -> bool:
     if re.search(r"[\u4e00-\u9fff]", company):
         return True
-    text = " ".join(
-        f"{item.title} {item.snippet} {item.source_url}" for item in items
-    )
+    text = " ".join(f"{item.title} {item.snippet} {item.source_url}" for item in items)
     mainland_terms = (
         "中国",
         "大陆",

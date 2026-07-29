@@ -15,7 +15,7 @@ from .models import CompanyLead, Evidence, OutreachRoute, ScoreComponent
 
 def evidence_from_dict(value: Mapping[str, Any]) -> Evidence:
     payload = dict(value)
-    for key in ("people", "organizations", "statement_ids"):
+    for key in ("people", "organizations", "statement_ids", "industry_tags"):
         payload[key] = tuple(payload.get(key) or ())
     allowed = {item.name for item in fields(Evidence)}
     return Evidence(**{key: item for key, item in payload.items() if key in allowed})
@@ -23,18 +23,18 @@ def evidence_from_dict(value: Mapping[str, Any]) -> Evidence:
 
 def route_from_dict(value: Mapping[str, Any]) -> OutreachRoute:
     allowed = {item.name for item in fields(OutreachRoute)}
-    return OutreachRoute(**{
-        key: item for key, item in dict(value).items() if key in allowed
-    })
+    return OutreachRoute(
+        **{key: item for key, item in dict(value).items() if key in allowed}
+    )
 
 
 def score_component_from_dict(value: Mapping[str, Any]) -> ScoreComponent:
     payload = dict(value)
     payload["evidence_urls"] = tuple(payload.get("evidence_urls") or ())
     allowed = {item.name for item in fields(ScoreComponent)}
-    return ScoreComponent(**{
-        key: item for key, item in payload.items() if key in allowed
-    })
+    return ScoreComponent(
+        **{key: item for key, item in payload.items() if key in allowed}
+    )
 
 
 def lead_from_dict(value: Mapping[str, Any]) -> CompanyLead:
@@ -46,13 +46,10 @@ def lead_from_dict(value: Mapping[str, Any]) -> CompanyLead:
         route_from_dict(item) for item in payload.get("outreach_routes", ())
     ]
     payload["score_components"] = [
-        score_component_from_dict(item)
-        for item in payload.get("score_components", ())
+        score_component_from_dict(item) for item in payload.get("score_components", ())
     ]
     allowed = {item.name for item in fields(CompanyLead)}
-    return CompanyLead(**{
-        key: item for key, item in payload.items() if key in allowed
-    })
+    return CompanyLead(**{key: item for key, item in payload.items() if key in allowed})
 
 
 __all__ = [

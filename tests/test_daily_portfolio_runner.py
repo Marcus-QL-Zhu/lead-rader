@@ -20,22 +20,12 @@ def _report(direction: str) -> dict:
             "generated_at": "2026-07-29T05:00:00+08:00",
             "source_summary": {},
         },
-        "leads": [
-            {
-                "company": f"{direction}公司",
-                "direction": direction,
-                "score": 60,
-                "evidence": [],
-            }
-        ],
+        "leads": [{"company": "示例公司", "score": 60, "evidence": []}],
     }
 
 
-def test_child_scans_skip_feishu_and_combined_portfolio_projects_once(
-    tmp_path, monkeypatch
-):
+def test_daily_topics_are_collected_by_one_application_run(tmp_path, monkeypatch):
     commands = []
-    projection_calls = []
 
     class Completed:
         returncode = 0
@@ -52,12 +42,6 @@ def test_child_scans_skip_feishu_and_combined_portfolio_projects_once(
             tmp_path / f"{direction}.json",
             _report(direction),
         ),
-    )
-    monkeypatch.setattr(
-        runner,
-        "sync_portfolio_projection",
-        lambda portfolio, args: projection_calls.append(portfolio)
-        or {"mode": "dry_run", "change_count": 1},
     )
     env_file = tmp_path / ".env"
     env_file.write_text("", encoding="utf-8")
@@ -78,6 +62,47 @@ def test_child_scans_skip_feishu_and_combined_portfolio_projects_once(
     )
 
     assert code == 0
-    assert len(commands) == 2
-    assert all("--skip-feishu-projection" in command for command in commands)
-    assert len(projection_calls) == 1
+    assert len(commands) == 1
+    command = commands[0]
+    assert command[command.index("--direction") + 1] == "硬科技组合"
+    assert command[command.index("--source-topics") + 1] == "具身智能|半导体"
+    assert "--skip-feishu-projection" not in command
+
+
+def test_daily_refresh_is_forwarded_to_the_single_run(tmp_path, monkeypatch):
+    commands = []
+
+    class Completed:
+        returncode = 0
+
+    monkeypatch.setattr(
+        runner.subprocess,
+        "run",
+        lambda command, check: commands.append(command) or Completed(),
+    )
+    monkeypatch.setattr(
+        runner,
+        "find_report",
+        lambda _directory, *, run_date, direction: (
+            tmp_path / f"{direction}.json",
+            _report(direction),
+        ),
+    )
+    env_file = tmp_path / ".env"
+    env_file.write_text("", encoding="utf-8")
+
+    assert (
+        runner.main(
+            [
+                "--refresh",
+                "--env-file",
+                str(env_file),
+                "--josint-db",
+                str(tmp_path / "josint.sqlite"),
+                "--output-dir",
+                str(tmp_path),
+            ]
+        )
+        == 0
+    )
+    assert "--refresh" in commands[0]

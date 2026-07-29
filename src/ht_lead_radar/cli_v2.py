@@ -71,12 +71,21 @@ def build_parser() -> argparse.ArgumentParser:
     resume.add_argument("--runtime-db", default=DEFAULTS["runtime_db"])
     resume.add_argument("--run-id", required=True)
 
-    replay = subparsers.add_parser("replay-run", help="重算低成本阶段并复用昂贵 checkpoint")
+    replay = subparsers.add_parser(
+        "replay-run", help="重算低成本阶段并复用昂贵 checkpoint"
+    )
     replay.add_argument("--runtime-db", default=DEFAULTS["runtime_db"])
     replay.add_argument("--run-id", required=True)
     replay.add_argument(
         "--from-stage",
-        choices=["collect", "normalize", "eventize", "score", "basic_research", "publish"],
+        choices=[
+            "collect",
+            "normalize",
+            "eventize",
+            "score",
+            "basic_research",
+            "publish",
+        ],
         default="normalize",
     )
     replay.add_argument(
@@ -121,6 +130,10 @@ def _add_pipeline_arguments(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument("--fixed-sources", default=DEFAULTS["fixed_sources"])
     parser.add_argument("--source-packs", default=DEFAULTS["source_packs"])
+    parser.add_argument(
+        "--source-topics",
+        help="pipe-separated discovery topics; omitted means the requested direction",
+    )
     parser.add_argument("--source-state-db", default=DEFAULTS["source_state_db"])
     parser.add_argument("--fact-db", default=DEFAULTS["fact_db"])
     parser.add_argument("--runtime-db", default=DEFAULTS["runtime_db"])
@@ -211,8 +224,7 @@ def _run_pipeline(args: argparse.Namespace) -> int:
         direction = plan.request.industry_topic or ""
     else:
         raw_request = (
-            f"我有一位候选人：{args.candidate}。"
-            "请反向分析哪些公司可能需要这位候选人。"
+            f"我有一位候选人：{args.candidate}。请反向分析哪些公司可能需要这位候选人。"
         )
         if args.direction:
             raw_request += f"重点分析{args.direction}行业。"
@@ -234,10 +246,12 @@ def _run_pipeline(args: argparse.Namespace) -> int:
     # The candidate description is task-local and must never enter runtime
     # checkpoints, manifests, projection state, or downstream fact stores.
     payload.pop("candidate", None)
-    payload.update({
-        "direction": direction,
-        "request_plan": plan.to_dict(),
-    })
+    payload.update(
+        {
+            "direction": direction,
+            "request_plan": plan.to_dict(),
+        }
+    )
     app = LeadRadarApplication(args.runtime_db)
     key = args.idempotency_key or default_idempotency_key(
         payload,
@@ -274,9 +288,9 @@ def _deep_research(args: argparse.Namespace) -> int:
     env = load_env_file(args.env_file)
     providers = []
     if args.provider in {"auto", "searxng"}:
-        providers.append(SearXNGCollector(
-            base_url=env.get("SEARXNG_URL", "http://localhost:8080")
-        ))
+        providers.append(
+            SearXNGCollector(base_url=env.get("SEARXNG_URL", "http://localhost:8080"))
+        )
     if args.provider in {"auto", "bing"}:
         providers.append(BingRSSCollector())
     report = DeepResearchEngine(
@@ -285,9 +299,10 @@ def _deep_research(args: argparse.Namespace) -> int:
     ).research(args.company, args.direction, refresh=args.refresh)
     target = Path(args.output_dir)
     target.mkdir(parents=True, exist_ok=True)
-    slug = re.sub(
-        r"[^0-9A-Za-z\u4e00-\u9fff-]+", "-", args.company
-    ).strip("-") or "company"
+    slug = (
+        re.sub(r"[^0-9A-Za-z\u4e00-\u9fff-]+", "-", args.company).strip("-")
+        or "company"
+    )
     path = target / f"deep-research-{slug}-{date.today().isoformat()}.json"
     path.write_text(
         json.dumps(report.to_dict(), ensure_ascii=False, indent=2),
@@ -330,9 +345,9 @@ def _source_health(args: argparse.Namespace) -> int:
 def _monitor(args: argparse.Namespace) -> int:
     cron_entries = ()
     if args.cron_text_file:
-        cron_entries = Path(args.cron_text_file).read_text(
-            encoding="utf-8"
-        ).splitlines()
+        cron_entries = (
+            Path(args.cron_text_file).read_text(encoding="utf-8").splitlines()
+        )
     report = build_daily_monitoring_report(
         runtime_db=args.runtime_db,
         source_health_db=args.source_health_db,
@@ -343,9 +358,7 @@ def _monitor(args: argparse.Namespace) -> int:
         ),
     )
     payload = report.to_dict()
-    payload["metaso_budget"] = SearchBudgetLedger(
-        args.budget_db
-    ).status().to_dict()
+    payload["metaso_budget"] = SearchBudgetLedger(args.budget_db).status().to_dict()
     _print_json(payload)
     return report.suggested_exit_code
 

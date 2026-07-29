@@ -15,14 +15,16 @@ def test_checked_in_registry_loads_and_has_all_required_packs():
 
     assert registry.version == 2
     assert registry.verified_on == "2026-07-25"
-    assert {pack.id for pack in registry.packs}.issuperset({
-        "generic-cn",
-        "brain-computer-interface-cn",
-        "semiconductor-cn",
-        "commercial-space-cn",
-        "fusion-cn",
-        "embodied-intelligence-cn",
-    })
+    assert {pack.id for pack in registry.packs}.issuperset(
+        {
+            "generic-cn",
+            "brain-computer-interface-cn",
+            "semiconductor-cn",
+            "commercial-space-cn",
+            "fusion-cn",
+            "embodied-intelligence-cn",
+        }
+    )
 
 
 @pytest.mark.parametrize(
@@ -35,7 +37,9 @@ def test_checked_in_registry_loads_and_has_all_required_packs():
         ("人形机器人", "embodied-intelligence-cn", "suzhou-robot-association"),
     ],
 )
-def test_sector_selection_fans_in_generic_and_matching_pack(topic, pack_id, specific_source):
+def test_sector_selection_fans_in_generic_and_matching_pack(
+    topic, pack_id, specific_source
+):
     selection = load_source_packs().select(topic)
 
     assert selection.pack_ids == ("generic-cn", pack_id)
@@ -72,8 +76,7 @@ def test_disabled_dynamic_or_blocked_sources_are_visible_but_not_scheduled_by_de
     assert "nmpa-medical-device-notices" in disabled_ids
     assert "chictr-public-search" in disabled_ids
     assert any(
-        source.source_type == "company_official"
-        for source in default.disabled_sources
+        source.source_type == "company_official" for source in default.disabled_sources
     )
 
 
@@ -106,7 +109,10 @@ def test_registry_serialization_is_json_compatible():
 
     encoded = json.dumps(payload, ensure_ascii=False)
     assert "中国大陆脑机接口" in encoded
-    assert payload["policy"]["metaso_role"] == "verification_only_after_fixed-source discovery"
+    assert (
+        payload["policy"]["metaso_role"]
+        == "verification_only_after_fixed-source discovery"
+    )
 
 
 def _write_registry(tmp_path: Path, payload: dict) -> Path:
@@ -120,28 +126,32 @@ def _minimal_payload() -> dict:
         "version": 1,
         "verified_on": "2026-07-25",
         "policy": {},
-        "sources": [{
-            "id": "one",
-            "name": "One",
-            "owner": "Owner",
-            "source_type": "government",
-            "grade": "A",
-            "url": "https://example.gov.cn/list",
-            "adapter": "html_list",
-            "signal_types": ["policy"],
-            "industry_tags": ["generic"],
-            "enabled": True,
-            "verified_on": "2026-07-25",
-            "status": "verified_static_list",
-            "verification_note": "test",
-        }],
-        "packs": [{
-            "id": "generic-cn",
-            "name": "Generic",
-            "aliases": ["generic"],
-            "industry_tags": ["generic"],
-            "source_ids": ["one"],
-        }],
+        "sources": [
+            {
+                "id": "one",
+                "name": "One",
+                "owner": "Owner",
+                "source_type": "government",
+                "grade": "A",
+                "url": "https://example.gov.cn/list",
+                "adapter": "html_list",
+                "signal_types": ["policy"],
+                "industry_tags": ["generic"],
+                "enabled": True,
+                "verified_on": "2026-07-25",
+                "status": "verified_static_list",
+                "verification_note": "test",
+            }
+        ],
+        "packs": [
+            {
+                "id": "generic-cn",
+                "name": "Generic",
+                "aliases": ["generic"],
+                "industry_tags": ["generic"],
+                "source_ids": ["one"],
+            }
+        ],
     }
 
 
@@ -171,3 +181,38 @@ def test_undocumented_adapter_or_non_public_url_is_rejected(tmp_path):
     payload["sources"][0]["url"] = "file:///etc/passwd"
     with pytest.raises(SourcePackError, match=r"public http\(s\)"):
         SourcePackRegistry.load(_write_registry(tmp_path, payload))
+
+
+def test_multi_topic_selection_unions_all_packs_without_duplicate_sources():
+    registry = load_source_packs()
+    selection = registry.select("具身智能|半导体|商业航天|核聚变|脑机接口")
+    source_ids = [source.id for source in selection.sources]
+
+    assert set(selection.pack_ids) == {
+        "generic-cn",
+        "embodied-intelligence-cn",
+        "semiconductor-cn",
+        "commercial-space-cn",
+        "fusion-cn",
+        "brain-computer-interface-cn",
+    }
+    assert len(source_ids) == len(set(source_ids))
+    assert all(source.source_type != "company_official" for source in selection.sources)
+
+
+def test_enabled_legacy_and_source_pack_urls_do_not_overlap():
+    legacy = json.loads(
+        (Path(__file__).parents[1] / "config" / "fixed-sources.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    registry = load_source_packs()
+    selected = registry.select("具身智能|半导体|商业航天|核聚变|脑机接口")
+    legacy_urls = {
+        item["list_url"]
+        for item in legacy["sources"]
+        if item.get("enabled", True) and not item.get("company")
+    }
+    pack_urls = {source.url for source in selected.sources}
+
+    assert legacy_urls.isdisjoint(pack_urls)

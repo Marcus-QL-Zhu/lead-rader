@@ -36,17 +36,13 @@ def test_demo_application_is_checkpointed_and_report_is_traceable(tmp_path):
 
     assert first.lead_count == 3
     assert second.runtime.reused_stages
-    report = json.loads(
-        open(first.output["json_path"], encoding="utf-8").read()
-    )
+    report = json.loads(open(first.output["json_path"], encoding="utf-8").read())
     assert report["manifest"]["request_plan"]["request"]["raw_text"]
     assert all(item["event_id"] for item in report["leads"][0]["evidence"])
 
 
 def test_application_never_persists_candidate_profile_in_fact_store(tmp_path):
-    plan = plan_opportunity_request(
-        "我有一位数据采集总监候选人，哪些公司可能会要他？"
-    )
+    plan = plan_opportunity_request("我有一位数据采集总监候选人，哪些公司可能会要他？")
     payload = _payload(tmp_path)
     payload["command"] = "float"
     payload["request_plan"] = plan.to_dict()
@@ -55,9 +51,7 @@ def test_application_never_persists_candidate_profile_in_fact_store(tmp_path):
 
     database_bytes = (tmp_path / "facts.sqlite").read_bytes()
     assert "candidate_profile".encode() not in database_bytes
-    envelope = json.loads(
-        open(result.output["json_path"], encoding="utf-8").read()
-    )
+    envelope = json.loads(open(result.output["json_path"], encoding="utf-8").read())
     # The manifest preserves the request interpretation, but the Candidate
     # Float result itself explicitly stores no candidate object.
     assert all(
@@ -93,9 +87,7 @@ def test_float_candidate_marker_is_absent_from_persistent_outputs(tmp_path):
         if path.exists():
             assert marker_bytes not in path.read_bytes(), path
 
-    envelope = json.loads(
-        open(result.output["json_path"], encoding="utf-8").read()
-    )
+    envelope = json.loads(open(result.output["json_path"], encoding="utf-8").read())
     manifest_text = json.dumps(
         envelope["manifest"],
         ensure_ascii=False,
@@ -124,3 +116,12 @@ def test_skip_feishu_projection_has_distinct_idempotency_key(tmp_path):
     child["skip_feishu_projection"] = True
 
     assert default_idempotency_key(ordinary) != default_idempotency_key(child)
+
+
+def test_source_topics_are_part_of_idempotency_and_default_to_direction(tmp_path):
+    ordinary = _payload(tmp_path)
+    broad = dict(ordinary)
+    broad["direction"] = "硬科技组合"
+    broad["source_topics"] = "具身智能|半导体"
+
+    assert default_idempotency_key(ordinary) != default_idempotency_key(broad)

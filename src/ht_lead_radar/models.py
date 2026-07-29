@@ -14,22 +14,24 @@ class Evidence:
     snippet: str
     source_url: str
     source_name: str
-    source_grade: str = 'B'
-    direction: str = ''
+    source_grade: str = "B"
+    direction: str = ""
     people: tuple[str, ...] = ()
     organizations: tuple[str, ...] = ()
-    document_id: str = ''
-    event_id: str = ''
+    document_id: str = ""
+    event_id: str = ""
     statement_ids: tuple[str, ...] = ()
-    independent_source_group: str = ''
-    published_at: str = ''
-    observed_at: str = ''
-    content_sha256: str = ''
-    company_type: str = ''
-    source_excerpt: str = ''
-    source_locator: str = ''
-    analyst_note: str = ''
-    source_kind: str = ''
+    independent_source_group: str = ""
+    published_at: str = ""
+    observed_at: str = ""
+    content_sha256: str = ""
+    company_type: str = ""
+    source_excerpt: str = ""
+    source_locator: str = ""
+    analyst_note: str = ""
+    source_kind: str = ""
+    source_id: str = ""
+    industry_tags: tuple[str, ...] = ()
     is_recruiting_input: bool = False
 
 
@@ -67,9 +69,9 @@ class CompanyLead:
     lead_time_days: int | None = None
     gates: dict[str, bool] = field(default_factory=dict)
     score_components: list[ScoreComponent] = field(default_factory=list)
-    industry_layer: str = 'core'
-    mainland_relevance: str = 'default-market'
-    request_mode: str = 'market_scan'
+    industry_layer: str = "core"
+    mainland_relevance: str = "default-market"
+    request_mode: str = "market_scan"
     basic_research: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Iterable
 
-from .models import CompanyLead
+from .models import CompanyLead, Evidence
 from .signals import canonicalize_event_types
 
 
@@ -69,57 +69,127 @@ ROLE_MAPS: tuple[tuple[tuple[str, ...], dict[str, tuple[str, ...]]], ...] = (
     ),
 )
 
+TOPIC_INDUSTRY_TAGS: tuple[tuple[tuple[str, ...], str], ...] = (
+    (
+        ("\u8111\u673a\u63a5\u53e3", "\u795e\u7ecf\u63a5\u53e3", "bci"),
+        "brain_computer_interface",
+    ),
+    (
+        ("\u534a\u5bfc\u4f53", "\u82af\u7247", "\u96c6\u6210\u7535\u8def"),
+        "semiconductor",
+    ),
+    (
+        (
+            "\u5546\u4e1a\u822a\u5929",
+            "\u6c11\u8425\u822a\u5929",
+            "\u706b\u7bad",
+            "\u536b\u661f",
+        ),
+        "commercial_space",
+    ),
+    (
+        (
+            "\u6838\u805a\u53d8",
+            "\u805a\u53d8\u80fd\u6e90",
+            "\u53ef\u63a7\u6838\u805a\u53d8",
+        ),
+        "fusion",
+    ),
+    (
+        (
+            "\u5177\u8eab\u667a\u80fd",
+            "\u4eba\u5f62\u673a\u5668\u4eba",
+            "\u7075\u5de7\u624b",
+            "\u673a\u5668\u4eba",
+        ),
+        "embodied_intelligence",
+    ),
+)
 GENERIC_ROLES = {
     "executive_change": (
-        "战略转型总监", "组织与人才发展总监", "业务运营总监",
+        "战略转型总监",
+        "组织与人才发展总监",
+        "业务运营总监",
     ),
     "merger_acquisition": (
-        "并购整合总监", "企业发展总监", "财务整合总监",
+        "并购整合总监",
+        "企业发展总监",
+        "财务整合总监",
     ),
     "joint_venture_or_spinout": (
-        "合资公司总经理", "新业务运营总监", "战略合作总监",
+        "合资公司总经理",
+        "新业务运营总监",
+        "战略合作总监",
     ),
     "ipo_or_listing": (
-        "董事会秘书", "资本市场总监", "内控与审计总监",
+        "董事会秘书",
+        "资本市场总监",
+        "内控与审计总监",
     ),
     "new_site_or_entity": (
-        "区域总经理", "新基地运营总监", "区域人力资源总监",
+        "区域总经理",
+        "新基地运营总监",
+        "区域人力资源总监",
     ),
     "project_buildout": (
-        "项目建设总监", "基地运营总监", "工程管理总监",
+        "项目建设总监",
+        "基地运营总监",
+        "工程管理总监",
     ),
     "project_call": (
-        "项目申报与产业合作总监", "解决方案总监", "政府事务总监",
+        "项目申报与产业合作总监",
+        "解决方案总监",
+        "政府事务总监",
     ),
     "eia_or_permit": (
-        "项目建设总监", "EHS总监", "厂务总监",
+        "项目建设总监",
+        "EHS总监",
+        "厂务总监",
     ),
     "procurement_intention": (
-        "采购平台主管", "项目建设总监", "供应链规划总监",
+        "采购平台主管",
+        "项目建设总监",
+        "供应链规划总监",
     ),
     "procurement_tender": (
-        "政府大客户总监", "投标平台主管", "解决方案总监",
+        "政府大客户总监",
+        "投标平台主管",
+        "解决方案总监",
     ),
     "customer_validation": (
-        "客户质量总监", "应用工程总监", "客户成功总监",
+        "客户质量总监",
+        "应用工程总监",
+        "客户成功总监",
     ),
     "channel_expansion": (
-        "渠道销售总监", "生态合作总监", "售后服务总监",
+        "渠道销售总监",
+        "生态合作总监",
+        "售后服务总监",
     ),
     "regulatory_or_clinical": (
-        "注册法规总监", "临床运营总监", "医学事务总监",
+        "注册法规总监",
+        "临床运营总监",
+        "医学事务总监",
     ),
     "research_or_ip": (
-        "科研合作总监", "知识产权总监", "技术战略总监",
+        "科研合作总监",
+        "知识产权总监",
+        "技术战略总监",
     ),
     "enterprise_system": (
-        "数字化转型总监", "企业信息化总监", "业务流程平台主管",
+        "数字化转型总监",
+        "企业信息化总监",
+        "业务流程平台主管",
     ),
     "policy_or_standard": (
-        "政府事务总监", "标准与认证总监", "产业政策总监",
+        "政府事务总监",
+        "标准与认证总监",
+        "产业政策总监",
     ),
     "workforce_cluster": (
-        "组织与人才发展总监", "业务部门总监", "人力资源总监",
+        "组织与人才发展总监",
+        "业务部门总监",
+        "人力资源总监",
     ),
     # Read-time aliases for historical facts.
     "project_approval": ("项目建设总监", "政府事务总监", "运营总监"),
@@ -140,8 +210,16 @@ ARCHETYPE_ROLES = {
         "merger_acquisition": ("并购整合总监", "集团财务管控总监", "投后管理总监"),
     },
     "foreign": {
-        "executive_change": ("中国区战略总监", "中国区人力资源总监", "中国区业务运营总监"),
-        "global_expansion": ("中国区业务拓展总监", "本地化供应链总监", "中国区产品营销总监"),
+        "executive_change": (
+            "中国区战略总监",
+            "中国区人力资源总监",
+            "中国区业务运营总监",
+        ),
+        "global_expansion": (
+            "中国区业务拓展总监",
+            "本地化供应链总监",
+            "中国区产品营销总监",
+        ),
     },
 }
 
@@ -151,7 +229,12 @@ def infer_company_archetype(context: str) -> str:
     if any(
         term in lowered
         for term in (
-            "外企", "跨国公司", "中国区", "大中华区", "global", "china president",
+            "外企",
+            "跨国公司",
+            "中国区",
+            "大中华区",
+            "global",
+            "china president",
             "中国有限公司",
         )
     ):
@@ -159,8 +242,14 @@ def infer_company_archetype(context: str) -> str:
     if any(
         term in lowered
         for term in (
-            "上市公司", "证券代码", "上交所", "深交所", "港交所", "科创板",
-            "创业板", "annual report",
+            "上市公司",
+            "证券代码",
+            "上交所",
+            "深交所",
+            "港交所",
+            "科创板",
+            "创业板",
+            "annual report",
         )
     ):
         return "listed"
@@ -193,9 +282,7 @@ def roles_for(
     for event_type, roles in ARCHETYPE_ROLES[archetype].items():
         if event_type in event_set and event_type not in sector_event_types:
             role_map[event_type] = roles
-    active_events = [
-        event_type for event_type in role_map if event_type in event_set
-    ]
+    active_events = [event_type for event_type in role_map if event_type in event_set]
     roles: list[str] = []
     max_roles = max(
         (len(role_map[event_type]) for event_type in active_events),
@@ -207,22 +294,81 @@ def roles_for(
     for role_index in range(max_roles):
         for event_type in active_events:
             event_roles = role_map[event_type]
-            if (
-                role_index < len(event_roles)
-                and event_roles[role_index] not in roles
-            ):
+            if role_index < len(event_roles) and event_roles[role_index] not in roles:
                 roles.append(event_roles[role_index])
             if len(roles) >= limit:
                 return roles
     return roles
 
 
-def enrich_industry_roles(leads: list[CompanyLead], direction: str) -> list[CompanyLead]:
+def matched_topics_for_evidence(
+    evidence: Iterable[Evidence],
+    source_topics: Iterable[str],
+) -> list[str]:
+    items = tuple(item for item in evidence if item.event_type != "job_ad")
+    configured_topics = tuple(source_topics)
+    provenance_tags: set[str] = set()
+    for item in items:
+        specific_tags = {tag for tag in item.industry_tags if tag and tag != "generic"}
+        # Sources tagged for every sector are generic aggregators. Their tags
+        # describe coverage, not the industry of each individual document.
+        if len(specific_tags) == 1:
+            provenance_tags.update(specific_tags)
+
+    provenance_matches: list[str] = []
+    for topic in configured_topics:
+        for aliases, industry_tag in TOPIC_INDUSTRY_TAGS:
+            if industry_tag in provenance_tags and any(
+                alias.casefold() in topic.casefold()
+                or topic.casefold() in alias.casefold()
+                for alias in aliases
+            ):
+                provenance_matches.append(topic)
+                break
+    if provenance_matches:
+        return provenance_matches
+
+    text = " ".join(
+        f"{item.title} {item.snippet} {item.source_name}" for item in items
+    ).casefold()
+    scored: list[tuple[int, int, str]] = []
+    for index, topic in enumerate(configured_topics):
+        aliases = {topic}
+        for known_aliases, _mapping in ROLE_MAPS:
+            if any(
+                alias.casefold() in topic.casefold()
+                or topic.casefold() in alias.casefold()
+                for alias in known_aliases
+            ):
+                aliases.update(known_aliases)
+        score = sum(
+            text.count(alias.casefold()) * max(len(alias), 1)
+            for alias in aliases
+            if alias
+        )
+        if score:
+            scored.append((-score, index, topic))
+    scored.sort()
+    return [topic for _score, _index, topic in scored]
+
+
+def enrich_industry_roles(
+    leads: list[CompanyLead],
+    direction: str,
+    *,
+    source_topics: Iterable[str] = (),
+) -> list[CompanyLead]:
+    configured_topics = tuple(source_topics)
     for lead in leads:
+        matched_topics = matched_topics_for_evidence(
+            lead.evidence,
+            configured_topics,
+        )
+        role_direction = matched_topics[0] if matched_topics else direction
+        if matched_topics:
+            lead.basic_research["matched_source_topics"] = matched_topics
         event_types = {
-            item.event_type
-            for item in lead.evidence
-            if item.event_type != "job_ad"
+            item.event_type for item in lead.evidence if item.event_type != "job_ad"
         }
         context = " ".join(
             f"{item.title} {item.snippet}"
@@ -230,7 +376,7 @@ def enrich_industry_roles(leads: list[CompanyLead], direction: str) -> list[Comp
             if item.event_type != "job_ad"
         )
         inferred = roles_for(
-            direction,
+            role_direction,
             event_types,
             company_context=context,
         )
@@ -238,7 +384,7 @@ def enrich_industry_roles(leads: list[CompanyLead], direction: str) -> list[Comp
             lead.target_roles = inferred
             role_text = "、".join(inferred)
             lead.hiring_thesis = (
-                f"{lead.hiring_thesis.rstrip('。')}；结合{direction}行业能力链，"
+                f"{lead.hiring_thesis.rstrip('。')}；结合{role_direction}行业能力链，"
                 f"优先验证的总监级以上岗位为：{role_text}。"
             )
     return leads
@@ -250,5 +396,6 @@ __all__ = [
     "ROLE_MAPS",
     "enrich_industry_roles",
     "infer_company_archetype",
+    "matched_topics_for_evidence",
     "roles_for",
 ]

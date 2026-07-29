@@ -26,13 +26,15 @@ from .models import Evidence
 from .source_packs import DEFAULT_REGISTRY_PATH, SourceDefinition, SourcePackRegistry
 
 
-DIRECT_ADAPTERS = frozenset({
-    "direct_html",
-    "html_list",
-    "html_homepage_list",
-    "rss",
-    "json_feed",
-})
+DIRECT_ADAPTERS = frozenset(
+    {
+        "direct_html",
+        "html_list",
+        "html_homepage_list",
+        "rss",
+        "json_feed",
+    }
+)
 
 _EVENT_TERMS = re.compile(
     r"融资|增资|投资|入股|募资|工厂|基地|产线|扩产|产能|量产|交付|"
@@ -47,119 +49,277 @@ _EVENT_TERMS = re.compile(
 )
 
 _EARLY_EVENT_RULES: tuple[tuple[str, str, re.Pattern[str]], ...] = (
-    ("procurement_tender", "strategy_capital",
-     re.compile(r"公开招标|招标公告|采购公告|竞争性磋商|竞争性谈判")),
-    ("procurement_intention", "strategy_capital",
-     re.compile(r"采购意向|拟采购|预算金额|采购预算|计划采购")),
-    ("eia_or_permit", "strategy_capital",
-     re.compile(r"环境影响|环评|拟审查|建设项目受理|批复")),
-    ("project_buildout", "strategy_capital",
-     re.compile(r"项目启动|项目开工|建设项目|项目落地|竣工|投运")),
-    ("project_call", "build_organize",
-     re.compile(r"项目申报|申报指南|揭榜挂帅|征集项目|项目指南|试点示范")),
-    ("regulatory_or_clinical", "build_organize",
-     re.compile(r"获批|注册证|临床试验|临床研究|受理|审评|审批")),
-    ("policy_or_standard", "build_organize",
-     re.compile(r"政策|指导意见|行动方案|管理办法|标准|规范|白皮书")),
-    ("award_or_supplier", "strategy_capital",
-     re.compile(r"中标|成交|供应商|入围|定点|合同")),
-    ("technical_milestone", "build_organize",
-     re.compile(r"发射|首飞|点火|试车|装置建成|专有权|布图设计登记")),
+    (
+        "procurement_tender",
+        "strategy_capital",
+        re.compile(r"公开招标|招标公告|采购公告|竞争性磋商|竞争性谈判"),
+    ),
+    (
+        "procurement_intention",
+        "strategy_capital",
+        re.compile(r"采购意向|拟采购|预算金额|采购预算|计划采购"),
+    ),
+    (
+        "eia_or_permit",
+        "strategy_capital",
+        re.compile(r"环境影响|环评|拟审查|建设项目受理|批复"),
+    ),
+    (
+        "project_buildout",
+        "strategy_capital",
+        re.compile(r"项目启动|项目开工|建设项目|项目落地|竣工|投运"),
+    ),
+    (
+        "project_call",
+        "build_organize",
+        re.compile(r"项目申报|申报指南|揭榜挂帅|征集项目|项目指南|试点示范"),
+    ),
+    (
+        "regulatory_or_clinical",
+        "build_organize",
+        re.compile(r"获批|注册证|临床试验|临床研究|受理|审评|审批"),
+    ),
+    (
+        "policy_or_standard",
+        "build_organize",
+        re.compile(r"政策|指导意见|行动方案|管理办法|标准|规范|白皮书"),
+    ),
+    (
+        "award_or_supplier",
+        "strategy_capital",
+        re.compile(r"中标|成交|供应商|入围|定点|合同"),
+    ),
+    (
+        "technical_milestone",
+        "build_organize",
+        re.compile(r"发射|首飞|点火|试车|装置建成|专有权|布图设计登记"),
+    ),
 )
 
 _EVENT_SIGNAL_COMPATIBILITY: Mapping[str, frozenset[str]] = {
-    "factory_or_capacity": frozenset({
-        "factory", "capacity_expansion", "project_buildout", "device_buildout",
-        "mass_production", "capacity_milestone", "facility_opening",
-    }),
-    "major_order": frozenset({
-        "order", "major_contract", "contract_award", "customer_validation",
-        "delivery", "project_execution", "procurement_tender",
-        "equipment_purchase", "application_project",
-    }),
-    "funding": frozenset({
-        "funding", "investment", "investor", "investor_comment",
-        "fund_launch", "merger_acquisition",
-    }),
+    "factory_or_capacity": frozenset(
+        {
+            "factory",
+            "capacity_expansion",
+            "project_buildout",
+            "device_buildout",
+            "mass_production",
+            "capacity_milestone",
+            "facility_opening",
+        }
+    ),
+    "major_order": frozenset(
+        {
+            "order",
+            "major_contract",
+            "contract_award",
+            "customer_validation",
+            "delivery",
+            "project_execution",
+            "procurement_tender",
+            "equipment_purchase",
+            "application_project",
+        }
+    ),
+    "funding": frozenset(
+        {
+            "funding",
+            "investment",
+            "investor",
+            "investor_comment",
+            "fund_launch",
+            "merger_acquisition",
+        }
+    ),
     "global_expansion": frozenset({"market_expansion", "company_activity"}),
     "data_or_model": frozenset({"technology_milestone", "technology_asset"}),
-    "technical_milestone": frozenset({
-        "technology_milestone", "product_launch", "launch", "test",
-        "project_milestone", "technology_asset", "company_activity",
-        "industry_event", "award",
-    }),
+    "technical_milestone": frozenset(
+        {
+            "technology_milestone",
+            "product_launch",
+            "launch",
+            "test",
+            "project_milestone",
+            "technology_asset",
+            "company_activity",
+            "industry_event",
+            "award",
+        }
+    ),
     "executive_change": frozenset({"executive_change", "leadership"}),
-    "merger_acquisition": frozenset({
-        "merger_acquisition", "investment", "company_activity",
-    }),
-    "joint_venture_or_spinout": frozenset({
-        "merger_acquisition", "partnership", "company_activity",
-    }),
-    "ipo_or_listing": frozenset({
-        "ipo", "listing", "company_activity", "investment",
-    }),
-    "new_site_or_entity": frozenset({
-        "regional_hq", "new_subsidiary", "company_activity",
-        "facility_opening", "market_expansion",
-    }),
-    "customer_validation": frozenset({
-        "customer_validation", "product_validation", "delivery",
-        "contract_award", "supply_chain",
-    }),
-    "channel_expansion": frozenset({
-        "market_expansion", "partnership", "supply_chain", "company_activity",
-    }),
-    "research_or_ip": frozenset({
-        "research_program", "technology_asset", "technology_milestone",
-        "partnership", "company_activity",
-    }),
-    "enterprise_system": frozenset({
-        "digital_transformation", "company_activity", "project_buildout",
-    }),
-    "workforce_cluster": frozenset({
-        "talent_program", "company_activity",
-    }),
-    "partnership": frozenset({
-        "partnership", "international_cooperation", "supply_chain",
-    }),
+    "merger_acquisition": frozenset(
+        {
+            "merger_acquisition",
+            "investment",
+            "company_activity",
+        }
+    ),
+    "joint_venture_or_spinout": frozenset(
+        {
+            "merger_acquisition",
+            "partnership",
+            "company_activity",
+        }
+    ),
+    "ipo_or_listing": frozenset(
+        {
+            "ipo",
+            "listing",
+            "company_activity",
+            "investment",
+        }
+    ),
+    "new_site_or_entity": frozenset(
+        {
+            "regional_hq",
+            "new_subsidiary",
+            "company_activity",
+            "facility_opening",
+            "market_expansion",
+        }
+    ),
+    "customer_validation": frozenset(
+        {
+            "customer_validation",
+            "product_validation",
+            "delivery",
+            "contract_award",
+            "supply_chain",
+        }
+    ),
+    "channel_expansion": frozenset(
+        {
+            "market_expansion",
+            "partnership",
+            "supply_chain",
+            "company_activity",
+        }
+    ),
+    "research_or_ip": frozenset(
+        {
+            "research_program",
+            "technology_asset",
+            "technology_milestone",
+            "partnership",
+            "company_activity",
+        }
+    ),
+    "enterprise_system": frozenset(
+        {
+            "digital_transformation",
+            "company_activity",
+            "project_buildout",
+        }
+    ),
+    "workforce_cluster": frozenset(
+        {
+            "talent_program",
+            "company_activity",
+        }
+    ),
+    "partnership": frozenset(
+        {
+            "partnership",
+            "international_cooperation",
+            "supply_chain",
+        }
+    ),
     "job_ad": frozenset({"talent_program"}),
-    "procurement_intention": frozenset({
-        "procurement_intention", "planned_budget", "future_project",
-        "procurement_tender", "equipment_purchase", "project_buildout",
-        "application_project",
-    }),
-    "procurement_tender": frozenset({
-        "procurement_tender", "equipment_purchase", "project_buildout",
-        "application_project", "planned_budget", "future_project",
-    }),
-    "eia_or_permit": frozenset({
-        "eia_acceptance", "eia_approval", "factory", "capacity_expansion",
-        "project_buildout", "regulatory_action",
-    }),
-    "project_buildout": frozenset({
-        "project_buildout", "factory", "capacity_expansion", "device_buildout",
-        "facility_opening", "future_project", "application_project",
-    }),
-    "project_call": frozenset({
-        "project_call", "pilot_program", "pilot_platform", "research_program",
-        "supplier_call", "award_list", "policy",
-    }),
-    "regulatory_or_clinical": frozenset({
-        "regulatory_approval", "clinical", "clinical_trial_registration",
-        "clinical_site", "principal_investigator", "product_validation",
-        "registration", "medical_device_guidance", "eia_acceptance", "eia_approval",
-    }),
-    "policy_or_standard": frozenset({
-        "policy", "standard", "regulatory_action", "medical_device_guidance",
-    }),
-    "award_or_supplier": frozenset({
-        "contract_award", "customer_validation", "delivery", "project_execution",
-        "major_contract", "order", "supplier_call", "supply_chain",
-    }),
+    "procurement_intention": frozenset(
+        {
+            "procurement_intention",
+            "planned_budget",
+            "future_project",
+            "procurement_tender",
+            "equipment_purchase",
+            "project_buildout",
+            "application_project",
+        }
+    ),
+    "procurement_tender": frozenset(
+        {
+            "procurement_tender",
+            "equipment_purchase",
+            "project_buildout",
+            "application_project",
+            "planned_budget",
+            "future_project",
+        }
+    ),
+    "eia_or_permit": frozenset(
+        {
+            "eia_acceptance",
+            "eia_approval",
+            "factory",
+            "capacity_expansion",
+            "project_buildout",
+            "regulatory_action",
+        }
+    ),
+    "project_buildout": frozenset(
+        {
+            "project_buildout",
+            "factory",
+            "capacity_expansion",
+            "device_buildout",
+            "facility_opening",
+            "future_project",
+            "application_project",
+        }
+    ),
+    "project_call": frozenset(
+        {
+            "project_call",
+            "pilot_program",
+            "pilot_platform",
+            "research_program",
+            "supplier_call",
+            "award_list",
+            "policy",
+        }
+    ),
+    "regulatory_or_clinical": frozenset(
+        {
+            "regulatory_approval",
+            "clinical",
+            "clinical_trial_registration",
+            "clinical_site",
+            "principal_investigator",
+            "product_validation",
+            "registration",
+            "medical_device_guidance",
+            "eia_acceptance",
+            "eia_approval",
+        }
+    ),
+    "policy_or_standard": frozenset(
+        {
+            "policy",
+            "standard",
+            "regulatory_action",
+            "medical_device_guidance",
+        }
+    ),
+    "award_or_supplier": frozenset(
+        {
+            "contract_award",
+            "customer_validation",
+            "delivery",
+            "project_execution",
+            "major_contract",
+            "order",
+            "supplier_call",
+            "supply_chain",
+        }
+    ),
 }
 
 _OFFICIAL_LEGAL_SUFFIXES = (
-    "股份有限公司", "有限责任公司", "有限公司", "集团公司", "集团",
+    "股份有限公司",
+    "有限责任公司",
+    "有限公司",
+    "集团公司",
+    "集团",
 )
 
 _STRUCTURED_COMPANY = re.compile(
@@ -346,12 +506,14 @@ def _parse_html_documents(
     parser.feed(text)
     if source.adapter == "direct_html":
         title = parser.page_title or source.name
-        return [DiscoveredDocument(
-            title=title,
-            url=result.url,
-            summary=parser.page_text,
-            published_at=_event_date_from_text(parser.page_text, ""),
-        )], parser.page_text
+        return [
+            DiscoveredDocument(
+                title=title,
+                url=result.url,
+                summary=parser.page_text,
+                published_at=_event_date_from_text(parser.page_text, ""),
+            )
+        ], parser.page_text
 
     documents: list[DiscoveredDocument] = []
     seen: set[str] = set()
@@ -364,11 +526,13 @@ def _parse_html_documents(
         if normalized in seen:
             continue
         seen.add(normalized)
-        documents.append(DiscoveredDocument(
-            title=title,
-            url=normalized,
-            published_at=_event_date_from_text(title, ""),
-        ))
+        documents.append(
+            DiscoveredDocument(
+                title=title,
+                url=normalized,
+                published_at=_event_date_from_text(title, ""),
+            )
+        )
     return documents, parser.page_text
 
 
@@ -399,12 +563,16 @@ def _parse_rss_documents(result: FetchResult) -> list[DiscoveredDocument]:
         url = urllib.parse.urljoin(result.url, link)
         parsed = urllib.parse.urlparse(url)
         if title and parsed.scheme in {"http", "https"} and parsed.netloc:
-            documents.append(DiscoveredDocument(
-                title=title,
-                url=urllib.parse.urlunparse(parsed._replace(fragment="")),
-                summary=summary,
-                published_at=_event_date_from_text(f"{published} {summary}", published),
-            ))
+            documents.append(
+                DiscoveredDocument(
+                    title=title,
+                    url=urllib.parse.urlunparse(parsed._replace(fragment="")),
+                    summary=summary,
+                    published_at=_event_date_from_text(
+                        f"{published} {summary}", published
+                    ),
+                )
+            )
     return documents
 
 
@@ -421,19 +589,28 @@ def _parse_json_feed_documents(result: FetchResult) -> list[DiscoveredDocument]:
             continue
         title = _compact_text(str(item.get("title") or ""))
         raw_url = str(item.get("url") or item.get("external_url") or "").strip()
-        summary = _compact_text(str(
-            item.get("summary") or item.get("content_text") or item.get("content_html") or ""
-        ))
+        summary = _compact_text(
+            str(
+                item.get("summary")
+                or item.get("content_text")
+                or item.get("content_html")
+                or ""
+            )
+        )
         published = str(item.get("date_published") or item.get("date_modified") or "")
         url = urllib.parse.urljoin(result.url, raw_url)
         parsed = urllib.parse.urlparse(url)
         if title and parsed.scheme in {"http", "https"} and parsed.netloc:
-            documents.append(DiscoveredDocument(
-                title=title,
-                url=urllib.parse.urlunparse(parsed._replace(fragment="")),
-                summary=summary,
-                published_at=_event_date_from_text(f"{published} {summary}", published),
-            ))
+            documents.append(
+                DiscoveredDocument(
+                    title=title,
+                    url=urllib.parse.urlunparse(parsed._replace(fragment="")),
+                    summary=summary,
+                    published_at=_event_date_from_text(
+                        f"{published} {summary}", published
+                    ),
+                )
+            )
     return documents
 
 
@@ -441,7 +618,7 @@ def _canonical_official_owner(owner: str) -> str:
     cleaned = re.sub(r"[（(][^）)]*[）)]", "", owner).strip()
     for suffix in _OFFICIAL_LEGAL_SUFFIXES:
         if cleaned.endswith(suffix):
-            cleaned = cleaned[:-len(suffix)].strip()
+            cleaned = cleaned[: -len(suffix)].strip()
             break
     return cleaned
 
@@ -451,17 +628,55 @@ def _plausible_explicit_company(name: str) -> bool:
     if re.match(r"^20\d{2}年\d{1,2}月\d{1,2}日", normalized):
         return False
     exact_noise = {
-        "公司", "企业", "项目", "团队", "行业", "赛道", "领域", "市场",
-        "具身智能", "半导体", "商业航天", "脑机接口", "机器人", "某公司",
-        "中国区", "大中华区", "亚太区", "全球",
+        "公司",
+        "企业",
+        "项目",
+        "团队",
+        "行业",
+        "赛道",
+        "领域",
+        "市场",
+        "具身智能",
+        "半导体",
+        "商业航天",
+        "脑机接口",
+        "机器人",
+        "某公司",
+        "中国区",
+        "大中华区",
+        "亚太区",
+        "全球",
     }
     noise_fragments = (
-        "该项目", "本项目", "重大项目", "行业", "赛道", "领域", "最新消息", "重磅",
-        "通知", "公告", "方案", "指南", "标准", "报告", "白皮书",
+        "该项目",
+        "本项目",
+        "重大项目",
+        "行业",
+        "赛道",
+        "领域",
+        "最新消息",
+        "重磅",
+        "通知",
+        "公告",
+        "方案",
+        "指南",
+        "标准",
+        "报告",
+        "白皮书",
     )
     non_company_endings = (
-        "项目", "基地", "产业园", "工程", "计划", "产品", "装置",
-        "中心", "实验室", "研究院", "研究所", "大学",
+        "项目",
+        "基地",
+        "产业园",
+        "工程",
+        "计划",
+        "产品",
+        "装置",
+        "中心",
+        "实验室",
+        "研究院",
+        "研究所",
+        "大学",
     )
     return (
         2 <= len(normalized) <= 40
@@ -472,7 +687,9 @@ def _plausible_explicit_company(name: str) -> bool:
     )
 
 
-def _company_candidates(source: SourceDefinition, title: str, body: str) -> tuple[str, ...]:
+def _company_candidates(
+    source: SourceDefinition, title: str, body: str
+) -> tuple[str, ...]:
     if source.source_type == "company_official":
         owner = _canonical_official_owner(source.owner)
         return (owner,) if len(owner) >= 2 else ()
@@ -545,7 +762,9 @@ def _topic_terms(registry: SourcePackRegistry, topic: str) -> tuple[str, ...]:
         pack = registry.get_pack(pack_id)
         terms.extend(pack.aliases)
         terms.extend(tag.replace("_", " ") for tag in pack.industry_tags)
-    return tuple(dict.fromkeys(term.lower() for term in terms if len(term.strip()) >= 2))
+    return tuple(
+        dict.fromkeys(term.lower() for term in terms if len(term.strip()) >= 2)
+    )
 
 
 def _document_relevant(
@@ -676,7 +895,9 @@ class SourcePackCollector:
         )
         self._connection.commit()
 
-    def _conditional_headers(self, source: SourceDefinition, url: str, scope: str) -> dict[str, str]:
+    def _conditional_headers(
+        self, source: SourceDefinition, url: str, scope: str
+    ) -> dict[str, str]:
         row = self._connection.execute(
             """
             SELECT etag, last_modified
@@ -734,8 +955,16 @@ class SourcePackCollector:
                 error = excluded.error
             """,
             (
-                source.id, url, scope, etag, last_modified, content_hash,
-                now, now if success else "", status_code, error[:1000],
+                source.id,
+                url,
+                scope,
+                etag,
+                last_modified,
+                content_hash,
+                now,
+                now if success else "",
+                status_code,
+                error[:1000],
             ),
         )
         self._connection.commit()
@@ -750,7 +979,9 @@ class SourcePackCollector:
         try:
             with self._urlopen(request, timeout=self.timeout) as response:
                 status_value = getattr(response, "status", None)
-                status = int(status_value if status_value is not None else response.getcode())
+                status = int(
+                    status_value if status_value is not None else response.getcode()
+                )
                 try:
                     body = response.read(self.max_bytes + 1)
                 except TypeError:
@@ -764,7 +995,9 @@ class SourcePackCollector:
                 final_url = str(response.geturl() or url)
                 digest = sha256(body).hexdigest()
                 self._record_http(
-                    source, url, scope,
+                    source,
+                    url,
+                    scope,
                     status_code=status,
                     etag=etag,
                     last_modified=modified,
@@ -783,7 +1016,9 @@ class SourcePackCollector:
             if exc.code == 304:
                 headers = exc.headers or {}
                 self._record_http(
-                    source, url, scope,
+                    source,
+                    url,
+                    scope,
                     status_code=304,
                     etag=str(headers.get("ETag") or ""),
                     last_modified=str(headers.get("Last-Modified") or ""),
@@ -799,14 +1034,18 @@ class SourcePackCollector:
                     not_modified=True,
                 )
             self._record_http(
-                source, url, scope,
+                source,
+                url,
+                scope,
                 status_code=int(exc.code),
                 error=f"{type(exc).__name__}: {exc}",
             )
             raise
         except Exception as exc:
             self._record_http(
-                source, url, scope,
+                source,
+                url,
+                scope,
                 status_code=0,
                 error=f"{type(exc).__name__}: {exc}",
             )
@@ -840,7 +1079,9 @@ class SourcePackCollector:
             return parser.page_text
         if "json" in content_type:
             try:
-                return _compact_text(json.dumps(json.loads(decoded), ensure_ascii=False))
+                return _compact_text(
+                    json.dumps(json.loads(decoded), ensure_ascii=False)
+                )
             except json.JSONDecodeError:
                 return _compact_text(decoded)
         return _compact_text(decoded)
@@ -969,7 +1210,11 @@ class SourcePackCollector:
         )
         self._store_observation(observation)
 
-        if event_type == "other" or not companies or not _event_supported(source, event_type):
+        if (
+            event_type == "other"
+            or not companies
+            or not _event_supported(source, event_type)
+        ):
             return True, 0, detail_error
 
         evidence_count = 0
@@ -990,6 +1235,8 @@ class SourcePackCollector:
                 source_name=f"{source.name} [{source.id}]",
                 source_grade=source.grade,
                 direction=topic,
+                source_id=source.id,
+                industry_tags=source.industry_tags,
                 document_id=document_id,
                 event_id=event_id,
                 independent_source_group=source_group,
@@ -1021,9 +1268,16 @@ class SourcePackCollector:
             ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
-                source_id, topic, started_at, finished_at, status,
-                discovered_count, observation_count, evidence_count,
-                detail_error_count, error[:1000],
+                source_id,
+                topic,
+                started_at,
+                finished_at,
+                status,
+                discovered_count,
+                observation_count,
+                evidence_count,
+                detail_error_count,
+                error[:1000],
             ),
         )
         self._connection.commit()
@@ -1171,7 +1425,9 @@ class SourcePackCollector:
             SELECT evidence_json, first_seen_at
             FROM source_pack_evidence
             WHERE topic = ? AND last_seen_at >= ?
-            """ + source_filter + """
+            """
+            + source_filter
+            + """
             ORDER BY event_date DESC, company ASC
             """,
             parameters,
@@ -1190,6 +1446,7 @@ class SourcePackCollector:
             payload["people"] = tuple(payload.get("people") or ())
             payload["organizations"] = tuple(payload.get("organizations") or ())
             payload["statement_ids"] = tuple(payload.get("statement_ids") or ())
+            payload["industry_tags"] = tuple(payload.get("industry_tags") or ())
             item = Evidence(**payload)
             key = (item.company, item.source_url, item.event_type)
             if key not in seen:
@@ -1223,7 +1480,9 @@ class SourcePackCollector:
             payload = json.loads(str(row["observation_json"]))
             payload["industry_tags"] = tuple(payload.get("industry_tags") or ())
             payload["signal_types"] = tuple(payload.get("signal_types") or ())
-            payload["company_candidates"] = tuple(payload.get("company_candidates") or ())
+            payload["company_candidates"] = tuple(
+                payload.get("company_candidates") or ()
+            )
             observations.append(SourceDocumentObservation(**payload))
         return observations
 
@@ -1263,7 +1522,9 @@ class SourcePackCollector:
         return {
             "sources": latest,
             "source_count": len(latest),
-            "healthy_count": sum(status in {"ok", "not_modified"} for status in statuses),
+            "healthy_count": sum(
+                status in {"ok", "not_modified"} for status in statuses
+            ),
             "failed_count": statuses.count("error"),
             "unsupported_count": statuses.count("unsupported_adapter"),
             "disabled_count": statuses.count("disabled"),
