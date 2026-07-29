@@ -190,3 +190,35 @@ def test_expired_draft_cannot_publish(tmp_path):
     )
     assert changed >= 1
     assert store.batch(bundle.run_date, bundle.direction)[0]["status"] == "expired"
+
+
+def test_store_rejects_noncanonical_or_inconsistent_expiry_before_writing(tmp_path):
+    store, bundle = seeded_store(tmp_path)
+    draft = bundle.drafts[0].to_dict()
+    draft["draft_id"] = "invalid-expiry"
+    draft["expires_at"] = ""
+    invalid = {**bundle.to_dict(), "drafts": [draft]}
+
+    with pytest.raises(ValueError, match="expires_at must be an ISO date"):
+        store.save_bundle(invalid)
+
+    draft["expires_at"] = "20260802"
+    with pytest.raises(ValueError, match="expires_at must use YYYY-MM-DD"):
+        store.save_bundle(invalid)
+
+    draft["expires_at"] = "2026-08-20"
+    with pytest.raises(ValueError, match="run_date plus 7 days"):
+        store.save_bundle(invalid)
+
+    draft["expires_at"] = "2026-08-02"
+    draft["run_date"] = " 2026-07-26 "
+    with pytest.raises(ValueError, match="run_date must equal bundle run_date"):
+        store.save_bundle(invalid)
+
+    draft["run_date"] = "2026-07-25"
+    with pytest.raises(ValueError, match="run_date must equal bundle run_date"):
+        store.save_bundle(invalid)
+
+    invalid["run_date"] = "20260726"
+    with pytest.raises(ValueError, match="run_date must use YYYY-MM-DD"):
+        store.save_bundle(invalid)

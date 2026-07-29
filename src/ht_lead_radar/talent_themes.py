@@ -12,6 +12,7 @@ from .talent_pool import (
     TalentPoolDraft,
     build_liepin_position_scope,
     canonical_payload_hash,
+    draft_expiry_date,
     validate_liepin_payload,
 )
 
@@ -272,7 +273,7 @@ def build_theme_draft_bundle(
                 ),
                 public_payload=payload,
                 payload_hash=canonical_payload_hash(payload),
-                expires_at="",
+                expires_at=draft_expiry_date(run_date),
             )
         )
     return DraftBundle(

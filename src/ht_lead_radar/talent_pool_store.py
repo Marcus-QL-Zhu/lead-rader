@@ -12,7 +12,11 @@ from datetime import date, datetime, timezone
 from pathlib import Path
 from typing import Any, Mapping
 
-from .talent_pool import canonical_payload_hash, validate_liepin_payload
+from .talent_pool import (
+    canonical_payload_hash,
+    draft_expiry_date,
+    validate_liepin_payload,
+)
 
 
 VALID_STATUSES = frozenset(
@@ -403,6 +407,12 @@ class TalentPoolStore:
 
     def save_bundle(self, bundle: Mapping[str, Any]) -> int:
         run_date = str(bundle.get("run_date") or "")
+        try:
+            canonical_run_date = date.fromisoformat(run_date).isoformat()
+        except ValueError as error:
+            raise ValueError("draft bundle run_date must be an ISO date") from error
+        if run_date != canonical_run_date:
+            raise ValueError("draft bundle run_date must use YYYY-MM-DD")
         direction = str(bundle.get("direction") or "")
         source_run_id = str(bundle.get("source_run_id") or "")
         if not source_run_id:
@@ -418,6 +428,20 @@ class TalentPoolStore:
             if not isinstance(payload, Mapping):
                 raise ValueError("each draft public_payload must be an object")
             validate_liepin_payload(payload)
+            draft_run_date = str(draft.get("run_date") or "")
+            if draft_run_date != run_date:
+                raise ValueError("each draft run_date must equal bundle run_date")
+            draft["run_date"] = run_date
+            expiry = str(draft.get("expires_at") or "").strip()
+            try:
+                canonical_expiry = date.fromisoformat(expiry).isoformat()
+            except ValueError as error:
+                raise ValueError("each draft expires_at must be an ISO date") from error
+            if expiry != canonical_expiry:
+                raise ValueError("each draft expires_at must use YYYY-MM-DD")
+            if canonical_expiry != draft_expiry_date(run_date):
+                raise ValueError("each draft expires_at must equal run_date plus 7 days")
+            draft["expires_at"] = canonical_expiry
             draft["payload_hash"] = canonical_payload_hash(payload)
         normalized_bundle = dict(bundle)
         normalized_bundle["drafts"] = drafts

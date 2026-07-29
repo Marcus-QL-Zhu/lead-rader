@@ -610,7 +610,7 @@ def generate_draft_bundle(
                 source_role_hypotheses=tuple(dict.fromkeys(group["roles"])),
                 public_payload=payload,
                 payload_hash=payload_hash,
-                expires_at=_add_days(run_date, 7),
+                expires_at=draft_expiry_date(run_date),
             )
         )
     if drafts and not minimum_count <= len(drafts) <= maximum_count:
@@ -618,10 +618,12 @@ def generate_draft_bundle(
     return DraftBundle(1, run_date, direction, run_id, tuple(drafts))
 
 
-def _add_days(value: str, days: int) -> str:
+def draft_expiry_date(run_date: str) -> str:
+    """Return the inclusive review deadline for a generated draft."""
+
     from datetime import date, timedelta
 
-    return (date.fromisoformat(value) + timedelta(days=days)).isoformat()
+    return (date.fromisoformat(run_date) + timedelta(days=7)).isoformat()
 
 
 def write_draft_bundle(bundle: DraftBundle, output: str | Path) -> Path:
@@ -646,6 +648,7 @@ __all__ = [
     "TalentPoolDraft",
     "assert_anonymized",
     "canonical_payload_hash",
+    "draft_expiry_date",
     "generate_draft_bundle",
     "is_director_plus",
     "load_draft_bundle",

@@ -312,6 +312,32 @@ def test_unknown_city_defaults_to_shanghai_and_remains_publishable():
     assert themes[0]["city"] == "上海"
 
 
+def test_theme_drafts_expire_seven_days_after_run_date():
+    report = supported_report(leads=1)
+    packet = build_company_evidence_packets(report)[0]
+    response = demand_response(
+        packet,
+        title="机器人小批量制造工程化总监",
+    )
+    parsed = (
+        parse_single_company_demand(
+            json.dumps(response, ensure_ascii=False),
+            packet=packet,
+        ),
+    )
+    themes = build_talent_themes(report, parsed, target_count=1)
+
+    seed = build_theme_draft_bundle(report, parsed, themes).drafts[0]
+    assert seed.expires_at == "2026-08-02"
+
+    generated = generate_direct_talent_bundle(
+        report,
+        target_count=1,
+        runner=SequenceRunner(response, ad_response(seed)),
+    )
+    assert generated.drafts[0].expires_at == "2026-08-02"
+
+
 def test_one_invalid_theme_returns_partial_bundle_instead_of_losing_valid_drafts():
     report = supported_report(leads=2)
     packets = build_company_evidence_packets(report)
