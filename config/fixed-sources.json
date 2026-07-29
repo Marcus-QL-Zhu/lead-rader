@@ -16,7 +16,7 @@
       "grade": "A",
       "fetch_detail": true,
       "max_items": 30,
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "daimon-latest-news",
@@ -27,7 +27,7 @@
       "grade": "A",
       "fetch_detail": false,
       "max_items": 30,
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "oymotion-company-news",
@@ -38,7 +38,7 @@
       "grade": "A",
       "fetch_detail": true,
       "max_items": 30,
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "pedaily-robotics",

@@ -474,3 +474,21 @@ def test_event_prompt_never_requests_approval_for_blocked_payloads():
     assert "If approval_blocked is true" in prompt
     assert "do not ask for approval" in prompt
     assert "Only when approval_blocked is false" in prompt
+
+
+def test_demand_summary_uses_current_horizon_and_evidence_keys():
+    summary = bridge._demand_summary({
+        "lead_index": 1,
+        "company": "示例机器人",
+        "hypotheses": [{
+            "specific_title": "量产工程化总监",
+            "horizon": "near_term",
+            "evidence_refs": ["event-1"],
+        }],
+    })
+
+    assert summary["hypotheses"] == [{
+        "specific_title": "量产工程化总监",
+        "horizon": "near_term",
+        "evidence_refs": ["event-1"],
+    }]

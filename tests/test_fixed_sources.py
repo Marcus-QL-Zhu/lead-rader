@@ -2,6 +2,7 @@ import json
 import sqlite3
 
 from ht_lead_radar.fixed_sources import FixedSourceCollector
+from ht_lead_radar.models import Evidence
 
 
 def _write_registry(tmp_path):
@@ -12,8 +13,7 @@ def _write_registry(tmp_path):
                 'name': 'official news',
                 'list_url': 'https://example.com/news/',
                 'link_pattern': r'example\.com/news/\d+\.html$',
-                'company': '\u56e0\u65f6\u673a\u5668\u4eba',
-                'grade': 'A',
+                'grade': 'B',
                 'fetch_detail': True,
             },
             {
@@ -34,7 +34,7 @@ def test_fixed_sources_persist_dedupe_and_isolate_failures(tmp_path, monkeypatch
     state_db = tmp_path / 'state.sqlite'
     collector = FixedSourceCollector(_write_registry(tmp_path), state_db)
 
-    listing = '<a href="/news/297.html">\u56e0\u65f6\u5b9e\u73b0\u4e07\u53f0\u7075\u5de7\u624b\u4ea4\u4ed8</a>'
+    listing = '<a href="/news/297.html">\u56e0\u65f6\u673a\u5668\u4eba\u6295\u4ea7</a>'
     detail = '<article>2026-07-20 \u65b0\u57fa\u5730\u6295\u4ea7\uff0c\u5e74\u4ea7\u80fd10\u4e07\u53f0\uff0c\u5df2\u91cf\u4ea7\u4ea4\u4ed8</article>'
 
     def fake_fetch(url):
@@ -141,3 +141,48 @@ def test_fixed_source_fetch_rejects_oversized_response(tmp_path, monkeypatch):
         assert "response exceeds 4 bytes" in str(error)
     else:
         raise AssertionError("oversized response was accepted")
+
+def test_company_specific_fixed_source_is_never_fetched(tmp_path, monkeypatch):
+    path = tmp_path / "company-source.json"
+    path.write_text(json.dumps({"sources": [{
+        "id": "company",
+        "name": "company page",
+        "list_url": "https://company.example/news",
+        "company": "特定公司",
+        "enabled": True,
+    }]}, ensure_ascii=False), encoding="utf-8")
+    collector = FixedSourceCollector(path, tmp_path / "company.sqlite")
+    calls = []
+    monkeypatch.setattr(collector, "_fetch", lambda url: calls.append(url))
+
+    assert collector.collect("具身智能") == []
+    assert calls == []
+
+
+def test_company_specific_cached_evidence_is_never_returned(tmp_path, monkeypatch):
+    path = tmp_path / "company-cache.json"
+    path.write_text(json.dumps({"sources": [{
+        "id": "company",
+        "name": "company page",
+        "list_url": "https://company.example/news",
+        "company": "特定公司",
+        "enabled": True,
+    }]}, ensure_ascii=False), encoding="utf-8")
+    collector = FixedSourceCollector(path, tmp_path / "company-cache.sqlite")
+    collector._store("company", Evidence(
+        company="特定公司",
+        event_type="funding",
+        phase="upstream",
+        event_date="2026-07-20",
+        title="特定公司融资",
+        snippet="历史缓存",
+        source_url="https://company.example/news/1",
+        source_name="company page",
+        source_grade="A",
+        direction="具身智能",
+    ))
+    calls = []
+    monkeypatch.setattr(collector, "_fetch", lambda url: calls.append(url))
+
+    assert collector.collect("具身智能") == []
+    assert calls == []

@@ -668,39 +668,46 @@ class LeadRadarApplication:
             payload.get("feishu_dry_run_path")
             or Path(payload["feishu_state_db"]).with_name("feishu-change-set.json")
         )
-        projection_state = ProjectionState(payload["feishu_state_db"])
-        client = None
-        if all((app_id, app_secret, app_token, table_id)):
-            client = FeishuBitableClient(
-                app_id,
-                app_secret,
-                app_token,
-                table_id,
-            )
-        try:
-            changes = sync_leads(
-                leads,
-                projection_state,
-                client=client,
-                dry_run_path=dry_run_path,
-            )
+        if payload.get("skip_feishu_projection"):
             integration_status["feishu"] = {
-                "mode": "live" if client else "dry_run",
-                "change_count": len(changes),
-                "change_set": str(Path(dry_run_path).resolve()),
-                "blocked_reason": (
-                    ""
-                    if client
-                    else "缺少 FEISHU_BITABLE_APP_TOKEN / FEISHU_BITABLE_TABLE_ID；"
-                    "已生成幂等增量变更集，未发送。"
-                ),
+                "mode": "skipped",
+                "change_count": 0,
+                "blocked_reason": "组合任务子扫描不单独修改飞书投影。",
             }
-        except Exception as error:
-            integration_status["feishu"] = {
-                "mode": "error",
-                "error": f"{type(error).__name__}: {error}",
-                "change_set": str(Path(dry_run_path).resolve()),
-            }
+        else:
+            projection_state = ProjectionState(payload["feishu_state_db"])
+            client = None
+            if all((app_id, app_secret, app_token, table_id)):
+                client = FeishuBitableClient(
+                    app_id,
+                    app_secret,
+                    app_token,
+                    table_id,
+                )
+            try:
+                changes = sync_leads(
+                    leads,
+                    projection_state,
+                    client=client,
+                    dry_run_path=dry_run_path,
+                )
+                integration_status["feishu"] = {
+                    "mode": "live" if client else "dry_run",
+                    "change_count": len(changes),
+                    "change_set": str(Path(dry_run_path).resolve()),
+                    "blocked_reason": (
+                        ""
+                        if client
+                        else "缺少 FEISHU_BITABLE_APP_TOKEN / FEISHU_BITABLE_TABLE_ID；"
+                        "已生成幂等增量变更集，未发送。"
+                    ),
+                }
+            except Exception as error:
+                integration_status["feishu"] = {
+                    "mode": "error",
+                    "error": f"{type(error).__name__}: {error}",
+                    "change_set": str(Path(dry_run_path).resolve()),
+                }
 
         source_summary = {
             "runs": (value.get("metadata") or {}).get("source_runs", []),
@@ -998,6 +1005,9 @@ def default_idempotency_key(payload: Mapping[str, Any], *, refresh: bool = False
             "direction": payload.get("direction"),
             "request_plan": payload.get("request_plan"),
             "provider": payload.get("provider", "auto"),
+            "skip_feishu_projection": bool(
+                payload.get("skip_feishu_projection")
+            ),
         },
         ensure_ascii=False,
         sort_keys=True,

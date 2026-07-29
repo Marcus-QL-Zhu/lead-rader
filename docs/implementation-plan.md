@@ -2,7 +2,7 @@
 
 - 状态：Implementation complete for the self-contained MVP；外部凭证/受限信源项单列为 Blocked
 - 对齐 Spec：`docs/alignment-spec.md`（Approved v1）
-- 最近更新：2026-07-25
+- 最近更新：2026-07-29
 - 生产目录：`/home/admin/.openclaw/workspace/skills/hardtech-lead-radar`
 - 生产计划：Asia/Shanghai 每天 05:00
 
@@ -51,8 +51,8 @@
 
 | ID | 状态 | 交付 |
 |---|---|---|
-| P1-01 | DONE | 旧版企业/媒体固定列表抓取器继续可用 |
-| P1-02 | DONE | `config/source-packs.json`：29 个核验来源、6 个复用来源包、19 个默认启用来源 |
+| P1-01 | DONE | 旧版固定列表抓取器继续可用；企业专属官网入口已禁用并由代码层拒绝进入每日发现 |
+| P1-02 | DONE | `config/source-packs.json`：43 个登记来源、6 个复用来源包、27 个默认启用的行业级/通用来源 |
 | P1-03 | DONE | 通用中国大陆政策、项目、环评、招投标、融资来源包 |
 | P1-04 | BLOCKED-EXTERNAL | SSE/SZSE/巨潮公告入口已登记但默认禁用；需官方稳定/文档化查询路径和代码映射，不采用网上流传的未文档化接口 |
 | P1-05 | READY-CODE | direct HTTP、Miniflux、RSSHub、changedetection 适配器、health-check 和 spike API 已实现；生产机剩余内存有限，未常驻部署 sidecar |
@@ -64,6 +64,11 @@
 | P1-11 | DONE | Miniflux/RSSHub/changedetection 技术接口和 spike；生产不为“技术栈完整”强行运行 |
 | P1-12 | DONE | ETag/Last-Modified、自适应频率、backoff+jitter、circuit breaker、失败隔离 |
 | P1-13 | DONE | 来源包真实采集器：HTML/RSS/JSON Feed、详情页、谨慎公司归属、document-only observation、SQLite 增量状态 |
+| P1-14 | DONE | 每日发现只使用政府、园区、协会、行业媒体、融资媒体、交易/注册披露等覆盖公司集合的来源；`company_official` 仅保留登记审计，不参与调度 |
+| P1-15 | DONE | 新增北京亦庄重大项目、苏州机器人协会、深圳半导体协会、核聚变垂直媒体，并复核公开列表、日期与详情入口 |
+| P1-16 | DONE | 通用列表适配器支持标题前缀、公司法定名、复合行业词和高管变动中的雇主抽取 |
+| P1-17 | DONE | 五赛道报告按轮询均衡合并为“硬科技组合”，统一聚合来源运行/异常与 Metaso 预算信息 |
+| P1-18 | PLANNED | 将五赛道共用的通用信源改为单次抓取、多方向路由（`collect_many`/跨方向当日缓存），进一步降低请求频率；当前正确性不受影响 |
 
 ### Phase 2 — 事实、实体与事件
 
@@ -122,6 +127,9 @@
 | P5-05 | DONE | `ask`、`float`、`deep-research`、`run-status`、`resume`、`replay-run` Agent/CLI |
 | P5-06 | BLOCKED-EXTERNAL | 飞书状态→OpenClaw webhook 仍需要事件回调、订阅权限和 OpenClaw 接收端配置 |
 | P5-07 | DONE | 后端 checkpoint、Feishu projection state、增量变化/撤选 |
+| P5-08 | DONE | 每日机会使用已汇报历史做 7 天冷却；出现新证据可提前回归，冷却结束后归入持续观察 |
+| P5-09 | DONE | 同一家公司每天最多进入一个人才主题；OpenClaw 上下文区分新增、持续观察和仍在冷却的公司 |
+| P5-10 | DONE | 每日默认依次扫描具身智能、半导体、商业航天、核聚变、脑机接口，再合成最多 20 家组合结果 |
 
 ### Phase 6 — 历史样本与预测校准
 
@@ -218,7 +226,7 @@ python scripts/run_lead_radar_v2.py run \
 /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/run_daily_fixed_sources.sh
 ```
 
-默认方向由 `HT_LEAD_DAILY_DIRECTION` 控制，缺省为 `具身智能`。cron 必须为：
+默认子方向由 `HT_LEAD_DAILY_DIRECTIONS` 控制，缺省为 `具身智能|半导体|商业航天|核聚变|脑机接口`；组合报告方向缺省为 `硬科技组合`。cron 必须为：
 
 ```cron
 0 5 * * * /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/run_daily_fixed_sources.sh
@@ -254,6 +262,8 @@ Float 失败后跨进程不能 resume，这是有意的数据治理结果：候�
 - 2026-07-25：融资固定来源从 2 个主要媒体入口扩为 13 个可发出融资信号的来源；生产健康检查 13/13 正常。
 - 2026-07-25：用固定随机种子从 65 个融资候选中抽取 10 项，Metaso 逐项核验投资方，消耗 60 积分；公开具名投资方 10/10 覆盖，1 项因发行方未披露全部机构名称而不可观测。
 - 2026-07-25：把所有剩余项收敛为明确外部阻塞或规模后延期，移除过时的“尚未开始”状态。
+- 2026-07-29：根据信源扩域决策，禁止企业官网进入每日发现；每日主链路改为行业级稳定来源与通用适配器。
+- 2026-07-29：加入五赛道均衡组合、7 天冷却、新证据提前回归、单公司单主题和 OpenClaw 机会分段。
 
 
 ## 8. 生产交付验收（2026-07-25）

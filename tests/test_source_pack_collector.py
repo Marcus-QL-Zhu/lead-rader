@@ -2,6 +2,7 @@ from email.message import Message
 import json
 import urllib.error
 
+from ht_lead_radar.models import Evidence
 from ht_lead_radar.source_pack_collector import SourcePackCollector
 from ht_lead_radar.source_packs import SourceDefinition, SourcePack, SourcePackRegistry
 
@@ -128,11 +129,11 @@ def test_collects_generic_and_sector_sources_with_provenance_and_health(tmp_path
         signals=("project_buildout", "factory"),
         tags=("generic", "embodied_intelligence"),
     )
-    official = _source(
+    sector_media = _source(
         "robot-news",
         "https://robot.example/news",
-        owner="示例机器人有限公司",
-        source_type="company_official",
+        owner="机器人行业协会",
+        source_type="industry_association",
         grade="B",
         signals=("funding",),
         tags=("embodied_intelligence",),
@@ -146,24 +147,24 @@ def test_collects_generic_and_sector_sources_with_provenance_and_health(tmp_path
             "https://gov.example/project-1",
             "<h1>具身智能产业基地项目</h1><p>建设单位：未来机器人有限公司。项目启动建设。</p>",
         ),
-        official.url: FakeResponse(
-            official.url,
-            '<a href="/round-a">2025年7月21日 完成亿元融资</a>',
+        sector_media.url: FakeResponse(
+            sector_media.url,
+            '<a href="/round-a">2025年7月21日 示例机器人有限公司完成亿元融资</a>',
         ),
         "https://robot.example/round-a": FakeResponse(
             "https://robot.example/round-a",
-            "<h1>完成亿元融资</h1><p>公司将扩充研发团队。</p>",
+            "<h1>示例机器人有限公司完成亿元融资</h1><p>公司将扩充研发团队。</p>",
         ),
     })
     collector = SourcePackCollector(
-        registry=_registry([generic], [official]),
+        registry=_registry([generic], [sector_media]),
         state_db=tmp_path / "state.sqlite3",
         urlopen=opener,
     )
 
     evidence = collector.collect("具身智能", year=2025, limit_per_query=10)
 
-    assert {item.company for item in evidence} == {"未来机器人有限公司", "示例机器人"}
+    assert {item.company for item in evidence} == {"未来机器人有限公司", "示例机器人有限公司"}
     assert {item.source_grade for item in evidence} == {"A", "B"}
     assert all("[" in item.source_name and item.source_name.endswith("]") for item in evidence)
     assert any("[generic-projects]" in item.source_name for item in evidence)
@@ -235,8 +236,8 @@ def test_etag_and_last_modified_are_sent_and_304_reuses_stored_evidence(tmp_path
     source = _source(
         "official",
         "https://robot.example/news",
-        owner="缓存机器人有限公司",
-        source_type="company_official",
+        owner="机器人产业协会",
+        source_type="industry_association",
     )
     state = {"count": 0, "conditional_headers": None}
 
@@ -245,7 +246,7 @@ def test_etag_and_last_modified_are_sent_and_304_reuses_stored_evidence(tmp_path
         if state["count"] == 1:
             return FakeResponse(
                 source.url,
-                '<a href="/a">2025年7月20日 缓存机器人具身智能业务完成融资</a>',
+                '<a href="/a">2025年7月20日 缓存机器人有限公司完成具身智能融资</a>',
                 etag='"version-1"',
                 last_modified="Sun, 20 Jul 2025 10:00:00 GMT",
             )
@@ -300,18 +301,18 @@ def test_disabled_blocked_and_browser_only_sources_are_never_fetched(tmp_path):
     )
 
 
-def test_rss_adapter_emits_company_official_evidence(tmp_path):
+def test_rss_adapter_emits_industry_media_evidence(tmp_path):
     source = _source(
         "rss-news",
         "https://robot.example/feed.xml",
-        owner="订阅机器人股份有限公司",
-        source_type="company_official",
+        owner="机器人产业协会",
+        source_type="industry_association",
         adapter="rss",
         signals=("funding",),
     )
     rss = """<?xml version="1.0" encoding="UTF-8"?>
     <rss version="2.0"><channel><item>
-      <title>订阅机器人具身智能业务完成融资</title>
+      <title>订阅机器人股份有限公司完成具身智能融资</title>
       <link>https://robot.example/items/1</link>
       <description>公司将扩大研发投入。</description>
       <pubDate>2025-07-20</pubDate>
@@ -330,7 +331,7 @@ def test_rss_adapter_emits_company_official_evidence(tmp_path):
     evidence = collector.collect("具身智能", year=2025)
 
     assert len(evidence) == 1
-    assert evidence[0].company == "订阅机器人"
+    assert evidence[0].company == "订阅机器人股份有限公司"
     assert evidence[0].event_type == "funding"
     assert evidence[0].event_date == "2025-07-20"
 
@@ -381,14 +382,14 @@ def test_direct_html_is_incremental_deduplicated_and_year_filtered(tmp_path):
     source = _source(
         "direct-page",
         "https://robot.example/latest",
-        owner="直连机器人有限公司",
-        source_type="company_official",
+        owner="机器人产业协会",
+        source_type="industry_association",
         adapter="direct_html",
         signals=("funding",),
     )
     page = """
     <html><head><title>公司动态</title></head>
-    <body><h1>2025年7月20日 直连机器人具身智能业务完成融资</h1>
+    <body><h1>2025年7月20日 直连机器人有限公司完成具身智能融资</h1>
     <p>本轮资金将用于研发。</p></body></html>
     """
     opener = StubOpener({
@@ -458,3 +459,68 @@ def test_explicit_quoted_brand_can_be_attributed_without_legal_suffix(tmp_path):
     evidence = collector.collect("具身智能", year=2025)
 
     assert [item.company for item in evidence] == ["未来智能"]
+
+
+def test_company_official_cached_evidence_is_not_returned(tmp_path):
+    broad = _source(
+        "broad",
+        "https://media.example/list",
+        source_type="vertical_technology_media",
+    )
+    official = _source(
+        "official-company",
+        "https://company.example/news",
+        owner="特定公司",
+        source_type="company_official",
+    )
+    collector = SourcePackCollector(
+        registry=_registry([broad, official]),
+        state_db=tmp_path / "state.sqlite3",
+        urlopen=StubOpener({
+            broad.url: FakeResponse(broad.url, "<html></html>"),
+        }),
+    )
+    collector._store_evidence(official, "具身智能", Evidence(
+        company="特定公司",
+        event_type="funding",
+        phase="upstream",
+        event_date="2026-07-20",
+        title="特定公司融资",
+        snippet="历史缓存",
+        source_url="https://company.example/news/1",
+        source_name="特定公司官网 [official-company]",
+        source_grade="A",
+        direction="具身智能",
+    ))
+
+    assert collector.collect("具身智能") == []
+
+
+def test_generic_government_listing_can_defer_topic_match_to_detail(tmp_path):
+    source = _source(
+        "government-projects",
+        "https://gov.example/list",
+        source_type="government_industrial_park",
+        signals=("project_buildout", "factory"),
+    )
+    collector = SourcePackCollector(
+        registry=_registry([source]),
+        state_db=tmp_path / "state.sqlite3",
+        urlopen=StubOpener({
+            source.url: FakeResponse(
+                source.url,
+                '<a href="/project">重大项目集中开工</a>',
+            ),
+            "https://gov.example/project": FakeResponse(
+                "https://gov.example/project",
+                "半导体生产基地启动，建设主体为北京奕行智能科技有限公司，"
+                "项目计划年内投产。",
+            ),
+        }),
+    )
+
+    evidence = collector.collect("半导体")
+
+    assert [item.company for item in evidence] == [
+        "北京奕行智能科技有限公司"
+    ]

@@ -19,7 +19,8 @@ OPENCLAW_MODELS_PATH="${OPENCLAW_MODELS_PATH:-/home/admin/.openclaw/agents/main/
 OPENCLAW_BIN="${OPENCLAW_BIN:-/home/admin/.local/share/pnpm/openclaw}"
 LEAD_RADAR_LLM_MODEL="${LEAD_RADAR_LLM_MODEL:-minimax/MiniMax-M3}"
 export OPENCLAW_CONFIG_PATH OPENCLAW_MODELS_PATH LEAD_RADAR_LLM_MODEL
-DAILY_DIRECTION="${HT_LEAD_DAILY_DIRECTION:-具身智能}"
+DAILY_DIRECTIONS="${HT_LEAD_DAILY_DIRECTIONS:-具身智能|半导体|商业航天|核聚变|脑机接口}"
+DAILY_DIRECTION="${HT_LEAD_DAILY_DIRECTION:-硬科技组合}"
 
 case "$APP_DIR" in
   /*/hardtech-lead-radar) ;;
@@ -54,9 +55,9 @@ if command -v flock >/dev/null 2>&1; then
   fi
 fi
 
-set -- run \
-  --direction "$DAILY_DIRECTION" \
-  --provider fixed \
+set -- \
+  --directions "$DAILY_DIRECTIONS" \
+  --portfolio-direction "$DAILY_DIRECTION" \
   --fixed-sources config/fixed-sources.json \
   --source-packs config/source-packs.json \
   --source-state-db data/fixed-sources.sqlite \
@@ -70,8 +71,7 @@ set -- run \
   --env-file "$ENV_FILE" \
   --josint-db "$JOSINT_DIR/data/jobs.sqlite" \
   --output-dir reports-daily \
-  --minimum-score 0 \
-  --top 20 \
+  --target-count 20 \
   --metaso-verify-limit 3 \
   --metaso-daily-point-budget 30 \
   --metaso-provider-daily-limit 500
@@ -80,7 +80,7 @@ if [ -f config/suppressions.json ]; then
   set -- "$@" --suppressions config/suppressions.json
 fi
 
-"$PYTHON_BIN" scripts/run_lead_radar_v2.py "$@"
+"$PYTHON_BIN" scripts/run_daily_hardtech_portfolio.py "$@"
 
 status=$?
 talent_draft_status=0

@@ -145,6 +145,11 @@ def _add_pipeline_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--feishu-app-token")
     parser.add_argument("--feishu-table-id")
     parser.add_argument("--feishu-dry-run-path")
+    parser.add_argument(
+        "--skip-feishu-projection",
+        action="store_true",
+        help="跳过飞书多维表格投影；用于组合任务的子扫描",
+    )
     parser.add_argument("--actor", default="openclaw")
     parser.add_argument("--idempotency-key")
     parser.add_argument("--refresh", action="store_true")

@@ -8,6 +8,7 @@ from ht_lead_radar.signals import (
 def test_canonical_signal_taxonomy_covers_organization_and_operating_changes():
     cases = {
         "公司任命新的中国区总裁": "executive_change",
+        "刘芳出任瑞萨电子中国区总裁": "executive_change",
         "完成对目标公司的控股权收购": "merger_acquisition",
         "双方成立合资公司独立运营": "joint_venture_or_spinout",
         "正式启动上市辅导": "ipo_or_listing",

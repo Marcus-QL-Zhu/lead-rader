@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from ht_lead_radar.feishu_notify import find_report
 from ht_lead_radar.direct_talent_generator import generate_direct_talent_bundle
+from ht_lead_radar.daily_opportunity_selection import select_daily_opportunities
 from ht_lead_radar.talent_pool import generate_draft_bundle, write_draft_bundle
 from ht_lead_radar.talent_pool_store import TalentPoolStore
 
@@ -27,6 +28,12 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--output-dir", default="reports-daily/talent-pool")
     parser.add_argument("--state-db", default="data/talent-pool.sqlite")
     parser.add_argument("--target-count", type=int, default=5)
+    parser.add_argument("--cooldown-days", type=int, default=7)
+    parser.add_argument(
+        "--disable-cooldown",
+        action="store_true",
+        help="generate from every report lead; intended only for isolated tests",
+    )
     parser.add_argument(
         "--generator",
         choices=("direct-llm", "openclaw", "template"),
@@ -65,6 +72,13 @@ def main(argv: list[str] | None = None) -> int:
             raise ValueError("report direction does not match --direction")
         if not str(manifest.get("run_id") or ""):
             raise ValueError("report manifest requires run_id for audit")
+        store = TalentPoolStore(args.state_db)
+        if not args.disable_cooldown:
+            report = select_daily_opportunities(
+                report,
+                history_database=store.database,
+                cooldown_days=args.cooldown_days,
+            )
         try:
             if args.generator in {"direct-llm", "openclaw"}:
                 bundle = generate_direct_talent_bundle(
@@ -88,7 +102,7 @@ def main(argv: list[str] | None = None) -> int:
         temporary_output = output.with_name(f".{output.name}.tmp-{os.getpid()}")
         write_draft_bundle(bundle, temporary_output)
         try:
-            TalentPoolStore(args.state_db).save_bundle(bundle.to_dict())
+            store.save_bundle(bundle.to_dict())
             os.replace(temporary_output, output)
         finally:
             temporary_output.unlink(missing_ok=True)

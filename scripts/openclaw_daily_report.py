@@ -213,9 +213,8 @@ def _demand_summary(item: Any) -> dict[str, Any]:
                 for key in (
                     "specific_title",
                     "why_now",
-                    "confidence",
-                    "timing",
-                    "evidence_ids",
+                    "horizon",
+                    "evidence_refs",
                 )
                 if hypothesis.get(key) not in (None, "", [])
             }
@@ -283,6 +282,7 @@ def render_context(row: dict[str, Any]) -> dict[str, Any]:
             _demand_summary(item)
             for item in bundle.get("company_demand_analysis") or []
         ],
+        "opportunity_segments": dict(bundle.get("selection_summary") or {}),
         "natural_language_examples": (
             [] if approval_blocked else _interaction_examples(len(drafts))
         ),
@@ -302,6 +302,9 @@ def event_text(snapshot_id: str, *, source: str) -> str:
         f"--snapshot-id {snapshot_id}. "
         "Summarize the returned current report in this Feishu main conversation, "
         "show each index with its target company and role, "
+        "use opportunity_segments to distinguish newly discovered opportunities "
+        "from ongoing opportunities returning after the seven-day cooldown, and "
+        "do not present suppressed cooldown entries as publishable drafts, "
         "and state valid displayed drafts and omitted generation failures separately. "
         "An omitted failure never belongs to a displayed index; in particular, "
         "text such as 'draft 1' inside its reason is local generator numbering, "

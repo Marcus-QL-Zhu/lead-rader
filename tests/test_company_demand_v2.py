@@ -89,6 +89,23 @@ def test_single_funding_event_cannot_create_near_term_role():
         )
 
 
+def test_single_funding_event_can_create_low_confidence_watchlist_role():
+    report = sample_report(leads=1)
+    packet = build_company_evidence_packets(report)[0]
+    response = demand_response(
+        packet,
+        title="机器人运动控制工程化总监",
+    )
+    response["role_hypotheses"][0]["horizon"] = "watchlist"
+
+    parsed = parse_single_company_demand(
+        json.dumps(response, ensure_ascii=False),
+        packet=packet,
+    )
+
+    assert parsed["hypotheses"][0]["horizon"] == "watchlist"
+
+
 def test_job_ad_alone_cannot_create_early_role():
     report = sample_report(leads=1)
     report["leads"][0]["evidence"][0]["event_type"] = "job_ad"
@@ -98,7 +115,7 @@ def test_job_ad_alone_cannot_create_early_role():
         title="机器人运动控制工程化总监",
     )
 
-    with pytest.raises(DemandAnalysisError, match="near_term requires"):
+    with pytest.raises(DemandAnalysisError, match="pre-ad upstream event"):
         parse_single_company_demand(
             json.dumps(response, ensure_ascii=False),
             packet=packet,
@@ -127,7 +144,7 @@ def test_prompt_has_three_diverse_few_shots_and_shanghai_fallback():
     assert COMPANY_DEMAND_SYSTEM_PROMPT.count("示例一") == 1
     assert COMPANY_DEMAND_SYSTEM_PROMPT.count("示例二") == 1
     assert COMPANY_DEMAND_SYSTEM_PROMPT.count("示例三") == 1
-    assert "单一融资事件不足以生成岗位" in COMPANY_DEMAND_SYSTEM_PROMPT
+    assert "单独融资或单独合作意向只能支持 low-confidence" in COMPANY_DEMAND_SYSTEM_PROMPT
     assert "职能依赖展开" in COMPANY_DEMAND_SYSTEM_PROMPT
     assert "跨职能 hub" in COMPANY_DEMAND_SYSTEM_PROMPT
     assert "中国区业务战略" in COMPANY_DEMAND_SYSTEM_PROMPT

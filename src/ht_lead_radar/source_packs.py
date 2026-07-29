@@ -32,6 +32,7 @@ ENABLED_STATUSES = frozenset({
     "verified_static_list",
     "verified_public_listing",
 })
+PROHIBITED_DAILY_SOURCE_TYPES = frozenset({"company_official"})
 
 
 class SourcePackError(ValueError):
@@ -296,7 +297,10 @@ class SourcePackRegistry:
                 source = self.get_source(source_id)
                 if requested_signals and not requested_signals.intersection(source.signal_types):
                     continue
-                if source.enabled:
+                prohibited = source.source_type in PROHIBITED_DAILY_SOURCE_TYPES
+                if prohibited:
+                    disabled.append(source)
+                elif source.enabled:
                     selected.append(source)
                 else:
                     disabled.append(source)
@@ -328,6 +332,7 @@ __all__ = [
     "ALLOWED_ADAPTERS",
     "DEFAULT_REGISTRY_PATH",
     "ENABLED_STATUSES",
+    "PROHIBITED_DAILY_SOURCE_TYPES",
     "SourceDefinition",
     "SourcePack",
     "SourcePackError",

@@ -38,7 +38,7 @@ _EVENT_TERMS = re.compile(
     r"融资|增资|投资|入股|募资|工厂|基地|产线|扩产|产能|量产|交付|"
     r"订单|中标|定点|采购|招标|预算|意向|项目|申报|揭榜|试点|"
     r"政策|指南|标准|名单|获批|注册|临床|试验|发布|首发|突破|"
-    r"样机|迭代|合作|签约|任命|履新|加盟|出海|海外|投产|建设|"
+    r"样机|迭代|合作|签约|任命|履新|加盟|出任|接任|换帅|人事调整|出海|海外|投产|建设|"
     r"环评|环境影响|发射|首飞|点火|试车|投运|专有权|登记|"
     r"并购|收购|控制权|合资|分拆|上市辅导|招股书|区域总部|子公司|"
     r"事业部|客户验证|供应商认证|渠道|经销商|研究院|知识产权|"
@@ -163,9 +163,9 @@ _OFFICIAL_LEGAL_SUFFIXES = (
 )
 
 _STRUCTURED_COMPANY = re.compile(
-    r"(?:建设单位|项目单位|招标人|采购人|中标人|中标供应商|成交供应商|"
+    r"(?:建设单位|建设主体|项目单位|招标人|采购人|中标人|中标供应商|成交供应商|"
     r"供应商|申请人|申报单位|承建单位|实施单位|企业名称|公司名称)"
-    r"\s*[:：]\s*"
+    r"\s*(?:[:：]|为)\s*"
     r"(?P<name>[\u4e00-\u9fffA-Za-z0-9·（）()\-]{2,60}?"
     r"(?:股份有限公司|有限责任公司|有限公司|集团公司|集团|研究院|研究所|大学))"
 )
@@ -174,8 +174,40 @@ _QUOTED_COMPANY = re.compile(
 )
 _LEADING_COMPANY = re.compile(
     r"^(?:20\d{2}年\d{1,2}月\d{1,2}日\s*)?"
+    r"(?:(?:首发|独家|重磅|快讯|融资消息|会员资讯)\s*[｜|丨：:]\s*)*"
     r"(?P<name>[\u4e00-\u9fffA-Za-z0-9·（）()\- ]{2,40}?)"
-    r"\s*(?:完成|获得|获|宣布|计划|启动|签署|拿下|发布|开启|拟)"
+    r"\s*(?:完成|获得|获|宣布|计划|启动|签署|签约|拿下|发布|开启|拟|"
+    r"迎来|任命|更换|换帅|履新|出任|接任|加盟|落地|开工|投产)"
+)
+_LEGAL_COMPANY = re.compile(
+    r"(?P<name>[\u4e00-\u9fffA-Za-z0-9·（）()\-]{2,60}?"
+    r"(?:股份有限公司|有限责任公司|有限公司|集团公司))"
+)
+_FUNDING_SUBJECT_PATTERNS = (
+    re.compile(
+        r"(?:^|[｜|丨：:]\s*|[“「『《])"
+        r"(?:20\d{2}年\d{1,2}月\d{1,2}日\s*)?"
+        r"(?:(?:首发|独家|重磅|快讯|融资消息|会员资讯)\s*[｜|丨：:]\s*)*"
+        r"(?P<name>[\u4e00-\u9fffA-Za-z0-9·（）()\- ]{2,60}?)"
+        r"(?:[”」』》])?\s*(?:完成|获得|获).{0,30}?(?:融资|投资|增资)"
+    ),
+    re.compile(
+        r"(?:领投|投资|增资|入股)"
+        r"(?P<name>[\u4e00-\u9fffA-Za-z0-9·（）()\-]{2,60}?"
+        r"(?:股份有限公司|有限责任公司|有限公司|集团公司))"
+        r".{0,20}?(?:融资|增资|入股|$)"
+    ),
+)
+_EMPLOYER_FIRST_EXECUTIVE = re.compile(
+    r"(?P<name>[\u4e00-\u9fffA-Za-z0-9·（）()\- ]{2,40}?)"
+    r"(?:宣布|任命|聘任|委任).{0,20}?(?:出任|担任|为)"
+    r".{0,12}?(?:董事长|总裁|副总裁|总经理|CEO|CTO|COO|首席|董事|总监)"
+)
+_EXECUTIVE_COMPANY = re.compile(
+    r"(?:出任|担任|接任|获任命为|任命为|履新|加盟)"
+    r"(?P<name>[\u4e00-\u9fffA-Za-z0-9·（）()\- ]{2,40}?)"
+    r"(?:中国区|大中华区|亚太区|全球)?"
+    r"(?:董事长|总裁|副总裁|总经理|CEO|CTO|COO|首席|董事|总监)"
 )
 
 
@@ -416,12 +448,15 @@ def _canonical_official_owner(owner: str) -> str:
 
 def _plausible_explicit_company(name: str) -> bool:
     normalized = _compact_text(name).strip(" ，,。；;：:")
+    if re.match(r"^20\d{2}年\d{1,2}月\d{1,2}日", normalized):
+        return False
     exact_noise = {
         "公司", "企业", "项目", "团队", "行业", "赛道", "领域", "市场",
         "具身智能", "半导体", "商业航天", "脑机接口", "机器人", "某公司",
+        "中国区", "大中华区", "亚太区", "全球",
     }
     noise_fragments = (
-        "该项目", "本项目", "行业", "赛道", "领域", "最新消息", "重磅",
+        "该项目", "本项目", "重大项目", "行业", "赛道", "领域", "最新消息", "重磅",
         "通知", "公告", "方案", "指南", "标准", "报告", "白皮书",
     )
     non_company_endings = (
@@ -448,13 +483,37 @@ def _company_candidates(source: SourceDefinition, title: str, body: str) -> tupl
         for match in _STRUCTURED_COMPANY.finditer(text)
     )
     if _EVENT_TERMS.search(text):
-        for match in _QUOTED_COMPANY.finditer(text):
+        funding_title = bool(re.search(r"融资|募资|领投|战略投资|增资|入股", title))
+        if funding_title:
+            for pattern in _FUNDING_SUBJECT_PATTERNS:
+                for match in pattern.finditer(title):
+                    candidate = match.group("name").strip(" ，,。；;")
+                    if _plausible_explicit_company(candidate):
+                        found.append(candidate)
+        else:
+            for match in _LEGAL_COMPANY.finditer(title):
+                candidate = match.group("name").strip(" ，,。；;")
+                if _plausible_explicit_company(candidate):
+                    found.append(candidate)
+            for match in _QUOTED_COMPANY.finditer(title):
+                candidate = match.group("name").strip(" ，,。；;")
+                if _plausible_explicit_company(candidate):
+                    found.append(candidate)
+        leading = _LEADING_COMPANY.search(title)
+        if (
+            leading
+            and not re.search(r"出任|任命|履新|接任|换帅|人事调整", title)
+            and _plausible_explicit_company(leading.group("name"))
+        ):
+            found.append(leading.group("name").strip(" ，,。；;"))
+        for match in _EMPLOYER_FIRST_EXECUTIVE.finditer(title):
             candidate = match.group("name").strip(" ，,。；;")
             if _plausible_explicit_company(candidate):
                 found.append(candidate)
-        leading = _LEADING_COMPANY.search(title)
-        if leading and _plausible_explicit_company(leading.group("name")):
-            found.append(leading.group("name").strip(" ，,。；;"))
+        for match in _EXECUTIVE_COMPANY.finditer(title):
+            candidate = match.group("name").strip(" ，,。；;")
+            if _plausible_explicit_company(candidate):
+                found.append(candidate)
     return tuple(dict.fromkeys(name for name in found if 2 <= len(name) <= 60))
 
 
@@ -475,6 +534,11 @@ def _event_supported(source: SourceDefinition, event_type: str) -> bool:
 
 def _topic_terms(registry: SourcePackRegistry, topic: str) -> tuple[str, ...]:
     terms = [topic.strip()]
+    terms.extend(
+        item.strip()
+        for item in re.split(r"[、,/|与和及]", topic)
+        if len(item.strip()) >= 2
+    )
     for pack_id in registry.matching_pack_ids(topic):
         if pack_id == "generic-cn":
             continue
@@ -858,7 +922,15 @@ class SourcePackCollector:
         generic_source_ids: frozenset[str],
     ) -> tuple[bool, int, bool]:
         seed_text = _compact_text(f"{document.title} {document.summary}")
-        if not _document_relevant(source, seed_text, topic_terms, generic_source_ids):
+        seed_relevant = _document_relevant(
+            source, seed_text, topic_terms, generic_source_ids
+        )
+        may_need_government_detail = (
+            source.id in generic_source_ids
+            and source.source_type in {"government", "government_industrial_park"}
+            and bool(_EVENT_TERMS.search(seed_text))
+        )
+        if not seed_relevant and not may_need_government_detail:
             return False, 0, False
 
         body = document.summary
@@ -1050,7 +1122,11 @@ class SourcePackCollector:
                 _utc_now(),
                 status="disabled",
             )
-        evidence = self.load_recent(normalized_topic, year=year)
+        evidence = self.load_recent(
+            normalized_topic,
+            year=year,
+            source_ids=tuple(source.id for source in selection.sources),
+        )
         statuses = [item["status"] for item in health.values()]
         self.last_run_summary = {
             "topic": normalized_topic,
@@ -1078,16 +1154,27 @@ class SourcePackCollector:
         topic: str,
         days: int = 365,
         year: int = 0,
+        source_ids: tuple[str, ...] | None = None,
     ) -> list[Evidence]:
+        if source_ids is not None and not source_ids:
+            return []
         cutoff = (date.today() - timedelta(days=days)).isoformat()
+        source_filter = ""
+        parameters: list[Any] = [topic.strip(), cutoff]
+        if source_ids is not None:
+            source_filter = " AND source_id IN ({})".format(
+                ",".join("?" for _ in source_ids)
+            )
+            parameters.extend(source_ids)
         rows = self._connection.execute(
             """
             SELECT evidence_json, first_seen_at
             FROM source_pack_evidence
             WHERE topic = ? AND last_seen_at >= ?
+            """ + source_filter + """
             ORDER BY event_date DESC, company ASC
             """,
-            (topic.strip(), cutoff),
+            parameters,
         ).fetchall()
         output: list[Evidence] = []
         seen: set[tuple[str, str, str]] = set()

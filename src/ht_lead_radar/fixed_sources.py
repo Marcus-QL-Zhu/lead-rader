@@ -201,6 +201,11 @@ class FixedSourceCollector:
             ''', (source_id, date.today().isoformat(), status, count, error[:500]))
 
     def collect(self, direction: str, year: int = 0, limit_per_query: int = 10) -> list[Evidence]:
+        allowed_source_ids = tuple(
+            str(source["id"])
+            for source in self.registry.get("sources", [])
+            if source.get("enabled", True) and not source.get("company")
+        )
         applicable = tuple(
             self.registry.get('policy', {}).get('applicable_directions') or ()
         )
@@ -211,9 +216,11 @@ class FixedSourceCollector:
             for term in applicable
         ):
             self.last_run_summary['skipped'] = 'direction_outside_legacy_scope'
-            return self.load_recent(direction)
+            return []
         for source in self.registry.get('sources', []):
-            if not source.get('enabled', True):
+            # Daily discovery must remain universe-wide. Company-owned pages are
+            # intentionally excluded even if an old registry accidentally enables one.
+            if not source.get('enabled', True) or source.get('company'):
                 continue
             source_id = source['id']
             count = 0
@@ -236,14 +243,27 @@ class FixedSourceCollector:
             except Exception as exc:
                 self._record_run(source_id, 'error', 0, str(exc))
                 self.last_run_summary['errors'].append(f'{source_id}: {exc}')
-        return self.load_recent(direction)
+        return self.load_recent(direction, source_ids=allowed_source_ids)
 
-    def load_recent(self, direction: str, days: int = 365) -> list[Evidence]:
+    def load_recent(
+        self,
+        direction: str,
+        days: int = 365,
+        source_ids: tuple[str, ...] | None = None,
+    ) -> list[Evidence]:
+        if source_ids is not None and not source_ids:
+            return []
         cutoff = (date.today() - timedelta(days=days)).isoformat()
+        source_filter = (
+            " AND source_id IN ({})".format(",".join("?" for _ in source_ids))
+            if source_ids is not None
+            else ""
+        )
         with sqlite3.connect(self.state_db) as connection:
             rows = connection.execute(
-                'SELECT evidence_json, first_seen FROM fixed_evidence WHERE last_seen >= ?',
-                (cutoff,),
+                'SELECT evidence_json, first_seen FROM fixed_evidence WHERE last_seen >= ?'
+                + source_filter,
+                (cutoff, *(source_ids or ())),
             ).fetchall()
         output: list[Evidence] = []
         for serialized, first_seen in rows:

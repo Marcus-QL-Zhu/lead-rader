@@ -70,7 +70,8 @@ Director+ 组织缺口。判断顺序是：企业阶段变化 → 新增业务�
 所有事实必须引用输入中的 evidence_id。采用以下证据门槛，不要等待招聘广告：
 - 两个相互独立、且共同指向同一新增责任的上游事件，可以支持 near_term 假设；
 - 一个 A 级运营变化若会直接创造新责任（例如建产线、设基地、启动临床、进入新市场），可以支持 near_term 或 watchlist 假设；
-- 单独融资、单独合作意向或单独招聘广告不足以支持早期岗位假设。
+- 单独融资或单独合作意向只能支持 low-confidence 的 watchlist 假设，必须把
+  尚待核验的组织责任写入 unknowns_to_verify；单独招聘广告仍不足以支持早期岗位假设。
 允许证据不足：此时返回空的 role_hypotheses，并列出可公开观察的 watch_for，
 不为完成数量而猜测岗位。watch_for 不得虚构具体产量、日期、人名或招聘动作。
 最终只返回严格 JSON，不输出分析过程。
@@ -412,6 +413,10 @@ def _validate_evidence_gate(
         and len(event_types) >= 2
         and len(source_groups) >= 2
     )
+    if not upstream:
+        raise DemandAnalysisError(
+            "role hypothesis requires at least one pre-ad upstream event"
+        )
     operational = [
         item
         for item in upstream
@@ -425,10 +430,6 @@ def _validate_evidence_gate(
         raise DemandAnalysisError(
             "near_term requires two diverse upstream events or one A-grade "
             "operational event"
-        )
-    if horizon == "watchlist" and not (diverse_upstream or operational):
-        raise DemandAnalysisError(
-            "watchlist requires an operational event or two diverse upstream events"
         )
 
 

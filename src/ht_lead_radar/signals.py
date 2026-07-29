@@ -25,7 +25,7 @@ SIGNALS: tuple[SignalDefinition, ...] = (
         "executive_change",
         "build_organize",
         _rx(
-            r"任命|履新|接任|升任|新任|换帅|人事调整|"
+            r"任命|履新|接任|升任|新任|换帅|人事调整|出任|调任|"
             r"(?:加盟|加入).{0,18}(?:董事长|总裁|副总裁|总经理|CEO|CTO|COO|"
             r"首席|董事|总监)|"
             r"appointed|joins? as|named .{0,30}(?:ceo|cto|coo|president|"

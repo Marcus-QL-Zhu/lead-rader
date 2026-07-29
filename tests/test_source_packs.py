@@ -28,11 +28,11 @@ def test_checked_in_registry_loads_and_has_all_required_packs():
 @pytest.mark.parametrize(
     "topic,pack_id,specific_source",
     [
-        ("脑机接口", "brain-computer-interface-cn", "neuroxess-news"),
+        ("脑机接口", "brain-computer-interface-cn", "beijing-etown-major-projects"),
         ("芯片", "semiconductor-cn", "cnipa-ic-layout-announcements"),
         ("商业航天", "commercial-space-cn", "cnsa-policy-announcements"),
         ("可控核聚变", "fusion-cn", "iter-china-news"),
-        ("人形机器人", "embodied-intelligence-cn", "unitree-news"),
+        ("人形机器人", "embodied-intelligence-cn", "suzhou-robot-association"),
     ],
 )
 def test_sector_selection_fans_in_generic_and_matching_pack(topic, pack_id, specific_source):
@@ -71,6 +71,10 @@ def test_disabled_dynamic_or_blocked_sources_are_visible_but_not_scheduled_by_de
     assert "nmpa-medical-device-notices" in audit_ids
     assert "nmpa-medical-device-notices" in disabled_ids
     assert "chictr-public-search" in disabled_ids
+    assert any(
+        source.source_type == "company_official"
+        for source in default.disabled_sources
+    )
 
 
 def test_every_source_has_provenance_signal_tags_adapter_and_verification_state():

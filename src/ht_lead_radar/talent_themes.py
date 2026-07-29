@@ -119,7 +119,11 @@ def build_talent_themes(
         )
     )
     themes: list[dict[str, Any]] = []
-    for group in groups[: max(min(target_count, 10), 0)]:
+    used_companies: set[str] = set()
+    for group in groups:
+        companies = {str(item["company"]) for item in group}
+        if companies & used_companies:
+            continue
         anchor = max(
             group,
             key=lambda item: (
@@ -176,6 +180,9 @@ def build_talent_themes(
                 ),
             }
         )
+        used_companies.update(companies)
+        if len(themes) >= max(min(target_count, 10), 0):
+            break
     return tuple(themes)
 
 
@@ -285,6 +292,7 @@ def build_theme_draft_bundle(
         generation_provider="direct-llm-evidence-bound-themes",
         company_demand_analysis=company_demands,
         talent_themes=themes,
+        selection_summary=dict(report.get("daily_opportunity_segments") or {}),
     )
 
 

@@ -100,6 +100,7 @@ class DraftBundle:
     generation_model: str = ""
     company_demand_analysis: tuple[dict[str, Any], ...] = ()
     talent_themes: tuple[dict[str, Any], ...] = ()
+    selection_summary: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

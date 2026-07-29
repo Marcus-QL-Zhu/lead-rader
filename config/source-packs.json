@@ -6,7 +6,8 @@
     "market": "CN_MAINLAND_HIRING_MARKET",
     "access": "public pages only; low-frequency incremental retrieval; respect robots.txt, site terms, and access controls; never bypass CAPTCHA or authentication",
     "content_storage": "store source metadata, title, date, URL, hash, and only the minimum evidence excerpt; do not republish copyrighted full text",
-    "metaso_role": "verification_only_after_fixed-source discovery"
+    "metaso_role": "verification_only_after_fixed-source discovery",
+    "daily_source_policy": "industry-wide public sources only; company official websites are prohibited from daily discovery"
   },
   "sources": [
     {
@@ -747,7 +748,7 @@
       "industry_tags": [
         "brain_computer_interface"
       ],
-      "enabled": true,
+      "enabled": false,
       "verified_on": "2026-07-25",
       "status": "verified_static_list",
       "verification_note": "官方新闻列表可直接读取标题、日期和详情入口。"
@@ -771,7 +772,7 @@
       "industry_tags": [
         "brain_computer_interface"
       ],
-      "enabled": true,
+      "enabled": false,
       "verified_on": "2026-07-25",
       "status": "verified_static_list",
       "verification_note": "官方静态新闻列表可直接读取日期、标题、摘要和详情链接。"
@@ -863,7 +864,7 @@
       "industry_tags": [
         "commercial_space"
       ],
-      "enabled": true,
+      "enabled": false,
       "verified_on": "2026-07-25",
       "status": "verified_static_list",
       "verification_note": "官方首页新闻中心可直接读取带日期的试验、发射与公司动态。"
@@ -887,7 +888,7 @@
       "industry_tags": [
         "commercial_space"
       ],
-      "enabled": true,
+      "enabled": false,
       "verified_on": "2026-07-25",
       "status": "verified_static_list",
       "verification_note": "公司官方新闻列表可直接读取标题、日期和详情入口。"
@@ -934,7 +935,7 @@
       "industry_tags": [
         "fusion"
       ],
-      "enabled": true,
+      "enabled": false,
       "verified_on": "2026-07-25",
       "status": "verified_static_list",
       "verification_note": "公司官方列表可直接读取标题、日期、摘要和详情链接。"
@@ -980,7 +981,7 @@
       "industry_tags": [
         "embodied_intelligence"
       ],
-      "enabled": true,
+      "enabled": false,
       "verified_on": "2026-07-25",
       "status": "verified_static_list",
       "verification_note": "官方静态新闻列表可直接读取标题、日期和详情链接。"
@@ -1003,7 +1004,7 @@
       "industry_tags": [
         "embodied_intelligence"
       ],
-      "enabled": true,
+      "enabled": false,
       "verified_on": "2026-07-25",
       "status": "verified_static_list",
       "verification_note": "官网首页公开展示最新资讯及详情链接；部分详情跳转微信公众号，列表标题仍可作为发现信号。"
@@ -1017,6 +1018,10 @@
       "url": "https://robotsz.org.cn/",
       "adapter": "html_homepage_list",
       "signal_types": [
+        "funding",
+        "factory",
+        "capacity_expansion",
+        "technology_milestone",
         "industry_event",
         "company_activity",
         "policy",
@@ -1026,10 +1031,87 @@
       "industry_tags": [
         "embodied_intelligence"
       ],
-      "enabled": false,
+      "enabled": true,
       "verified_on": "2026-07-25",
-      "status": "verification_timeout",
-      "verification_note": "搜索索引可见近期公告，但本轮直接访问超时；连续健康检查通过前不自动启用。"
+      "status": "verified_public_listing",
+      "verification_note": "2026-07-29复核：首页公开展示行业资讯、协会动态、融资、投产、合作和政策信息，标题带日期并有稳定详情入口。"
+    },
+    {
+      "id": "beijing-etown-major-projects",
+      "name": "北京经济技术开发区—重大项目",
+      "owner": "北京经济技术开发区管理委员会",
+      "source_type": "government_industrial_park",
+      "grade": "A",
+      "url": "https://kfqgw.beijing.gov.cn/ywdt/gdcyfzgd/zdxm/",
+      "adapter": "html_list",
+      "signal_types": [
+        "project_buildout",
+        "facility_opening",
+        "factory",
+        "capacity_expansion",
+        "regional_hq",
+        "company_activity"
+      ],
+      "industry_tags": [
+        "generic",
+        "brain_computer_interface",
+        "semiconductor",
+        "commercial_space",
+        "fusion",
+        "embodied_intelligence"
+      ],
+      "enabled": true,
+      "verified_on": "2026-07-25",
+      "status": "verified_static_list",
+      "verification_note": "2026-07-29复核：政府重大项目静态列表含日期、公司或项目主体及详情链接，覆盖机器人、半导体、商业航天等产业。"
+    },
+    {
+      "id": "shenzhen-semiconductor-association",
+      "name": "深圳市半导体行业协会—动态资讯",
+      "owner": "深圳市半导体行业协会",
+      "source_type": "industry_association",
+      "grade": "B",
+      "url": "https://www.szsia.com/",
+      "adapter": "html_homepage_list",
+      "signal_types": [
+        "funding",
+        "partnership",
+        "research_program",
+        "industry_event",
+        "company_activity",
+        "talent_program"
+      ],
+      "industry_tags": [
+        "semiconductor"
+      ],
+      "enabled": true,
+      "verified_on": "2026-07-25",
+      "status": "verified_public_listing",
+      "verification_note": "2026-07-29复核：首页公开聚合会员融资、合作、实验室、协会动态和人才项目，标题带日期并有详情入口。"
+    },
+    {
+      "id": "fusion-industry-media",
+      "name": "可控核聚变—行业垂直媒体",
+      "owner": "可控核聚变行业垂直媒体",
+      "source_type": "vertical_technology_media",
+      "grade": "B",
+      "url": "https://www.nuclear-fusion.com.cn/",
+      "adapter": "html_homepage_list",
+      "signal_types": [
+        "funding",
+        "major_contract",
+        "technology_milestone",
+        "project_buildout",
+        "policy",
+        "research_program"
+      ],
+      "industry_tags": [
+        "fusion"
+      ],
+      "enabled": true,
+      "verified_on": "2026-07-25",
+      "status": "verified_public_listing",
+      "verification_note": "2026-07-29复核：首页持续聚合聚变融资、重大合同、技术突破和政策，公开显示日期、摘要和详情入口。"
     }
   ],
   "packs": [
@@ -1071,7 +1153,8 @@
         "cls-telegraph",
         "sse-listed-announcements",
         "szse-company-notices",
-        "cninfo-disclosures"
+        "cninfo-disclosures",
+        "beijing-etown-major-projects"
       ]
     },
     {
@@ -1109,7 +1192,8 @@
       "source_ids": [
         "cnipa-ic-layout-announcements",
         "csia-announcements",
-        "semi-china-news"
+        "semi-china-news",
+        "shenzhen-semiconductor-association"
       ]
     },
     {
@@ -1147,7 +1231,8 @@
       "source_ids": [
         "iter-china-news",
         "energy-singularity-news",
-        "startorus-home"
+        "startorus-home",
+        "fusion-industry-media"
       ]
     },
     {

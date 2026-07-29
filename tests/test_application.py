@@ -103,3 +103,24 @@ def test_float_candidate_marker_is_absent_from_persistent_outputs(tmp_path):
     )
     assert marker not in manifest_text
     assert marker not in json.dumps(envelope, ensure_ascii=False, sort_keys=True)
+
+
+def test_child_scan_can_skip_feishu_projection_entirely(tmp_path):
+    payload = _payload(tmp_path)
+    payload["skip_feishu_projection"] = True
+    result = LeadRadarApplication(payload["runtime_db"]).run(
+        payload,
+        default_idempotency_key(payload, refresh=True),
+    )
+
+    assert result.output["feishu"]["mode"] == "skipped"
+    assert not (tmp_path / "feishu.sqlite").exists()
+    assert not (tmp_path / "feishu-change-set.json").exists()
+
+
+def test_skip_feishu_projection_has_distinct_idempotency_key(tmp_path):
+    ordinary = _payload(tmp_path)
+    child = dict(ordinary)
+    child["skip_feishu_projection"] = True
+
+    assert default_idempotency_key(ordinary) != default_idempotency_key(child)
