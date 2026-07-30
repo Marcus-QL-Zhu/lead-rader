@@ -327,6 +327,96 @@ class Kr36Adapter(AggregateAdapter):
             content_hash=digest,
         )
 
+    def fetch_detail(
+        self,
+        channel: SourceChannel,
+        index: SourceArticleIndex,
+        context: AdapterContext,
+    ) -> bytes:
+        """Use 36Kr's content-bearing ``www`` route before the CAPTCHA route.
+
+        The bare-domain article route can return ByteDance's interactive
+        ``TTGCaptcha`` to server clients while the official ``www`` route
+        returns the same public article. The stored canonical URL remains
+        unchanged; this is only a bounded acquisition-path switch.
+        """
+
+        del channel
+        parsed = urlparse(index.canonical_url)
+        www_url = f"https://www.36kr.com{parsed.path}"
+        decision = {
+            "source_article_id": index.source_article_id,
+            "primary_path": "html:www.36kr.com",
+            "fallback_path": "html:36kr.com",
+        }
+        try:
+            primary = context.fetch(www_url)
+        except (OSError, ValueError) as exc:
+            decision["primary_failure"] = f"{type(exc).__name__}: {exc}"
+            try:
+                fallback = context.fetch(index.canonical_url)
+            except (OSError, ValueError) as fallback_exc:
+                decision["fallback_failure"] = (
+                    f"{type(fallback_exc).__name__}: {fallback_exc}"
+                )
+                decision["outcome"] = "both_routes_failed"
+                self._record_fetch_decision(context, index, decision)
+                raise
+            else:
+                decision["outcome"] = "bare_domain_after_www_error"
+                self._record_fetch_decision(context, index, decision)
+                return fallback
+        if self._has_detail_payload(primary):
+            decision["outcome"] = "www_accepted"
+            self._record_fetch_decision(context, index, decision)
+            return primary
+        decision["primary_rejection"] = (
+            "captcha" if self._is_captcha(primary) else "missing_detail_markers"
+        )
+        try:
+            fallback = context.fetch(index.canonical_url)
+        except (OSError, ValueError) as fallback_exc:
+            decision["fallback_failure"] = (
+                f"{type(fallback_exc).__name__}: {fallback_exc}"
+            )
+            decision["outcome"] = "bare_route_failed_after_www_rejection"
+            self._record_fetch_decision(context, index, decision)
+            raise
+        decision["outcome"] = (
+            "bare_domain_accepted"
+            if not self._is_captcha(fallback)
+            else "both_routes_captcha"
+        )
+        self._record_fetch_decision(context, index, decision)
+        return fallback
+
+    @staticmethod
+    def _is_captcha(payload: bytes) -> bool:
+        return b"TTGCaptcha" in payload or b"verify_center" in payload
+
+    @classmethod
+    def _has_detail_payload(cls, payload: bytes) -> bool:
+        if cls._is_captcha(payload):
+            return False
+        return any(
+            marker in payload
+            for marker in (
+                b"articleDetailContent",
+                b"newsflash-item",
+                b"common-width content",
+            )
+        )
+
+    @staticmethod
+    def _record_fetch_decision(
+        context: AdapterContext,
+        index: SourceArticleIndex,
+        decision: dict[str, str],
+    ) -> None:
+        context.decision_state[index.source_article_id] = decision
+        if context.record_decision is not None:
+            context.record_decision(index.source_article_id, decision)
+
     @classmethod
     def _listing_event_complete(cls, index: SourceArticleIndex) -> bool:
         """Require a complete current funding assertion with a resolvable subject."""

@@ -2,6 +2,8 @@ from datetime import datetime, timezone
 import json
 import sqlite3
 
+import pytest
+
 from ht_lead_radar.aggregate_adapters.adaptive import AdaptiveSelector
 from ht_lead_radar.aggregate_adapters.coordinator import (
     DedicatedAggregateCoordinator,
@@ -76,7 +78,7 @@ def test_kr36_indexes_every_list_item_but_emits_only_real_events(tmp_path):
     routes = {"https://pitchhub.36kr.com/financing-flash": listing}
     routes.update(
         {
-            f"https://36kr.com/newsflashes/{article_id}": _detail(title, company)
+            f"https://www.36kr.com/newsflashes/{article_id}": _detail(title, company)
             for article_id, (title, company) in titles.items()
         }
     )
@@ -128,7 +130,7 @@ def test_kr36_second_run_uses_persisted_events_without_refetching_details(tmp_pa
     routes = {"https://pitchhub.36kr.com/financing-flash": listing}
     routes.update(
         {
-            f"https://36kr.com/newsflashes/{article_id}": _detail(title, company)
+            f"https://www.36kr.com/newsflashes/{article_id}": _detail(title, company)
             for article_id, (title, company) in titles.items()
         }
     )
@@ -206,6 +208,7 @@ def test_kr36_captcha_with_structured_listing_is_complete_not_dead_letter(tmp_pa
     listing = _listing()
     routes = {"https://pitchhub.36kr.com/financing-flash": listing}
     for article_id in ("1001", "1002", "1003", "1004", "1005"):
+        routes[f"https://www.36kr.com/newsflashes/{article_id}"] = b"<html>TTGCaptcha verify_center</html>"
         routes[f"https://36kr.com/newsflashes/{article_id}"] = b"<html>TTGCaptcha verify_center</html>"
     coordinator = DedicatedAggregateCoordinator(
         state_db=tmp_path / "captcha.sqlite3",
@@ -231,6 +234,140 @@ def test_kr36_captcha_with_structured_listing_is_complete_not_dead_letter(tmp_pa
     }
     connection.close()
     assert statuses == {"structured_complete", "listing_complete"}
+
+
+def test_kr36_prefers_www_detail_and_does_not_hit_bare_captcha_route(tmp_path):
+    listing = _listing()
+    calls: list[str] = []
+    routes = {"https://pitchhub.36kr.com/financing-flash": listing}
+    titles = {
+        "1001": ("星河芯片完成1亿元A轮融资", "星河芯片"),
+        "1002": ("灵巧机器人完成数千万元A轮融资", "灵巧机器人"),
+        "1003": ("神经接口科技获数亿元新一轮融资", "神经接口科技"),
+        "1004": ("超导能源完成亿元级战略融资", "超导能源"),
+        "1005": ("个贷融资成本明示规定即将实施", "合规观察"),
+    }
+    routes.update(
+        {
+            f"https://www.36kr.com/newsflashes/{article_id}": _detail(title, company)
+            for article_id, (title, company) in titles.items()
+        }
+    )
+
+    def fetch(url: str) -> bytes:
+        calls.append(url)
+        return routes[url]
+
+    result = DedicatedAggregateCoordinator(
+        state_db=tmp_path / "www.sqlite3",
+        registry=DedicatedAdapterRegistry((Kr36Adapter(),)),
+        fetch=fetch,
+        now=NOW,
+    ).collect_source("36kr-financing-flash", "hardtech")
+
+    assert result.run.detail_failure_count == 0
+    assert not any(
+        url.startswith("https://36kr.com/newsflashes/") for url in calls
+    )
+
+
+def test_kr36_falls_back_to_bare_domain_when_www_transport_fails(tmp_path):
+    listing = _listing()
+    routes = {"https://pitchhub.36kr.com/financing-flash": listing}
+    titles = {
+        "1001": ("星河芯片完成1亿元A轮融资", "星河芯片"),
+        "1002": ("灵巧机器人完成数千万元A轮融资", "灵巧机器人"),
+        "1003": ("神经接口科技获数亿元新一轮融资", "神经接口科技"),
+        "1004": ("超导能源完成亿元级战略融资", "超导能源"),
+        "1005": ("个贷融资成本明示规定即将实施", "合规观察"),
+    }
+    routes.update(
+        {
+            f"https://36kr.com/newsflashes/{article_id}": _detail(title, company)
+            for article_id, (title, company) in titles.items()
+        }
+    )
+
+    def fetch(url: str) -> bytes:
+        if url.startswith("https://www.36kr.com/"):
+            raise OSError("simulated www outage")
+        return routes[url]
+
+    result = DedicatedAggregateCoordinator(
+        state_db=tmp_path / "www-error.sqlite3",
+        registry=DedicatedAdapterRegistry((Kr36Adapter(),)),
+        fetch=fetch,
+        now=NOW,
+    ).collect_source("36kr-financing-flash", "hardtech")
+
+    assert result.run.status == "ok"
+    assert result.run.detail_failure_count == 0
+
+
+def test_kr36_records_both_route_failures_before_reraising(tmp_path):
+    from ht_lead_radar.aggregate_adapters.base import AdapterContext
+
+    adapter = Kr36Adapter()
+    channel = adapter.channel_for("36kr-financing-flash")
+    index = adapter.parse_listing(channel, _listing(), AdapterContext.create(
+        state_db=tmp_path / "listing.sqlite3",
+        fetch=lambda _url: b"",
+        now=NOW,
+    ))[0]
+    decisions = []
+
+    def fail(url: str) -> bytes:
+        raise OSError(f"unavailable: {url}")
+
+    context = AdapterContext.create(
+        state_db=tmp_path / "failure.sqlite3",
+        fetch=fail,
+        record_decision=lambda _article_id, decision: decisions.append(decision),
+        now=NOW,
+    )
+
+    with pytest.raises(OSError, match="unavailable"):
+        adapter.fetch_detail(channel, index, context)
+
+    assert decisions[-1]["outcome"] == "both_routes_failed"
+    assert "primary_failure" in decisions[-1]
+    assert "fallback_failure" in decisions[-1]
+
+
+def test_kr36_records_bare_failure_after_www_payload_rejection(tmp_path):
+    from ht_lead_radar.aggregate_adapters.base import AdapterContext
+
+    adapter = Kr36Adapter()
+    channel = adapter.channel_for("36kr-financing-flash")
+    index = adapter.parse_listing(
+        channel,
+        _listing(),
+        AdapterContext.create(
+            state_db=tmp_path / "listing-rejection.sqlite3",
+            fetch=lambda _url: b"",
+            now=NOW,
+        ),
+    )[0]
+    decisions = []
+
+    def fetch(url: str) -> bytes:
+        if url.startswith("https://www.36kr.com/"):
+            return b"<html>TTGCaptcha</html>"
+        raise OSError("bare route unavailable")
+
+    context = AdapterContext.create(
+        state_db=tmp_path / "rejection-failure.sqlite3",
+        fetch=fetch,
+        record_decision=lambda _article_id, decision: decisions.append(decision),
+        now=NOW,
+    )
+
+    with pytest.raises(OSError, match="bare route unavailable"):
+        adapter.fetch_detail(channel, index, context)
+
+    assert decisions[-1]["primary_rejection"] == "captcha"
+    assert decisions[-1]["outcome"] == "bare_route_failed_after_www_rejection"
+    assert "fallback_failure" in decisions[-1]
 
 
 def test_kr36_unknown_listing_is_not_treated_as_complete_negative():

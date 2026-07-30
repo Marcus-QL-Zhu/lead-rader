@@ -1503,6 +1503,17 @@ class SourcePackCollector:
                     runner = None
             if runner is not None and runner is not False:
                 dedicated_semantic_mode = "minimax"
+            dedicated_listing_urls = [
+                dedicated_registry.for_source(source_id)
+                .channel_for(source_id)
+                .url
+                for source_id in dedicated_registry.source_ids
+            ]
+            shared_listing_urls = {
+                url
+                for url in dedicated_listing_urls
+                if dedicated_listing_urls.count(url) > 1
+            }
             dedicated_coordinator = DedicatedAggregateCoordinator(
                 state_db=self.state_db,
                 registry=dedicated_registry,
@@ -1511,6 +1522,7 @@ class SourcePackCollector:
                     max_bytes=self.max_bytes,
                     user_agent=self.user_agent,
                     urlopen=self._urlopen,
+                    shared_get_urls=shared_listing_urls,
                 ),
                 llm_runner=runner if runner is not False else None,
                 acceptance_dir=os.environ.get("LEAD_RADAR_AGGREGATE_ACCEPTANCE_DIR"),

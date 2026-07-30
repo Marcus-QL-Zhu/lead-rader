@@ -60,7 +60,7 @@ class CyzoneAdapter(AggregateAdapter):
         SourceChannel(
             source_id="cyzone-financing",
             name="创业邦—融资",
-            url="https://capital.cyzone.cn/",
+            url="https://www.cyzone.cn/",
             source_grade="B",
             event_prior=("funding",),
             allowed_hosts=("www.cyzone.cn",),
@@ -76,7 +76,7 @@ class CyzoneAdapter(AggregateAdapter):
             allowed_path_patterns=(r"/article/\d+\.html",),
         ),
     )
-    minimum_listing_count = 10
+    minimum_listing_count = 1
     maximum_listing_count = 100
 
     def parse_listing(
@@ -90,10 +90,7 @@ class CyzoneAdapter(AggregateAdapter):
             url=channel.url,
             storage_path=context.adaptive_db,
         )
-        if channel.source_id == "cyzone-financing":
-            selector = "div.article-item"
-            minimum_count = 10
-        elif channel.source_id == "cyzone-latest":
+        if channel.source_id in {"cyzone-financing", "cyzone-latest"}:
             selector = "div#pane-recommend div.article-item[data-id]"
             minimum_count = 20
         else:
@@ -146,21 +143,22 @@ class CyzoneAdapter(AggregateAdapter):
             )
             time_label = self._first_text(item, "span.time")
             thumb_url = self._thumbnail_url(item, channel)
-            published_at = (
-                self._date_from_thumbnail(thumb_url)
-                if channel.source_id == "cyzone-financing"
-                else self._parse_listing_time(time_label, context)
-            )
+            published_at = self._parse_listing_time(time_label, context)
             if not published_at:
                 raise ListingInvariantError(
                     f"{channel.source_id} item {article_id} has no valid date"
                 )
-            if self._date_value(published_at) > context.now.date():
+            if self._date_value(published_at) > self._local_today(context):
                 raise ListingInvariantError(
                     f"{channel.source_id} item {article_id} is future dated"
                 )
 
             company = self._company_from_listing(title, tags)
+            is_financing = "融资" in tags
+            if channel.source_id == "cyzone-financing" and not is_financing:
+                continue
+            if channel.source_id == "cyzone-latest" and is_financing:
+                continue
             structured = {
                 "time_label": time_label,
                 "tags": tags,
@@ -201,7 +199,11 @@ class CyzoneAdapter(AggregateAdapter):
                 )
             )
             seen.add(article_id)
-        self.validate_listing(channel, output)
+        # The homepage itself must contain at least 20 items (enforced by the
+        # selector invariant), but either mutually-exclusive projection may
+        # legitimately be empty on a quiet day.
+        if output:
+            self.validate_listing(channel, output)
         return output
 
     def fetch_detail(
@@ -293,7 +295,7 @@ class CyzoneAdapter(AggregateAdapter):
                 f"{index.source_article_id}"
             )
         detail_date = self._detail_date(adaptive)
-        if detail_date and self._date_value(detail_date) > context.now.date():
+        if detail_date and self._date_value(detail_date) > self._local_today(context):
             detail_date = ""
 
         author = self._first_text(
@@ -391,7 +393,7 @@ class CyzoneAdapter(AggregateAdapter):
                 f"{channel.source_id} API title mismatch for {index.source_article_id}"
             )
         api_date = self._api_date(data.get("published_at"))
-        if api_date and self._date_value(api_date) > context.now.date():
+        if api_date and self._date_value(api_date) > self._local_today(context):
             raise DetailFetchError(
                 f"{channel.source_id} API detail is future dated for "
                 f"{index.source_article_id}: {api_date}"
@@ -541,6 +543,8 @@ class CyzoneAdapter(AggregateAdapter):
     @staticmethod
     def _parse_listing_time(value: str, context: AdapterContext) -> str:
         normalized = re.sub(r"\s+", " ", value).strip()
+        local_now = context.now.astimezone(timezone(timedelta(hours=8)))
+        local_today = local_now.date()
         full = re.fullmatch(r"(20\d{2})-(\d{2})-(\d{2})", normalized)
         if full:
             try:
@@ -550,13 +554,13 @@ class CyzoneAdapter(AggregateAdapter):
         month_day = re.fullmatch(r"(\d{2})-(\d{2})", normalized)
         if month_day:
             try:
-                candidate = context.now.date().replace(
+                candidate = local_today.replace(
                     month=int(month_day.group(1)),
                     day=int(month_day.group(2)),
                 )
             except ValueError:
                 return ""
-            if candidate > context.now.date() + timedelta(days=1):
+            if candidate > local_today + timedelta(days=1):
                 try:
                     candidate = candidate.replace(year=candidate.year - 1)
                 except ValueError:
@@ -564,13 +568,24 @@ class CyzoneAdapter(AggregateAdapter):
             return candidate.isoformat()
         today = re.fullmatch(r"今天(?:\s+\d{1,2}:\d{2})?", normalized)
         if today:
-            return context.now.date().isoformat()
+            return local_today.isoformat()
         yesterday = re.fullmatch(r"昨天(?:\s+\d{1,2}:\d{2})?", normalized)
         if yesterday:
-            return (context.now - timedelta(days=1)).date().isoformat()
-        if re.fullmatch(r"\d+\s*(?:分钟前|小时前)", normalized):
-            return context.now.date().isoformat()
+            return (local_now - timedelta(days=1)).date().isoformat()
+        relative = re.fullmatch(r"(\d+)\s*(分钟前|小时前)", normalized)
+        if relative:
+            amount = int(relative.group(1))
+            delta = (
+                timedelta(minutes=amount)
+                if relative.group(2) == "分钟前"
+                else timedelta(hours=amount)
+            )
+            return (local_now - delta).date().isoformat()
         return ""
+
+    @staticmethod
+    def _local_today(context: AdapterContext):
+        return context.now.astimezone(timezone(timedelta(hours=8))).date()
 
     @staticmethod
     def _detail_date(adaptive: AdaptiveSelector) -> str:

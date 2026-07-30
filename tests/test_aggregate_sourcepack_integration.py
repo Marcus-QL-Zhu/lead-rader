@@ -87,7 +87,7 @@ def test_source_pack_routes_36kr_through_dedicated_adapter(tmp_path):
             </div>
             """
         )
-        routes[f"https://36kr.com/newsflashes/{article_id}"] = (
+        routes[f"https://www.36kr.com/newsflashes/{article_id}"] = (
             f"""
             <html><head><meta name="description"
               content="测试芯片{number}完成1亿元A轮融资，资金用于半导体芯片研发和量产。"></head>

@@ -74,14 +74,14 @@ SOURCES = [
     ),
     source(
         "cyzone-financing",
-        "创业邦—融资频道",
+        "创业邦—首页融资增量",
         "爱奇清科（北京）信息科技有限公司",
         "financing_media",
         "B",
-        "https://capital.cyzone.cn/",
-        "html_list",
+        "https://www.cyzone.cn/",
+        "html_homepage_list",
         ["funding", "investor", "funding_round", "funding_amount", "fund_report"],
-        "公开融资频道及分页历史；会混入月报和基金管理人内容，必须继续做事件类型过滤，不能把列表条目都视为单笔融资。",
+        "旧 capital.cyzone.cn 专题已停更；专用适配器从当前首页互斥投影带融资标签的每日增量，并与最新资讯共享一次 GET。",
     ),
     source(
         "cyzone-latest",
@@ -92,7 +92,7 @@ SOURCES = [
         "https://www.cyzone.cn/",
         "html_homepage_list",
         ["funding", "investor", "funding_round", "funding_amount", "company_activity"],
-        "融资频道对近期单笔事件召回不足时的首页补充入口；2026-07-25 生产解析发现 204 个链接、9 个融资相关条目。",
+        "当前首页的非融资标签资讯投影；融资标签条目由 cyzone-financing 互斥接管，同一轮不重复抓取或语义处理。",
     ),
     source(
         "lieyunpro-archives",

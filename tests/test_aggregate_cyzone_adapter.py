@@ -61,7 +61,7 @@ def _latest_item(
     """
 
 
-def _latest_listing(*, item_class: str = "article-item") -> bytes:
+def _latest_listing(*, item_class: str = "article-item", date: str = "07-29") -> bytes:
     items = [
         _latest_item(
             "910001",
@@ -89,6 +89,8 @@ def _latest_listing(*, item_class: str = "article-item") -> bytes:
     )
     if item_class != "article-item":
         html = html.replace('class="article-item"', f'class="{item_class}"')
+    if date != "07-29":
+        html = html.replace(">07-29<", f">{date}<")
     return html.encode()
 
 
@@ -160,18 +162,73 @@ def test_cyzone_indexes_every_public_item_in_both_listing_fixtures(tmp_path):
     context = _context(tmp_path)
 
     latest = ADAPTER.parse_listing(LATEST, _latest_listing(), context)
-    financing = ADAPTER.parse_listing(FINANCING, _capital_listing(), context)
+    financing = ADAPTER.parse_listing(FINANCING, _latest_listing(), context)
 
-    assert len(latest) == 20
-    assert [item.listing_position for item in latest] == list(range(1, 21))
-    assert latest[0].source_article_id == "910001"
-    assert latest[0].published_at == "2026-07-29"
-    assert latest[0].structured_data["company"] == "星河芯片"
-    assert latest[1].title == "8岁融资200万？AI正在批量制造神童"
-    assert len(financing) == 10
-    assert financing[0].published_at == "2025-09-11"
-    assert financing[-1].published_at == "2025-09-20"
+    assert len(latest) == 19
+    assert latest[0].source_article_id == "910002"
+    assert latest[0].title == "8岁融资200万？AI正在批量制造神童"
+    assert len(financing) == 1
+    assert financing[0].source_article_id == "910001"
+    assert financing[0].published_at == "2026-07-29"
+    assert financing[0].structured_data["company"] == "星河芯片"
     assert {item.source_id for item in financing} == {"cyzone-financing"}
+    assert {
+        item.source_article_id for item in latest
+    }.isdisjoint(item.source_article_id for item in financing)
+    assert len(latest) + len(financing) == 20
+
+
+def test_cyzone_relative_listing_time_uses_china_timezone_and_elapsed_time(tmp_path):
+    context = AdapterContext.create(
+        state_db=tmp_path / "relative-time.sqlite3",
+        fetch=lambda _url: b"",
+        now=datetime(2026, 7, 30, 21, 0, tzinfo=timezone.utc),
+    )
+
+    assert ADAPTER._parse_listing_time("今天 04:30", context) == "2026-07-31"
+    assert ADAPTER._parse_listing_time("10 小时前", context) == "2026-07-30"
+    assert ADAPTER._parse_listing_time("30 分钟前", context) == "2026-07-31"
+    assert ADAPTER._parse_listing_time("昨天", context) == "2026-07-30"
+
+
+def test_cyzone_full_listing_and_details_accept_local_today_at_0500(tmp_path):
+    local_0500 = datetime(2026, 7, 30, 21, 0, tzinfo=timezone.utc)
+    context = AdapterContext.create(
+        state_db=tmp_path / "local-today.sqlite3",
+        fetch=lambda _url: b"",
+        now=local_0500,
+    )
+    index = ADAPTER.parse_listing(
+        FINANCING,
+        _latest_listing(date="今天 04:30"),
+        context,
+    )[0]
+    assert index.published_at == "2026-07-31"
+
+    body = (
+        "The company completed a financing round and described product research, "
+        "manufacturing validation, customer delivery, supply chain preparation, "
+        "and organization building in enough detail for deterministic validation."
+    )
+    html = _detail(index.source_article_id, index.title, body).replace(
+        b"2026-07-29", b"2026-07-31"
+    )
+    html_article = ADAPTER.parse_detail(FINANCING, index, html, context)
+    assert html_article.structured_data["detail_published_at"] == "2026-07-31"
+
+    api = json.dumps(
+        {
+            "data": {
+                "content_id": int(index.source_article_id),
+                "title": index.title,
+                "content": f"<p>{body}</p>",
+                "published_at": "2026-07-31 04:30:00",
+            }
+        },
+        ensure_ascii=False,
+    ).encode()
+    api_article = ADAPTER.parse_detail(FINANCING, index, api, context)
+    assert api_article.index.published_at == "2026-07-31"
 
 
 def test_cyzone_detail_extracts_only_article_body_and_checks_date(tmp_path):
@@ -362,8 +419,8 @@ def test_cyzone_second_run_does_not_refetch_unchanged_details(tmp_path):
     calls.clear()
     second = coordinator.collect_source(LATEST.source_id, "硬科技")
 
-    assert first.run.listing_count == second.run.listing_count == 20
-    assert first.run.incremental_count == 20
+    assert first.run.listing_count == second.run.listing_count == 19
+    assert first.run.incremental_count == 19
     assert second.run.incremental_count == 0
     assert calls == [LATEST.url]
     connection = sqlite3.connect(tmp_path / "coordinator.sqlite3")
@@ -371,7 +428,7 @@ def test_cyzone_second_run_does_not_refetch_unchanged_details(tmp_path):
         connection.execute("SELECT COUNT(*) FROM aggregate_clean_articles").fetchone()[
             0
         ]
-        == 20
+        == 19
     )
     connection.close()
 
@@ -460,7 +517,11 @@ def test_cyzone_coordinator_resolves_prior_detail_dead_letters_via_api(tmp_path)
                         "content_id": int(article_id),
                         "title": titles[article_id],
                         "content": f"<p>{body}</p>",
-                        "published_at": indexes[int(article_id) - 910001].published_at,
+                        "published_at": next(
+                            item.published_at
+                            for item in indexes
+                            if item.source_article_id == article_id
+                        ),
                         "tags": "hardtech",
                     }
                 },
@@ -469,7 +530,7 @@ def test_cyzone_coordinator_resolves_prior_detail_dead_letters_via_api(tmp_path)
 
     database = tmp_path / "coordinator-api.sqlite3"
     with AggregateStateStore(database) as store:
-        for article_id in ("910001", "910002"):
+        for article_id in ("910002", "910003"):
             store.record_dead_letter(
                 source_id=LATEST.source_id,
                 source_article_id=article_id,
@@ -487,8 +548,8 @@ def test_cyzone_coordinator_resolves_prior_detail_dead_letters_via_api(tmp_path)
     result = coordinator.collect_source(LATEST.source_id, "hardtech", force_reprocess=True)
 
     assert result.run.status == "ok"
-    assert result.run.listing_count == 20
-    assert result.run.detail_success_count == 20
+    assert result.run.listing_count == 19
+    assert result.run.detail_success_count == 19
     assert result.run.detail_failure_count == 0
     with AggregateStateStore(database) as store:
         assert store.health()["open_dead_letter_count"] == 0

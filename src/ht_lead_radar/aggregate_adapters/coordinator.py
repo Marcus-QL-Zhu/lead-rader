@@ -11,7 +11,7 @@ import json
 import os
 from pathlib import Path
 import time
-from typing import Any, Callable
+from typing import Any, Callable, Iterable
 import urllib.parse
 import urllib.request
 
@@ -75,6 +75,7 @@ class PublicHttpFetcher:
         user_agent: str = "HT-Lead-Radar/0.3 (+public aggregate monitoring)",
         urlopen: Callable[..., Any] | None = None,
         minimum_interval_seconds: float = 1.25,
+        shared_get_urls: Iterable[str] = (),
     ) -> None:
         self.timeout = timeout
         self.max_bytes = max_bytes
@@ -84,6 +85,19 @@ class PublicHttpFetcher:
         ).open
         self.minimum_interval_seconds = max(0.0, minimum_interval_seconds)
         self._last_fetch_at = 0.0
+        self.shared_get_urls = frozenset(shared_get_urls)
+        for url in self.shared_get_urls:
+            _validate_public_http_url(url)
+        # Shared listing URLs are a finite, registry-derived set. Keep their
+        # exact response for this fetcher's collection cycle so mutually
+        # exclusive source projections always inspect the same snapshot.
+        # SourcePackCollector creates a fresh fetcher for every new run.
+        self._get_cache: dict[str, bytes] = {}
+
+    def clear_shared_cache(self) -> None:
+        """Start a new explicit shared-listing snapshot cycle."""
+
+        self._get_cache.clear()
 
     def __call__(self, url: str) -> bytes:
         return self._request(url)
@@ -107,7 +121,12 @@ class PublicHttpFetcher:
         accept: str = "text/html,application/xhtml+xml;q=0.9,*/*;q=0.5",
     ) -> bytes:
         _validate_public_http_url(url)
-        elapsed = time.monotonic() - self._last_fetch_at
+        if method == "GET" and body is None and url in self.shared_get_urls:
+            cached = self._get_cache.get(url)
+            if cached is not None:
+                return cached
+        now = time.monotonic()
+        elapsed = now - self._last_fetch_at
         if self._last_fetch_at and elapsed < self.minimum_interval_seconds:
             time.sleep(self.minimum_interval_seconds - elapsed)
         headers = {"User-Agent": self.user_agent, "Accept": accept}
@@ -129,6 +148,8 @@ class PublicHttpFetcher:
             if len(body) > self.max_bytes:
                 raise ValueError(f"response exceeds {self.max_bytes} bytes")
             self._last_fetch_at = time.monotonic()
+            if method == "GET" and url in self.shared_get_urls:
+                self._get_cache[url] = body
             return body
 
 

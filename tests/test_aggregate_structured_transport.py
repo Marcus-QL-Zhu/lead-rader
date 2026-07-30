@@ -55,6 +55,55 @@ def test_public_fetcher_posts_json_with_explicit_headers():
     }
 
 
+def test_public_fetcher_reuses_only_explicit_shared_get():
+    calls = []
+
+    def urlopen(request, *, timeout):
+        del timeout
+        calls.append(request.full_url)
+        return _Response(b"shared-listing", request.full_url)
+
+    fetcher = PublicHttpFetcher(
+        urlopen=urlopen,
+        minimum_interval_seconds=0,
+        shared_get_urls=("https://example.com/shared",),
+    )
+
+    first = fetcher("https://example.com/shared")
+    second = fetcher("https://example.com/shared")
+
+    assert first == second == b"shared-listing"
+    assert calls == ["https://example.com/shared"]
+
+
+def test_public_fetcher_keeps_cycle_snapshot_and_does_not_cache_details():
+    calls = []
+
+    def urlopen(request, *, timeout):
+        del timeout
+        calls.append(request.full_url)
+        return _Response(f"response-{len(calls)}".encode(), request.full_url)
+
+    fetcher = PublicHttpFetcher(
+        urlopen=urlopen,
+        minimum_interval_seconds=0,
+        shared_get_urls=("https://example.com/shared",),
+    )
+
+    assert fetcher("https://example.com/shared") == b"response-1"
+    assert fetcher("https://example.com/shared") == b"response-1"
+    assert fetcher("https://example.com/detail/1") == b"response-2"
+    assert fetcher("https://example.com/detail/1") == b"response-3"
+    fetcher.clear_shared_cache()
+    assert fetcher("https://example.com/shared") == b"response-4"
+    assert calls == [
+        "https://example.com/shared",
+        "https://example.com/detail/1",
+        "https://example.com/detail/1",
+        "https://example.com/shared",
+    ]
+
+
 def test_post_audit_files_are_unique_per_request_payload(tmp_path):
     class Fetcher:
         def __call__(self, _url):

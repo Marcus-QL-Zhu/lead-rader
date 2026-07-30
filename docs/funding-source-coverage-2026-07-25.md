@@ -25,8 +25,8 @@
 | 综合 | 36氪融资快报 | https://pitchhub.36kr.com/financing-flash | 近期科技融资、首发 | 63 个链接，正常 |
 | 综合 | 投资界投资事件 | https://www.pedaily.cn/vcpeevent/ | 逐笔投资事件 | 70 个链接，正常 |
 | 综合 | 投资界融资资讯 | https://www.pedaily.cn/i2826/ | 新闻与融资背景 | 58 个链接，正常 |
-| 综合 | 创业邦融资频道 | https://capital.cyzone.cn/ | 融资频道与历史分页 | 64 个链接，正常 |
-| 综合 | 创业邦最新资讯 | https://www.cyzone.cn/ | 近期单笔融资补充 | 204 个链接，正常 |
+| 综合 | 创业邦首页融资增量 | https://www.cyzone.cn/ | 当前首页中带融资标签的互斥投影 | 2026-07-31 验证；旧 capital.cyzone.cn 专题已停更，不再用于每日增量 |
+| 综合 | 创业邦最新资讯 | https://www.cyzone.cn/ | 当前首页中非融资标签的互斥投影 | 与融资投影共享一次 GET，无重复语义处理 |
 | 综合 | 猎云网归档 | https://lieyunpro.com/archives | 创业公司与硬科技补漏 | 130 个链接，正常 |
 | 垂直 | 动脉网投融资 | https://www.vbdata.cn/articleList?tag=5512 | 医疗、脑科学、生物技术 | 32 个链接，正常 |
 | 垂直 | 甲子光年 | https://www.jazzyear.com/ | AI、机器人、硬科技 | 79 个链接，正常 |
