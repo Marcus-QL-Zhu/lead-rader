@@ -57,7 +57,7 @@ def _event(company: str, event_type: str, status: str, quote: str, summary: str)
     }
 
 def test_prompt_version_v15():
-    assert PROMPT_VERSION == "aggregate-semantic-v19"
+    assert PROMPT_VERSION == "aggregate-semantic-v20"
 
 def test_model_summary_with_prior_year_rejects_historical_case():
     quote = "\u6676\u6cf0\u79d1\u6280\u9009\u5b9a\u6280\u672f\u65b9\u5e76\u5b8c\u62109\u8f6e\u9ad8\u7cbe\u5ea6\u5b9e\u9a8c\u64cd\u4f5c\u3002"

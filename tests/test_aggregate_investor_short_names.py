@@ -107,4 +107,4 @@ def test_repair_salvages_grounded_two_character_investor_names():
     )
 
     assert events[0].investors == ("智谱", "商汤", "阿里")
-    assert investor_quote in events[0].evidence_quotes
+    assert any(investor_quote in quote for quote in events[0].evidence_quotes)

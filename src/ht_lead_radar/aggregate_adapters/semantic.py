@@ -13,7 +13,7 @@ from .entities import canonical_company_name, company_alias_candidates, is_compa
 from .models import CleanArticle, SemanticEvent, SourceChannel
 
 
-PROMPT_VERSION = "aggregate-semantic-v19"
+PROMPT_VERSION = "aggregate-semantic-v20"
 ALLOWED_EVENT_TYPES = frozenset(
     {
         "funding",
@@ -181,6 +181,12 @@ class MiniMaxSemanticProcessor:
                 rule_events,
             )
             audit["status"] = "accepted"
+            events = self._salvage_grounded_investors(
+                article,
+                events,
+                (str(audit["first_response"]),),
+                "",
+            )
             self._complete_audit(audit, events)
             return events
         except Exception as first_error:
@@ -415,8 +421,12 @@ class MiniMaxSemanticProcessor:
         seed: SemanticEvent,
     ) -> str:
         candidates: list[tuple[int, int, str]] = []
-        for sentence in re.split(r"(?<=[\u3002\uff01\uff1f\uff1b])", text):
-            quote = sentence.strip()
+        sentences = [
+            value.strip()
+            for value in re.split(r"(?<=[\u3002\uff01\uff1f\uff1b])", text)
+            if value.strip()
+        ]
+        for position, quote in enumerate(sentences):
             if investor not in quote or cls._is_historical_background(quote):
                 continue
             if not re.search(
@@ -426,22 +436,59 @@ class MiniMaxSemanticProcessor:
                 quote,
             ):
                 continue
-            score = 0
-            if any(
-                mention and mention in quote
-                for mention in (
-                    seed.canonical_company,
-                    *seed.company_mentions,
-                )
+            identity_quote = quote
+            if not cls._company_event_subject_grounded(
+                seed.canonical_company,
+                identity_quote,
+                seed.event_type,
             ):
-                score += 3
+                if not (
+                    position > 0
+                    and re.match(r"^(?:\u672c\u8f6e|\u672c\u6b21)", quote)
+                    and cls._company_event_subject_grounded(
+                        seed.canonical_company,
+                        sentences[position - 1],
+                        seed.event_type,
+                    )
+                ):
+                    continue
+                identity_quote = f"{sentences[position - 1]}{quote}"
+            round_pattern = (
+                r"(?:Pre-)?[A-Z](?:\+{1,2})?\u8f6e|"
+                r"\u5929\u4f7f(?:\+{1,2})?\u8f6e|"
+                r"\u79cd\u5b50(?:\+{1,2})?\u8f6e|\u6218\u7565\u878d\u8d44"
+            )
+            current_rounds = {
+                cls._normalize_round(value)
+                for value in re.findall(round_pattern, quote)
+            }
+            normalized_seed_round = cls._normalize_round(seed.funding_round)
+            if (
+                normalized_seed_round
+                and current_rounds
+                and normalized_seed_round not in current_rounds
+            ):
+                continue
+            quote_rounds = {
+                cls._normalize_round(value)
+                for value in re.findall(round_pattern, identity_quote)
+            }
+            if (
+                seed.funding_round
+                and quote_rounds
+                and normalized_seed_round not in quote_rounds
+            ):
+                continue
+            score = 3
             if seed.funding_round and seed.funding_round in quote:
                 score += 2
             if seed.funding_amount and seed.funding_amount in quote:
                 score += 2
             if "\u672c\u8f6e" in quote or "\u672c\u6b21" in quote:
                 score += 2
-            candidates.append((score, -len(quote), quote[:500]))
+            candidates.append(
+                (score, -len(identity_quote), identity_quote[:500])
+            )
         if not candidates:
             return ""
         return max(candidates)[2]
@@ -713,16 +760,18 @@ class MiniMaxSemanticProcessor:
                 cumulative_amount = cumulative_amount or amount
                 amount = ""
             named_investors: list[str] = []
-            omitted_investors: list[str] = []
+            unnamed_investors: list[str] = []
+            ungrounded_investors: list[str] = []
             for investor in map(str, investors):
                 value = investor.strip()
                 if not value:
                     continue
                 if _UNNAMED_INVESTOR.fullmatch(value):
-                    omitted_investors.append(value)
+                    unnamed_investors.append(value)
                     continue
                 if value not in quote_text:
-                    raise SemanticOutputError("investor is absent from evidence quote")
+                    ungrounded_investors.append(value)
+                    continue
                 named_investors.append(cls._normalize_investor_name(value, quote_text))
             tags = raw.get("industry_tags") or []
             if not isinstance(tags, list) or any(
@@ -739,7 +788,11 @@ class MiniMaxSemanticProcessor:
                 f"minimax_ungrounded_field_removed:{field}" for field in removed_fields
             )
             raw_ambiguities.extend(
-                f"unnamed_investor_omitted:{value}" for value in omitted_investors
+                f"unnamed_investor_omitted:{value}" for value in unnamed_investors
+            )
+            raw_ambiguities.extend(
+                f"minimax_ungrounded_investor_removed:{value}"
+                for value in ungrounded_investors
             )
             seed = cls._matching_seed(
                 rule_events,

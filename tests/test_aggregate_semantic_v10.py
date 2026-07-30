@@ -18,11 +18,12 @@ class Runner:
         return next(self.responses)
 
 
-def test_successful_repair_preserves_grounded_investor_from_first_response():
+def test_first_response_omits_ungrounded_quote_and_salvages_investor():
     company = "\u683c\u5f0f\u5854"
     investor = "\u56fd\u79d1\u521b\u6295"
     quote = (
-        f"\u672c\u8f6e\u878d\u8d44\u7531 {investor} "
+        f"{company}\u5b8c\u6210A\u8f6e\u878d\u8d44\uff0c"
+        f"\u672c\u8f6e\u7531 {investor} "
         "\u9886\u6295\uff0c\u5174\u6e58\u8d44\u672c\u65d7\u4e0b\u57fa\u91d1\u8ddf\u6295\u3002"
     )
     index = SourceArticleIndex(
@@ -108,6 +109,6 @@ def test_successful_repair_preserves_grounded_investor_from_first_response():
     processor = MiniMaxSemanticProcessor(Runner([first, repaired]))
     events = processor.process(channel, article, [seed])
 
-    assert processor.last_audit["status"] == "repaired"
+    assert processor.last_audit["status"] == "accepted"
     assert events[0].investors == (investor,)
     assert quote in events[0].evidence_quotes

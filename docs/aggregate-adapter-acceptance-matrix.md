@@ -1,7 +1,7 @@
 # 聚合信源适配器 v2 验收矩阵
 
 验收日期：2026-07-30
-语义版本：`aggregate-semantic-v19`
+语义版本：`aggregate-semantic-v20`
 模型：`minimax/MiniMax-M3`（直接使用 OpenClaw 所属 provider 配置，不调用 OpenClaw Agent）
 
 ## 验收口径
