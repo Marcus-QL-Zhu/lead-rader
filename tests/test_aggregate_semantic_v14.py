@@ -212,7 +212,7 @@ def test_other_events_are_not_persisted_or_duplicated():
 
     assert [event.event_type for event in events] == ["technical_milestone"]
     assert all(event.prompt_version == PROMPT_VERSION for event in events)
-    assert PROMPT_VERSION == "aggregate-semantic-v18"
+    assert PROMPT_VERSION == "aggregate-semantic-v19"
 
 
 def test_rules_only_path_uses_same_company_normalization_and_drops_other():

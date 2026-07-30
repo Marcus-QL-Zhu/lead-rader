@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 from dataclasses import replace
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from hashlib import sha256
+import json
 import re
 from urllib.parse import urljoin, urlparse
 
@@ -203,6 +204,52 @@ class CyzoneAdapter(AggregateAdapter):
         self.validate_listing(channel, output)
         return output
 
+    def fetch_detail(
+        self,
+        channel: SourceChannel,
+        index: SourceArticleIndex,
+        context: AdapterContext,
+    ) -> bytes:
+        """Prefer Cyzone's public application API over brittle article DOM."""
+
+        del channel
+        decision: dict[str, str] = {
+            "source_article_id": index.source_article_id,
+            "primary_path": "api:app_content/show",
+            "fallback_path": "html:canonical_url",
+        }
+        if context.post_json is not None:
+            try:
+                payload = context.post_json(
+                    "https://api1.cyzone.cn/v2/content/app_content/show",
+                    {"content_id": int(index.source_article_id)},
+                )
+                decoded = json.loads(payload.decode("utf-8"))
+                data = decoded.get("data") if isinstance(decoded, dict) else None
+                if not isinstance(data, dict):
+                    raise ValueError("API data is not an object")
+                returned_id = str(data.get("content_id") or "").strip()
+                if returned_id != index.source_article_id:
+                    raise ValueError(
+                        f"API content_id mismatch: {returned_id!r}"
+                    )
+                if not str(data.get("content") or "").strip():
+                    raise ValueError("API content is empty")
+                decision["outcome"] = "api_accepted"
+                context.decision_state[index.source_article_id] = decision
+                if context.record_decision is not None:
+                    context.record_decision(index.source_article_id, decision)
+                return payload
+            except (OSError, ValueError, TypeError, UnicodeDecodeError) as exc:
+                decision["outcome"] = "html_fallback"
+                decision["api_failure"] = f"{type(exc).__name__}: {exc}"
+        else:
+            decision["outcome"] = "html_only_no_post_transport"
+        context.decision_state[index.source_article_id] = decision
+        if context.record_decision is not None:
+            context.record_decision(index.source_article_id, decision)
+        return context.fetch(index.canonical_url)
+
     def parse_detail(
         self,
         channel: SourceChannel,
@@ -210,6 +257,10 @@ class CyzoneAdapter(AggregateAdapter):
         html: bytes,
         context: AdapterContext,
     ) -> CleanArticle:
+        api_article = self._parse_api_detail(channel, index, html, context)
+        if api_article is not None:
+            return api_article
+
         adaptive = AdaptiveSelector(
             html,
             url=index.canonical_url,
@@ -242,20 +293,8 @@ class CyzoneAdapter(AggregateAdapter):
                 f"{index.source_article_id}"
             )
         detail_date = self._detail_date(adaptive)
-        if not detail_date:
-            raise DetailFetchError(
-                f"{channel.source_id} detail date missing for {index.source_article_id}"
-            )
-        if detail_date != index.published_at[:10]:
-            raise DetailFetchError(
-                f"{channel.source_id} listing/detail date mismatch for "
-                f"{index.source_article_id}: {index.published_at} != {detail_date}"
-            )
-        if self._date_value(detail_date) > context.now.date():
-            raise DetailFetchError(
-                f"{channel.source_id} detail is future dated for "
-                f"{index.source_article_id}"
-            )
+        if detail_date and self._date_value(detail_date) > context.now.date():
+            detail_date = ""
 
         author = self._first_text(
             adaptive.selector,
@@ -273,8 +312,18 @@ class CyzoneAdapter(AggregateAdapter):
             {
                 "detail_published_at": detail_date,
                 "detail_tags": tags,
+                "acquisition_decision": context.decision_state.get(
+                    index.source_article_id, {}
+                ),
+                "published_at_provenance": (
+                    "detail_html" if detail_date else "listing"
+                ),
             }
         )
+        if detail_date and detail_date != index.published_at[:10]:
+            structured["date_ambiguity"] = (
+                f"listing={index.published_at[:10]};detail={detail_date}"
+            )
         digest = sha256(f"{index.title}\n{body}".encode("utf-8")).hexdigest()
         return CleanArticle(
             index=index,
@@ -286,15 +335,133 @@ class CyzoneAdapter(AggregateAdapter):
             adaptive_similarity=selected.similarity_threshold,
             evidence_locators={
                 "title": "detail:h1.art-title",
-                "published_at": "detail:div.art-help div.author-date",
+                "published_at": (
+                    "detail:div.art-help div.author-date"
+                    if detail_date
+                    else "listing:time-or-thumbnail"
+                ),
                 "body": "detail:div.g-art-content",
                 "author": "detail:div.art-help div.author-date a.author",
                 "tags": "detail:div.tag-group a",
-                "company": "listing:div.tags / title:融资丨",
+                "company": "listing:tags-or-title",
             },
             fetch_status="ok",
             content_hash=digest,
         )
+
+    def _parse_api_detail(
+        self,
+        channel: SourceChannel,
+        index: SourceArticleIndex,
+        payload: bytes,
+        context: AdapterContext,
+    ) -> CleanArticle | None:
+        try:
+            decoded = json.loads(payload.decode("utf-8"))
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            return None
+        data = decoded.get("data") if isinstance(decoded, dict) else None
+        if not isinstance(data, dict):
+            return None
+        returned_id = str(data.get("content_id") or "").strip()
+        if returned_id != index.source_article_id:
+            raise DetailFetchError(
+                f"{channel.source_id} API content_id mismatch for "
+                f"{index.source_article_id}: {returned_id!r}"
+            )
+        content = str(data.get("content") or "").strip()
+        if not content:
+            return None
+        adaptive = AdaptiveSelector(
+            content,
+            url=index.canonical_url,
+            storage_path=context.adaptive_db,
+        )
+        body = self.clean_text(
+            adaptive.selector.get_all_text(separator=" ", strip=True)
+        )
+        body = self.clean_text(_DETAIL_CTA.sub("", body))
+        if len(body) < 80:
+            raise DetailFetchError(
+                f"{channel.source_id} API body too short for {index.source_article_id}"
+            )
+        title = self.clean_text(str(data.get("title") or index.title))
+        if not self._titles_match(index.title, title):
+            raise DetailFetchError(
+                f"{channel.source_id} API title mismatch for {index.source_article_id}"
+            )
+        api_date = self._api_date(data.get("published_at"))
+        if api_date and self._date_value(api_date) > context.now.date():
+            raise DetailFetchError(
+                f"{channel.source_id} API detail is future dated for "
+                f"{index.source_article_id}: {api_date}"
+            )
+        resolved_index = replace(index, published_at=api_date) if api_date else index
+        raw_tags = data.get("tags")
+        tags = tuple(
+            dict.fromkeys(
+                value.strip()
+                for value in (
+                    str(raw_tags or "").split(",")
+                    if not isinstance(raw_tags, list)
+                    else map(str, raw_tags)
+                )
+                if value.strip()
+            )
+        )
+        structured = dict(index.structured_data)
+        structured.update(
+            {
+                "api_content_id": str(data.get("content_id") or index.source_article_id),
+                "api_published_at": api_date,
+                "published_at_provenance": "api:published_at",
+                "api_category": str(data.get("category") or ""),
+                "acquisition_decision": context.decision_state.get(
+                    index.source_article_id, {}
+                ),
+            }
+        )
+        if api_date and api_date != index.published_at[:10]:
+            structured["date_ambiguity"] = (
+                f"listing={index.published_at[:10]};api={api_date}"
+            )
+        digest = sha256(f"{title}\n{body}".encode("utf-8")).hexdigest()
+        return CleanArticle(
+            index=resolved_index,
+            clean_body=body,
+            author=self.clean_text(
+                str(data.get("author_name") or data.get("author") or "")
+            ),
+            tags=tags,
+            structured_data=structured,
+            extraction_method="api:app_content/show",
+            evidence_locators={
+                "title": "api:data.title",
+                "published_at": "api:data.published_at",
+                "body": "api:data.content",
+                "author": "api:data.author_name|author",
+                "tags": "api:data.tags",
+                "company": "listing:tags-or-title",
+            },
+            fetch_status="structured_complete",
+            content_hash=digest,
+        )
+
+    @classmethod
+    def _api_date(cls, value: object) -> str:
+        if isinstance(value, (int, float)) or (
+            isinstance(value, str) and value.strip().isdigit()
+        ):
+            timestamp = int(value)
+            if timestamp > 10_000_000_000:
+                timestamp //= 1000
+            return datetime.fromtimestamp(
+                timestamp,
+                tz=timezone(timedelta(hours=8)),
+            ).date().isoformat()
+        text = str(value or "").strip()
+        match = re.search(r"20\d{2}-\d{2}-\d{2}", text)
+        return match.group(0) if match else ""
 
     def rule_events(
         self,

@@ -1,10 +1,12 @@
 from datetime import datetime, timezone
+import json
 import sqlite3
 
 import pytest
 
 from ht_lead_radar.aggregate_adapters.base import (
     AdapterContext,
+    DetailFetchError,
     ListingInvariantError,
 )
 from ht_lead_radar.aggregate_adapters.coordinator import (
@@ -372,3 +374,187 @@ def test_cyzone_second_run_does_not_refetch_unchanged_details(tmp_path):
         == 20
     )
     connection.close()
+
+
+def test_cyzone_api_detail_is_primary_and_api_date_is_authoritative(tmp_path):
+    title = "\u661f\u6cb3\u82af\u7247\u5b8c\u62101\u4ebf\u5143A\u8f6e\u878d\u8d44"
+    index = _index("910001", title, company="\u661f\u6cb3\u82af\u7247")
+    body = (
+        "\u661f\u6cb3\u82af\u7247\u8fd1\u65e5\u5b8c\u62101\u4ebf\u5143A\u8f6e\u878d\u8d44\uff0c"
+        "\u672c\u8f6e\u7531\u8fdc\u5c71\u8d44\u672c\u9886\u6295\u3002"
+        "\u8d44\u91d1\u5c06\u7528\u4e8e\u82af\u7247\u7814\u53d1\u3001\u4ea7\u54c1\u8fed\u4ee3\u548c\u91cf\u4ea7\u9a8c\u8bc1\uff0c"
+        "\u63a8\u8fdb\u6280\u672f\u5728\u771f\u5b9e\u5de5\u4e1a\u573a\u666f\u7684\u89c4\u6a21\u5316\u843d\u5730\uff0c"
+        "\u5e76\u7ee7\u7eed\u5efa\u8bbe\u7814\u53d1\u56e2\u961f\u3001\u4f9b\u5e94\u94fe\u4f53\u7cfb\u548c\u5ba2\u6237\u4ea4\u4ed8\u80fd\u529b\u3002"
+    )
+    payload = json.dumps(
+        {
+            "data": {
+                "content_id": 910001,
+                "title": title,
+                "content": f"<p>{body}</p>",
+                "published_at": "2026-07-30 09:00:00",
+                "author_name": "\u521b\u4e1a\u90a6",
+                "tags": "\u534a\u5bfc\u4f53,\u878d\u8d44",
+            }
+        },
+        ensure_ascii=False,
+    ).encode()
+    context = AdapterContext.create(
+        state_db=tmp_path / "api.sqlite3",
+        fetch=lambda _url: (_ for _ in ()).throw(AssertionError("HTML fallback used")),
+        post_json=lambda _url, request: payload if request["content_id"] == 910001 else b"",
+        now=NOW,
+    )
+
+    raw = ADAPTER.fetch_detail(LATEST, index, context)
+    article = ADAPTER.parse_detail(LATEST, index, raw, context)
+
+    assert article.fetch_status == "structured_complete"
+    assert article.extraction_method == "api:app_content/show"
+    assert article.index.published_at == "2026-07-30"
+    assert article.structured_data["published_at_provenance"] == "api:published_at"
+    assert article.structured_data["date_ambiguity"] == "listing=2026-07-29;api=2026-07-30"
+    assert body in article.clean_body
+
+
+def test_cyzone_html_missing_date_uses_listing_date_instead_of_dropping_article(tmp_path):
+    title = "\u661f\u6cb3\u82af\u7247\u5b8c\u62101\u4ebf\u5143A\u8f6e\u878d\u8d44"
+    body = (
+        "\u661f\u6cb3\u82af\u7247\u8fd1\u65e5\u5b8c\u62101\u4ebf\u5143A\u8f6e\u878d\u8d44\uff0c"
+        "\u672c\u8f6e\u7531\u8fdc\u5c71\u8d44\u672c\u9886\u6295\u3002"
+        "\u8d44\u91d1\u5c06\u7528\u4e8e\u82af\u7247\u7814\u53d1\u3001\u4ea7\u54c1\u8fed\u4ee3\u548c\u91cf\u4ea7\u9a8c\u8bc1\uff0c"
+        "\u5e76\u63a8\u8fdb\u6280\u672f\u5728\u771f\u5b9e\u5de5\u4e1a\u573a\u666f\u4e2d\u7684\u89c4\u6a21\u5316\u5e94\u7528\u548c\u4ea4\u4ed8\u3002"
+    )
+    html = _detail("910001", title, body).replace(b"2026-07-29", b"")
+
+    article = ADAPTER.parse_detail(LATEST, _index("910001", title), html, _context(tmp_path))
+
+    assert article.fetch_status == "ok"
+    assert article.index.published_at == "2026-07-29"
+    assert article.structured_data["published_at_provenance"] == "listing"
+
+
+def test_cyzone_coordinator_resolves_prior_detail_dead_letters_via_api(tmp_path):
+    from ht_lead_radar.aggregate_adapters.storage import AggregateStateStore
+
+    listing = _latest_listing()
+    indexes = ADAPTER.parse_listing(LATEST, listing, _context(tmp_path))
+    titles = {item.source_article_id: item.title for item in indexes}
+
+    class Fetcher:
+        def __call__(self, url):
+            if url == LATEST.url:
+                return listing
+            raise AssertionError(f"unexpected HTML detail fallback: {url}")
+
+        def post_json(self, _url, payload):
+            article_id = str(payload["content_id"])
+            body = (
+                f"{titles[article_id]} company update with enough audited article text. "
+                "The company described product research, manufacturing validation, "
+                "customer delivery, supply-chain preparation, and organization building."
+            )
+            return json.dumps(
+                {
+                    "data": {
+                        "content_id": int(article_id),
+                        "title": titles[article_id],
+                        "content": f"<p>{body}</p>",
+                        "published_at": indexes[int(article_id) - 910001].published_at,
+                        "tags": "hardtech",
+                    }
+                },
+                ensure_ascii=False,
+            ).encode()
+
+    database = tmp_path / "coordinator-api.sqlite3"
+    with AggregateStateStore(database) as store:
+        for article_id in ("910001", "910002"):
+            store.record_dead_letter(
+                source_id=LATEST.source_id,
+                source_article_id=article_id,
+                canonical_url=f"https://www.cyzone.cn/article/{article_id}.html",
+                stage="detail_or_semantic",
+                error="legacy detail date missing",
+            )
+    coordinator = DedicatedAggregateCoordinator(
+        state_db=database,
+        registry=DedicatedAdapterRegistry((CyzoneAdapter(),)),
+        fetch=Fetcher(),
+        now=NOW,
+    )
+
+    result = coordinator.collect_source(LATEST.source_id, "hardtech", force_reprocess=True)
+
+    assert result.run.status == "ok"
+    assert result.run.listing_count == 20
+    assert result.run.detail_success_count == 20
+    assert result.run.detail_failure_count == 0
+    with AggregateStateStore(database) as store:
+        assert store.health()["open_dead_letter_count"] == 0
+
+
+def test_cyzone_api_rejects_wrong_content_id_and_audits_html_fallback(tmp_path):
+    title = "\u661f\u6cb3\u82af\u7247\u5b8c\u62101\u4ebf\u5143A\u8f6e\u878d\u8d44"
+    index = _index("910001", title, company="\u661f\u6cb3\u82af\u7247")
+    api = json.dumps(
+        {
+            "data": {
+                "content_id": 999999,
+                "title": title,
+                "content": "<p>wrong article body with enough content for parsing</p>",
+                "published_at": "2026-07-29",
+            }
+        }
+    ).encode()
+    html = _detail(
+        "910001",
+        title,
+        "\u661f\u6cb3\u82af\u7247\u5b8c\u62101\u4ebf\u5143A\u8f6e\u878d\u8d44\uff0c"
+        "\u672c\u8f6e\u7531\u8fdc\u5c71\u8d44\u672c\u9886\u6295\u3002"
+        "\u8d44\u91d1\u5c06\u7528\u4e8e\u7814\u53d1\u3001\u91cf\u4ea7\u548c\u4ea4\u4ed8\u4f53\u7cfb\u5efa\u8bbe\uff0c"
+        "\u5e76\u5efa\u8bbe\u4f9b\u5e94\u94fe\u3001\u5ba2\u6237\u670d\u52a1\u548c\u4ea7\u54c1\u9a8c\u8bc1\u80fd\u529b\u3002",
+    )
+    decisions = []
+    context = AdapterContext.create(
+        state_db=tmp_path / "api-mismatch.sqlite3",
+        fetch=lambda _url: html,
+        post_json=lambda _url, _request: api,
+        record_decision=lambda label, payload: decisions.append((label, payload)),
+        now=NOW,
+    )
+
+    raw = ADAPTER.fetch_detail(LATEST, index, context)
+    article = ADAPTER.parse_detail(LATEST, index, raw, context)
+
+    assert raw == html
+    assert article.fetch_status == "ok"
+    decision = article.structured_data["acquisition_decision"]
+    assert decision["outcome"] == "html_fallback"
+    assert "content_id mismatch" in decision["api_failure"]
+    assert decisions[0][0] == "910001"
+
+
+def test_cyzone_api_rejects_future_published_at(tmp_path):
+    title = "\u661f\u6cb3\u82af\u7247\u5b8c\u62101\u4ebf\u5143A\u8f6e\u878d\u8d44"
+    index = _index("910001", title, company="\u661f\u6cb3\u82af\u7247")
+    payload = json.dumps(
+        {
+            "data": {
+                "content_id": 910001,
+                "title": title,
+                "content": "<p>" + ("complete future article body " * 10) + "</p>",
+                "published_at": "2099-01-01",
+            }
+        }
+    ).encode()
+    context = AdapterContext.create(
+        state_db=tmp_path / "future.sqlite3",
+        fetch=lambda _url: b"",
+        post_json=lambda _url, _request: payload,
+        now=NOW,
+    )
+
+    raw = ADAPTER.fetch_detail(LATEST, index, context)
+    with pytest.raises(DetailFetchError, match="future dated"):
+        ADAPTER.parse_detail(LATEST, index, raw, context)

@@ -27,6 +27,15 @@ def canonical_company_name(value: str) -> str:
         "",
         candidate,
     )
+    candidate = re.sub(
+        r"(?:\u4ec5|\u4e0d\u5230|\u8fd1|\u7ea6)?"
+        r"[\d\u4e00\u4e8c\u4e09\u56db\u4e94\u516d"
+        r"\u4e03\u516b\u4e5d\u5341\u767e\u4e24]+"
+        r"(?:\u4e2a)?(?:\u5929|\u6708|\u5e74|\u5c0f\u65f6|\u5206\u949f)"
+        r"(?:\u5185|\u540e|\u524d)?$",
+        "",
+        candidate,
+    )
     ui_label = re.fullmatch(
         r"(?P<name>[A-Z][A-Z0-9-]{2,15})"
         r"(?:\u573a\u666f|\u610f\u5411\u8d5b\u961f|\u4e13\u5bb6)?"
@@ -105,6 +114,14 @@ def is_company_like(value: str) -> bool:
     if not 2 <= len(candidate) <= 40:
         return False
     if _NON_ENTITY_START.search(candidate) or _NON_ENTITY_SLOGAN.search(candidate):
+        return False
+    if re.search(
+        r"(?:\u9996\u5ea7|\u9996\u4e2a).{0,16}"
+        r"(?:\u5de5\u5382|\u57fa\u5730|\u4e2d\u5fc3)|"
+        r"(?:\u5de5\u5382|\u57fa\u5730).{0,12}"
+        r"(?:\u843d\u5730|\u5f00\u5de5|\u6295\u4ea7|\u5728)",
+        candidate,
+    ):
         return False
     if any(suffix in candidate for suffix in LEGAL_SUFFIXES):
         return True

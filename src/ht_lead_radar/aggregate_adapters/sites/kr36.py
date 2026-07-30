@@ -252,8 +252,24 @@ class Kr36Adapter(AggregateAdapter):
         failure_reason = ""
         if len(body) < 40:
             body = self.clean_text(f"{index.title} {index.summary} {body}")
-            fetch_status = "listing_fallback"
-            failure_reason = "detail_captcha" if captcha_page else "detail_too_short"
+            event_complete = self._listing_event_complete(index)
+            negative_complete = self._listing_negative_complete(index)
+            fetch_status = (
+                "structured_complete"
+                if event_complete
+                else "listing_complete"
+                if negative_complete
+                else "listing_fallback"
+            )
+            failure_reason = (
+                "detail_captcha_structured_listing_used"
+                if captcha_page and fetch_status == "structured_complete"
+                else "detail_captcha_complete_negative_listing_used"
+                if captcha_page and fetch_status == "listing_complete"
+                else "detail_captcha"
+                if captcha_page
+                else "detail_too_short"
+            )
         if len(body) < 20:
             raise DetailFetchError(
                 f"{channel.source_id} detail and listing text too short "
@@ -310,6 +326,87 @@ class Kr36Adapter(AggregateAdapter):
             failure_reason=failure_reason,
             content_hash=digest,
         )
+
+    @classmethod
+    def _listing_event_complete(cls, index: SourceArticleIndex) -> bool:
+        """Require a complete current funding assertion with a resolvable subject."""
+
+        if len(index.summary.strip()) < 8:
+            return False
+        text = cls.clean_text(f"{index.title} {index.summary}")
+        provisional = CleanArticle(
+            index=index,
+            clean_body=text,
+            content_hash=cls.stable_hash(text),
+        )
+        prior_company = ""
+        for sentence in cls._sentences(text):
+            if cls._historical_background(sentence):
+                continue
+            for assertion in _FUNDING_ASSERTION.finditer(sentence):
+                company = cls._company_for_event(
+                    provisional,
+                    sentence,
+                    assertion,
+                    prior_company,
+                )
+                if company:
+                    return True
+        return False
+
+    @classmethod
+    def _listing_negative_complete(cls, index: SourceArticleIndex) -> bool:
+        text = cls.clean_text(f"{index.title} {index.summary}")
+        explicit_non_event = re.search(
+            r"\u878d\u8d44\u6210\u672c|\u878d\u8d44\u878d\u5238|"
+            r"\u4e2a\u8d37|\u623f\u8d37|\u94f6\u884c|\u5229\u7387|\u503a\u5238|"
+            r"\u76d1\u7ba1|\u89c4\u5b9a|\u653f\u7b56|\u6307\u5357|\u529e\u6cd5|"
+            r"\u5f81\u6c42\u610f\u89c1|\u5c06\u4e8e.{0,20}\u5b9e\u65bd",
+            text,
+        )
+        title_explicit_non_event = re.search(
+            r"\u878d\u8d44\u6210\u672c|\u878d\u8d44\u878d\u5238|"
+            r"\u4e2a\u8d37|\u623f\u8d37|\u76d1\u7ba1|\u89c4\u5b9a|"
+            r"\u653f\u7b56|\u6307\u5357|\u529e\u6cd5|\u5f81\u6c42\u610f\u89c1",
+            index.title,
+        )
+        incomplete_marker = re.search(
+            r"\u8be6\u60c5.{0,12}(?:\u67e5\u770b|\u89c1|\u9605\u8bfb)\u6b63\u6587|"
+            r"\u672a\u62ab\u9732|\u5f85\u62ab\u9732|\u66f4\u591a\u4fe1\u606f|"
+            r"\u8fce\u6765\u65b0\u8fdb\u5c55|"
+            r"\u5c06\u5728.{0,20}(?:\u6b63\u6587)?\u62ab\u9732|"
+            r"(?:\u878d\u8d44|\u4ea4\u6613)\u7ec6\u8282.{0,20}\u62ab\u9732|"
+            r"\u6b63\u6587\u62ab\u9732",
+            text,
+        )
+        return bool(
+            len(index.summary.strip()) >= 20
+            and explicit_non_event
+            and (index.title in index.summary or title_explicit_non_event)
+            and not incomplete_marker
+        )
+
+    @classmethod
+    def _company_for_listing_assertion(
+        cls,
+        sentence: str,
+        assertion: re.Match[str],
+    ) -> str:
+        prefix = sentence[: assertion.start()]
+        segment = re.split(r"[\u3002\uff01\uff1f\uff1b\uff1a:,]", prefix)[-1]
+        segment = re.sub(
+            r"^(?:36\u6c2a\u83b7\u6089|\u636e\u6089|\u8fd1\u65e5|\u65e5\u524d|\d{1,2}\u6708\d{1,2}\u65e5)\s*",
+            "",
+            segment.strip(),
+        )
+        segment = re.sub(
+            r"(?:\u5df2|\u6b63\u5f0f|\u6210\u529f|\u5ba3\u5e03|\u5b98\u5ba3)\s*$",
+            "",
+            segment,
+        ).strip(" \u2018\u2019\u201c\u201d\u300c\u300d")
+        if cls._valid_company_candidate(segment):
+            return segment
+        return ""
 
     def rule_events(
         self,

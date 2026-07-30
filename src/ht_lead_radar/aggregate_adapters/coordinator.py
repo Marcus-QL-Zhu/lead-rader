@@ -6,6 +6,7 @@ from concurrent.futures import Future, ThreadPoolExecutor
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from hashlib import sha256
+import ipaddress
 import json
 import os
 from pathlib import Path
@@ -41,6 +42,30 @@ class _SemanticWork:
     future: Future[tuple[list[SemanticEvent], dict[str, Any]]]
 
 
+def _validate_public_http_url(url: str, *, expected_host: str = "") -> None:
+    parsed = urllib.parse.urlparse(url)
+    host = (parsed.hostname or "").lower().rstrip(".")
+    if parsed.scheme != "https" or not host or parsed.username or parsed.password:
+        raise ValueError(f"unsafe aggregate URL: {url}")
+    if expected_host and host != expected_host.lower().rstrip("."):
+        raise ValueError(f"cross-host redirect rejected: {expected_host} -> {host}")
+    if host == "localhost" or host.endswith((".localhost", ".local")):
+        raise ValueError(f"local aggregate URL rejected: {url}")
+    try:
+        address = ipaddress.ip_address(host.strip("[]"))
+    except ValueError:
+        return
+    if not address.is_global:
+        raise ValueError(f"non-public aggregate URL rejected: {url}")
+
+
+class _SameHostRedirectHandler(urllib.request.HTTPRedirectHandler):
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # type: ignore[no-untyped-def]
+        original_host = urllib.parse.urlparse(req.full_url).hostname or ""
+        _validate_public_http_url(newurl, expected_host=original_host)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
 class PublicHttpFetcher:
     def __init__(
         self,
@@ -54,22 +79,52 @@ class PublicHttpFetcher:
         self.timeout = timeout
         self.max_bytes = max_bytes
         self.user_agent = user_agent
-        self.urlopen = urlopen or urllib.request.urlopen
+        self.urlopen = urlopen or urllib.request.build_opener(
+            _SameHostRedirectHandler()
+        ).open
         self.minimum_interval_seconds = max(0.0, minimum_interval_seconds)
         self._last_fetch_at = 0.0
 
     def __call__(self, url: str) -> bytes:
+        return self._request(url)
+
+    def post_json(self, url: str, payload: dict[str, Any]) -> bytes:
+        return self._request(
+            url,
+            method="POST",
+            body=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+            content_type="application/json",
+            accept="application/json,text/plain,*/*",
+        )
+
+    def _request(
+        self,
+        url: str,
+        *,
+        method: str = "GET",
+        body: bytes | None = None,
+        content_type: str = "",
+        accept: str = "text/html,application/xhtml+xml;q=0.9,*/*;q=0.5",
+    ) -> bytes:
+        _validate_public_http_url(url)
         elapsed = time.monotonic() - self._last_fetch_at
         if self._last_fetch_at and elapsed < self.minimum_interval_seconds:
             time.sleep(self.minimum_interval_seconds - elapsed)
+        headers = {"User-Agent": self.user_agent, "Accept": accept}
+        if content_type:
+            headers["Content-Type"] = content_type
         request = urllib.request.Request(
             url,
-            headers={
-                "User-Agent": self.user_agent,
-                "Accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.5",
-            },
+            data=body,
+            headers=headers,
+            method=method,
         )
         with self.urlopen(request, timeout=self.timeout) as response:
+            final_url = response.geturl() if hasattr(response, "geturl") else url
+            _validate_public_http_url(
+                str(final_url),
+                expected_host=urllib.parse.urlparse(url).hostname or "",
+            )
             body = response.read(self.max_bytes + 1)
             if len(body) > self.max_bytes:
                 raise ValueError(f"response exceeds {self.max_bytes} bytes")
@@ -113,6 +168,8 @@ class DedicatedAggregateCoordinator:
         context = AdapterContext.create(
             state_db=self.state_db,
             fetch=lambda url: self._fetch_adapter_page(source_id, url),
+            post_json=self._post_adapter_json(source_id),
+            record_decision=self._record_adapter_decision(source_id),
             now=self.now,
         )
         listing_count = incremental_count = detail_success_count = 0
@@ -142,7 +199,14 @@ class DedicatedAggregateCoordinator:
                     stage="listing",
                 )
                 listing_count = len(indexes)
-                for index in indexes:
+                listed_ids = {item.source_article_id for item in indexes}
+                recovery_indexes = [
+                    item
+                    for item in store.open_dead_letter_indexes(source_id)
+                    if item.source_article_id not in listed_ids
+                ]
+                processing_indexes = [*indexes, *recovery_indexes]
+                for index in processing_indexes:
                     changed = store.upsert_index(index)
                     if (
                         not changed
@@ -151,6 +215,10 @@ class DedicatedAggregateCoordinator:
                             index,
                             prompt_version=PROMPT_VERSION,
                             model_identity=self.processor.model_identity,
+                        )
+                        and not store.has_open_dead_letter(
+                            source_id=source_id,
+                            source_article_id=index.source_article_id,
                         )
                         and not force_reprocess
                     ):
@@ -201,7 +269,7 @@ class DedicatedAggregateCoordinator:
                                 semantic_audit,
                             )
                             continue
-                        detail_html = self.fetch(index.canonical_url)
+                        detail_html = adapter.fetch_detail(channel, index, context)
                         self._write_raw(
                             source_id,
                             f"detail-{index.source_article_id}",
@@ -213,8 +281,19 @@ class DedicatedAggregateCoordinator:
                             detail_html,
                             context,
                         )
+                        prior_article_hash = store.article_content_hash(
+                            source_id,
+                            index.source_article_id,
+                        )
+                        semantic_still_current = store.semantic_is_current(
+                            index,
+                            prompt_version=PROMPT_VERSION,
+                            model_identity=self.processor.model_identity,
+                        )
                         store.store_article(article)
-                        if article.fetch_status == "ok":
+                        if article.fetch_status in {
+                            "ok", "structured_complete", "listing_complete"
+                        }:
                             detail_success_count += 1
                             store.resolve_dead_letter(
                                 source_id=source_id,
@@ -238,6 +317,29 @@ class DedicatedAggregateCoordinator:
                             article.extraction_method == "adaptive"
                             or index.discovery_method == "adaptive"
                         )
+                        if (
+                            prior_article_hash == article.content_hash
+                            and semantic_still_current
+                            and not store.has_open_dead_letter(
+                                source_id=source_id,
+                                source_article_id=index.source_article_id,
+                            )
+                            and not force_reprocess
+                        ):
+                            cached_events = store.events_for_article(
+                                source_id,
+                                index.source_article_id,
+                                content_hash=article.content_hash,
+                            )
+                            evidence.extend(
+                                self._events_to_evidence(
+                                    cached_events,
+                                    channel.name,
+                                    channel.source_grade,
+                                    topic,
+                                )
+                            )
+                            continue
                         rule_events = adapter.rule_events(channel, article)
                         rule_event_count += len(rule_events)
                         semantic_work.append(
@@ -490,12 +592,53 @@ class DedicatedAggregateCoordinator:
         self._write_raw(source_id, f"adapter-fetch-{digest}", payload)
         return payload
 
+    def _post_adapter_json(
+        self,
+        source_id: str,
+    ) -> Callable[[str, dict[str, Any]], bytes] | None:
+        post_json = getattr(self.fetch, "post_json", None)
+        if not callable(post_json):
+            return None
+
+        def fetch(url: str, payload: dict[str, Any]) -> bytes:
+            body = post_json(url, payload)
+            request_key = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+            digest = sha256(
+                f"{url}|{request_key}".encode("utf-8")
+            ).hexdigest()[:16]
+            self._write_raw(source_id, f"adapter-post-{digest}", body)
+            return body
+
+        return fetch
+
     def _write_raw(self, source_id: str, label: str, payload: bytes) -> None:
         if self.acceptance_dir is None:
             return
         target = self.acceptance_dir / source_id
         target.mkdir(parents=True, exist_ok=True)
+        digest = sha256(payload).hexdigest()[:16]
+        immutable = target / f"{label}-{digest}.html"
+        if not immutable.exists():
+            immutable.write_bytes(payload)
         (target / f"{label}.html").write_bytes(payload)
+
+    def _record_adapter_decision(
+        self,
+        source_id: str,
+    ) -> Callable[[str, dict[str, Any]], None] | None:
+        if self.acceptance_dir is None:
+            return None
+
+        def record(label: str, decision: dict[str, Any]) -> None:
+            payload = json.dumps(
+                decision,
+                ensure_ascii=False,
+                indent=2,
+                sort_keys=True,
+            ).encode("utf-8")
+            self._write_raw(source_id, f"decision-{label}", payload)
+
+        return record
 
     def _write_semantic(
         self,
@@ -509,11 +652,16 @@ class DedicatedAggregateCoordinator:
             return
         target = self.acceptance_dir / source_id
         target.mkdir(parents=True, exist_ok=True)
+        payload = json.dumps(
+            {"article": article, "events": events, "minimax_audit": minimax_audit},
+            ensure_ascii=False,
+            indent=2,
+        )
+        digest = sha256(payload.encode("utf-8")).hexdigest()[:16]
+        immutable = target / f"semantic-{article_id}-{digest}.json"
+        if not immutable.exists():
+            immutable.write_text(payload, encoding="utf-8")
         (target / f"semantic-{article_id}.json").write_text(
-            json.dumps(
-                {"article": article, "events": events, "minimax_audit": minimax_audit},
-                ensure_ascii=False,
-                indent=2,
-            ),
+            payload,
             encoding="utf-8",
         )

@@ -1,7 +1,7 @@
 # 聚合信源适配器 v2 验收矩阵
 
 验收日期：2026-07-30
-语义版本：`aggregate-semantic-v18`
+语义版本：`aggregate-semantic-v19`
 模型：`minimax/MiniMax-M3`（直接使用 OpenClaw 所属 provider 配置，不调用 OpenClaw Agent）
 
 ## 验收口径
@@ -78,3 +78,7 @@ Scrapling 仅用于保存已验证元素特征，并在 CSS/XPath 漂移时重�
 - wheel 无隔离构建：通过，10 个适配器均包含在发行包内；
 - `git diff --check`：通过；
 - 独立 Full Code Review：原始 4 个 P1、1 个 P2 已全部修复并复核，无遗留 P0/P1。
+
+## 2026-07-31 revalidation notice
+
+The prior PASS labels are suspended after production exposed unresolved 36Kr/Cyzone detail failures and false company subjects. They become valid again only after the hard exit conditions in `docs/implementation-plan.md` pass on frozen replay and production evidence.

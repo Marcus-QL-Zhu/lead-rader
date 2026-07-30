@@ -3,12 +3,12 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from hashlib import sha256
 from pathlib import Path
 import re
-from typing import Callable
+from typing import Any, Callable
 from urllib.parse import urlparse
 
 from .models import CleanArticle, SemanticEvent, SourceArticleIndex, SourceChannel
@@ -32,6 +32,9 @@ class AdapterContext:
     adaptive_db: Path
     now: datetime
     fetch: Callable[[str], bytes]
+    post_json: Callable[[str, dict[str, Any]], bytes] | None = None
+    record_decision: Callable[[str, dict[str, Any]], None] | None = None
+    decision_state: dict[str, dict[str, Any]] = field(default_factory=dict)
 
     @classmethod
     def create(
@@ -39,6 +42,8 @@ class AdapterContext:
         *,
         state_db: str | Path,
         fetch: Callable[[str], bytes],
+        post_json: Callable[[str, dict[str, Any]], bytes] | None = None,
+        record_decision: Callable[[str, dict[str, Any]], None] | None = None,
         now: datetime | None = None,
     ) -> "AdapterContext":
         state_path = Path(state_db)
@@ -49,6 +54,8 @@ class AdapterContext:
             ),
             now=now or datetime.now(timezone.utc),
             fetch=fetch,
+            post_json=post_json,
+            record_decision=record_decision,
         )
 
 
@@ -109,6 +116,17 @@ class AggregateAdapter(ABC):
 
         del channel, index
         return True
+
+    def fetch_detail(
+        self,
+        channel: SourceChannel,
+        index: SourceArticleIndex,
+        context: AdapterContext,
+    ) -> bytes:
+        """Fetch detail through the adapter's preferred auditable path."""
+
+        del channel
+        return context.fetch(index.canonical_url)
 
     def validate_listing(
         self,

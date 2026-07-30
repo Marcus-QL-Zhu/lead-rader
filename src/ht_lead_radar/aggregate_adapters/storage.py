@@ -493,6 +493,65 @@ class AggregateStateStore:
             raw[field] = tuple(raw.get(field) or ())
         return SemanticEvent(**raw)
 
+    def has_open_dead_letter(
+        self,
+        *,
+        source_id: str,
+        source_article_id: str,
+    ) -> bool:
+        row = self.connection.execute(
+            """
+            SELECT 1 FROM aggregate_dead_letters
+            WHERE source_id = ? AND source_article_id = ? AND resolved_at = ''
+            LIMIT 1
+            """,
+            (source_id, source_article_id),
+        ).fetchone()
+        return row is not None
+
+    def open_dead_letter_indexes(
+        self,
+        source_id: str,
+        *,
+        limit: int = 100,
+    ) -> list[SourceArticleIndex]:
+        rows = self.connection.execute(
+            """
+            SELECT DISTINCT i.index_json
+            FROM aggregate_dead_letters AS d
+            JOIN aggregate_article_index AS i
+              ON i.source_id = d.source_id
+             AND i.source_article_id = d.source_article_id
+            WHERE d.source_id = ? AND d.resolved_at = ''
+              AND d.source_article_id != ''
+            ORDER BY d.last_failed_at ASC
+            LIMIT ?
+            """,
+            (source_id, max(1, int(limit))),
+        ).fetchall()
+        output: list[SourceArticleIndex] = []
+        for row in rows:
+            try:
+                raw = json.loads(str(row["index_json"]))
+                output.append(SourceArticleIndex(**raw))
+            except (TypeError, ValueError, json.JSONDecodeError):
+                continue
+        return output
+
+    def article_content_hash(
+        self,
+        source_id: str,
+        source_article_id: str,
+    ) -> str:
+        row = self.connection.execute(
+            """
+            SELECT content_hash FROM aggregate_clean_articles
+            WHERE source_id = ? AND source_article_id = ?
+            """,
+            (source_id, source_article_id),
+        ).fetchone()
+        return str(row["content_hash"]) if row else ""
+
     def record_dead_letter(
         self,
         *,

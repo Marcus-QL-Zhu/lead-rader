@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import json
 import sqlite3
 
 from ht_lead_radar.aggregate_adapters.adaptive import AdaptiveSelector
@@ -199,3 +200,90 @@ def test_scrapling_adaptive_selector_relocates_saved_element(tmp_path):
         "融资一",
         "融资二",
     ]
+
+
+def test_kr36_captcha_with_structured_listing_is_complete_not_dead_letter(tmp_path):
+    listing = _listing()
+    routes = {"https://pitchhub.36kr.com/financing-flash": listing}
+    for article_id in ("1001", "1002", "1003", "1004", "1005"):
+        routes[f"https://36kr.com/newsflashes/{article_id}"] = b"<html>TTGCaptcha verify_center</html>"
+    coordinator = DedicatedAggregateCoordinator(
+        state_db=tmp_path / "captcha.sqlite3",
+        registry=DedicatedAdapterRegistry((Kr36Adapter(),)),
+        fetch=lambda url: routes[url],
+        now=NOW,
+    )
+
+    result = coordinator.collect_source("36kr-financing-flash", "hardtech")
+
+    assert result.run.status == "ok"
+    assert result.run.detail_success_count == 5
+    assert result.run.detail_failure_count == 0
+    connection = sqlite3.connect(tmp_path / "captcha.sqlite3")
+    assert connection.execute(
+        "SELECT COUNT(*) FROM aggregate_dead_letters WHERE resolved_at = ''"
+    ).fetchone()[0] == 0
+    statuses = {
+        json.loads(row[0])["fetch_status"]
+        for row in connection.execute(
+            "SELECT article_json FROM aggregate_clean_articles"
+        ).fetchall()
+    }
+    connection.close()
+    assert statuses == {"structured_complete", "listing_complete"}
+
+
+def test_kr36_unknown_listing_is_not_treated_as_complete_negative():
+    from ht_lead_radar.aggregate_adapters.models import SourceArticleIndex
+
+    index = SourceArticleIndex(
+        source_id="36kr-financing-flash",
+        source_article_id="2001",
+        channel="financing-flash",
+        canonical_url="https://36kr.com/newsflashes/2001",
+        title="\u661f\u6cb3\u82af\u7247\u8fce\u6765\u65b0\u8fdb\u5c55",
+        published_at="2026-07-31",
+        discovered_at=NOW.isoformat(),
+        cursor_value="2001",
+        listing_page="https://pitchhub.36kr.com/financing-flash",
+        listing_position=1,
+        content_hash="unknown",
+        discovery_method="fixture",
+        summary=(
+            "\u661f\u6cb3\u82af\u7247\u8fce\u6765\u65b0\u8fdb\u5c55\uff0c"
+            "\u66f4\u591a\u878d\u8d44\u8be6\u60c5\u8bf7\u67e5\u770b\u6b63\u6587\uff0c"
+            "\u672c\u6761\u6458\u8981\u672a\u62ab\u9732\u4ea4\u6613\u72b6\u6001\u3002"
+        ),
+        structured_data={"company": "\u661f\u6cb3\u82af\u7247"},
+    )
+
+    assert Kr36Adapter._listing_event_complete(index) is False
+    assert Kr36Adapter._listing_negative_complete(index) is False
+
+
+def test_kr36_policy_words_do_not_hide_pending_funding_detail():
+    from ht_lead_radar.aggregate_adapters.models import SourceArticleIndex
+
+    index = SourceArticleIndex(
+        source_id="36kr-financing-flash",
+        source_article_id="2002",
+        channel="financing-flash",
+        canonical_url="https://36kr.com/newsflashes/2002",
+        title="\u661f\u6cb3\u82af\u7247\u8d44\u672c\u52a8\u6001",
+        published_at="2026-07-31",
+        discovered_at=NOW.isoformat(),
+        cursor_value="2002",
+        listing_page="https://pitchhub.36kr.com/financing-flash",
+        listing_position=1,
+        content_hash="pending",
+        discovery_method="fixture",
+        summary=(
+            "\u672c\u8f6e\u4ea4\u6613\u7531\u661f\u6cb3\u82af\u7247\u63a8\u8fdb\uff0c"
+            "\u67d0\u94f6\u884c\u53c2\u4e0e\uff0c\u76f8\u5173\u76d1\u7ba1\u653f\u7b56\u4e0e"
+            "\u878d\u8d44\u7ec6\u8282\u5c06\u5728\u6b63\u6587\u62ab\u9732\u3002"
+        ),
+        structured_data={"company": "\u661f\u6cb3\u82af\u7247"},
+    )
+
+    assert Kr36Adapter._listing_event_complete(index) is False
+    assert Kr36Adapter._listing_negative_complete(index) is False

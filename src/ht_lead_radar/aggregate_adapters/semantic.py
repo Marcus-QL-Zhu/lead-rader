@@ -13,7 +13,7 @@ from .entities import canonical_company_name, company_alias_candidates, is_compa
 from .models import CleanArticle, SemanticEvent, SourceChannel
 
 
-PROMPT_VERSION = "aggregate-semantic-v18"
+PROMPT_VERSION = "aggregate-semantic-v19"
 ALLOWED_EVENT_TYPES = frozenset(
     {
         "funding",
@@ -96,6 +96,8 @@ SYSTEM_PROMPT = (
     "investors\u53ea\u586b\u5177\u540d\u5b50\u673a\u6784\u6216\u57fa\u91d1\uff0c\u4e0d\u586b\u6bcd\u673a\u6784\uff1b"
     "\u53ea\u6709\u5b50\u673a\u6784\u672a\u5177\u540d\u65f6\u624d\u586b\u6bcd\u673a\u6784\u3002"
     "\u672a\u5177\u540d\u63cf\u8ff0\u653eambiguities\u3002"
+    "company\u5fc5\u987b\u662f\u627f\u62c5\u8be5\u4e8b\u4ef6\u7684\u516c\u53f8\u4e3b\u4f53\uff0c"
+    "\u4e0d\u5f97\u586b\u65f6\u95f4\u3001\u91d1\u989d\u3001\u5a92\u4f53\u3001\u5206\u6790\u5e08\u6216\u6295\u8d44\u65b9\u3002"
     "company\u3001\u91d1\u989d\u3001\u8f6e\u6b21\u3001"
     "\u6295\u8d44\u4eba\u548cevidence_quotes\u5fc5\u987b"
     "\u9010\u5b57\u51fa\u73b0\u5728\u8f93\u5165\u539f\u6587\u3002"
@@ -628,6 +630,14 @@ class MiniMaxSemanticProcessor:
                 # Model-only events are never allowed to poison grounded rule
                 # seeds.  The final merge already suppresses unmatched events.
                 continue
+            if preliminary_seed is None:
+                preliminary_seed = cls._correction_seed(
+                    rule_events,
+                    event_type,
+                    round_name,
+                    event_status,
+                    quotes,
+                )
             if not cls._company_subject_grounded(company, quotes[0]):
                 expanded_primary = cls._expand_pronominal_subject_context(
                     text,
@@ -737,8 +747,30 @@ class MiniMaxSemanticProcessor:
                 event_type,
                 round_name,
                 event_status,
+            ) or cls._correction_seed(
+                rule_events,
+                event_type,
+                round_name,
+                event_status,
+                quotes,
             )
-            canonical_company = seed.canonical_company if seed else company
+            canonical_company = company
+            is_company_correction = (
+                seed is not None
+                and cls._canonical_company(seed.canonical_company)
+                != cls._canonical_company(company)
+            )
+            if is_company_correction and not cls._company_event_subject_grounded(
+                company,
+                quotes[0],
+                event_type,
+            ):
+                subject_mismatch_count += 1
+                continue
+            if is_company_correction:
+                raw_ambiguities.append(
+                    f"minimax_corrected_rule_company:{seed.canonical_company}"
+                )
             effective_round = round_name or (seed.funding_round if seed else "")
             effective_quotes = list(quotes)
             if (
@@ -977,6 +1009,37 @@ class MiniMaxSemanticProcessor:
         ]
         return candidates[0] if len(candidates) == 1 else None
 
+    @classmethod
+    def _correction_seed(
+        cls,
+        rule_events: list[SemanticEvent],
+        event_type: str,
+        round_name: str,
+        event_status: str,
+        quotes: list[str] | tuple[str, ...],
+    ) -> SemanticEvent | None:
+        """Match one grounded rule event while allowing subject correction."""
+
+        candidates: list[SemanticEvent] = []
+        for event in rule_events:
+            if event.event_type != event_type or event.event_status != event_status:
+                continue
+            if (
+                event.funding_round
+                and round_name
+                and cls._normalize_round(event.funding_round) != round_name
+            ):
+                continue
+            if not any(
+                model_quote in seed_quote or seed_quote in model_quote
+                for model_quote in quotes
+                for seed_quote in event.evidence_quotes
+                if model_quote and seed_quote
+            ):
+                continue
+            candidates.append(event)
+        return candidates[0] if len(candidates) == 1 else None
+
     @staticmethod
     def _normalize_event_status(
         event_type: str,
@@ -1040,6 +1103,113 @@ class MiniMaxSemanticProcessor:
             len(candidate) >= 2 and re.sub(r"\s+", "", candidate) in normalized_quote
             for candidate in company_alias_candidates(company)
         )
+
+    @classmethod
+    def _company_event_subject_grounded(
+        cls,
+        company: str,
+        primary_quote: str,
+        event_type: str,
+    ) -> bool:
+        """Require the candidate company to precede an event-defining predicate."""
+
+        predicate_patterns = {
+            "funding": r"(?:\u5b8c\u6210|\u83b7\u5f97|\u83b7(?!\u6089)|\u65a9\u83b7|\u5ba3\u5e03\u5b8c\u6210|\u5b98\u5ba3\u5b8c\u6210|\u542f\u52a8|\u5f00\u542f|\u5f00\u59cb).{0,80}(?:\u878d\u8d44|[A-Z](?:\+{1,2})?\u8f6e)",
+            "executive_change": r"(?:\u4efb\u547d|\u8058\u4efb|\u51fa\u4efb|\u62c5\u4efb|\u52a0\u5165|\u79bb\u4efb|\u8f9e\u4efb|\u5347\u4efb|\u63a5\u4efb)",
+            "partnership": r"(?:\u7b7e\u7f72|\u7b7e\u8ba2|\u8fbe\u6210|\u5efa\u7acb|\u6df1\u5316|\u643a\u624b|\u5408\u4f5c)",
+            "major_order": r"(?:\u4e2d\u6807|\u83b7\u5f97|\u65a9\u83b7|\u7b7e\u7f72|\u7b7e\u8ba2|\u62ff\u4e0b).{0,50}(?:\u8ba2\u5355|\u5408\u540c|\u9879\u76ee|\u91c7\u8d2d)",
+            "product_launch": r"(?:\u53d1\u5e03|\u63a8\u51fa|\u4e0a\u5e02|\u4e0a\u7ebf|\u9996\u53d1)",
+            "capacity_expansion": r"(?:\u6269\u4ea7|\u6295\u4ea7|\u5f00\u5de5|\u843d\u5730|\u5efa\u8bbe|\u542f\u7528|\u91cf\u4ea7)",
+            "technical_milestone": r"(?:\u53d1\u5e03|\u63a8\u51fa|\u5b8c\u6210|\u5b9e\u73b0|\u7a81\u7834|\u83b7\u6279|\u4ea4\u4ed8|\u91cf\u4ea7)",
+            "data_or_model": r"(?:\u53d1\u5e03|\u63a8\u51fa|\u5f00\u6e90|\u4e0a\u7ebf|\u8bad\u7ec3|\u5347\u7ea7)",
+            "regulatory_milestone": r"(?:\u83b7\u6279|\u6279\u51c6|\u901a\u8fc7|\u53d6\u5f97|\u83b7\u5f97)",
+            "organization_build": r"(?:\u6210\u7acb|\u7ec4\u5efa|\u8bbe\u7acb|\u5347\u7ea7|\u8c03\u6574)",
+        }
+        predicate = predicate_patterns.get(event_type)
+        if not predicate:
+            return False
+        compact = re.sub(r"\s+", "", primary_quote)
+        for alias in company_alias_candidates(company):
+            normalized_alias = re.sub(r"\s+", "", alias)
+            if len(normalized_alias) < 2:
+                continue
+            start = 0
+            while True:
+                position = compact.find(normalized_alias, start)
+                if position < 0:
+                    break
+                left_boundary = max(
+                    compact.rfind(mark, 0, position)
+                    for mark in "\u3002\uff01\uff1f\uff1b\uff0c,:\uff1a\n"
+                )
+                clause_start = left_boundary + 1
+                alias_end = position + len(normalized_alias)
+                tail = compact[alias_end:]
+                hard_positions = [
+                    tail.find(mark)
+                    for mark in "\u3002\uff01\uff1f\uff1b\n"
+                ]
+                hard_positions = [value for value in hard_positions if value >= 0]
+                bounded_tail = tail[: min(hard_positions)] if hard_positions else tail
+                soft_positions = [
+                    bounded_tail.find(mark)
+                    for mark in "\uff0c,:\uff1a"
+                ]
+                soft_positions = [value for value in soft_positions if value >= 0]
+                if soft_positions:
+                    first_soft = min(soft_positions)
+                    first_segment = bounded_tail[:first_soft]
+                    after = first_segment
+                    if re.fullmatch(
+                        r"(?:\u5ba3\u5e03|\u8868\u793a|\u62ab\u9732|\u5b98\u5ba3|\u79f0|\u6d88\u606f\u79f0)",
+                        first_segment,
+                    ):
+                        remainder = bounded_tail[first_soft + 1 :]
+                        next_soft = [
+                            remainder.find(mark)
+                            for mark in "\uff0c,:\uff1a"
+                        ]
+                        next_soft = [value for value in next_soft if value >= 0]
+                        next_segment = (
+                            remainder[: min(next_soft)] if next_soft else remainder
+                        )
+                        event_match = re.search(predicate, next_segment)
+                        if event_match:
+                            subject_prefix = next_segment[: event_match.start()]
+                            auxiliary = (
+                                r"(?:\u5df2|\u516c\u53f8|\u5176|\u8be5\u516c\u53f8|"
+                                r"\u672c\u516c\u53f8|\u6b63\u5f0f|\u6210\u529f|"
+                                r"\u5c06|\u62df|\u8ba1\u5212|\u6b63|\u6b63\u5728)*"
+                            )
+                            same_subject = any(
+                                subject_prefix.startswith(candidate)
+                                for candidate in company_alias_candidates(company)
+                                if len(candidate) >= 2
+                            )
+                            pronominal_subject = subject_prefix.startswith(
+                                (
+                                    "\u516c\u53f8",
+                                    "\u5176",
+                                    "\u8be5\u516c\u53f8",
+                                    "\u672c\u516c\u53f8",
+                                )
+                            )
+                            if (
+                                re.fullmatch(auxiliary, subject_prefix)
+                                or same_subject
+                                or pronominal_subject
+                            ):
+                                after += next_segment
+                else:
+                    after = bounded_tail
+                before = compact[max(clause_start, position - 10) : position]
+                if not re.search(
+                    r"(?:\u6295\u8d44\u65b9|\u6295\u8d44\u4eba|\u9886\u6295\u65b9|\u8ddf\u6295\u65b9|\u5206\u6790\u5e08|\u4e0e|\u548c|\u540c|\u643a\u624b|\u8054\u5408|\u8054\u624b|\u643a|\u534f\u540c|\u4f1a\u540c|\u5055\u540c|\u643a\u540c)$",
+                    before,
+                ) and re.search(predicate, after[:100]):
+                    return True
+                start = position + len(normalized_alias)
+        return False
 
     @classmethod
     def _expand_pronominal_subject_context(
@@ -1268,10 +1438,41 @@ class MiniMaxSemanticProcessor:
                 event.event_type,
                 event.funding_round,
                 event.event_status,
+            ) or cls._correction_seed(
+                rule_events,
+                event.event_type,
+                event.funding_round,
+                event.event_status,
+                event.evidence_quotes,
             )
             if seed is None:
                 continue
-            merged.pop(cls._event_key(seed), None)
+            for candidate in rule_events:
+                same_semantic_slot = (
+                    candidate.event_type == event.event_type
+                    and candidate.event_status == event.event_status
+                    and cls._normalize_round(candidate.funding_round)
+                    == cls._normalize_round(event.funding_round)
+                    and any(
+                        left in right or right in left
+                        for left in candidate.evidence_quotes
+                        for right in event.evidence_quotes
+                        if left and right
+                    )
+                )
+                if not same_semantic_slot:
+                    continue
+                same_company = (
+                    cls._canonical_company(candidate.canonical_company)
+                    == cls._canonical_company(event.canonical_company)
+                )
+                invalid_subject = not cls._company_event_subject_grounded(
+                    candidate.canonical_company,
+                    candidate.evidence_quotes[0] if candidate.evidence_quotes else "",
+                    candidate.event_type,
+                )
+                if same_company or invalid_subject:
+                    merged.pop(cls._event_key(candidate), None)
             merged[cls._event_key(event)] = event
         return cls._normalize_final_events(list(merged.values()))
 

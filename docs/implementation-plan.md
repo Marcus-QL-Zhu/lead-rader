@@ -448,3 +448,40 @@ Status: maximum iteration V23 reached locally. Independent review found the V20â
 - [x] Stopped at the preregistered maximum V23 without lowering the acceptance threshold or manufacturing a third label.
 
 Artifacts: `evaluation/holdout-v20/prediction-snapshot.json`, `evaluation/holdout-v20/mechanical-acceptance-summary.invalid.json`, and `evaluation/holdout-v20` through `evaluation/holdout-v23`. Local generated reports remain under `.acceptance/` and are not canonical.
+
+## 2026-07-31: Aggregate-source recovery and entity-resolution hardening
+
+Status: in progress. The earlier aggregate-adapter PASS conclusion is withdrawn until every exit condition below has direct replayable evidence.
+
+### Scope
+
+- Rebuild Cyzone acquisition around the public JSON endpoints used by its web application. API `published_at` is authoritative; listing and HTML dates are corroborating evidence, not independent reasons to discard an article.
+- Rebuild 36Kr acquisition around public structured listing/hydration payloads. A CAPTCHA response must never be treated as article text and repeated requests to the same blocked route are not a recovery strategy.
+- Separate discovery from enrichment. Every discovered increment is persisted before detail extraction, and each item ends in an explicit usable, retryable, or quarantined state.
+- Replace seed-locked company attribution with grounded candidate adjudication. MiniMax may correct a deterministic seed only when the replacement is an exact source span and passes deterministic entity and subject-role validation.
+- Add bounded path switching: after two failures on one acquisition path, use a materially different structured, HTML, generic-extraction, or browser path.
+- Preserve raw listing/detail/API responses, cleaned text, rule candidates, MiniMax output, final events, and failure decisions for replay and review.
+
+### Implementation order
+
+1. Add frozen regressions for the observed 36Kr CAPTCHA, Cyzone missing/mismatched date, and non-company subjects such as time-duration fragments.
+2. Implement Cyzone API listing/detail parsing with provenance-aware dates.
+3. Implement 36Kr structured-content extraction and auditable listing fallback.
+4. Add subject candidates, role classification, grounded MiniMax correction, and fail-closed quarantine for unresolved attribution.
+5. Make retry/dead-letter states describe actual recoverability and exclude successfully degraded items from the unresolved count.
+6. Replay all frozen samples, run fresh MiniMax acceptance, then run production.
+7. Perform independent full code review, push the reviewed commit, wait for its GitHub Actions run, and deploy that exact SHA.
+
+### Hard exit conditions
+
+Work does not stop until all of the following are true:
+
+- Discovery recall is 100% against every frozen listing/API snapshot used for acceptance; no increment is silently omitted.
+- All 62 observed 36Kr/Cyzone production items have a replayable terminal state. The 27 former detail failures are either full/structured/listing-complete with sufficient evidence or explicitly quarantined for a factual conflict.
+- Frozen acceptance contains zero unresolved 36Kr/Cyzone detail dead letters.
+- Company and event attribution has zero factual errors in the independently reviewed acceptance set; dates, durations, amounts, headlines, media, investors, and analysts never become hiring-company subjects.
+- Every accepted company is grounded by an exact source span. A MiniMax correction records the rejected seed and the evidence supporting replacement.
+- Re-running the same snapshot is idempotent: no duplicate evidence, events, MiniMax calls, or notifications.
+- Full pytest, Ruff, compileall, `git diff --check`, credential scan, and the independent sub-agent review pass.
+- GitHub Actions passes for the exact commit deployed to production.
+- A production run reports no unexplained omission or unresolved high-value adapter failure, and its raw artifacts can be reconciled item by item with the final events and OpenClaw report.
