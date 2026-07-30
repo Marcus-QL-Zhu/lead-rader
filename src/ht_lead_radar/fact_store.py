@@ -1523,6 +1523,7 @@ class FactStore:
             "direction": getattr(evidence, "direction", ""),
             "people": list(getattr(evidence, "people", ()) or ()),
             "organizations": list(getattr(evidence, "organizations", ()) or ()),
+            **dict(getattr(evidence, "event_slots", {}) or {}),
         }
         statement = Statement.create(
             document_id=document.id,

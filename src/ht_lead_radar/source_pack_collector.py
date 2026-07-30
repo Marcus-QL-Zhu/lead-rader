@@ -6,12 +6,13 @@ Browser-only, blocked, or disabled sources are never fetched here.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 from datetime import date, datetime, timedelta, timezone
 from hashlib import sha256
 from html.parser import HTMLParser
 import html
 import json
+import os
 from pathlib import Path
 import re
 import sqlite3
@@ -808,6 +809,7 @@ class SourcePackCollector:
         detail_fetch: bool = True,
         max_bytes: int = 5_000_000,
         urlopen: Callable[..., Any] | None = None,
+        dedicated_llm_runner: Any | None = None,
     ) -> None:
         self.registry = registry or SourcePackRegistry.load(registry_path)
         self.state_db = state_db
@@ -816,6 +818,7 @@ class SourcePackCollector:
         self.detail_fetch = detail_fetch
         self.max_bytes = max_bytes
         self._urlopen = urlopen or urllib.request.urlopen
+        self._dedicated_llm_runner = dedicated_llm_runner
         if str(state_db) != ":memory:":
             Path(state_db).parent.mkdir(parents=True, exist_ok=True)
         self._connection = sqlite3.connect(str(state_db))
@@ -868,11 +871,14 @@ class SourcePackCollector:
                 topic TEXT NOT NULL,
                 company TEXT NOT NULL,
                 event_type TEXT NOT NULL,
+                event_id TEXT NOT NULL,
                 event_date TEXT NOT NULL DEFAULT '',
                 first_seen_at TEXT NOT NULL,
                 last_seen_at TEXT NOT NULL,
                 evidence_json TEXT NOT NULL,
-                PRIMARY KEY (source_id, source_url, topic, company, event_type)
+                PRIMARY KEY (
+                    source_id, source_url, topic, company, event_type, event_id
+                )
             );
             CREATE TABLE IF NOT EXISTS source_pack_source_runs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -893,7 +899,125 @@ class SourcePackCollector:
             ON source_pack_documents(topic, last_seen_at);
             """
         )
+        self._migrate_source_pack_evidence_event_identity()
         self._connection.commit()
+
+    @staticmethod
+    def _evidence_identity(payload: Mapping[str, Any]) -> str:
+        explicit = str(payload.get("event_id") or "").strip()
+        if explicit:
+            return explicit
+        slots = payload.get("event_slots")
+        canonical_slots = slots if isinstance(slots, Mapping) else {}
+        canonical = json.dumps(
+            {
+                "company": str(payload.get("company") or ""),
+                "event_type": str(payload.get("event_type") or ""),
+                "event_date": str(payload.get("event_date") or ""),
+                "title": str(payload.get("title") or ""),
+                "snippet": str(payload.get("snippet") or ""),
+                "event_slots": canonical_slots,
+            },
+            ensure_ascii=False,
+            sort_keys=True,
+            separators=(",", ":"),
+        )
+        return sha256(canonical.encode("utf-8")).hexdigest()
+
+    def _migrate_source_pack_evidence_event_identity(self) -> None:
+        tables = {
+            str(row["name"])
+            for row in self._connection.execute(
+                "SELECT name FROM sqlite_master WHERE type = 'table'"
+            ).fetchall()
+        }
+        has_legacy = "source_pack_evidence_legacy" in tables
+        columns = {
+            str(row["name"])
+            for row in self._connection.execute(
+                "PRAGMA table_info(source_pack_evidence)"
+            ).fetchall()
+        }
+        if "event_id" in columns and not has_legacy:
+            return
+        if has_legacy and "event_id" not in columns:
+            raise sqlite3.DatabaseError(
+                "source_pack_evidence migration has incompatible tables"
+            )
+
+        source_table = (
+            "source_pack_evidence_legacy" if has_legacy else "source_pack_evidence"
+        )
+        rows = self._connection.execute(f"SELECT * FROM {source_table}").fetchall()
+        prepared: list[tuple[str, ...]] = []
+        for row in rows:
+            payload = json.loads(str(row["evidence_json"]))
+            event_id = self._evidence_identity(payload)
+            payload["event_id"] = event_id
+            prepared.append(
+                (
+                    str(row["source_id"]),
+                    str(row["source_url"]),
+                    str(row["topic"]),
+                    str(row["company"]),
+                    str(row["event_type"]),
+                    event_id,
+                    str(row["event_date"]),
+                    str(row["first_seen_at"]),
+                    str(row["last_seen_at"]),
+                    json.dumps(payload, ensure_ascii=False),
+                )
+            )
+
+        try:
+            self._connection.execute("BEGIN IMMEDIATE")
+            if not has_legacy:
+                self._connection.execute(
+                    """
+                    ALTER TABLE source_pack_evidence
+                    RENAME TO source_pack_evidence_legacy
+                    """
+                )
+                self._connection.execute(
+                    """
+                    CREATE TABLE source_pack_evidence (
+                        source_id TEXT NOT NULL,
+                        source_url TEXT NOT NULL,
+                        topic TEXT NOT NULL,
+                        company TEXT NOT NULL,
+                        event_type TEXT NOT NULL,
+                        event_id TEXT NOT NULL,
+                        event_date TEXT NOT NULL DEFAULT '',
+                        first_seen_at TEXT NOT NULL,
+                        last_seen_at TEXT NOT NULL,
+                        evidence_json TEXT NOT NULL,
+                        PRIMARY KEY (
+                            source_id, source_url, topic, company,
+                            event_type, event_id
+                        )
+                    )
+                    """
+                )
+            self._connection.executemany(
+                """
+                INSERT OR REPLACE INTO source_pack_evidence (
+                    source_id, source_url, topic, company, event_type, event_id,
+                    event_date, first_seen_at, last_seen_at, evidence_json
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                prepared,
+            )
+            self._connection.execute("DROP TABLE source_pack_evidence_legacy")
+            self._connection.execute(
+                """
+                CREATE INDEX IF NOT EXISTS idx_source_pack_evidence_topic
+                ON source_pack_evidence(topic, last_seen_at)
+                """
+            )
+            self._connection.commit()
+        except Exception:
+            self._connection.rollback()
+            raise
 
     def _conditional_headers(
         self, source: SourceDefinition, url: str, scope: str
@@ -1126,15 +1250,22 @@ class SourcePackCollector:
         source: SourceDefinition,
         topic: str,
         evidence: Evidence,
+        *,
+        commit: bool = True,
     ) -> None:
         now = _utc_now()
+        payload = asdict(evidence)
+        event_id = self._evidence_identity(payload)
+        payload["event_id"] = event_id
         self._connection.execute(
             """
             INSERT INTO source_pack_evidence (
-                source_id, source_url, topic, company, event_type, event_date,
-                first_seen_at, last_seen_at, evidence_json
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-            ON CONFLICT(source_id, source_url, topic, company, event_type)
+                source_id, source_url, topic, company, event_type, event_id,
+                event_date, first_seen_at, last_seen_at, evidence_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(
+                source_id, source_url, topic, company, event_type, event_id
+            )
             DO UPDATE SET
                 event_date = excluded.event_date,
                 last_seen_at = excluded.last_seen_at,
@@ -1146,13 +1277,49 @@ class SourcePackCollector:
                 topic,
                 evidence.company,
                 evidence.event_type,
+                event_id,
                 evidence.event_date,
                 now,
                 now,
-                json.dumps(asdict(evidence), ensure_ascii=False),
+                json.dumps(payload, ensure_ascii=False),
             ),
         )
-        self._connection.commit()
+        if commit:
+            self._connection.commit()
+
+    @staticmethod
+    def _dedicated_evidence_relevant(
+        source: SourceDefinition,
+        evidence: Evidence,
+        topic_terms: tuple[str, ...],
+        generic_source_ids: frozenset[str],
+    ) -> bool:
+        text = " ".join(
+            (
+                evidence.company,
+                evidence.title,
+                evidence.snippet,
+                evidence.source_excerpt,
+            )
+        )
+        if _document_relevant(
+            source,
+            text,
+            topic_terms,
+            generic_source_ids,
+        ):
+            return True
+        normalized_tags = {
+            str(tag).strip().lower().replace(" ", "_")
+            for tag in evidence.industry_tags
+            if str(tag).strip() and str(tag).strip().lower() != "generic"
+        }
+        normalized_topic_terms = {
+            term.strip().lower().replace(" ", "_")
+            for term in topic_terms
+            if term.strip()
+        }
+        return bool(normalized_tags.intersection(normalized_topic_terms))
 
     def _process_document(
         self,
@@ -1306,9 +1473,106 @@ class SourcePackCollector:
         terms = _topic_terms(self.registry, normalized_topic)
         generic_ids = frozenset(self.registry.get_pack("generic-cn").source_ids)
         health: dict[str, dict[str, Any]] = {}
+        dedicated_coordinator = None
+        dedicated_semantic_mode = "rules_only"
+        dedicated_semantic_error = ""
+
+        from .aggregate_adapters.coordinator import (
+            DedicatedAggregateCoordinator,
+            PublicHttpFetcher,
+        )
+        from .aggregate_adapters.registry import DedicatedAdapterRegistry
+
+        dedicated_registry = DedicatedAdapterRegistry.defaults()
+        if dedicated_registry.source_ids.intersection(
+            source.id for source in selection.sources
+        ):
+            runner = self._dedicated_llm_runner
+            if (
+                runner is not False
+                and runner is None
+                and os.environ.get("LEAD_RADAR_AGGREGATE_LLM", "1")
+                not in {"0", "false", "False"}
+            ):
+                try:
+                    from .openclaw_llm import OpenClawConfiguredLLMRunner
+
+                    runner = OpenClawConfiguredLLMRunner()
+                except Exception as exc:
+                    dedicated_semantic_error = f"{type(exc).__name__}: {exc}"
+                    runner = None
+            if runner is not None and runner is not False:
+                dedicated_semantic_mode = "minimax"
+            dedicated_coordinator = DedicatedAggregateCoordinator(
+                state_db=self.state_db,
+                registry=dedicated_registry,
+                fetch=PublicHttpFetcher(
+                    timeout=self.timeout,
+                    max_bytes=self.max_bytes,
+                    user_agent=self.user_agent,
+                    urlopen=self._urlopen,
+                ),
+                llm_runner=runner if runner is not False else None,
+                acceptance_dir=os.environ.get("LEAD_RADAR_AGGREGATE_ACCEPTANCE_DIR"),
+            )
 
         for source in selection.sources:
             started_at = _utc_now()
+            if (
+                dedicated_coordinator is not None
+                and source.id in dedicated_registry.source_ids
+            ):
+                result = dedicated_coordinator.collect_source(
+                    source.id,
+                    normalized_topic,
+                )
+                relevant_evidence = [
+                    item
+                    for item in result.evidence
+                    if self._dedicated_evidence_relevant(
+                        source,
+                        item,
+                        terms,
+                        generic_ids,
+                    )
+                ]
+                if result.run.status == "ok":
+                    with self._connection:
+                        self._connection.execute(
+                            """
+                            DELETE FROM source_pack_evidence
+                            WHERE source_id = ? AND topic = ?
+                            """,
+                            (source.id, normalized_topic),
+                        )
+                        for item in relevant_evidence:
+                            self._store_evidence(
+                                source,
+                                normalized_topic,
+                                item,
+                                commit=False,
+                            )
+                elif result.run.status == "partial":
+                    with self._connection:
+                        for item in relevant_evidence:
+                            self._store_evidence(
+                                source,
+                                normalized_topic,
+                                item,
+                                commit=False,
+                            )
+                health[source.id] = self._record_source_run(
+                    source.id,
+                    normalized_topic,
+                    started_at,
+                    status=result.run.status,
+                    discovered_count=result.run.listing_count,
+                    observation_count=result.run.detail_success_count,
+                    evidence_count=len(relevant_evidence),
+                    detail_error_count=result.run.detail_failure_count,
+                    error=result.run.error,
+                )
+                continue
             if source.adapter not in DIRECT_ADAPTERS:
                 health[source.id] = self._record_source_run(
                     source.id,
@@ -1381,6 +1645,24 @@ class SourcePackCollector:
             year=year,
             source_ids=tuple(source.id for source in selection.sources),
         )
+        if dedicated_coordinator is not None:
+            from .aggregate_adapters.storage import (
+                AggregateStateStore,
+                normalize_company_alias,
+            )
+
+            with AggregateStateStore(self.state_db) as aggregate_store:
+                alias_map = aggregate_store.canonical_alias_map()
+            evidence = [
+                replace(
+                    item,
+                    company=alias_map.get(
+                        normalize_company_alias(item.company),
+                        item.company,
+                    ),
+                )
+                for item in evidence
+            ]
         statuses = [item["status"] for item in health.values()]
         self.last_run_summary = {
             "topic": normalized_topic,
@@ -1400,6 +1682,13 @@ class SourcePackCollector:
                 for source_id, item in health.items()
                 if item["status"] == "error"
             ],
+            "dedicated_aggregate": (
+                dedicated_coordinator.health()
+                if dedicated_coordinator is not None
+                else {}
+            ),
+            "dedicated_semantic_mode": dedicated_semantic_mode,
+            "dedicated_semantic_error": dedicated_semantic_error,
         }
         return evidence
 
@@ -1433,7 +1722,7 @@ class SourcePackCollector:
             parameters,
         ).fetchall()
         output: list[Evidence] = []
-        seen: set[tuple[str, str, str]] = set()
+        seen: set[tuple[str, str, str, str]] = set()
         for row in rows:
             payload = json.loads(str(row["evidence_json"]))
             event_date = str(payload.get("event_date") or "")
@@ -1448,7 +1737,12 @@ class SourcePackCollector:
             payload["statement_ids"] = tuple(payload.get("statement_ids") or ())
             payload["industry_tags"] = tuple(payload.get("industry_tags") or ())
             item = Evidence(**payload)
-            key = (item.company, item.source_url, item.event_type)
+            key = (
+                item.company,
+                item.source_url,
+                item.event_type,
+                item.event_id or self._evidence_identity(payload),
+            )
             if key not in seen:
                 seen.add(key)
                 output.append(item)
@@ -1519,6 +1813,10 @@ class SourcePackCollector:
                 "error": str(row["error"]),
             }
         statuses = [item["status"] for item in latest.values()]
+        from .aggregate_adapters.storage import AggregateStateStore
+
+        with AggregateStateStore(self.state_db) as aggregate_store:
+            dedicated_aggregate = aggregate_store.health()
         return {
             "sources": latest,
             "source_count": len(latest),
@@ -1528,6 +1826,7 @@ class SourcePackCollector:
             "failed_count": statuses.count("error"),
             "unsupported_count": statuses.count("unsupported_adapter"),
             "disabled_count": statuses.count("disabled"),
+            "dedicated_aggregate": dedicated_aggregate,
         }
 
 

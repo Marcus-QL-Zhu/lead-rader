@@ -370,7 +370,7 @@
       "owner": "智东西",
       "source_type": "vertical_technology_media",
       "grade": "B",
-      "url": "https://zhidx.com/p/category/%E8%9E%8D%E6%8A%95%E8%B5%84%E6%B6%88%E6%81%AF",
+      "url": "https://zhidx.com/p/tag/%E8%9E%8D%E8%B5%84",
       "adapter": "html_list",
       "signal_types": [
         "funding",
@@ -535,7 +535,7 @@
       "source_type": "financial_media",
       "grade": "B",
       "url": "https://www.cls.cn/telegraph",
-      "adapter": "browser_dynamic_list",
+      "adapter": "html_list",
       "signal_types": [
         "funding",
         "order",
@@ -550,10 +550,10 @@
         "fusion",
         "embodied_intelligence"
       ],
-      "enabled": false,
+      "enabled": true,
       "verified_on": "2026-07-25",
-      "status": "verified_dynamic_requires_browser",
-      "verification_note": "公开页面但内容主要动态加载，且网站声明内容受版权保护；待浏览器适配并坚持最小摘录策略。"
+      "status": "verified_public_listing",
+      "verification_note": "Dedicated adapter uses the public telegraph XHR increment API and stores only short evidence excerpts; no browser, login, or access-control bypass."
     },
     {
       "id": "sse-listed-announcements",

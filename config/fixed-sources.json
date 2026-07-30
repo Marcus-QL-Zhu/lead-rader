@@ -48,7 +48,7 @@
       "grade": "B",
       "fetch_detail": true,
       "max_items": 40,
-      "enabled": true
+      "enabled": false
     },
     {
       "id": "stcn-flash",
@@ -68,14 +68,10 @@
       "grade": "B",
       "fetch_detail": true,
       "max_items": 40,
-      "enabled": true
+      "enabled": false
     }
   ],
   "pending_sources": [
-    {
-      "id": "linkerbot-official",
-      "reason": "官网为 JavaScript 渲染，需 changedetection/browser 适配器"
-    },
     {
       "id": "government-project-sites",
       "reason": "需按北京、上海、深圳、无锡、苏州等产业集群建立独立列表页注册表"

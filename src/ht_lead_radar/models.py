@@ -18,6 +18,7 @@ class Evidence:
     direction: str = ""
     people: tuple[str, ...] = ()
     organizations: tuple[str, ...] = ()
+    event_slots: dict[str, Any] = field(default_factory=dict)
     document_id: str = ""
     event_id: str = ""
     statement_ids: tuple[str, ...] = ()

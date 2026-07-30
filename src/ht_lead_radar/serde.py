@@ -17,6 +17,7 @@ def evidence_from_dict(value: Mapping[str, Any]) -> Evidence:
     payload = dict(value)
     for key in ("people", "organizations", "statement_ids", "industry_tags"):
         payload[key] = tuple(payload.get(key) or ())
+    payload["event_slots"] = dict(payload.get("event_slots") or {})
     allowed = {item.name for item in fields(Evidence)}
     return Evidence(**{key: item for key, item in payload.items() if key in allowed})
 

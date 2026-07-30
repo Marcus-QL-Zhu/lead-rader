@@ -356,6 +356,26 @@ def build_summary(
             f"信源异常：{len(source_failures)} 个",
         ]
     )
+    dedicated_health = {}
+    for source_run in source_summary.get("runs") or []:
+        if not isinstance(source_run, Mapping):
+            continue
+        run_summary = source_run.get("run_summary") or {}
+        candidate = run_summary.get("dedicated_aggregate") or {}
+        if not candidate:
+            health = source_run.get("health") or {}
+            candidate = health.get("dedicated_aggregate") or {}
+        if isinstance(candidate, Mapping) and candidate:
+            dedicated_health = candidate
+            break
+    if dedicated_health:
+        lines.append(
+            f"\u4e13\u5c5e\u805a\u5408\u4fe1\u6e90\uff1a"
+            f"{dedicated_health.get('source_count', 0)} \u4e2a\uff0c"
+            f"\u5065\u5eb7 {dedicated_health.get('healthy_count', 0)}\uff0c"
+            f"\u5f02\u5e38 {dedicated_health.get('failed_count', 0)}\uff0c"
+            f"\u5f85\u5904\u7406 {dedicated_health.get('open_dead_letter_count', 0)}"
+        )
     if talent_generation_model:
         lines.append(f"LLM 模型：{talent_generation_model}")
     if demand_values:

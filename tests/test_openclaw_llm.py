@@ -18,9 +18,7 @@ def write_openclaw_config(tmp_path, *, api="openai-completions"):
         json.dumps(
             {
                 "agents": {
-                    "defaults": {
-                        "model": {"primary": "minimax/MiniMax-M2.7-highspeed"}
-                    }
+                    "defaults": {"model": {"primary": "minimax/MiniMax-M2.7-highspeed"}}
                 }
             }
         ),
@@ -135,10 +133,19 @@ def test_direct_runner_fails_closed_on_missing_assistant_text():
 
 
 def test_direct_runner_retries_one_transient_empty_assistant_response():
-    responses = iter([
-        {"choices": [{"message": {"content": ""}}]},
-        {"choices": [{"message": {"content": '{"drafts":[]}'}}]},
-    ])
+    bodies = []
+    responses = iter(
+        [
+            {"choices": [{"message": {"content": ""}}]},
+            {"choices": [{"message": {"content": '{"drafts":[]}'}}]},
+        ]
+    )
+
+    def transport(request, timeout):
+        del timeout
+        bodies.append(json.loads(request.data.decode("utf-8")))
+        return next(responses)
+
     runner = OpenClawConfiguredLLMRunner(
         config=OpenClawLLMConfig(
             provider="minimax",
@@ -147,10 +154,11 @@ def test_direct_runner_retries_one_transient_empty_assistant_response():
             api_kind="openai-completions",
             api_key="test-secret",
         ),
-        transport=lambda request, timeout: next(responses),
+        transport=transport,
     )
 
     assert runner.run("prompt", session_id="ignored") == '{"drafts":[]}'
+    assert [body["reasoning_split"] for body in bodies] == [True, False]
 
 
 def test_explicit_configured_model_override_uses_same_provider(tmp_path):

@@ -171,6 +171,13 @@ def _default_transport(
             raise DirectLLMError(
                 f"LLM provider returned HTTP {error.code}: {detail}"
             ) from error
+        except TimeoutError as error:
+            # Retrying a full model-generation timeout can block one article
+            # for many minutes. Fail this semantic pass closed so the caller
+            # preserves deterministic rule seeds and records the audit error.
+            raise DirectLLMError(
+                "LLM provider request failed: TimeoutError"
+            ) from error
         except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
             if isinstance(error, OSError) and attempt < 2:
                 time.sleep(2**attempt)
@@ -230,25 +237,30 @@ class OpenClawConfiguredLLMRunner:
         if system_prompt.strip():
             messages.append({"role": "system", "content": system_prompt.strip()})
         messages.append({"role": "user", "content": prompt})
-        body = {
-            "model": self.config.model,
-            "messages": messages,
-            "stream": False,
-            "temperature": 0.0,
-            "max_completion_tokens": self.max_completion_tokens,
-            "reasoning_split": True,
-        }
-        request = urllib.request.Request(
-            f"{self.config.base_url}/chat/completions",
-            data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
-            headers={
-                "Authorization": f"Bearer {self.config.api_key}",
-                "Content-Type": "application/json",
-            },
-            method="POST",
-        )
         last_error: DirectLLMError | None = None
-        for _attempt in range(2):
+        for attempt in range(2):
+            body = {
+                "model": self.config.model,
+                "messages": messages,
+                "stream": False,
+                "temperature": 0.0,
+                "max_completion_tokens": self.max_completion_tokens,
+                # MiniMax can consume the entire completion budget in
+                # separated reasoning and return blank assistant content.
+                # Keep separated reasoning for the first request, then retry
+                # once with interleaved reasoning so a final JSON answer is
+                # observable and can still pass deterministic validation.
+                "reasoning_split": attempt == 0,
+            }
+            request = urllib.request.Request(
+                f"{self.config.base_url}/chat/completions",
+                data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
+                headers={
+                    "Authorization": f"Bearer {self.config.api_key}",
+                    "Content-Type": "application/json",
+                },
+                method="POST",
+            )
             payload = self.transport(request, self.timeout_seconds)
             try:
                 return _message_text(payload)

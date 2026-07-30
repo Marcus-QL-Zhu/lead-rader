@@ -1,0 +1,519 @@
+"""Incremental orchestration for dedicated aggregate-source adapters."""
+
+from __future__ import annotations
+
+from concurrent.futures import Future, ThreadPoolExecutor
+from dataclasses import dataclass
+from datetime import datetime, timezone
+from hashlib import sha256
+import json
+import os
+from pathlib import Path
+import time
+from typing import Any, Callable
+import urllib.parse
+import urllib.request
+
+from ..models import Evidence
+from .base import AdapterContext
+from .models import (
+    AdapterRun,
+    CleanArticle,
+    SemanticEvent,
+    SourceArticleIndex,
+    SourceChannel,
+)
+from .registry import DedicatedAdapterRegistry
+from .semantic import MiniMaxSemanticProcessor, PROMPT_VERSION, PromptRunner
+from .storage import AggregateStateStore
+
+
+@dataclass(frozen=True)
+class DedicatedCollectionResult:
+    evidence: tuple[Evidence, ...]
+    run: AdapterRun
+
+
+@dataclass(frozen=True)
+class _SemanticWork:
+    index: SourceArticleIndex
+    article: CleanArticle
+    future: Future[tuple[list[SemanticEvent], dict[str, Any]]]
+
+
+class PublicHttpFetcher:
+    def __init__(
+        self,
+        *,
+        timeout: float = 20,
+        max_bytes: int = 5_000_000,
+        user_agent: str = "HT-Lead-Radar/0.3 (+public aggregate monitoring)",
+        urlopen: Callable[..., Any] | None = None,
+        minimum_interval_seconds: float = 1.25,
+    ) -> None:
+        self.timeout = timeout
+        self.max_bytes = max_bytes
+        self.user_agent = user_agent
+        self.urlopen = urlopen or urllib.request.urlopen
+        self.minimum_interval_seconds = max(0.0, minimum_interval_seconds)
+        self._last_fetch_at = 0.0
+
+    def __call__(self, url: str) -> bytes:
+        elapsed = time.monotonic() - self._last_fetch_at
+        if self._last_fetch_at and elapsed < self.minimum_interval_seconds:
+            time.sleep(self.minimum_interval_seconds - elapsed)
+        request = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": self.user_agent,
+                "Accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.5",
+            },
+        )
+        with self.urlopen(request, timeout=self.timeout) as response:
+            body = response.read(self.max_bytes + 1)
+            if len(body) > self.max_bytes:
+                raise ValueError(f"response exceeds {self.max_bytes} bytes")
+            self._last_fetch_at = time.monotonic()
+            return body
+
+
+class DedicatedAggregateCoordinator:
+    def __init__(
+        self,
+        *,
+        state_db: str | Path,
+        registry: DedicatedAdapterRegistry | None = None,
+        fetch: Callable[[str], bytes] | None = None,
+        llm_runner: PromptRunner | None = None,
+        now: datetime | None = None,
+        acceptance_dir: str | Path | None = None,
+        semantic_workers: int | None = None,
+    ) -> None:
+        self.state_db = Path(state_db)
+        self.registry = registry or DedicatedAdapterRegistry.defaults()
+        self.fetch = fetch or PublicHttpFetcher()
+        self.processor = MiniMaxSemanticProcessor(llm_runner)
+        self._llm_runner = llm_runner
+        self.semantic_workers = self._worker_count(semantic_workers, llm_runner)
+        self.now = now or datetime.now(timezone.utc)
+        self.acceptance_dir = Path(acceptance_dir) if acceptance_dir else None
+
+    def collect_source(
+        self,
+        source_id: str,
+        topic: str,
+        *,
+        force_reprocess: bool = False,
+    ) -> DedicatedCollectionResult:
+        adapter = self.registry.for_source(source_id)
+        if adapter is None:
+            raise KeyError(f"no dedicated adapter for {source_id}")
+        channel = adapter.channel_for(source_id)
+        started = self.now.replace(microsecond=0).isoformat()
+        context = AdapterContext.create(
+            state_db=self.state_db,
+            fetch=lambda url: self._fetch_adapter_page(source_id, url),
+            now=self.now,
+        )
+        listing_count = incremental_count = detail_success_count = 0
+        detail_failure_count = rule_event_count = minimax_event_count = 0
+        adaptive_used_count = 0
+        prefiltered_count = 0
+        semantic_failure_count = 0
+        omissions_detected = 0
+        evidence: list[Evidence] = []
+        semantic_work: list[_SemanticWork] = []
+        status = "ok"
+        error = ""
+        with (
+            ThreadPoolExecutor(
+                max_workers=self.semantic_workers,
+                thread_name_prefix="aggregate-minimax",
+            ) as executor,
+            AggregateStateStore(self.state_db) as store,
+        ):
+            try:
+                listing_html = self.fetch(channel.url)
+                self._write_raw(source_id, "listing", listing_html)
+                indexes = adapter.parse_listing(channel, listing_html, context)
+                store.resolve_dead_letter(
+                    source_id=source_id,
+                    source_article_id="",
+                    stage="listing",
+                )
+                listing_count = len(indexes)
+                for index in indexes:
+                    changed = store.upsert_index(index)
+                    if (
+                        not changed
+                        and store.article_is_current(index, now=self.now)
+                        and store.semantic_is_current(
+                            index,
+                            prompt_version=PROMPT_VERSION,
+                            model_identity=self.processor.model_identity,
+                        )
+                        and not force_reprocess
+                    ):
+                        evidence.extend(
+                            self._events_to_evidence(
+                                store.events_for_article(
+                                    source_id,
+                                    index.source_article_id,
+                                ),
+                                channel.name,
+                                channel.source_grade,
+                                topic,
+                            )
+                        )
+                        continue
+                    incremental_count += 1
+                    try:
+                        if not adapter.should_fetch_detail(channel, index):
+                            prefiltered_count += 1
+                            article = self._prefiltered_article(index)
+                            store.store_article(article)
+                            semantic_events: list[SemanticEvent] = []
+                            semantic_audit = self.processor.prefiltered_audit(
+                                article,
+                                reason="adapter_listing_router_rejected",
+                            )
+                            store.store_semantic_audit(semantic_audit)
+                            store.store_events(
+                                source_id,
+                                index.source_article_id,
+                                semantic_events,
+                            )
+                            for resolved_stage in (
+                                "detail_fetch",
+                                "semantic_validation",
+                                "detail_or_semantic",
+                            ):
+                                store.resolve_dead_letter(
+                                    source_id=source_id,
+                                    source_article_id=index.source_article_id,
+                                    stage=resolved_stage,
+                                )
+                            self._write_semantic(
+                                source_id,
+                                index.source_article_id,
+                                article.to_dict(),
+                                [],
+                                semantic_audit,
+                            )
+                            continue
+                        detail_html = self.fetch(index.canonical_url)
+                        self._write_raw(
+                            source_id,
+                            f"detail-{index.source_article_id}",
+                            detail_html,
+                        )
+                        article = adapter.parse_detail(
+                            channel,
+                            index,
+                            detail_html,
+                            context,
+                        )
+                        store.store_article(article)
+                        if article.fetch_status == "ok":
+                            detail_success_count += 1
+                            store.resolve_dead_letter(
+                                source_id=source_id,
+                                source_article_id=index.source_article_id,
+                                stage="detail_fetch",
+                            )
+                        else:
+                            detail_failure_count += 1
+                            store.record_dead_letter(
+                                source_id=source_id,
+                                source_article_id=index.source_article_id,
+                                canonical_url=index.canonical_url,
+                                stage="detail_fetch",
+                                error=(
+                                    "detail unavailable; processed auditable "
+                                    "listing title/summary fallback: "
+                                    f"{article.failure_reason}"
+                                ),
+                            )
+                        adaptive_used_count += int(
+                            article.extraction_method == "adaptive"
+                            or index.discovery_method == "adaptive"
+                        )
+                        rule_events = adapter.rule_events(channel, article)
+                        rule_event_count += len(rule_events)
+                        semantic_work.append(
+                            _SemanticWork(
+                                index=index,
+                                article=article,
+                                future=executor.submit(
+                                    self._process_semantic,
+                                    channel,
+                                    article,
+                                    rule_events,
+                                ),
+                            )
+                        )
+                    except Exception as exc:
+                        detail_failure_count += 1
+                        store.record_dead_letter(
+                            source_id=source_id,
+                            source_article_id=index.source_article_id,
+                            canonical_url=index.canonical_url,
+                            stage="detail_or_semantic",
+                            error=f"{type(exc).__name__}: {exc}",
+                        )
+                # Persist on the main thread in listing order. SQLite never
+                # crosses worker boundaries, so the audit trail is deterministic.
+                for work in semantic_work:
+                    index = work.index
+                    article = work.article
+                    try:
+                        semantic_events, semantic_audit = work.future.result()
+                        omissions_detected += int(
+                            semantic_audit.get("omissions_detected") or 0
+                        )
+                        store.store_semantic_audit(semantic_audit)
+                        if semantic_audit.get("status") == "fallback_to_rules":
+                            semantic_failure_count += 1
+                            store.record_dead_letter(
+                                source_id=source_id,
+                                source_article_id=index.source_article_id,
+                                canonical_url=index.canonical_url,
+                                stage="semantic_validation",
+                                error=str(semantic_audit.get("error") or "")[
+                                    :2000
+                                ],
+                            )
+                        else:
+                            store.resolve_dead_letter(
+                                source_id=source_id,
+                                source_article_id=index.source_article_id,
+                                stage="semantic_validation",
+                            )
+                        minimax_event_count += sum(
+                            event.processor == "minimax"
+                            for event in semantic_events
+                        )
+                        store.store_events(
+                            source_id,
+                            index.source_article_id,
+                            semantic_events,
+                        )
+                        store.resolve_dead_letter(
+                            source_id=source_id,
+                            source_article_id=index.source_article_id,
+                            stage="detail_or_semantic",
+                        )
+                        evidence.extend(
+                            self._events_to_evidence(
+                                semantic_events,
+                                channel.name,
+                                channel.source_grade,
+                                topic,
+                            )
+                        )
+                        self._write_semantic(
+                            source_id,
+                            index.source_article_id,
+                            article.to_dict(),
+                            [event.to_dict() for event in semantic_events],
+                            semantic_audit,
+                        )
+                    except Exception as exc:
+                        detail_failure_count += 1
+                        store.record_dead_letter(
+                            source_id=source_id,
+                            source_article_id=index.source_article_id,
+                            canonical_url=index.canonical_url,
+                            stage="detail_or_semantic",
+                            error=f"{type(exc).__name__}: {exc}",
+                        )
+                listing_hash = sha256(listing_html).hexdigest()
+                cursor = indexes[0].cursor_value if indexes else ""
+                store.update_cursor(
+                    source_id=source_id,
+                    cursor_value=cursor,
+                    listing_hash=listing_hash,
+                    listing_count=listing_count,
+                )
+                if detail_failure_count or semantic_failure_count:
+                    status = "partial"
+            except Exception as exc:
+                status = "error"
+                error = f"{type(exc).__name__}: {exc}"
+                store.record_dead_letter(
+                    source_id=source_id,
+                    source_article_id="",
+                    canonical_url=channel.url,
+                    stage="listing",
+                    error=error,
+                )
+            run = AdapterRun(
+                adapter_id=adapter.adapter_id,
+                source_id=source_id,
+                started_at=started,
+                finished_at=max(
+                    self.now,
+                    datetime.now(timezone.utc),
+                )
+                .replace(microsecond=0)
+                .isoformat(),
+                status=status,
+                listing_count=listing_count,
+                incremental_count=incremental_count,
+                detail_success_count=detail_success_count,
+                detail_failure_count=detail_failure_count,
+                rule_event_count=rule_event_count,
+                minimax_event_count=minimax_event_count,
+                evidence_count=len(evidence),
+                adaptive_used_count=adaptive_used_count,
+                semantic_failure_count=semantic_failure_count,
+                prefiltered_count=prefiltered_count,
+                omissions_detected=omissions_detected,
+                error=error,
+            )
+            store.record_run(run)
+        return DedicatedCollectionResult(tuple(evidence), run)
+
+    @staticmethod
+    def _worker_count(
+        value: int | None,
+        runner: PromptRunner | None,
+    ) -> int:
+        if runner is None:
+            return 1
+        if value is None:
+            raw = os.environ.get("LEAD_RADAR_AGGREGATE_LLM_WORKERS", "6")
+            try:
+                value = int(raw)
+            except ValueError:
+                value = 6
+        return max(1, min(value, 8))
+
+    def _process_semantic(
+        self,
+        channel: SourceChannel,
+        article: CleanArticle,
+        rule_events: list[SemanticEvent],
+    ) -> tuple[list[SemanticEvent], dict[str, Any]]:
+        processor = MiniMaxSemanticProcessor(self._llm_runner)
+        events = processor.process(channel, article, rule_events)
+        return events, dict(processor.last_audit)
+
+    @staticmethod
+    def _prefiltered_article(index: SourceArticleIndex) -> CleanArticle:
+        body = index.summary or index.title
+        return CleanArticle(
+            index=index,
+            clean_body=body,
+            structured_data={
+                **index.structured_data,
+                "prefilter_reason": "adapter_listing_router_rejected",
+            },
+            extraction_method="listing-prefilter",
+            evidence_locators={
+                "body": "listing:complete-text",
+                "routing": "adapter.should_fetch_detail",
+            },
+            fetch_status="prefiltered",
+            failure_reason="",
+            content_hash=sha256(f"{index.title}\n{body}".encode("utf-8")).hexdigest(),
+        )
+
+    def health(self) -> dict[str, Any]:
+        with AggregateStateStore(self.state_db) as store:
+            return store.health()
+
+    @staticmethod
+    def _events_to_evidence(
+        events: list[SemanticEvent],
+        source_name: str,
+        source_grade: str,
+        topic: str,
+    ) -> list[Evidence]:
+        accepted = [
+            event
+            for event in events
+            if event.event_type != "other"
+            and event.canonical_company
+            and event.evidence_quotes
+        ]
+        output: list[Evidence] = []
+        for event in accepted:
+            document_id = sha256(
+                f"{event.source_id}|{event.canonical_url}".encode("utf-8")
+            ).hexdigest()
+            event_id = sha256(
+                (
+                    f"{document_id}|{event.canonical_company}|"
+                    f"{event.event_type}|{event.event_date}"
+                    f"|{event.funding_round}|{event.event_status}"
+                ).encode("utf-8")
+            ).hexdigest()
+            output.append(
+                Evidence(
+                    company=event.canonical_company,
+                    event_type=event.event_type,
+                    phase=event.phase,
+                    event_date=event.event_date,
+                    title=event.event_summary or event.evidence_quotes[0][:180],
+                    snippet=event.evidence_quotes[0][:500],
+                    source_url=event.canonical_url,
+                    source_name=f"{source_name} [{event.source_id}]",
+                    source_grade=source_grade,
+                    direction=topic,
+                    document_id=document_id,
+                    event_id=event_id,
+                    independent_source_group=urllib.parse.urlparse(
+                        event.canonical_url
+                    ).netloc.lower(),
+                    content_sha256=event.content_hash,
+                    source_excerpt=event.evidence_quotes[0][:500],
+                    source_locator="aggregate_semantic_events",
+                    analyst_note="; ".join(event.ambiguities),
+                    organizations=event.investors,
+                    event_slots={
+                        "funding_round": event.funding_round,
+                        "funding_amount": event.funding_amount,
+                        "cumulative_funding_amount": event.cumulative_funding_amount,
+                        "event_status": event.event_status,
+                    },
+                    source_kind="aggregate_media",
+                    source_id=event.source_id,
+                    industry_tags=event.industry_tags,
+                )
+            )
+        return output
+
+    def _fetch_adapter_page(self, source_id: str, url: str) -> bytes:
+        payload = self.fetch(url)
+        digest = sha256(url.encode("utf-8")).hexdigest()[:16]
+        self._write_raw(source_id, f"adapter-fetch-{digest}", payload)
+        return payload
+
+    def _write_raw(self, source_id: str, label: str, payload: bytes) -> None:
+        if self.acceptance_dir is None:
+            return
+        target = self.acceptance_dir / source_id
+        target.mkdir(parents=True, exist_ok=True)
+        (target / f"{label}.html").write_bytes(payload)
+
+    def _write_semantic(
+        self,
+        source_id: str,
+        article_id: str,
+        article: dict[str, Any],
+        events: list[dict[str, Any]],
+        minimax_audit: dict[str, Any],
+    ) -> None:
+        if self.acceptance_dir is None:
+            return
+        target = self.acceptance_dir / source_id
+        target.mkdir(parents=True, exist_ok=True)
+        (target / f"semantic-{article_id}.json").write_text(
+            json.dumps(
+                {"article": article, "events": events, "minimax_audit": minimax_audit},
+                ensure_ascii=False,
+                indent=2,
+            ),
+            encoding="utf-8",
+        )

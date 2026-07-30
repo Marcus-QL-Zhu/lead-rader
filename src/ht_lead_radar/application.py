@@ -940,6 +940,7 @@ class LeadRadarApplication:
                     ],
                 )
                 pack_health = pack_collector.source_health_summary()
+                pack_run_summary = dict(pack_collector.last_run_summary)
             evidence.extend(evidence_from_dict(item) for item in serialized)
             summary["runs"].append(
                 {
@@ -947,6 +948,7 @@ class LeadRadarApplication:
                     "status": "ok",
                     "evidence_count": len(serialized),
                     "health": pack_health,
+                    "run_summary": pack_run_summary,
                 }
             )
         except ImportError:
