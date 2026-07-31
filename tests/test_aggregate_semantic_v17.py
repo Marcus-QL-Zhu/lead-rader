@@ -65,7 +65,7 @@ def test_v21_runs_minimax_when_no_rule_seed():
     assert processor.process(channel, article, []) == []
     assert runner.calls == 1
     assert processor.last_audit["status"] == "accepted"
-    assert PROMPT_VERSION == "aggregate-semantic-v22"
+    assert PROMPT_VERSION == "aggregate-semantic-v23"
 
 
 def test_v18_seed_quote_replaces_ungrounded_model_quote_and_field():

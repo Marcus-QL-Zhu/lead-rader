@@ -16,7 +16,7 @@ from .entities import canonical_company_name, company_alias_candidates, is_compa
 from .models import CleanArticle, SemanticEvent, SourceChannel
 
 
-PROMPT_VERSION = "aggregate-semantic-v22"
+PROMPT_VERSION = "aggregate-semantic-v23"
 ALLOWED_EVENT_TYPES = frozenset(
     {
         "funding",
@@ -72,7 +72,8 @@ SYSTEM_PROMPT = (
     "\u4e3b\u4f53\u6b67\u4e49\uff0c\u4e0d\u8865\u5145\u5916"
     "\u90e8\u77e5\u8bc6\u3002"
     "\u4ec5\u8f93\u51fa\u4e00\u4e2aJSON\u5bf9\u8c61\uff1a"
-    '{"events":[...],"ambiguities":[...]}\u3002'
+    '{"events":[...],"rejections":[{"id":"c_x",'
+    '"reason_code":"funding_use_or_plan"}],"ambiguities":[...]}\u3002'
     "\u6bcf\u4e2aevent\u5b57\u6bb5\uff1acompany,event_type,"
     "industry_tags,funding_round,funding_amount,"
     "cumulative_funding_amount,investors,event_status,"
@@ -115,9 +116,16 @@ SYSTEM_PROMPT = (
     "\u5e76\u8f93\u51fa\u6ca1\u6709seed\u4f46\u6b63\u6587\u660e\u786e\u652f\u6301\u7684\u5168\u90e8\u4e8b\u4ef6\u3002"
     "\u4e0d\u5f97\u4ece\u5ef6\u5c55\u9605\u8bfb\u3001\u76f8\u5173\u9605\u8bfb\u6216\u63a8\u8350\u9605\u8bfb\u7684\u6807\u9898\u4e2d\u62bd\u53d6\u4e8b\u4ef6\u3002"
     "candidate_ledger\u662f\u786e\u5b9a\u6027\u89c4\u5219\u627e\u5230\u7684\u5f85\u6838\u5019\u9009\uff1b"
-    "\u6bcf\u4e2a\u5019\u9009\u90fd\u5fc5\u987b\u8f93\u51fa\u5bf9\u5e94event\u3002"
-    "rule_seed\u4e2d\u6bcf\u4e2aseed\u4e5f\u5fc5\u987b\u88abevent\u8986\u76d6\u6216\u7ea0\u6b63\uff0c"
-    "\u4e0d\u5f97\u9759\u9ed8\u5ffd\u7565seed\u3002"
+    "\u6bcf\u4e2a\u771f\u5b9e\u5019\u9009\u5fc5\u987b\u8f93\u51fa\u5bf9\u5e94event\uff1b"
+    "\u82e5\u662f\u8d44\u91d1\u7528\u9014\u3001\u4e1a\u52a1\u4ecb\u7ecd\u3001\u5386\u53f2\u56de\u987e\u3001"
+    "\u884c\u4e1a\u6cdb\u5316\u63cf\u8ff0\u6216\u5176\u4ed6\u975e\u72ec\u7acb\u4e8b\u4ef6\uff0c"
+    "\u5fc5\u987b\u628a\u5b83\u7684id\u548c\u53ef\u9a8c\u8bc1reason_code\u653e\u5165rejections\u3002"
+    "rule_seed\u4e2d\u6bcf\u4e2aseed\u5fc5\u987b\u88abevent\u8986\u76d6\u6216\u7ea0\u6b63\uff1b"
+    "\u82e5seed\u672c\u8eab\u662f\u8bef\u62a5\uff0c\u4e5f\u628a\u5b83\u7684id\u548creason_code\u653e\u5165rejections\u3002"
+    "reason_code\u53ea\u80fd\u662ffunding_use_or_plan,historical_or_reference,"
+    "generic_commentary,invalid_subject,duplicate_summary\u4e4b\u4e00\uff1b"
+    "\u4e0d\u5f97\u4f7f\u7528\u81ea\u7531\u6587\u672c\u7406\u7531\u5220\u9664\u5019\u9009\u3002"
+    "\u4e0d\u5f97\u9759\u9ed8\u5ffd\u7565candidate\u6216seed\u3002"
     "\u5408\u4f5c\u4e8b\u4ef6\u7684company\u53ea\u586b\u4e00\u4e2a\u53ef\u80fd\u4ea7\u751f\u62db\u8058\u7684\u7ecf\u8425\u4e3b\u4f53\uff1b"
     "\u4e0d\u5f97\u628a\u591a\u4e2a\u5408\u4f5c\u65b9\u7528\u2018\u4e0e\u2019\u6216\u2018\u548c\u2019\u62fc\u6210company\u3002"
     "\u82e5\u5408\u4f5c\u53cc\u65b9\u90fd\u662f\u653f\u5e9c\u3001\u59d4\u5458\u4f1a\u3001\u534f\u4f1a\u6216\u975e\u7ecf\u8425\u6027\u516c\u5171\u673a\u6784\uff0c"
@@ -180,6 +188,10 @@ class MiniMaxSemanticProcessor:
             "chunk_count": len(chunks),
             "chunk_statuses": [],
             "candidate_count": len(candidates),
+            "rejected_candidate_count": 0,
+            "rejected_candidate_ids": [],
+            "explicitly_rejected_seed_count": 0,
+            "explicitly_rejected_seed_ids": [],
             "unmapped_candidate_count": 0,
             "unmapped_candidate_ids": [],
         }
@@ -194,6 +206,8 @@ class MiniMaxSemanticProcessor:
         errors: list[str] = []
         statuses: list[str] = []
         model_ambiguities: list[str] = []
+        rejected_candidate_ids: set[str] = set()
+        rejected_seed_ids: set[str] = set()
         for chunk_index, chunk in enumerate(chunks, start=1):
             chunk_index_record = article.index
             if chunk_index > 1:
@@ -233,10 +247,32 @@ class MiniMaxSemanticProcessor:
                     for value in payload.get("ambiguities", [])
                     if isinstance(value, str)
                 ]
+                chunk_candidates = self._event_candidates(chunk)
+                chunk_rejected_candidates, chunk_rejected_seeds = (
+                    self._validated_rejections(
+                        chunk_article,
+                        payload,
+                        chunk_candidates,
+                        chunk_rules,
+                        events,
+                    )
+                )
+                events = [
+                    event
+                    for event in events
+                    if not (
+                        event.processor.startswith("rules")
+                        and self._rule_seed_id(event) in chunk_rejected_seeds
+                    )
+                ]
+                rejected_candidate_ids.update(chunk_rejected_candidates)
+                rejected_seed_ids.update(chunk_rejected_seeds)
                 self._assert_chunk_adjudicated(
                     events,
                     chunk_rules,
-                    self._event_candidates(chunk),
+                    chunk_candidates,
+                    rejected_candidate_ids=chunk_rejected_candidates,
+                    rejected_seed_ids=chunk_rejected_seeds,
                 )
                 model_ambiguities.extend(
                     ambiguities
@@ -262,7 +298,9 @@ class MiniMaxSemanticProcessor:
                     "Return one corrected strict JSON object under the original system "
                     "constraints. Do not use Markdown fences. Escape every ASCII double "
                     "quote inside string values as \\\"; prefer Chinese corner quotes "
-                    "inside summaries. Do not repeat a rejected field.\n"
+                    "inside summaries. Do not repeat a rejected field. Put only "
+                    "deterministically supportable false positives in rejections as "
+                    "{id, reason_code}; use only the allowed reason codes.\n"
                     f"Original input: {prompt}\n"
                     f"Prior output: {response[:4000]}\n"
                     f"Validation error: {first_error_text}",
@@ -284,10 +322,32 @@ class MiniMaxSemanticProcessor:
                     for value in payload.get("ambiguities", [])
                     if isinstance(value, str)
                 ]
+                chunk_candidates = self._event_candidates(chunk)
+                chunk_rejected_candidates, chunk_rejected_seeds = (
+                    self._validated_rejections(
+                        chunk_article,
+                        payload,
+                        chunk_candidates,
+                        chunk_rules,
+                        events,
+                    )
+                )
+                events = [
+                    event
+                    for event in events
+                    if not (
+                        event.processor.startswith("rules")
+                        and self._rule_seed_id(event) in chunk_rejected_seeds
+                    )
+                ]
+                rejected_candidate_ids.update(chunk_rejected_candidates)
+                rejected_seed_ids.update(chunk_rejected_seeds)
                 self._assert_chunk_adjudicated(
                     events,
                     chunk_rules,
-                    self._event_candidates(chunk),
+                    chunk_candidates,
+                    rejected_candidate_ids=chunk_rejected_candidates,
+                    rejected_seed_ids=chunk_rejected_seeds,
                 )
                 model_ambiguities.extend(
                     ambiguities
@@ -322,7 +382,14 @@ class MiniMaxSemanticProcessor:
             repair_responses.append(repair)
 
         events = self._normalize_final_events(all_events)
+        events, rejection_conflict_count = self._remove_rejection_conflicts(
+            events,
+            candidates,
+            rejected_candidate_ids,
+            rejected_seed_ids,
+        )
         audit["chunk_statuses"] = statuses
+        audit["rejection_conflict_removed_count"] = rejection_conflict_count
         audit["first_response"] = self._audit_responses(first_responses)
         audit["repair_response"] = self._audit_responses(repair_responses)
         audit["error"] = "; ".join(errors)
@@ -338,6 +405,8 @@ class MiniMaxSemanticProcessor:
             rule_events,
             candidates=candidates,
             model_ambiguities=model_ambiguities,
+            rejected_candidate_ids=rejected_candidate_ids,
+            rejected_seed_ids=rejected_seed_ids,
         )
         if audit["unmapped_candidate_count"]:
             audit["status"] = "fallback_to_rules"
@@ -348,9 +417,25 @@ class MiniMaxSemanticProcessor:
             audit["error"] = "; ".join(
                 value for value in (audit["error"], suffix) if value
             )
-            events = self._normalize_final_events(rule_events)
-            audit["final_event_count"] = len(events)
-            audit["rules_preserved_count"] = len(events)
+            fallback_events, fallback_conflict_count = (
+                self._remove_rejection_conflicts(
+                    self._normalize_final_events(rule_events),
+                    candidates,
+                    rejected_candidate_ids,
+                    rejected_seed_ids,
+                )
+            )
+            audit["rejection_conflict_removed_count"] += fallback_conflict_count
+            events = self._normalize_final_events(fallback_events)
+            self._complete_audit(
+                audit,
+                events,
+                rule_events,
+                candidates=candidates,
+                model_ambiguities=model_ambiguities,
+                rejected_candidate_ids=rejected_candidate_ids,
+                rejected_seed_ids=rejected_seed_ids,
+            )
         return events
 
     @staticmethod
@@ -516,8 +601,21 @@ class MiniMaxSemanticProcessor:
                     sentence,
                 ):
                     continue
+                if event_type == "technical_milestone" and re.search(
+                    r"(?:\u4ea4\u4ed8(?:\u4f53\u7cfb|\u65b9\u6848|\u80fd\u529b|\u6d41\u7a0b|\u6a21\u5f0f)|"
+                    r"\u91cf\u4ea7(?:\u652f\u6491|\u8fed\u4ee3|\u51c6\u5907)|"
+                    r"\u53d1\u5e03\u4e0d\u662f(?:\u7ec8\u70b9|\u7ed3\u675f))",
+                    sentence,
+                ):
+                    continue
                 if event_type == "customer_validation" and re.search(
                     r"\u5ba2\u6237\u9a8c\u8bc1(?:\u9636\u6bb5|\u671f|\u4e2d)",
+                    sentence,
+                ):
+                    continue
+                if event_type == "customer_validation" and re.search(
+                    r"(?:\u5f80\u5f80|\u901a\u5e38|\u5b9e\u8df5\u4e2d|\u6d41\u7a0b).{0,100}"
+                    r"(?:\u9a8c\u8bc1|\u91cf\u4ea7\u51b3\u7b56)",
                     sentence,
                 ):
                     continue
@@ -616,7 +714,7 @@ class MiniMaxSemanticProcessor:
                             "funding_round": normalized_round,
                             "quote": candidate_quote,
                         }
-                    if event_type == "funding" and subject_hint:
+                    if subject_hint:
                         candidate_record["subject_hint"] = subject_hint
                     candidates.append(candidate_record)
                     for partner_subject_hint in partner_subject_hints:
@@ -751,27 +849,190 @@ class MiniMaxSemanticProcessor:
         return subject if is_company_like(subject) else ""
 
     @classmethod
+    def _validated_rejections(
+        cls,
+        article: CleanArticle,
+        payload: dict[str, Any],
+        candidates: list[dict[str, str]],
+        rule_events: list[SemanticEvent],
+        events: list[SemanticEvent],
+    ) -> tuple[set[str], set[str]]:
+        """Accept only reason-coded rejections proven by source text."""
+
+        raw_rejections = payload.get("rejections", [])
+        if not isinstance(raw_rejections, list) or any(
+            not isinstance(value, dict) for value in raw_rejections
+        ):
+            raise SemanticOutputError("rejections must be objects")
+        candidate_lookup = {item["id"]: item for item in candidates}
+        seed_lookup = {cls._rule_seed_id(item): item for item in rule_events}
+        rejected_candidates: set[str] = set()
+        rejected_seeds: set[str] = set()
+        seen: set[str] = set()
+        for rejection in raw_rejections:
+            rejection_id = str(rejection.get("id") or "").strip()
+            reason_code = str(rejection.get("reason_code") or "").strip()
+            if not rejection_id or rejection_id in seen:
+                raise SemanticOutputError("duplicate or empty rejection ID")
+            seen.add(rejection_id)
+            candidate = candidate_lookup.get(rejection_id)
+            seed = seed_lookup.get(rejection_id)
+            if candidate is None and seed is None:
+                raise SemanticOutputError("unknown rejected ID")
+            if not cls._rejection_reason_grounded(
+                article,
+                reason_code,
+                candidate=candidate,
+                seed=seed,
+                events=events,
+            ):
+                raise SemanticOutputError(
+                    f"unsupported rejection reason: {rejection_id}:{reason_code}"
+                )
+            if candidate is not None:
+                rejected_candidates.add(rejection_id)
+            else:
+                rejected_seeds.add(rejection_id)
+        return rejected_candidates, rejected_seeds
+
+    @classmethod
+    def _rejection_reason_grounded(
+        cls,
+        article: CleanArticle,
+        reason_code: str,
+        *,
+        candidate: dict[str, str] | None,
+        seed: SemanticEvent | None,
+        events: list[SemanticEvent],
+    ) -> bool:
+        quote = (
+            str(candidate.get("quote") or "")
+            if candidate is not None
+            else (seed.evidence_quotes[0] if seed and seed.evidence_quotes else "")
+        )
+        event_type = (
+            str(candidate.get("event_type") or "")
+            if candidate is not None
+            else (seed.event_type if seed else "")
+        )
+        if reason_code == "funding_use_or_plan":
+            return cls._funding_use_only_nonfunding(event_type, quote)
+        if reason_code == "historical_or_reference":
+            return cls._is_historical_event_quote(
+                quote,
+                article.index.published_at,
+            )
+        if reason_code == "generic_commentary":
+            generic = bool(
+                re.search(
+                    r"(?:\u884c\u4e1a|\u8f66\u4f01|\u4f01\u4e1a|\u5382\u5546|"
+                    r"\u521b\u4e1a\u516c\u53f8|\u5e02\u573a|\u4e1a\u754c|\u901a\u5e38|\u5f80\u5f80)",
+                    quote,
+                )
+            )
+            subject_hint = str((candidate or {}).get("subject_hint") or "")
+            generic_seed = bool(
+                seed
+                and re.fullmatch(
+                    r".*(?:\u884c\u4e1a|\u8f66\u4f01|\u4f01\u4e1a|\u5382\u5546|\u5e02\u573a).*",
+                    seed.canonical_company,
+                )
+            )
+            return generic and (not subject_hint or generic_seed)
+        if reason_code == "invalid_subject":
+            if seed is not None:
+                company = seed.canonical_company
+                return (
+                    not is_company_like(company)
+                    or bool(re.search(r"(?:\u4e0e|\u548c).{2,80}(?:\u4e0e|\u548c)", company))
+                    or bool(
+                        re.search(
+                            r"(?:\u59d4\u5458\u4f1a|\u7814\u7a76\u9662|\u653f\u5e9c|"
+                            r"\u534f\u4f1a|\u79c1\u52df\u57fa\u91d1|\u6295\u8d44\u57fa\u91d1)",
+                            company,
+                        )
+                    )
+                )
+            candidate_subject = str((candidate or {}).get("subject_hint") or "")
+            public_body = bool(
+                re.search(
+                    r"(?:\u59d4\u5458\u4f1a|\u7814\u7a76\u9662|\u653f\u5e9c|\u534f\u4f1a)",
+                    quote,
+                )
+            )
+            return public_body and (
+                not candidate_subject
+                or bool(re.search(r"(?:\u4e0e|\u548c)", candidate_subject))
+            )
+        if reason_code == "duplicate_summary":
+            if event_type != "funding" or not re.search(
+                r"(?:\u8fde\u7eed|\u7d2f\u8ba1|\u5171).{0,20}[\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341\d]+\u8f6e\u878d\u8d44",
+                quote,
+            ):
+                return False
+            return len([event for event in events if event.event_type == "funding"]) >= 2
+        return False
+
+    @classmethod
     def _assert_chunk_adjudicated(
         cls,
         events: list[SemanticEvent],
         rule_events: list[SemanticEvent],
         candidates: list[dict[str, str]],
+        *,
+        rejected_candidate_ids: set[str] | None = None,
+        rejected_seed_ids: set[str] | None = None,
     ) -> None:
+        rejected_candidate_ids = rejected_candidate_ids or set()
+        rejected_seed_ids = rejected_seed_ids or set()
         missing_candidates = [
             candidate["id"]
             for candidate in candidates
-            if not cls._candidate_is_covered(candidate, events)
+            if candidate["id"] not in rejected_candidate_ids
+            and not cls._candidate_is_covered(candidate, events)
         ]
         missing_seeds = [
             cls._rule_seed_id(seed)
             for seed in rule_events
-            if not cls._seed_is_adjudicated(seed, events, rule_events)
+            if cls._rule_seed_id(seed) not in rejected_seed_ids
+            and not cls._seed_is_adjudicated(seed, events, rule_events)
         ]
         if missing_candidates or missing_seeds:
             raise SemanticOutputError(
                 "unadjudicated semantic candidates: "
                 f"candidates={missing_candidates}, seeds={missing_seeds}"
             )
+
+    @classmethod
+    def _remove_rejection_conflicts(
+        cls,
+        events: list[SemanticEvent],
+        candidates: list[dict[str, str]],
+        rejected_candidate_ids: set[str],
+        rejected_seed_ids: set[str],
+    ) -> tuple[list[SemanticEvent], int]:
+        """Apply deterministic rejections globally after chunk fan-in."""
+
+        rejected_candidates = [
+            item for item in candidates if item["id"] in rejected_candidate_ids
+        ]
+        conflicts = [
+            event
+            for event in events
+            if any(
+                cls._candidate_is_covered(candidate, [event])
+                for candidate in rejected_candidates
+            )
+            or (
+                event.processor.startswith("rules")
+                and cls._rule_seed_id(event) in rejected_seed_ids
+            )
+        ]
+        conflict_object_ids = {id(event) for event in conflicts}
+        return (
+            [event for event in events if id(event) not in conflict_object_ids],
+            len(conflicts),
+        )
 
     @classmethod
     def _candidate_is_covered(
@@ -892,28 +1153,7 @@ class MiniMaxSemanticProcessor:
         ]
         if len(overlap_pairs) == 1 and overlap_pairs[0][0] == seed:
             return True
-        seed_amount = cls._comparable_amount(seed.funding_amount)
-        if not seed_amount:
-            return False
-        same_rule_amount = [
-            item
-            for item in rule_events
-            if item.event_type == seed.event_type
-            and cls._comparable_amount(item.funding_amount) == seed_amount
-        ]
-        same_model_amount = [
-            item
-            for item in events
-            if item.event_type == seed.event_type
-            and cls._comparable_amount(item.funding_amount) == seed_amount
-        ]
-        if len(same_rule_amount) == len(same_model_amount) == 1:
-            return True
         return False
-
-    @staticmethod
-    def _comparable_amount(value: str) -> str:
-        return re.sub(r"^(?:\u7ea6|\u8d85|\u8d85\u8fc7|\u8fd1)", "", value.strip())
 
     @staticmethod
     def _quotes_overlap(
@@ -1201,6 +1441,8 @@ class MiniMaxSemanticProcessor:
         *,
         candidates: list[dict[str, str]] | None = None,
         model_ambiguities: list[str] | None = None,
+        rejected_candidate_ids: set[str] | None = None,
+        rejected_seed_ids: set[str] | None = None,
     ) -> None:
         audit["final_event_count"] = len(events)
         audit["rules_preserved_count"] = sum(
@@ -1208,26 +1450,29 @@ class MiniMaxSemanticProcessor:
         )
         candidates = candidates or []
         model_ambiguities = model_ambiguities or []
+        rejected_candidate_ids = rejected_candidate_ids or set()
+        rejected_seed_ids = rejected_seed_ids or set()
         unmapped: list[str] = []
         for candidate in candidates:
             candidate_id = candidate["id"]
-            candidate_quote = candidate["quote"]
-            candidate_type = candidate["event_type"]
             covered = MiniMaxSemanticProcessor._candidate_is_covered(
-                {
-                    "id": candidate_id,
-                    "event_type": candidate_type,
-                    "quote": candidate_quote,
-                },
+                candidate,
                 events,
             )
-            if not covered:
+            if not covered and candidate_id not in rejected_candidate_ids:
                 unmapped.append(candidate_id)
+        audit["rejected_candidate_count"] = len(rejected_candidate_ids)
+        audit["rejected_candidate_ids"] = sorted(rejected_candidate_ids)
+        audit["explicitly_rejected_seed_count"] = len(rejected_seed_ids)
+        audit["explicitly_rejected_seed_ids"] = sorted(rejected_seed_ids)
         audit["unmapped_candidate_count"] = len(unmapped)
         audit["unmapped_candidate_ids"] = unmapped
         audit["omissions_detected"] = len(unmapped)
-        exact_seed_count = sum(
-            any(
+        exact_seed_ids = {
+            MiniMaxSemanticProcessor._rule_seed_id(seed)
+            for seed in rule_events
+            if MiniMaxSemanticProcessor._rule_seed_id(seed) not in rejected_seed_ids
+            and any(
                 MiniMaxSemanticProcessor._matching_seed(
                     [seed],
                     event.canonical_company,
@@ -1238,24 +1483,34 @@ class MiniMaxSemanticProcessor:
                 is not None
                 for event in events
             )
+        }
+        corrected_seed_ids = {
+            MiniMaxSemanticProcessor._rule_seed_id(seed)
             for seed in rule_events
-        )
-        adjudicated_seed_count = sum(
-            MiniMaxSemanticProcessor._seed_is_adjudicated(
+            if MiniMaxSemanticProcessor._rule_seed_id(seed)
+            not in rejected_seed_ids | exact_seed_ids
+            and MiniMaxSemanticProcessor._seed_is_adjudicated(
                 seed,
                 events,
                 rule_events,
             )
-            for seed in rule_events
+        }
+        seed_bound_event_count = sum(
+            any(
+                seed.event_type == event.event_type
+                and MiniMaxSemanticProcessor._quotes_overlap(
+                    seed.evidence_quotes,
+                    event.evidence_quotes,
+                )
+                for seed in rule_events
+                if MiniMaxSemanticProcessor._rule_seed_id(seed)
+                not in rejected_seed_ids
+            )
+            for event in events
         )
-        corrected_seed_count = max(0, adjudicated_seed_count - exact_seed_count)
-        audit["model_only_count"] = max(
-            0, len(events) - exact_seed_count - corrected_seed_count
-        )
-        audit["rejected_seed_count"] = max(
-            0, len(rule_events) - adjudicated_seed_count
-        )
-        audit["corrected_seed_count"] = corrected_seed_count
+        audit["model_only_count"] = max(0, len(events) - seed_bound_event_count)
+        audit["rejected_seed_count"] = len(rejected_seed_ids)
+        audit["corrected_seed_count"] = len(corrected_seed_ids)
 
     @staticmethod
     def _prompt(
@@ -1299,6 +1554,7 @@ class MiniMaxSemanticProcessor:
                     "confidence": "high",
                 }
             ],
+            "rejections": [],
             "ambiguities": [],
         }
         payload = {
@@ -1318,6 +1574,7 @@ class MiniMaxSemanticProcessor:
                 ),
                 "expected_output": {
                     "events": [],
+                    "rejections": [],
                     "ambiguities": ["historical_background_only"],
                 },
             },
@@ -1653,10 +1910,6 @@ class MiniMaxSemanticProcessor:
             raise SemanticOutputError(
                 "all semantic events failed primary-subject grounding"
             )
-        if rule_events and not model_events and not raw_events:
-            raise SemanticOutputError(
-                "empty model output did not adjudicate available rule seeds"
-            )
         return cls._merge_with_rule_seeds(rule_events, model_events)
 
     @staticmethod
@@ -1713,8 +1966,10 @@ class MiniMaxSemanticProcessor:
         if event_type == "funding":
             return False
         if not re.search(
-            r"\u672c(?:\u6b21|\u8f6e).{0,20}\u8d44\u91d1"
-            r".{0,24}(?:\u7528\u4e8e|\u6295\u5165)",
+            r"(?:\u672c(?:\u6b21|\u8f6e).{0,20}\u8d44\u91d1|"
+            r"\u672c\u6b21\u52df\u8d44|\u52df\u96c6\u8d44\u91d1|\u878d\u8d44\u6240\u5f97|"
+            r"\u8d44\u91d1).{0,30}(?:\u5c06|\u62df|\u8ba1\u5212)?"
+            r"(?:\u7528\u4e8e|\u6295\u5165|\u6295\u5411)",
             evidence_text,
         ):
             return False

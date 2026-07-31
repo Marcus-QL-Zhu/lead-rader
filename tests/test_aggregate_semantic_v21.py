@@ -1,3 +1,4 @@
+from dataclasses import replace
 import json
 
 from ht_lead_radar.aggregate_adapters.models import (
@@ -401,6 +402,208 @@ def test_candidate_cannot_be_silently_rejected_by_an_ambiguity_string():
     assert processor.process(channel, article, []) == []
     assert processor.last_audit["status"] == "fallback_to_rules"
     assert processor.last_audit["unmapped_candidate_count"] == 1
+
+
+def test_reason_coded_candidate_rejection_requires_deterministic_support():
+    _, article = _fixture("本次募资将全部投入医疗级模组量产迭代。")
+    candidate = {
+        "id": "c_funding_use",
+        "event_type": "technical_milestone",
+        "funding_round": "",
+        "quote": "本次募资将全部投入医疗级模组量产迭代。",
+    }
+    payload = {
+        "rejections": [
+            {"id": candidate["id"], "reason_code": "funding_use_or_plan"}
+        ]
+    }
+
+    rejected_candidates, rejected_seeds = (
+        MiniMaxSemanticProcessor._validated_rejections(
+            article,
+            payload,
+            [candidate],
+            [],
+            [],
+        )
+    )
+
+    assert rejected_candidates == {candidate["id"]}
+    assert rejected_seeds == set()
+
+
+def test_free_text_cannot_reject_a_grounded_real_seed():
+    quote = "甲辰科技宣布启动A轮融资。"
+    channel, article = _fixture(quote)
+    seed = _seed(article, "甲辰科技", quote, round_name="A轮", status="started")
+    seed_id = MiniMaxSemanticProcessor._rule_seed_id(seed)
+    response = json.dumps(
+        {
+            "events": [],
+            "rejections": [
+                {"id": seed_id, "reason_code": "generic_commentary"}
+            ],
+            "ambiguities": [f"{seed_id}: 未证实转述"],
+        },
+        ensure_ascii=False,
+    )
+    processor = MiniMaxSemanticProcessor(_SequenceRunner([response, response]))
+
+    events = processor.process(channel, article, [seed])
+
+    assert [event.canonical_company for event in events] == ["甲辰科技"]
+    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["rejected_seed_count"] == 0
+
+
+def test_rejection_with_unknown_id_fails_closed():
+    channel, article = _fixture("甲辰科技宣布启动A轮融资。")
+    response = json.dumps(
+        {
+            "events": [],
+            "rejections": [
+                {"id": "c_not_in_ledger", "reason_code": "generic_commentary"}
+            ],
+            "ambiguities": [],
+        },
+        ensure_ascii=False,
+    )
+    processor = MiniMaxSemanticProcessor(_SequenceRunner([response]))
+
+    assert processor.process(channel, article, []) == []
+    assert processor.last_audit["status"] == "fallback_to_rules"
+
+
+def test_global_rejection_removes_rule_fallback_conflict_after_chunk_fan_in():
+    quote = "本次募资将全部投入医疗级模组量产迭代"
+    _, article = _fixture(quote)
+    seed = SemanticEvent(
+        source_id="v21",
+        source_article_id="article",
+        canonical_url=article.index.canonical_url,
+        company_mentions=("甲辰科技",),
+        canonical_company="甲辰科技",
+        event_type="technical_milestone",
+        event_date="2026-07-31",
+        industry_tags=("medical_device",),
+        event_summary=quote,
+        evidence_quotes=(quote,),
+        processor="rules:test",
+        content_hash="body",
+        event_status="target",
+    )
+    seed_id = MiniMaxSemanticProcessor._rule_seed_id(seed)
+    events, removed_count = MiniMaxSemanticProcessor._remove_rejection_conflicts(
+        [seed],
+        [],
+        set(),
+        {seed_id},
+    )
+
+    assert events == []
+    assert removed_count == 1
+
+
+def test_rejection_conflict_removes_only_matching_evidence_not_same_key_event():
+    first_quote = "甲辰科技发布第一代工业控制平台。"
+    second_quote = "甲辰科技发布第二代边缘计算平台。"
+    _, article = _fixture(first_quote + second_quote)
+    first = SemanticEvent(
+        source_id="v21",
+        source_article_id="article",
+        canonical_url=article.index.canonical_url,
+        company_mentions=("甲辰科技",),
+        canonical_company="甲辰科技",
+        event_type="technical_milestone",
+        event_date="2026-07-31",
+        industry_tags=("industrial_software",),
+        event_summary=first_quote,
+        evidence_quotes=(first_quote,),
+        processor="minimax",
+        content_hash="body",
+        event_status="completed",
+    )
+    second = replace(
+        first,
+        event_summary=second_quote,
+        evidence_quotes=(second_quote,),
+    )
+    candidate = {
+        "id": "c_first",
+        "event_type": "technical_milestone",
+        "funding_round": "",
+        "subject_hint": "甲辰科技",
+        "quote": first_quote,
+    }
+
+    events, removed_count = MiniMaxSemanticProcessor._remove_rejection_conflicts(
+        [first, second],
+        [candidate],
+        {candidate["id"]},
+        set(),
+    )
+
+    assert events == [second]
+    assert removed_count == 1
+
+
+def test_unmapped_candidate_fallback_does_not_restore_rejected_seed():
+    rejected_quote = (
+        "北部湾港集团与交通运输部天津水运工程科学研究院"
+        "签署战略合作协议。"
+    )
+    body = rejected_quote + "乙卯机器人完成B轮融资。"
+    channel, article = _fixture(body)
+    seed = SemanticEvent(
+        source_id="v21",
+        source_article_id="article",
+        canonical_url=article.index.canonical_url,
+        company_mentions=("北部湾港集团与交通运输部天津水运工程科学研究院",),
+        canonical_company="北部湾港集团与交通运输部天津水运工程科学研究院",
+        event_type="partnership",
+        event_date="2026-07-31",
+        industry_tags=("medical_device",),
+        event_summary=rejected_quote,
+        evidence_quotes=(rejected_quote,),
+        processor="rules:test",
+        content_hash="body",
+        event_status="completed",
+    )
+    seed_id = MiniMaxSemanticProcessor._rule_seed_id(seed)
+    response = json.dumps(
+        {
+            "events": [],
+            "rejections": [
+                {"id": seed_id, "reason_code": "invalid_subject"}
+            ],
+            "ambiguities": [],
+        },
+        ensure_ascii=False,
+    )
+    processor = MiniMaxSemanticProcessor(_SequenceRunner([response, response]))
+
+    assert processor.process(channel, article, [seed]) == []
+    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["rejected_seed_count"] == 1
+    assert processor.last_audit["rules_preserved_count"] == 0
+
+
+def test_rules_fallback_recomputes_model_only_and_corrected_audit_counts():
+    first = "甲辰科技完成A轮融资。"
+    second = "乙卯机器人完成B轮融资。"
+    third = "丙午芯片完成C轮融资。"
+    channel, article = _fixture(first + second + third)
+    seed = _seed(article, "甲辰科技", first, round_name="A轮")
+    partial = _payload(_funding("乙卯机器人", second, round_name="B轮"))
+    processor = MiniMaxSemanticProcessor(_SequenceRunner([partial, partial]))
+
+    events = processor.process(channel, article, [seed])
+
+    assert [event.canonical_company for event in events] == ["甲辰科技"]
+    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["model_only_count"] == 0
+    assert processor.last_audit["corrected_seed_count"] == 0
+    assert processor.last_audit["rules_preserved_count"] == 1
 
 
 def test_candidate_ledger_covers_all_high_value_allowed_event_families():
