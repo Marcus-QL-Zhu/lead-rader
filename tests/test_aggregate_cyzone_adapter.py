@@ -178,6 +178,27 @@ def test_cyzone_indexes_every_public_item_in_both_listing_fixtures(tmp_path):
     assert len(latest) + len(financing) == 20
 
 
+def test_cyzone_time_label_does_not_change_content_hash(tmp_path):
+    context = _context(tmp_path)
+
+    first = ADAPTER.parse_listing(FINANCING, _latest_listing(date="07-29"), context)
+    later = ADAPTER.parse_listing(
+        FINANCING,
+        _latest_listing(date="2026-07-29"),
+        context,
+    )
+
+    assert [item.published_at for item in first] == [
+        item.published_at for item in later
+    ]
+    assert [item.content_hash for item in first] == [
+        item.content_hash for item in later
+    ]
+    assert [item.structured_data["time_label"] for item in first] != [
+        item.structured_data["time_label"] for item in later
+    ]
+
+
 def test_cyzone_relative_listing_time_uses_china_timezone_and_elapsed_time(tmp_path):
     context = AdapterContext.create(
         state_db=tmp_path / "relative-time.sqlite3",

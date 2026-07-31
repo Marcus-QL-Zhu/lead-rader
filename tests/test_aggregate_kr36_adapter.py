@@ -118,6 +118,67 @@ def test_kr36_indexes_every_list_item_but_emits_only_real_events(tmp_path):
     connection.close()
 
 
+def test_kr36_relative_time_label_does_not_change_content_hash(tmp_path):
+    from ht_lead_radar.aggregate_adapters.base import AdapterContext
+
+    adapter = Kr36Adapter()
+    channel = adapter.channel_for("36kr-financing-flash")
+    context = AdapterContext.create(
+        state_db=tmp_path / "stable-time.sqlite3",
+        fetch=lambda _url: b"",
+        now=NOW,
+    )
+
+    first = adapter.parse_listing(channel, _listing(), context)
+    later = adapter.parse_listing(
+        channel,
+        _listing().replace("2小时".encode(), "3小时".encode()),
+        context,
+    )
+    after_midnight_context = AdapterContext.create(
+        state_db=tmp_path / "stable-time-next-day.sqlite3",
+        fetch=lambda _url: b"",
+        now=datetime(2026, 7, 30, 2, 0, tzinfo=timezone.utc),
+    )
+    after_midnight = adapter.parse_listing(
+        channel,
+        _listing(),
+        after_midnight_context,
+    )
+    absolute_label = adapter.parse_listing(
+        channel,
+        _listing().replace("2小时前".encode(), "2026-07-29".encode()),
+        context,
+    )
+
+    assert [item.content_hash for item in first] == [
+        item.content_hash for item in later
+    ]
+    assert [item.content_hash for item in first] == [
+        item.content_hash for item in after_midnight
+    ]
+    assert [item.content_hash for item in first] == [
+        item.content_hash for item in absolute_label
+    ]
+    assert [item.structured_data["time_label"] for item in first] != [
+        item.structured_data["time_label"] for item in later
+    ]
+
+
+def test_kr36_relative_time_uses_china_timezone(tmp_path):
+    from ht_lead_radar.aggregate_adapters.base import AdapterContext
+
+    context = AdapterContext.create(
+        state_db=tmp_path / "china-time.sqlite3",
+        fetch=lambda _url: b"",
+        now=datetime(2026, 7, 30, 21, 0, tzinfo=timezone.utc),
+    )
+    label = "2\u5c0f\u65f6\u524d"
+
+    assert Kr36Adapter._parse_time(label, context) == "2026-07-31T03:00:00+08:00"
+    assert Kr36Adapter._parse_time("2026-07-31", context) == "2026-07-31"
+
+
 def test_kr36_second_run_uses_persisted_events_without_refetching_details(tmp_path):
     listing = _listing()
     titles = {

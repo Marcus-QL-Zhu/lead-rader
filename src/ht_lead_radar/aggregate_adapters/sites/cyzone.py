@@ -165,6 +165,11 @@ class CyzoneAdapter(AggregateAdapter):
                 "thumbnail_url": thumb_url,
                 "company": company,
             }
+            stable_structured = {
+                key: value
+                for key, value in structured.items()
+                if key != "time_label"
+            }
             content_hash = self.stable_hash(
                 "\n".join(
                     (
@@ -172,7 +177,7 @@ class CyzoneAdapter(AggregateAdapter):
                         title,
                         summary,
                         published_at,
-                        repr(sorted(structured.items())),
+                        repr(sorted(stable_structured.items())),
                     )
                 )
             )

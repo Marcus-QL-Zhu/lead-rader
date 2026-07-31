@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import timedelta
+from datetime import timedelta, timezone
 from hashlib import sha256
 import re
 from urllib.parse import urljoin, urlparse
@@ -169,14 +169,18 @@ class Kr36Adapter(AggregateAdapter):
                 "time_label": time_label,
                 **project,
             }
+            stable_structured = {
+                key: value
+                for key, value in structured.items()
+                if key != "time_label"
+            }
             content_hash = self.stable_hash(
                 "\n".join(
                     (
                         canonical_url,
                         title,
                         summary,
-                        published_at,
-                        repr(sorted(structured.items())),
+                        repr(sorted(stable_structured.items())),
                     )
                 )
             )
@@ -897,21 +901,22 @@ class Kr36Adapter(AggregateAdapter):
     @staticmethod
     def _parse_time(value: str, context: AdapterContext) -> str:
         normalized = value.strip()
+        local_now = context.now.astimezone(timezone(timedelta(hours=8)))
         full = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})", normalized)
         if full:
             return normalized
         hours = re.fullmatch(r"(\d+)\s*小时前", normalized)
         if hours:
-            parsed = context.now - timedelta(hours=int(hours.group(1)))
+            parsed = local_now - timedelta(hours=int(hours.group(1)))
             return parsed.replace(microsecond=0).isoformat()
         minutes = re.fullmatch(r"(\d+)\s*分钟前", normalized)
         if minutes:
-            parsed = context.now - timedelta(minutes=int(minutes.group(1)))
+            parsed = local_now - timedelta(minutes=int(minutes.group(1)))
             return parsed.replace(microsecond=0).isoformat()
         if normalized == "昨天":
-            return (context.now - timedelta(days=1)).date().isoformat()
+            return (local_now - timedelta(days=1)).date().isoformat()
         if normalized == "前天":
-            return (context.now - timedelta(days=2)).date().isoformat()
+            return (local_now - timedelta(days=2)).date().isoformat()
         return ""
 
     @staticmethod
