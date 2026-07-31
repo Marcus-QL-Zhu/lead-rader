@@ -1,5 +1,6 @@
 from datetime import datetime, timezone
 from hashlib import sha256
+import json
 from types import SimpleNamespace
 import sqlite3
 import threading
@@ -125,14 +126,36 @@ class _BarrierRunner:
         session_id: str,
         system_prompt: str = "",
     ) -> str:
-        del prompt, session_id, system_prompt
+        del prompt, system_prompt
         with self.lock:
             self.calls += 1
             self.active += 1
             self.max_active = max(self.max_active, self.active)
         try:
             self.barrier.wait(timeout=2)
-            return '{"events":[],"ambiguities":[]}'
+            article_id = session_id.split(":")[2]
+            company = f"Company {article_id}"
+            quote = f"{company} completed a funding round."
+            return json.dumps(
+                {
+                    "events": [
+                        {
+                            "company": company,
+                            "event_type": "funding",
+                            "industry_tags": ["technology"],
+                            "funding_round": "",
+                            "funding_amount": "",
+                            "cumulative_funding_amount": "",
+                            "investors": [],
+                            "event_status": "completed",
+                            "event_summary": quote,
+                            "evidence_quotes": [quote],
+                            "confidence": "high",
+                        }
+                    ],
+                    "ambiguities": [],
+                }
+            )
         finally:
             with self.lock:
                 self.active -= 1

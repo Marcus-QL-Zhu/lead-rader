@@ -8,6 +8,7 @@ import re
 from urllib.parse import urljoin, urlparse
 
 from ..adaptive import AdaptiveSelector
+from ..body_scope import clean_semantic_body_scope
 from ..base import (
     AdapterContext,
     AggregateAdapter,
@@ -34,7 +35,8 @@ _FUNDING_ASSERTION = re.compile(
     rf"(?:{_COMPLETED_ASSERTION.pattern})|(?:{_STARTED_ASSERTION.pattern})"
 )
 _ROUND = re.compile(
-    r"(Pre-[A-Z](?:\+{1,2})?(?:\u8f6e)?|(?<![A-Z])[A-Z](?:\+{1,2})?\u8f6e|"
+    r"(Pre-IPO(?:\u8f6e)?|Pre-[A-Z](?:\+{1,2})?(?:\u8f6e)?|"
+    r"(?<![A-Z])[A-Z](?:\+{1,2})?\u8f6e|"
     r"\u5929\u4f7f(?:\+{1,2})?\u8f6e|\u79cd\u5b50(?:\+{1,2})?\u8f6e|"
     r"\u6218\u7565\u878d\u8d44)"
 )
@@ -510,7 +512,7 @@ class Kr36Adapter(AggregateAdapter):
         parts = (
             (article.index.title, 1),
             (article.index.summary, 2),
-            (article.clean_body, 3),
+            (clean_semantic_body_scope(article.clean_body), 3),
         )
         text = self.clean_text(" ".join(value for value, _ in parts))
         tags = tuple(
@@ -791,6 +793,11 @@ class Kr36Adapter(AggregateAdapter):
                     r"(?:\u4f30\u503c|\u6295\u524d|\u6295\u540e)"
                     r".{0,6}$",
                     before,
+                )
+                or re.match(
+                    r"(?:\u7684)?(?:\u6295\u524d|\u6295\u540e)?"
+                    r"\u4f30\u503c",
+                    after,
                 )
                 or re.match(
                     r".{0,4}(?:\u8ba2\u5355|\u8425\u6536|"

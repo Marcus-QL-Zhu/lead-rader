@@ -7,6 +7,7 @@ from datetime import datetime
 import re
 from typing import Callable
 
+from .body_scope import clean_semantic_body_scope
 from .entities import canonical_company_name, is_company_like
 from .models import CleanArticle, SemanticEvent, SourceChannel
 
@@ -20,7 +21,7 @@ _STARTED = re.compile(
     r".{0,20}(?:已)?(?:提前)?(?:开始|启动|开启)"
 )
 _ROUND = re.compile(
-    r"(Pre-[A-Z](?:\+{1,2})?(?:轮)?|"
+    r"(Pre-IPO(?:轮)?|Pre-[A-Z](?:\+{1,2})?(?:轮)?|"
     r"(?<![A-Z])[A-Z](?:\+{1,2})?轮|"
     r"天使(?:\+{1,2})?轮|种子(?:\+{1,2})?轮|战略融资)"
 )
@@ -102,7 +103,7 @@ def extract_funding_events(
     parts = (
         (article.index.title, 1),
         (article.index.summary, 2),
-        (article.clean_body, 3),
+        (clean_semantic_body_scope(article.clean_body), 3),
     )
     full_text = _clean(" ".join(value for value, _ in parts))
     tags = tuple(
@@ -344,9 +345,10 @@ def _amounts_for_assertion(
     for match in _AMOUNT.finditer(sentence):
         before = sentence[max(0, match.start() - 18) : match.start()]
         after = sentence[match.end() : match.end() + 12]
-        if re.search(r"(?:估值|投前|投后).{0,6}$", before) or re.match(
-            r".{0,4}(?:订单|营收|利润|交付|小时)",
-            after,
+        if (
+            re.search(r"(?:估值|投前|投后).{0,6}$", before)
+            or re.match(r"(?:的)?(?:投前|投后)?估值", after)
+            or re.match(r".{0,4}(?:订单|营收|利润|交付|小时)", after)
         ):
             continue
         total_funding_context = bool(

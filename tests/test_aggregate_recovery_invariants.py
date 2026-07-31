@@ -101,7 +101,28 @@ class _Runner:
     def run(self, prompt, *, session_id, system_prompt=""):
         del prompt, session_id, system_prompt
         self.calls += 1
-        return json.dumps({"events": [], "ambiguities": []})
+        quote = "星河科技发布新产品并进入客户验证阶段。"
+        return json.dumps(
+            {
+                "events": [
+                    {
+                        "company": "星河科技",
+                        "event_type": "technical_milestone",
+                        "industry_tags": ["hardtech"],
+                        "funding_round": "",
+                        "funding_amount": "",
+                        "cumulative_funding_amount": "",
+                        "investors": [],
+                        "event_status": "completed",
+                        "event_summary": quote,
+                        "evidence_quotes": [quote],
+                        "confidence": "high",
+                    }
+                ],
+                "ambiguities": [],
+            },
+            ensure_ascii=False,
+        )
 
 
 def test_open_dead_letter_is_drained_after_item_leaves_listing(tmp_path):

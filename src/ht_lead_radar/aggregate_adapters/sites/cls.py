@@ -395,9 +395,11 @@ class ClsAdapter(AggregateAdapter):
     @classmethod
     def _item_title(cls, item: dict[str, Any], content: str) -> str:
         title = cls.clean_text(str(item.get("title") or ""))
-        if not title:
+        if len(title) < 4:
             match = _BRACKET_TITLE.match(content)
-            title = match.group(1).strip() if match else content[:120].strip()
+            fallback = match.group(1).strip() if match else content[:120].strip()
+            if len(fallback) >= 4:
+                title = fallback
         if len(title) < 4:
             raise ListingInvariantError("cls-telegraph item title is too short")
         return title

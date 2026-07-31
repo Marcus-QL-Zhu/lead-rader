@@ -114,6 +114,25 @@ def test_owned_platform_uses_legal_company_as_canonical_entity():
     )
 
 
+def test_391676_pre_ipo_round_does_not_turn_target_valuation_into_amount():
+    article = _article(
+        "3916765840043656",
+        "月之暗面已完成新一轮35亿美元融资：估值升至350亿美元",
+        (
+            "大模型公司月之暗面在最新一轮融资中募集了35亿美元。"
+            "目前，月之暗面已开始筹划Pre-IPO轮融资，并已开始接触"
+            "潜在投资者，目标是以500亿美元的投前估值完成筹资。"
+        ),
+        company="月之暗面",
+    )
+
+    events = Kr36Adapter().rule_events(CHANNEL, article)
+    pre_ipo = next(event for event in events if event.event_status == "started")
+
+    assert pre_ipo.funding_round == "Pre-IPO轮"
+    assert pre_ipo.funding_amount == ""
+
+
 def test_adapter_run_finish_time_never_precedes_injected_start_time(tmp_path):
     listing = """
     <div><div class="item-title"><a class="title"

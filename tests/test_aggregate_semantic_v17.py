@@ -57,15 +57,15 @@ def _article() -> tuple[SourceChannel, CleanArticle]:
     )
 
 
-def test_v17_skips_minimax_when_no_rule_seed():
+def test_v21_runs_minimax_when_no_rule_seed():
     channel, article = _article()
     runner = _Runner()
     processor = MiniMaxSemanticProcessor(runner)
 
     assert processor.process(channel, article, []) == []
-    assert runner.calls == 0
-    assert processor.last_audit["status"] == "no_rule_seed"
-    assert PROMPT_VERSION == "aggregate-semantic-v20"
+    assert runner.calls == 1
+    assert processor.last_audit["status"] == "accepted"
+    assert PROMPT_VERSION == "aggregate-semantic-v22"
 
 
 def test_v18_seed_quote_replaces_ungrounded_model_quote_and_field():

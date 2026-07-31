@@ -136,6 +136,17 @@ def test_cls_closed_day_paginates_until_crossing_boundary(tmp_path):
     assert all(item.published_at.startswith("2026-07-29") for item in articles)
 
 
+def test_cls_short_api_title_falls_back_to_bracketed_content():
+    item = _item(
+        2440999,
+        DAY_END - 30,
+        "快讯",
+        "【星河芯片完成新产线投产】财联社7月29日电，星河芯片完成新产线投产。",
+    )
+
+    assert ADAPTER._item_title(item, item["content"]) == "星河芯片完成新产线投产"
+
+
 def test_cls_listing_fails_closed_without_boundary_proof(tmp_path):
     routes = {
         DAY_END: _api(

@@ -56,3 +56,20 @@ def test_reusable_rules_split_completed_started_and_multiple_companies():
         ("星河芯片", "B轮", "started"),
         ("智谷机器人", "战略融资", "completed"),
     }
+
+
+def test_shared_rules_keep_pre_ipo_round_and_reject_target_valuation_as_amount():
+    events = extract_funding_events(
+        CHANNEL,
+        _article(
+            "月之暗面已开始筹划Pre-IPO轮融资，并已开始接触潜在投资者，"
+            "目标是以500亿美元的投前估值完成筹资。"
+        ),
+        config=FundingRuleConfig(processor="rules:test"),
+    )
+
+    assert len(events) == 1
+    assert events[0].canonical_company == "月之暗面"
+    assert events[0].funding_round == "Pre-IPO轮"
+    assert events[0].funding_amount == ""
+    assert events[0].event_status == "started"

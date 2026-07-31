@@ -168,7 +168,7 @@ def test_salvage_does_not_bind_investor_from_another_company_round():
 
     events = processor.process(CHANNEL, article, seeds)
 
-    assert processor.last_audit["status"] == "accepted"
+    assert processor.last_audit["status"] == "fallback_to_rules"
     target = next(item for item in events if item.canonical_company == company)
     assert wrong_investor not in target.investors
     assert other not in target.evidence_quotes

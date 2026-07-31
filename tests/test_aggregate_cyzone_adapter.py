@@ -361,6 +361,27 @@ def test_cyzone_explicit_developer_subject_overrides_editorial_title():
     assert "全球摇人" not in events[0].company_mentions
 
 
+def test_841582_related_reading_headline_is_not_a_funding_event():
+    article = CleanArticle(
+        index=_index(
+            "841582",
+            "FIFA募资42亿美元背后，体育IP资本化已成常态",
+        ),
+        clean_body=(
+            "国际足联拟成立FFE并向外部投资者出售少数股权。"
+            "新西兰橄榄球队曾从银湖资本获得融资。"
+            "（延展阅读：估值90亿英镑，CVC打造的“体育版LVMH”启动融资）"
+            "所以从模式上讲，这套商业逻辑已经具备可复制性。"
+        ),
+        content_hash="841582-body",
+    )
+
+    events = ADAPTER.rule_events(LATEST, article)
+
+    assert all(event.canonical_company != "体育版LVMH" for event in events)
+    assert all("延展阅读" not in quote for event in events for quote in event.evidence_quotes)
+
+
 def test_cyzone_listing_drift_fails_closed_on_invalid_result(tmp_path):
     context = _context(tmp_path)
     invalid = _latest_listing().replace(
