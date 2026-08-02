@@ -502,6 +502,56 @@
       "verification_note": "公开融资资讯列表；属于媒体二手来源，融资事实应回到公司或投资机构原文核验。"
     },
     {
+      "id": "cnstock-company-channel",
+      "name": "上海证券报·中国证券网—公司",
+      "owner": "上海证券报社有限公司",
+      "source_type": "financial_company_media",
+      "grade": "B",
+      "url": "https://www.cnstock.com/channel/10006",
+      "adapter": "html_list",
+      "signal_types": [
+        "funding",
+        "executive_change",
+        "capacity_expansion",
+        "major_order",
+        "partnership",
+        "technology_milestone",
+        "company_roadmap",
+        "long_interview"
+      ],
+      "industry_tags": [
+        "generic",
+        "brain_computer_interface",
+        "semiconductor",
+        "commercial_space",
+        "fusion",
+        "embodied_intelligence"
+      ],
+      "enabled": true,
+      "verified_on": "2026-08-02",
+      "status": "verified_public_listing",
+      "verification_note": "公开 Next.js 公司频道提供精确文章 ID、日期和详情结构化正文；专用适配器按上一完整自然日增量读取，并补充公司专访和路线图型长文。"
+    },
+    {
+      "id": "shenzhen-sasac-appointments",
+      "name": "深圳市国资委—市属企业人事任免",
+      "owner": "深圳市人民政府国有资产监督管理委员会",
+      "source_type": "government_enterprise_appointments",
+      "grade": "A",
+      "url": "https://gzw.sz.gov.cn/zwgk/qt/rsxx/",
+      "adapter": "html_list",
+      "signal_types": [
+        "executive_change"
+      ],
+      "industry_tags": [
+        "generic"
+      ],
+      "enabled": true,
+      "verified_on": "2026-08-02",
+      "status": "verified_public_listing",
+      "verification_note": "市属企业任免官方栏目；专用适配器只读取公开列表和人事信息正文，推荐/建议任职保留为 target，不把公务员选调信息当企业高管变动。"
+    },
+    {
       "id": "stcn-flash",
       "name": "证券时报—人民财讯快讯",
       "owner": "深圳证券时报社有限公司",
@@ -894,6 +944,195 @@
       "verification_note": "公司官方新闻列表可直接读取标题、日期和详情入口。"
     },
     {
+      "id": "nbd-vcpe-weekly",
+      "name": "每日经济新闻—VC/PE周报",
+      "owner": "每日经济新闻",
+      "source_type": "business_media",
+      "grade": "B",
+      "url": "https://www.nbd.com.cn/search/article_search/?q=VC%20PE%20%E5%91%A8%E6%8A%A5",
+      "adapter": "html_list",
+      "signal_types": [
+        "funding",
+        "major_order",
+        "partnership",
+        "factory",
+        "capacity_expansion",
+        "multi_company_bulletin"
+      ],
+      "industry_tags": [
+        "generic",
+        "semiconductor",
+        "embodied_intelligence",
+        "commercial_space",
+        "fusion"
+      ],
+      "enabled": true,
+      "verified_on": "2026-07-25",
+      "status": "verified_public_listing",
+      "verification_note": "2026-08-01复核：公开站内搜索和SSR详情可稳定发现最近35天VC/PE周报；专用适配器验证每期日期、标题及至少4个连续条目边界。"
+    },
+    {
+      "id": "shanghai-fgw-annual-plan",
+      "name": "上海市发展和改革委员会—年度计划",
+      "owner": "上海市发展和改革委员会",
+      "source_type": "government_planning",
+      "grade": "A",
+      "url": "https://fgw.sh.gov.cn/fgw_ndjh/",
+      "adapter": "html_list",
+      "signal_types": [
+        "roadmap",
+        "policy",
+        "project_buildout",
+        "factory",
+        "capacity_expansion",
+        "technology_milestone"
+      ],
+      "industry_tags": [
+        "generic",
+        "semiconductor",
+        "embodied_intelligence",
+        "commercial_space",
+        "brain_computer_interface"
+      ],
+      "enabled": true,
+      "verified_on": "2026-07-25",
+      "status": "verified_public_listing",
+      "verification_note": "2026-08-01复核：上海市发改委年度计划栏目为公开SSR列表；专用适配器仅在官方标记、未来章节和明确目标同时存在时标记roadmap。"
+    },
+    {
+      "id": "caict-mobile-market-analysis",
+      "name": "中国信通院—国内手机市场运行分析",
+      "owner": "中国信息通信研究院",
+      "source_type": "government_research_institute",
+      "grade": "A",
+      "url": "https://gma.caict.ac.cn/plat/news",
+      "adapter": "html_list",
+      "signal_types": [
+        "industry_analysis",
+        "market_expansion",
+        "technology_milestone",
+        "policy"
+      ],
+      "industry_tags": [
+        "generic",
+        "semiconductor"
+      ],
+      "enabled": true,
+      "verified_on": "2026-07-25",
+      "status": "verified_public_listing",
+      "verification_note": "2026-08-01复核：中国信通院官方公共服务子域公开列出国内手机市场运行分析系列；专用适配器固定枚举最新6篇并交叉验证标题、年月、作者及报告完成单位。"
+    },
+    {
+      "id": "ccid-report-commentary",
+      "name": "赛迪中国市场情报中心—专家观点与政策解读",
+      "owner": "中国市场情报中心（赛迪集团）",
+      "source_type": "industry_research_institute",
+      "grade": "B",
+      "url": "https://www.ccidreport.com/zjgd2.jhtml",
+      "adapter": "html_list",
+      "signal_types": [
+        "industry_analysis",
+        "policy",
+        "factory",
+        "capacity_expansion",
+        "partnership",
+        "technology_milestone"
+      ],
+      "industry_tags": [
+        "generic",
+        "semiconductor",
+        "embodied_intelligence",
+        "commercial_space"
+      ],
+      "enabled": true,
+      "verified_on": "2026-07-25",
+      "status": "verified_public_listing",
+      "verification_note": "2026-08-01复核：专家观点与政策解读两个公开栏目首屏共16篇，列表和详情可交叉验证标题、CMS日期、栏目及正文。"
+    },
+    {
+      "id": "jazzyear-research",
+      "name": "甲子光年—研究报告",
+      "owner": "甲子光年",
+      "source_type": "technology_research_media",
+      "grade": "B",
+      "url": "https://www.jazzyear.com/study_list.html",
+      "adapter": "html_list",
+      "signal_types": [
+        "industry_analysis",
+        "funding",
+        "factory",
+        "capacity_expansion",
+        "partnership",
+        "technology_milestone"
+      ],
+      "industry_tags": [
+        "generic",
+        "semiconductor",
+        "embodied_intelligence",
+        "brain_computer_interface"
+      ],
+      "enabled": true,
+      "verified_on": "2026-07-25",
+      "status": "verified_public_listing",
+      "verification_note": "2026-08-01复核：研究栏目首屏12篇均服务端公开直出，列表含研究类型和日期，详情含原创报告标记、摘要和核心亮点。"
+    },
+    {
+      "id": "cena-industry-analysis",
+      "name": "中国电子报—产业分析版面",
+      "owner": "中国电子报",
+      "source_type": "industry_media",
+      "grade": "B",
+      "url": "https://epaper.cena.com.cn/pc/layout/index.html",
+      "adapter": "html_list",
+      "signal_types": [
+        "executive_change",
+        "factory",
+        "capacity_expansion",
+        "major_order",
+        "partnership",
+        "policy",
+        "technology_milestone",
+        "industry_analysis"
+      ],
+      "industry_tags": [
+        "generic",
+        "semiconductor",
+        "embodied_intelligence"
+      ],
+      "enabled": true,
+      "verified_on": "2026-07-25",
+      "status": "verified_public_listing",
+      "verification_note": "2026-08-01复核：电子报当前期版面、文章列表和正文均为公开静态页面；专用适配器完整枚举分析型版面并保留原始期号、版面和正文证据。"
+    },
+    {
+      "id": "jiqizhixin-industry-analysis",
+      "name": "机器之心—产业资讯",
+      "owner": "机器之心",
+      "source_type": "vertical_technology_media",
+      "grade": "B",
+      "url": "https://www.jiqizhixin.com/industry",
+      "adapter": "html_list",
+      "signal_types": [
+        "funding",
+        "executive_change",
+        "factory",
+        "capacity_expansion",
+        "major_order",
+        "partnership",
+        "technology_milestone",
+        "industry_analysis"
+      ],
+      "industry_tags": [
+        "generic",
+        "embodied_intelligence",
+        "semiconductor"
+      ],
+      "enabled": true,
+      "verified_on": "2026-07-25",
+      "status": "verified_public_listing",
+      "verification_note": "2026-08-01复核：产业资讯 SSR 首屏公开展示标题、作者和时间，详情使用网页自身公开 JSON 接口；专用适配器验证最近24小时窗口闭合后才接受增量。"
+    },
+    {
       "id": "iter-china-news",
       "name": "中国国际核聚变能源计划执行中心—新闻动态",
       "owner": "中国国际核聚变能源计划执行中心",
@@ -1131,7 +1370,14 @@
         "generic"
       ],
       "source_ids": [
-        "miit-science-files",
+      "nbd-vcpe-weekly",
+      "shanghai-fgw-annual-plan",
+      "caict-mobile-market-analysis",
+      "ccid-report-commentary",
+      "jazzyear-research",
+      "cena-industry-analysis",
+      "jiqizhixin-industry-analysis",
+      "miit-science-files",
         "ccgp-central-open-tenders",
         "ccgp-local-open-tenders",
         "ccgp-central-awards",
@@ -1151,6 +1397,8 @@
         "pedaily-investment-news",
         "stcn-flash",
         "cls-telegraph",
+        "cnstock-company-channel",
+        "shenzhen-sasac-appointments",
         "sse-listed-announcements",
         "szse-company-notices",
         "cninfo-disclosures",

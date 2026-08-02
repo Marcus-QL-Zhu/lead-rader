@@ -1,6 +1,7 @@
 import importlib.util
 import json
 import subprocess
+from datetime import date, timedelta
 from pathlib import Path
 
 import pytest
@@ -64,14 +65,17 @@ def test_current_context_prefers_newer_pending_day_and_blocks_approval(tmp_path)
     store.mark_openclaw_reported(first["snapshot_id"])
 
     next_report = sample_report()
-    next_report["manifest"]["as_of"] = "2026-07-27"
-    next_report["manifest"]["run_id"] = "run-20260727"
+    next_date = (
+        date.fromisoformat(first_bundle.run_date) + timedelta(days=1)
+    ).isoformat()
+    next_report["manifest"]["as_of"] = next_date
+    next_report["manifest"]["run_id"] = f"run-{next_date.replace('-', '')}"
     next_bundle = generate_draft_bundle(next_report)
     store.save_bundle(next_bundle.to_dict())
 
     current = store.latest_openclaw_context()
     assert current is not None
-    assert current["run_date"] == "2026-07-27"
+    assert current["run_date"] == next_date
     assert current["status"] == "pending"
     with pytest.raises(RuntimeError, match="not been shown completely"):
         store.apply_command(
@@ -84,15 +88,18 @@ def test_current_context_prefers_newer_pending_day_and_blocks_approval(tmp_path)
 
 
 def test_pending_selector_never_falls_back_to_older_backlog(tmp_path):
-    store, _ = _store(tmp_path)
+    store, first_bundle = _store(tmp_path)
     next_report = sample_report()
-    next_report["manifest"]["as_of"] = "2026-07-27"
-    next_report["manifest"]["run_id"] = "run-20260727"
+    next_date = (
+        date.fromisoformat(first_bundle.run_date) + timedelta(days=1)
+    ).isoformat()
+    next_report["manifest"]["as_of"] = next_date
+    next_report["manifest"]["run_id"] = f"run-{next_date.replace('-', '')}"
     store.save_bundle(generate_draft_bundle(next_report).to_dict())
 
     today = store.pending_openclaw_report(claim=True)
     assert today is not None
-    assert today["run_date"] == "2026-07-27"
+    assert today["run_date"] == next_date
     assert store.pending_openclaw_report() is None
 
     store.mark_openclaw_reported(today["snapshot_id"])
@@ -457,8 +464,11 @@ def test_requeue_rejects_active_wrong_session_and_stale_snapshots(tmp_path):
     )
 
     next_report = sample_report()
-    next_report["manifest"]["as_of"] = "2026-07-28"
-    next_report["manifest"]["run_id"] = "run-20260728"
+    next_date = (
+        date.fromisoformat(first_bundle.run_date) + timedelta(days=2)
+    ).isoformat()
+    next_report["manifest"]["as_of"] = next_date
+    next_report["manifest"]["run_id"] = f"run-{next_date.replace('-', '')}"
     next_bundle = generate_draft_bundle(next_report)
     store.save_bundle(next_bundle.to_dict())
     assert not store.requeue_openclaw_report(first["snapshot_id"])

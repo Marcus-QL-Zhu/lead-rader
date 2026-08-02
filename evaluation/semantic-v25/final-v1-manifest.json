@@ -1,0 +1,1772 @@
+{
+  "schema_version": 1,
+  "dataset_version": "semantic-v25-final-v1",
+  "status": "frozen_unlabelled",
+  "may_support_final_acceptance": true,
+  "selection_policy": {
+    "formal_per_document_type": 8,
+    "reserve_per_document_type": 4,
+    "maximum_per_source": 6,
+    "required_event_groups": {
+      "funding": [
+        "funding"
+      ],
+      "executive_change": [
+        "executive_change"
+      ],
+      "factory_or_capacity": [
+        "factory_or_capacity"
+      ],
+      "major_order": [
+        "major_order"
+      ],
+      "partnership": [
+        "partnership"
+      ],
+      "technical_milestone": [
+        "technical_milestone"
+      ],
+      "regulatory_or_clinical": [
+        "regulatory_or_clinical"
+      ],
+      "merger_or_listing": [
+        "ipo_or_listing",
+        "merger_acquisition"
+      ]
+    },
+    "strict_prior_article_company_and_near_duplicate_exclusion": true
+  },
+  "availability": {
+    "eligible_cases": 478,
+    "by_document_type": {
+      "single_company_flash": 384,
+      "roadmap": 23,
+      "commentary": 32,
+      "long_feature": 25,
+      "multi_company_bulletin": 14
+    },
+    "by_source": {
+      "beijing-etown-major-projects": 20,
+      "caict-mobile-market-analysis": 6,
+      "ccid-report-commentary": 16,
+      "cena-industry-analysis": 8,
+      "cls-telegraph": 158,
+      "fusion-industry-media": 7,
+      "iter-china-news": 8,
+      "jazzyear-latest": 1,
+      "jazzyear-research": 12,
+      "jiqizhixin-industry-analysis": 12,
+      "miit-science-files": 1,
+      "shanghai-fgw-annual-plan": 4,
+      "shenzhen-semiconductor-association": 73,
+      "stcn-flash": 146,
+      "suzhou-robot-association": 2,
+      "vbdata-funding": 1,
+      "zhidx-financing": 3
+    },
+    "rejected": {
+      "exact_prior_overlap": 138,
+      "invalid_or_short": 847,
+      "prior_company_overlap": 7
+    }
+  },
+  "selected": {
+    "formal": 40,
+    "reserve": 20,
+    "formal_by_document_type": {
+      "multi_company_bulletin": 8,
+      "roadmap": 8,
+      "long_feature": 8,
+      "commentary": 8,
+      "single_company_flash": 8
+    },
+    "reserve_by_document_type": {
+      "multi_company_bulletin": 4,
+      "roadmap": 4,
+      "long_feature": 4,
+      "commentary": 4,
+      "single_company_flash": 4
+    },
+    "source_counts": {
+      "stcn-flash": 4,
+      "shenzhen-semiconductor-association": 5,
+      "jazzyear-latest": 1,
+      "cls-telegraph": 5,
+      "shanghai-fgw-annual-plan": 3,
+      "vbdata-funding": 1,
+      "fusion-industry-media": 4,
+      "jazzyear-research": 5,
+      "beijing-etown-major-projects": 4,
+      "jiqizhixin-industry-analysis": 5,
+      "cena-industry-analysis": 4,
+      "ccid-report-commentary": 5,
+      "caict-mobile-market-analysis": 5,
+      "zhidx-financing": 3,
+      "iter-china-news": 3,
+      "suzhou-robot-association": 2,
+      "miit-science-files": 1
+    },
+    "formal_event_types": [
+      "customer_validation",
+      "enterprise_system",
+      "executive_change",
+      "factory_or_capacity",
+      "funding",
+      "ipo_or_listing",
+      "major_order",
+      "merger_acquisition",
+      "new_site_or_entity",
+      "partnership",
+      "policy_or_standard",
+      "procurement_tender",
+      "regulatory_or_clinical",
+      "technical_milestone"
+    ],
+    "missing_event_groups": []
+  },
+  "bundle_path": "evaluation\\semantic-v25\\final-v1-bundle.jsonl",
+  "bundle_sha256": "627727ee66551eafcbb88cde59ecf7a4ac93883360cd615d60859a09be7623bb",
+  "cases": [
+    {
+      "key": "stcn-flash:4053338",
+      "split": "formal",
+      "source_id": "stcn-flash",
+      "source_article_id": "4053338",
+      "canonical_url": "https://www.stcn.com/article/detail/4053338.html",
+      "published_at": "2026-07-31T21:23:44+08:00",
+      "title": "公告精选：山东莱阳核电等项目获核准；中创智领等多家公司拟回购股份",
+      "body_sha256": "9a7ec968ecbae681a10e70b5ab5677616d859b290e026c258f82f4fac3272b36",
+      "normalized_sha256": "2e73302b661f03769dde735c3dd317ccbab4babd861d51b1dd766f9d11f7ea5a",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [
+        "上海洗霸",
+        "南网",
+        "天海防务",
+        "实朴检测",
+        "江河"
+      ],
+      "candidate_ids": [
+        "c_130780aa6c",
+        "c_459e3ae0be",
+        "c_94f5181da2",
+        "c_9f79429701",
+        "c_cbe60505fd",
+        "c_e8f3e42c30"
+      ],
+      "candidate_event_types": [
+        "funding",
+        "ipo_or_listing",
+        "major_order",
+        "merger_acquisition"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "shenzhen-semiconductor-association:3464",
+      "split": "formal",
+      "source_id": "shenzhen-semiconductor-association",
+      "source_article_id": "3464",
+      "canonical_url": "https://www.szsia.com/?p=3464",
+      "published_at": "2024-07-23",
+      "title": "《深圳市龙岗区工业和信息化产业发展专项资金关于支持半导体与集成电路产业发展实施细则》申报指南（2024年度）",
+      "body_sha256": "82dd26b7f2a073945d9a5ee9f1415d7253235bfd5ec2f7d0a2d2fbfc52570141",
+      "normalized_sha256": "c455285d180ae88180a1e1d8689631423eb2da6c0d4324f3ada228b3ea47e65c",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [],
+      "candidate_ids": [
+        "ac_3120ad628cca",
+        "ac_dd4d2d5e6ee9",
+        "c_2bab40f662",
+        "c_3a625f34b7",
+        "c_8c332d6520",
+        "c_a10452018f",
+        "c_b540224206",
+        "c_e7ea8864e5"
+      ],
+      "candidate_event_types": [
+        "major_order",
+        "policy_or_standard",
+        "regulatory_or_clinical",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jazzyear-latest:1828",
+      "split": "formal",
+      "source_id": "jazzyear-latest",
+      "source_article_id": "1828",
+      "canonical_url": "https://www.jazzyear.com/article_info.html?id=1828",
+      "published_at": "2026-07-31",
+      "title": "从世界模型到工业决策大脑，AI走进纺织车间",
+      "body_sha256": "25ce7d3307c78f860f3ea9b28492a06671fe92e75099deb2e14af8e842e076b4",
+      "normalized_sha256": "b55d813db94126075fd7fa6fb67007654e96ee0b41746c1c3fb21218f45c4275",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [
+        "从柯桥纺织场景"
+      ],
+      "candidate_ids": [
+        "ac_47cfc35365d5",
+        "ac_6ff4d9e198b9",
+        "ac_ab85f106b32a",
+        "c_0f2ea60a78",
+        "c_29b07bd3d7"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2442012",
+      "split": "formal",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2442012",
+      "canonical_url": "https://www.cls.cn/detail/2442012",
+      "published_at": "2026-07-31T06:30:00+08:00",
+      "title": "周五你需要知道的隔夜全球要闻：微软市值单日增加4500亿美元创美股之最；苹果第四财季营收展望不及预期盘后跌近7%；Meta称未来支出承诺接近7000亿美元",
+      "body_sha256": "8da085b98c7454de87b892829c5b18312c4faed5d285d71101c5c679975dea90",
+      "normalized_sha256": "cff25d1ed3fcee82185d63aea27c68e049503470eee6b14985ed72ec8fed9269",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [],
+      "candidate_ids": [
+        "ac_cff80fe5373c",
+        "ac_db7dac0830d1",
+        "c_c1bcde0428"
+      ],
+      "candidate_event_types": [
+        "regulatory_or_clinical",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "shenzhen-semiconductor-association:2627",
+      "split": "formal",
+      "source_id": "shenzhen-semiconductor-association",
+      "source_article_id": "2627",
+      "canonical_url": "https://www.szsia.com/?p=2627",
+      "published_at": "2023-03-14",
+      "title": "桑达科技大厦601室装修招标文件",
+      "body_sha256": "d07ac102e2df345bf0319b6c1c8129c631f2895bb67c48edfce885fecd6134eb",
+      "normalized_sha256": "0f6348b0f221c9f12e0018c0e6ad53b3e571318d8b1b7282606b10c1d170244f",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [],
+      "candidate_ids": [
+        "ac_2284e6407ff3",
+        "ac_39672f1bb8b3",
+        "ac_4297f847c6a1",
+        "ac_92e2c011c187",
+        "ac_c45461a8a48c",
+        "ac_c5a6d9f3ed37",
+        "ac_e1ad000e5c00",
+        "c_38b2a71159"
+      ],
+      "candidate_event_types": [
+        "major_order",
+        "procurement_tender"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "shenzhen-semiconductor-association:4368",
+      "split": "formal",
+      "source_id": "shenzhen-semiconductor-association",
+      "source_article_id": "4368",
+      "canonical_url": "https://www.szsia.com/?p=4368",
+      "published_at": "2025-09-18",
+      "title": "政策申报 | 四部门关于开展2025年度享受增值税加计抵减政策的集成电路企业清单制定工作的通知",
+      "body_sha256": "a55ba22c8ee045ccca66423c77e224151e7b6861fe8df57230660100b279852d",
+      "normalized_sha256": "c5977f59d80a4a7f3ee92b8933a4b1ebc1b1e854665622a4e4d55a57c064971c",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [],
+      "candidate_ids": [
+        "ac_1f34503eabcd",
+        "ac_cb1ed57374ed",
+        "ac_fa73638b8c91"
+      ],
+      "candidate_event_types": [
+        "merger_acquisition"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "shanghai-fgw-annual-plan:f6e6a9abacbb4977b9f46c59ea97b86d",
+      "split": "formal",
+      "source_id": "shanghai-fgw-annual-plan",
+      "source_article_id": "f6e6a9abacbb4977b9f46c59ea97b86d",
+      "canonical_url": "https://fgw.sh.gov.cn/fgw_ndjh/20250123/f6e6a9abacbb4977b9f46c59ea97b86d.html",
+      "published_at": "2025-01-23T00:00:00+00:00",
+      "title": "关于上海市2024年国民经济和社会发展计划执行情况与2025年国民经济和社会发展计划草案的报告",
+      "body_sha256": "995ec09b8772ed20f51ba13680932675c46c31f099015c6ea53b716f2542095a",
+      "normalized_sha256": "fb9d5ae2254afec59f2e4843aa8f584149cf4d359bd4b15fc7d0131e18cd937c",
+      "document_type": "roadmap",
+      "company_keys": [
+        "80条",
+        "一件事",
+        "丝路电商",
+        "五个新城",
+        "全面实施浦东综合改革",
+        "加强长三角区域科技创新和产业创新协同,",
+        "国际人才蓄水池",
+        "实施支持在沪国家重大科技基础设施",
+        "实施浦东综合改革",
+        "推动落实虹桥国际开放枢纽",
+        "支持国家实验室及基地",
+        "检查码",
+        "沪派江南",
+        "浦江之光",
+        "深入",
+        "深入推进高等教育综合改革",
+        "深化内外贸一体化",
+        "清算通",
+        "第二立面",
+        "网络购物季",
+        "落实数字人民币"
+      ],
+      "candidate_ids": [
+        "ac_014e74ed9ebc",
+        "ac_019b7fd7d921",
+        "ac_08714c9648b6",
+        "ac_0d2fe17ac26f",
+        "ac_181c3ca87c51",
+        "ac_19c50d46bd27",
+        "ac_1c391369e610",
+        "ac_1d1aa678f1a3",
+        "ac_1e4568806b0b",
+        "ac_1ff8de56d02c",
+        "ac_21f3bc43ab67",
+        "ac_25155fa0eb75",
+        "ac_2547369f800f",
+        "ac_2b37ce3d190c",
+        "ac_2cb60dd628b7",
+        "ac_335e2c4cbf9b",
+        "ac_35793921a32c",
+        "ac_380716980304",
+        "ac_40cfbb831004",
+        "ac_424045b8b7d2",
+        "ac_519884c03bf1",
+        "ac_54ae54e58211",
+        "ac_634714a7796a",
+        "ac_65368f72f825",
+        "ac_67dfc9f4837c",
+        "ac_6b749c99b577",
+        "ac_6fe47c08704f",
+        "ac_74fd8aa998fa",
+        "ac_77999f74fe4e",
+        "ac_79a70ee7a3b0",
+        "ac_7ec07ad348cf",
+        "ac_9b89b8d0ce6d",
+        "ac_9d8bbb590216",
+        "ac_ae0b23cc30c0",
+        "ac_bbada6f998bc",
+        "ac_be6d258b37b7",
+        "ac_db7c5c3e7adc",
+        "ac_dddd608e05cc",
+        "ac_e4f8c4411642",
+        "ac_e73378f507ce",
+        "ac_e735fd9b7106",
+        "ac_ef1be550f9bf",
+        "ac_f6eac99e92b1",
+        "ac_f98ff50953b4",
+        "ac_fac71ce0e7f3",
+        "c_03911dbd08",
+        "c_0c342b41d3",
+        "c_103d6f993c",
+        "c_14c754f989",
+        "c_1b1ce6305f",
+        "c_1bdceba568",
+        "c_1e6564b533",
+        "c_248bee72cc",
+        "c_2d7bfc0f12",
+        "c_3580f7c790",
+        "c_36f748cb28",
+        "c_3de4b86690",
+        "c_4332e932c0",
+        "c_4d1fc09f31",
+        "c_596cb7415f",
+        "c_5bdc033dd1",
+        "c_6102d1c540",
+        "c_61d2d4b0f6",
+        "c_6944b67a9c",
+        "c_6b81f61f45",
+        "c_70467de19a",
+        "c_78779cb708",
+        "c_7948c76c58",
+        "c_8479e9611c",
+        "c_8892c5b389",
+        "c_902a4d676e",
+        "c_9a52e32fa9",
+        "c_ade8758f35",
+        "c_b691b34d9c",
+        "c_b76bb65410",
+        "c_bbd870d244",
+        "c_d552df98be",
+        "c_e44c1ebfca",
+        "c_e506033a5c",
+        "c_edfc02cb09",
+        "c_f7213105bd"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "ipo_or_listing",
+        "new_site_or_entity",
+        "policy_or_standard",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "shenzhen-semiconductor-association:3698",
+      "split": "formal",
+      "source_id": "shenzhen-semiconductor-association",
+      "source_article_id": "3698",
+      "canonical_url": "https://www.szsia.com/?p=3698",
+      "published_at": "2025-05-13",
+      "title": "活动通知 | 关于举办2025第三届全国人工智能应用场景创新挑战赛的通知",
+      "body_sha256": "8ce725cef6740e8eb3b26f0a3f135a7b8143b0b9717039921425c94b3f158420",
+      "normalized_sha256": "2f01d5bf722f3098bbd8eb3ae7a2ed4823b1569f9eac02d42de9ef58cdac26cf",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [],
+      "candidate_ids": [
+        "c_00402bcb00",
+        "c_9ed5693b29",
+        "c_e47476cf95",
+        "c_e55f1c71cc"
+      ],
+      "candidate_event_types": [
+        "funding",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "vbdata-funding:1519085489",
+      "split": "formal",
+      "source_id": "vbdata-funding",
+      "source_article_id": "1519085489",
+      "canonical_url": "https://www.vbdata.cn/1519085489",
+      "published_at": "2026-07-31",
+      "title": "【首发】层浪生物再次完成数千万元融资，高端国产流式推向全球市场",
+      "body_sha256": "1be9e963314ca6ee93f0e56f8de8b7ac1469b9d79e397e927bc5fe5788489a23",
+      "normalized_sha256": "bc9e69a1e567624c92d54fbe8c75bbd317cbc82f1622ac314e4a8fab30d36f71",
+      "document_type": "long_feature",
+      "company_keys": [
+        "中国流式细胞仪领域领军企业北京层浪生物科技",
+        "中国流式细胞仪领域领军企业北京层浪生物科技有限公司以下简称层浪生物",
+        "全程见证并陪伴公司",
+        "历史已先后"
+      ],
+      "candidate_ids": [
+        "ac_0e79360d187f",
+        "ac_5924b86679af",
+        "ac_74a2ad4a031a",
+        "ac_c9499c731432",
+        "c_01eb32eceb",
+        "c_124c539fae",
+        "c_2a76b552ac",
+        "c_3b71fb811d",
+        "c_5719c62295",
+        "c_95256107fc",
+        "c_b1445b8104",
+        "c_c9876885be",
+        "c_ce3d815c3d",
+        "c_f9e34a45d7"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "funding",
+        "new_site_or_entity",
+        "partnership",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "fusion-industry-media:4-ltd",
+      "split": "formal",
+      "source_id": "fusion-industry-media",
+      "source_article_id": "4-ltd",
+      "canonical_url": "https://www.nuclear-fusion.com.cn/blog/4-ltd",
+      "published_at": "2026-01-24T00:00:00+08:00",
+      "title": "西北核技术研究所成功研制国际首台多路并联4兆安快前沿大电流LTD装置",
+      "body_sha256": "c013bf531bfbbe9ae208a9968c11c63540b1d7d89348a78bf0f8c12802c8f699",
+      "normalized_sha256": "a417efcaa2c955d0deb88bc06151ac993a8b9d69cfd653c1fcd7086a1cfc7b1f",
+      "document_type": "roadmap",
+      "company_keys": [],
+      "candidate_ids": [
+        "c_e69496b9c1"
+      ],
+      "candidate_event_types": [
+        "customer_validation"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jazzyear-research:159",
+      "split": "formal",
+      "source_id": "jazzyear-research",
+      "source_article_id": "159",
+      "canonical_url": "https://www.jazzyear.com/study_info.html?id=159",
+      "published_at": "2025-10-22T00:00:00+08:00",
+      "title": "2025甲子Cool Vendor人形机器人大模型领域",
+      "body_sha256": "988427e1e0242b65a5836ca6cf506c1ae2d1051fa507a61747e67d99c508e64f",
+      "normalized_sha256": "0ef21fb65f7f28d05a9fa289f1091a3c61fce5a8c8dc94ef560ec1717ee49e2e",
+      "document_type": "long_feature",
+      "company_keys": [],
+      "candidate_ids": [
+        "ac_147091e5b720",
+        "ac_ef0c80f4d7e4",
+        "c_09bb454c67",
+        "c_39541829d3",
+        "c_90f2a880d6"
+      ],
+      "candidate_event_types": [
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "beijing-etown-major-projects:20260520_4658799",
+      "split": "formal",
+      "source_id": "beijing-etown-major-projects",
+      "source_article_id": "20260520_4658799",
+      "canonical_url": "https://kfqgw.beijing.gov.cn/ywdt/gdcyfzgd/zdxm/202605/t20260520_4658799.html",
+      "published_at": "2026-05-20",
+      "title": "国际医药创新公园研发转化基地项目开工",
+      "body_sha256": "6e6c5c8abd38244693cb42746ce120fa058a29b3987162fc3a95c4bc7d9d21ce",
+      "normalized_sha256": "e1b77a326ec41eb44083d0ee5ea8084ce52fd0c899d6d4933d9c74f7c276f287",
+      "document_type": "roadmap",
+      "company_keys": [],
+      "candidate_ids": [
+        "c_4f5e378a10",
+        "c_8f6422a2f7",
+        "c_deea05ebb9"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jiqizhixin-industry-analysis:2026-07-31-6",
+      "split": "formal",
+      "source_id": "jiqizhixin-industry-analysis",
+      "source_article_id": "2026-07-31-6",
+      "canonical_url": "https://www.jiqizhixin.com/articles/2026-07-31-6",
+      "published_at": "2026-07-31T13:20:29+08:00",
+      "title": "李飞飞SimFoundry很酷，但Real2Sim有更多办法",
+      "body_sha256": "55d3633d1f919b145acf7f6483bae9baa6805dac412a7b6f9395cef450fbc92c",
+      "normalized_sha256": "973c0ea499edc23f736f109012d543356ad1ff4e4d9a7144d4ad48f4a2c4e7d6",
+      "document_type": "long_feature",
+      "company_keys": [],
+      "candidate_ids": [
+        "c_036873b397",
+        "c_efbd39f1b8"
+      ],
+      "candidate_event_types": [
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "shenzhen-semiconductor-association:3079",
+      "split": "formal",
+      "source_id": "shenzhen-semiconductor-association",
+      "source_article_id": "3079",
+      "canonical_url": "https://www.szsia.com/?p=3079",
+      "published_at": "2024-04-15",
+      "title": "桑达科技大厦10楼1001装修招标公告",
+      "body_sha256": "849121375a9aea9971d85d9e6560447ab921d710a1d766f20c93ff9703734e3f",
+      "normalized_sha256": "0c17c14b4a5d00f3c887f939992de73d06c84debf85c1ef178453c2e2aa0d2d8",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [],
+      "candidate_ids": [
+        "ac_2284e6407ff3",
+        "ac_39672f1bb8b3",
+        "ac_4297f847c6a1",
+        "ac_92e2c011c187",
+        "ac_c45461a8a48c",
+        "ac_c5a6d9f3ed37",
+        "ac_e1ad000e5c00",
+        "c_2d13fdbf62",
+        "c_a6ca4f0469"
+      ],
+      "candidate_event_types": [
+        "major_order",
+        "procurement_tender"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cena-industry-analysis:17951",
+      "split": "formal",
+      "source_id": "cena-industry-analysis",
+      "source_article_id": "17951",
+      "canonical_url": "https://epaper.cena.com.cn/pc/content/202607/31/content_17951.html",
+      "published_at": "2026-07-31T00:00:00+08:00",
+      "title": "加强知识产权保护，高效支撑关键核心技术自主创新",
+      "body_sha256": "0ab334c9287f2a9157a5a60169a863b461e50f6140feacaa9cea5b19f25603de",
+      "normalized_sha256": "b22f867d286da7fb914bb7fc555137e0a61673ea2a99205f3736306d5db2cf03",
+      "document_type": "roadmap",
+      "company_keys": [
+        "安徽某量子科技企业凭借10余件核心发明专利质押"
+      ],
+      "candidate_ids": [
+        "ac_23ffc211beff",
+        "ac_912fad2d7001",
+        "c_190d436ddc",
+        "c_526efb1193",
+        "c_9ed236b353",
+        "c_9fa89f6a66",
+        "c_db1df37c5d",
+        "c_f92b5f03cf"
+      ],
+      "candidate_event_types": [
+        "funding",
+        "major_order",
+        "new_site_or_entity",
+        "policy_or_standard"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "ccid-report-commentary:1121589",
+      "split": "formal",
+      "source_id": "ccid-report-commentary",
+      "source_article_id": "1121589",
+      "canonical_url": "https://www.ccidreport.com/zcjd/1121589.jhtml",
+      "published_at": "2026-07-24T00:00:00+08:00",
+      "title": "工信部等六部门部署开展2026年度智能工厂梯度培育行动",
+      "body_sha256": "96a17b7cb42f8ed429e439cfbd727ca5563ee8aff8bd4fc107426af5745781dc",
+      "normalized_sha256": "68f3e479b49added7c1470c83e520b07b2a6cfc1ddeb7e51ccac73b84ce86ac0",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [
+        "c_427cc7e1c0",
+        "c_55cfec8128",
+        "c_63202e2b7c",
+        "c_6dbeaa0a55",
+        "c_8f987ac322",
+        "c_d20df91326"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "policy_or_standard"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jiqizhixin-industry-analysis:2026-07-31-9",
+      "split": "formal",
+      "source_id": "jiqizhixin-industry-analysis",
+      "source_article_id": "2026-07-31-9",
+      "canonical_url": "https://www.jiqizhixin.com/articles/2026-07-31-9",
+      "published_at": "2026-07-31T17:21:37+08:00",
+      "title": "DeepSeek-V4-Flash正式版来了！",
+      "body_sha256": "2e03f76e07865e1bdc4ccb8f9f192f79a08780a2d37b345a5e87bf66e0a50a95",
+      "normalized_sha256": "b67548abfc6fb6744b16c0f705fd3dd61f9231c5417a8a7e32d43d835676033e",
+      "document_type": "long_feature",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "caict-mobile-market-analysis:caict-release-china-mobile-phone-market-analysis-report-february-2026",
+      "split": "formal",
+      "source_id": "caict-mobile-market-analysis",
+      "source_article_id": "caict-release-china-mobile-phone-market-analysis-report-february-2026",
+      "canonical_url": "https://gma.caict.ac.cn/plat/news/caict-release-china-mobile-phone-market-analysis-report-february-2026",
+      "published_at": "2026-03-27T00:00:00+08:00",
+      "title": "中国信通院发布2026年2月国内手机市场运行分析报告：出货量1678.9万部，其中5G手机占比94.9%",
+      "body_sha256": "7334a468a38c7a56e831d63cdec72d5d3bb101ad107a8e0715ef0f0b9e937770",
+      "normalized_sha256": "1d34236ad2409ef60490ccf436e8389dc32ed0653904499cdd7b3e2e7d5ef539",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "beijing-etown-major-projects:20260729_4797457",
+      "split": "formal",
+      "source_id": "beijing-etown-major-projects",
+      "source_article_id": "20260729_4797457",
+      "canonical_url": "https://kfqgw.beijing.gov.cn/ywdt/gdcyfzgd/zdxm/202607/t20260729_4797457.html",
+      "published_at": "2026-07-29",
+      "title": "北京集成电路核心装备创新产业园离子注入机科研生产条件建设项目突破“正负零” 北京亦庄再添集成电路装备“芯”引擎",
+      "body_sha256": "94aa2e830ad4b908564269b12743ac9c651455442e08adca168b1cdf9953e6fb",
+      "normalized_sha256": "89f57ed96b5510a52c4afde96ed52b909febff5d931efc463e9e90b0dff018f0",
+      "document_type": "roadmap",
+      "company_keys": [],
+      "candidate_ids": [
+        "ac_2e8d82760786",
+        "ac_514c70b1e463",
+        "ac_52d2e0370e98",
+        "c_1fb4512a67",
+        "c_f1ea404733"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "new_site_or_entity"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "ccid-report-commentary:1119703",
+      "split": "formal",
+      "source_id": "ccid-report-commentary",
+      "source_article_id": "1119703",
+      "canonical_url": "https://www.ccidreport.com/zjgd2/1119703.jhtml",
+      "published_at": "2026-07-13T00:00:00+08:00",
+      "title": "广东省工信厅党组书记、厅长曾进泽：坚持创新驱动突出应用导向 推动人工智能赋能制造业高质量发展走在前列",
+      "body_sha256": "be0079034ce97b72eefd3d973c49ff38b94c64710ca16514cb190f3304c8d241",
+      "normalized_sha256": "a55ea479acf63a7f19bfa1662dbdd10e4aaad746d4e6e0754550bdd900169c0f",
+      "document_type": "commentary",
+      "company_keys": [
+        "12英寸晶圆制造实际月",
+        "广货行天下",
+        "成1家国家领航级智能工厂、22个国家卓越级智能工厂、132个省级先进级智能工厂。"
+      ],
+      "candidate_ids": [
+        "c_3c8f7a5378",
+        "c_4d2c6b5073",
+        "c_58cd2a3b34",
+        "c_72dc4729c6",
+        "c_89865374b5",
+        "c_9144b5ffed",
+        "c_a163fb31b4",
+        "c_a7603b67c7",
+        "c_b9f8e3f946",
+        "c_bbddee67da",
+        "c_e64494e2dd",
+        "c_f2d713ccac"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "new_site_or_entity",
+        "policy_or_standard",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jazzyear-research:158",
+      "split": "formal",
+      "source_id": "jazzyear-research",
+      "source_article_id": "158",
+      "canonical_url": "https://www.jazzyear.com/study_info.html?id=158",
+      "published_at": "2025-10-10T00:00:00+08:00",
+      "title": "2025中国Data&AI数据基础设施白皮书",
+      "body_sha256": "43b4171ed212ec22a6c2189d45ea039934dbd90efae8e9487100737e7eeeaba3",
+      "normalized_sha256": "0c7d4a27dfe4e9f11add12959adc62b46252ca21320830dcf79725f8cc39978d",
+      "document_type": "long_feature",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "shanghai-fgw-annual-plan:0d0d16e6f34044888d1606faaae8f69f",
+      "split": "formal",
+      "source_id": "shanghai-fgw-annual-plan",
+      "source_article_id": "0d0d16e6f34044888d1606faaae8f69f",
+      "canonical_url": "https://fgw.sh.gov.cn/fgw_ndjh/20260212/0d0d16e6f34044888d1606faaae8f69f.html",
+      "published_at": "2026-02-12T00:00:00+00:00",
+      "title": "关于上海市2025年国民经济和社会发展计划执行情况与2026年国民经济和社会发展计划草案的报告",
+      "body_sha256": "2e240c59f2fa9081e32675578ddae3c69f3515f0a58d66e2d7a5ec70e90c7fa6",
+      "normalized_sha256": "e9e0c9b53bc650729f759ff72960f1e8bac019bf48edf88a694711d7e19eaf17",
+      "document_type": "roadmap",
+      "company_keys": [
+        "lng",
+        "stem",
+        "一网交易",
+        "加强临港新片区开放",
+        "大思政课",
+        "持续推进浦东新区综合改革",
+        "支持",
+        "模力社区",
+        "沪派江南",
+        "深入实施浦东综合改革",
+        "票根",
+        "联动接卸"
+      ],
+      "candidate_ids": [
+        "ac_1154d7b9e13d",
+        "ac_12699bb5c9b3",
+        "ac_1afbe79f9950",
+        "ac_1c72f91af53e",
+        "ac_23d8bd57f5c2",
+        "ac_27bf7c41791e",
+        "ac_330dfbdf06ad",
+        "ac_348064219c11",
+        "ac_471f7329e614",
+        "ac_68b4b3dbdb1e",
+        "ac_69cea95acada",
+        "ac_6f166a2f144e",
+        "ac_6f4e5ef7cd6b",
+        "ac_6fc1294bb6f9",
+        "ac_744a1d05b45a",
+        "ac_759f5ff0e6b0",
+        "ac_774fc9210cb2",
+        "ac_77cf36110e60",
+        "ac_8316fba61cef",
+        "ac_89a34b9c46ed",
+        "ac_8f32c8d47ab7",
+        "ac_8ff8b0bcb169",
+        "ac_a620fb518b58",
+        "ac_a64af860832a",
+        "ac_a6ad2833a7d1",
+        "ac_a9ece6e4f4c4",
+        "ac_add7cf8b61fa",
+        "ac_b5ab60754bdf",
+        "ac_bf1c0e8b353c",
+        "ac_c8008794f658",
+        "ac_c9769de33e22",
+        "ac_d13b09ca23a4",
+        "ac_d74fe9dd7504",
+        "ac_d938bb5412ee",
+        "ac_e78bc6a430a4",
+        "ac_f38d6da9cb55",
+        "ac_f4b0736ea91c",
+        "ac_f6f588ff3574",
+        "ac_f85c40213bbc",
+        "ac_fabbc1d22e8e",
+        "ac_fc5d58a61ed7",
+        "c_03afcaac7d",
+        "c_069204a756",
+        "c_0eb11ecd90",
+        "c_19ad492100",
+        "c_1efd890125",
+        "c_2c6e741263",
+        "c_3c6f7f1480",
+        "c_3d1609d6ab",
+        "c_4570567323",
+        "c_4767345355",
+        "c_47e99c239d",
+        "c_538a89ff24",
+        "c_6857cae2e6",
+        "c_803e886715",
+        "c_96507d11bb",
+        "c_9966905454",
+        "c_aa36af71ba",
+        "c_b201edd2aa",
+        "c_b92e55f7b1",
+        "c_c4f57a3b9d",
+        "c_e843e87da6"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "merger_acquisition",
+        "new_site_or_entity",
+        "policy_or_standard",
+        "procurement_tender",
+        "regulatory_or_clinical",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "caict-mobile-market-analysis:caict-release-china-mobile-phone-market-analysis-report-may-2026",
+      "split": "formal",
+      "source_id": "caict-mobile-market-analysis",
+      "source_article_id": "caict-release-china-mobile-phone-market-analysis-report-may-2026",
+      "canonical_url": "https://gma.caict.ac.cn/plat/news/caict-release-china-mobile-phone-market-analysis-report-may-2026",
+      "published_at": "2026-06-25T00:00:00+08:00",
+      "title": "中国信通院发布2026年5月国内手机市场运行分析报告：出货量2763.9万部，其中5G手机占比94.9%",
+      "body_sha256": "b6d40db814ec000fdecfac739f4d8d97693f67c1878943bd6e867d54a8562752",
+      "normalized_sha256": "10e76d8e868694c048d6c4ed3b20e43661bc8305b7b79964630a83d9a59c2659",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jiqizhixin-industry-analysis:2026-08-01-8",
+      "split": "formal",
+      "source_id": "jiqizhixin-industry-analysis",
+      "source_article_id": "2026-08-01-8",
+      "canonical_url": "https://www.jiqizhixin.com/articles/2026-08-01-8",
+      "published_at": "2026-08-01T21:38:03+08:00",
+      "title": "每人最多20篇？ICLR新规遭DeepMind研究者「反讽」请愿",
+      "body_sha256": "7bb6c1dff3dfac9faf0ae460626f8e743366ddcf01e4b9d39ab1c2084ff6ff8c",
+      "normalized_sha256": "755819b453133c01e31caa64743c54fdb1e16c3c3d9f8baad92d4a9b7ea5e0af",
+      "document_type": "long_feature",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "fusion-industry-media:2026-1124",
+      "split": "formal",
+      "source_id": "fusion-industry-media",
+      "source_article_id": "2026-1124",
+      "canonical_url": "https://www.nuclear-fusion.com.cn/blog/2026-1124",
+      "published_at": "2026-01-23T00:00:00+08:00",
+      "title": "韩国发布《2026年度聚变研究开发执行计划》，预算约1124亿韩元",
+      "body_sha256": "5d0a2e4af1bee556a84491d1bc0c7b7fa5d94334e3d6868fee40a1d4e7c0bb58",
+      "normalized_sha256": "1c2111445ad6fe2850a871e2b5d7143f6d1a0d11bed3cd23de564a37dafa5388",
+      "document_type": "roadmap",
+      "company_keys": [
+        "cpd",
+        "战略抢跑",
+        "韩国必须立即"
+      ],
+      "candidate_ids": [
+        "ac_8b49f3e2848d",
+        "ac_ef1f8e4f61ee",
+        "c_48c93458d7"
+      ],
+      "candidate_event_types": [
+        "policy_or_standard",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "caict-mobile-market-analysis:caict-release-china-mobile-phone-market-analysis-report-march-2026",
+      "split": "formal",
+      "source_id": "caict-mobile-market-analysis",
+      "source_article_id": "caict-release-china-mobile-phone-market-analysis-report-march-2026",
+      "canonical_url": "https://gma.caict.ac.cn/plat/news/caict-release-china-mobile-phone-market-analysis-report-march-2026",
+      "published_at": "2026-04-30T00:00:00+08:00",
+      "title": "中国信通院发布2026年3月国内手机市场运行分析报告：出货量2115.0万部，其中5G手机占比93.0%",
+      "body_sha256": "0dc429e252a2c36212bd0efe2c12934176d94688ec6ae284e8bd7155e62aecdb",
+      "normalized_sha256": "df6a932c4d154c749fe954dba640dea7b2bf26d4d37149e27d5931cde7299661",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cena-industry-analysis:17949",
+      "split": "formal",
+      "source_id": "cena-industry-analysis",
+      "source_article_id": "17949",
+      "canonical_url": "https://epaper.cena.com.cn/pc/content/202607/31/content_17949.html",
+      "published_at": "2026-07-31T00:00:00+08:00",
+      "title": "穿越175年技术周期，一家材料企业跨越时代的创新之路",
+      "body_sha256": "c4a561b0e45b6ec8cb2ee2381de0da3c9034f1b470d8a9b9c26c038cb1059654",
+      "normalized_sha256": "a801cf927537e6565d49dafc460c621863bf93c5194c0dacc888eddc7c1434ba",
+      "document_type": "long_feature",
+      "company_keys": [
+        "京东方与康宁",
+        "但真正让康宁",
+        "康宁与京东方"
+      ],
+      "candidate_ids": [
+        "ac_2e2a85b16157",
+        "ac_86443285f6e9",
+        "ac_a7574876e856",
+        "ac_d1242315f2a2",
+        "c_0ad381c5f0",
+        "c_538942a977",
+        "c_93607df104",
+        "c_94373d0114",
+        "c_c6e39d62b5",
+        "c_ee93d74f61",
+        "c_efc487e6ce",
+        "c_f98dde1859"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "ccid-report-commentary:1119636",
+      "split": "formal",
+      "source_id": "ccid-report-commentary",
+      "source_article_id": "1119636",
+      "canonical_url": "https://www.ccidreport.com/zjgd2/1119636.jhtml",
+      "published_at": "2026-07-10T00:00:00+08:00",
+      "title": "长三角国家技术创新中心主任刘庆：打通科技成果转化应用深层堵点",
+      "body_sha256": "52d26cd2a37297f9bb613e204fcd7822988bd29cf551afd572ecea96ef69b11e",
+      "normalized_sha256": "2bddc52fc0f9daa6692febadb6674a192f7891f4238bb63e2ed7116ab199d69a",
+      "document_type": "commentary",
+      "company_keys": [
+        "若未"
+      ],
+      "candidate_ids": [
+        "ac_3e1e7a101ca9",
+        "ac_dec40704ecab",
+        "c_48f60a67fb",
+        "c_64ec4cdb74",
+        "c_6f66aea229",
+        "c_9faf9cbeab"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "funding",
+        "new_site_or_entity"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "shanghai-fgw-annual-plan:51180ad6ac6646c5a0e9d047e1e05b05",
+      "split": "formal",
+      "source_id": "shanghai-fgw-annual-plan",
+      "source_article_id": "51180ad6ac6646c5a0e9d047e1e05b05",
+      "canonical_url": "https://fgw.sh.gov.cn/fgw_ndjh/20230130/51180ad6ac6646c5a0e9d047e1e05b05.html",
+      "published_at": "2023-01-30T00:00:00+00:00",
+      "title": "关于上海市2022年国民经济和社会发展计划执行情况与2023年国民经济和社会发展计划草案的报告",
+      "body_sha256": "8819b6e9f79d3060da05ad497545b5cd1fc7191021685831e6195421eccf5d65",
+      "normalized_sha256": "0e6dabfb3b874acaacedc3440e5183e1032a24483cd9c2f1db6f0861fe24114d",
+      "document_type": "roadmap",
+      "company_keys": [
+        "一城一名园",
+        "一带一路",
+        "丝路电商",
+        "全力落实虹桥国际开放枢纽",
+        "全面",
+        "出台新城规划",
+        "制定",
+        "双一流",
+        "坚持立德树人,",
+        "宝宝屋",
+        "实施职业技能培训标准化",
+        "工赋链主",
+        "强上市",
+        "推动浦东综合改革",
+        "沪伦通",
+        "深化推动虹桥国际开放枢纽",
+        "科技成果转移转化效能",
+        "超级博士后",
+        "金融改革创新",
+        "金融改革创新实现新突破,"
+      ],
+      "candidate_ids": [
+        "ac_050522c87152",
+        "ac_095fc061b03d",
+        "ac_0eb4d51adbfe",
+        "ac_15984c22f617",
+        "ac_15b3bac8aaef",
+        "ac_1888521eb3c6",
+        "ac_1c76c981c309",
+        "ac_254a4d514436",
+        "ac_26bd1b51cd02",
+        "ac_29f5c0a8fe17",
+        "ac_2d6c5a8c0be3",
+        "ac_372a0b831093",
+        "ac_41c146c46282",
+        "ac_44e7d9382425",
+        "ac_4d75828da15d",
+        "ac_53c5404ce3f5",
+        "ac_590a972fb596",
+        "ac_599cdf3bb45a",
+        "ac_6227e97bf529",
+        "ac_68bd623ee6ab",
+        "ac_6cec0fa01506",
+        "ac_6e2ba08351c7",
+        "ac_6ec10f218e33",
+        "ac_71e0b0352cde",
+        "ac_808b1e5acf4a",
+        "ac_85687cdc228e",
+        "ac_98d6ff61e7d6",
+        "ac_9ec40cb8a92f",
+        "ac_a7292336c3ed",
+        "ac_a91e97e30366",
+        "ac_add026fd1c96",
+        "ac_aeb56bea2f85",
+        "ac_b5d2f2d745df",
+        "ac_ce7b66b16691",
+        "ac_d53b81f52e1d",
+        "ac_d8bfb86eb47c",
+        "ac_e052b0658462",
+        "ac_e604d9782f70",
+        "ac_e762f260862f",
+        "ac_e9d6f620f8d0",
+        "ac_eb4196803647",
+        "ac_f3d03f66fe3f",
+        "c_04f1310b89",
+        "c_07a25db548",
+        "c_1617e52e10",
+        "c_26d5910a99",
+        "c_2d5dff1d6f",
+        "c_36ecf3acc5",
+        "c_3e2f608e31",
+        "c_45f25008d1",
+        "c_463c1e8abc",
+        "c_49c9984eac",
+        "c_4a01605abd",
+        "c_4f22c6d76a",
+        "c_5cee5d33d8",
+        "c_6dc83ca9f1",
+        "c_8062f8d3ba",
+        "c_83a67a2c21",
+        "c_8b7750be83",
+        "c_91aa0141d5",
+        "c_a8b93646ac",
+        "c_a9b6b2abdf",
+        "c_bd023050e5",
+        "c_d57e2793d3",
+        "c_daa1860c44",
+        "c_e4b6d5f781",
+        "c_e7052b1650",
+        "c_ec47ddd062",
+        "c_fc7aa1565e",
+        "c_fda1e62c69",
+        "c_fef019f91f"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "new_site_or_entity",
+        "policy_or_standard",
+        "regulatory_or_clinical",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "caict-mobile-market-analysis:caict-release-china-mobile-phone-market-analysis-report-december-2025",
+      "split": "formal",
+      "source_id": "caict-mobile-market-analysis",
+      "source_article_id": "caict-release-china-mobile-phone-market-analysis-report-december-2025",
+      "canonical_url": "https://gma.caict.ac.cn/plat/news/caict-release-china-mobile-phone-market-analysis-report-december-2025",
+      "published_at": "2026-01-30T00:00:00+08:00",
+      "title": "中国信通院发布2025年12月国内手机市场运行分析报告：出货量2447.3万部，其中5G手机占比90.4%",
+      "body_sha256": "e198be6cd8b8e54b7f64de2298cccfc5963bb8147088ba1c7c009cae9a44f1cf",
+      "normalized_sha256": "951f4dcf9d5bb755babd9bc5c734e8f14595aee74890ad4f4607b1decded1128",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jiqizhixin-industry-analysis:2026-07-31-10",
+      "split": "formal",
+      "source_id": "jiqizhixin-industry-analysis",
+      "source_article_id": "2026-07-31-10",
+      "canonical_url": "https://www.jiqizhixin.com/articles/2026-07-31-10",
+      "published_at": "2026-07-31T17:30:30+08:00",
+      "title": "MiniMax H3来了！花式「华强买瓜」不用愁 ，1秒仅需5毛钱",
+      "body_sha256": "a34b8ab86fc619cde8c4ebcbcf8f130c3f68e2b53cbacc3951f39db263427044",
+      "normalized_sha256": "9528fe985e850a4b0bbb921e7ca9c64f035936a5e3de6a86b1cfe797d3ad43b8",
+      "document_type": "long_feature",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "caict-mobile-market-analysis:caict-release-china-mobile-phone-market-analysis-report-january-2026",
+      "split": "formal",
+      "source_id": "caict-mobile-market-analysis",
+      "source_article_id": "caict-release-china-mobile-phone-market-analysis-report-january-2026",
+      "canonical_url": "https://gma.caict.ac.cn/plat/news/caict-release-china-mobile-phone-market-analysis-report-january-2026",
+      "published_at": "2026-03-04T00:00:00+08:00",
+      "title": "中国信通院发布2026年1月国内手机市场运行分析报告：出货量2286.6万部，其中5G手机占比86.9%",
+      "body_sha256": "6d30072b116806fc0eb1f069fdae9c662c4fd4af78023497d3be4b11756832a5",
+      "normalized_sha256": "87ebacd7ea36799e0348d8ce53e1f64524e2f823d7bb7c4750d185d1ed7985fc",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "zhidx-financing:581550",
+      "split": "formal",
+      "source_id": "zhidx-financing",
+      "source_article_id": "581550",
+      "canonical_url": "https://zhidx.com/p/581550.html",
+      "published_at": "2026-07-31T18:10:00+08:00",
+      "title": "李书福的武汉芯片独角兽，融资超13亿",
+      "body_sha256": "a15b52ce1a66293ce4df7b371feeec9a1c5e3f6012c4aa22ebd00a59bb51700e",
+      "normalized_sha256": "0a9c5a3bd95c3430d0d9ae81b8edaa8e43857efff91d95dd865df6be7d5f1005",
+      "document_type": "single_company_flash",
+      "company_keys": [
+        "于去年8月",
+        "前他曾任职于华芯通半导体、闪迪、freescale、博通和st意法半导体等企业。",
+        "芯擎",
+        "芯擎科技于曾今年4月"
+      ],
+      "candidate_ids": [
+        "ac_783831dd03ad",
+        "ac_b8072a4e65fc",
+        "ac_bcc651a722b6",
+        "ac_cbca1a6a57be",
+        "c_03c83253be",
+        "c_6f4dd72c70",
+        "c_8a1ca9259b",
+        "c_9a17d61b5d",
+        "c_c34c379a3f",
+        "c_d4e90a3fca",
+        "c_dc95253b36",
+        "c_f792298e41",
+        "c_ffa2507087"
+      ],
+      "candidate_event_types": [
+        "executive_change",
+        "funding",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "iter-china-news:24391",
+      "split": "formal",
+      "source_id": "iter-china-news",
+      "source_article_id": "24391",
+      "canonical_url": "https://www.iterchina.cn/picnews/info/2026/24391.html",
+      "published_at": "2026-07-24T00:00:00+08:00",
+      "title": "科技部副部长张光军出席ITER国际学校开幕式并调研核工业西南物理研究院",
+      "body_sha256": "1134b0f9330e146104d0a0577ffecfa9d533cfe8b14f1063dfa24918263863bb",
+      "normalized_sha256": "04f72c262dfb10bfaed97b69fc5d8edea0e44758acb9de642c9e155df61df5ac",
+      "document_type": "single_company_flash",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "suzhou-robot-association:policy-25",
+      "split": "formal",
+      "source_id": "suzhou-robot-association",
+      "source_article_id": "policy-25",
+      "canonical_url": "https://robotsz.org.cn/policy/25.html",
+      "published_at": "2023-09-07T00:00:00+08:00",
+      "title": "元宇宙、生成式AI、人形机器人！四部门印发“8+9”《新产业标准化领航工程实施方案》",
+      "body_sha256": "83f24f189f516551558ab7d80fc515cc7591a2050480e8e24b0c006a23bfc209",
+      "normalized_sha256": "0ef834e150f7aad0d9db2c4a0ba35c9719dbcb4676c412118aa8e70867db889b",
+      "document_type": "single_company_flash",
+      "company_keys": [
+        "四部门"
+      ],
+      "candidate_ids": [
+        "c_1a8eabef28"
+      ],
+      "candidate_event_types": [
+        "policy_or_standard"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "miit-science-files:f77d76b2274c493693200074ff237105",
+      "split": "formal",
+      "source_id": "miit-science-files",
+      "source_article_id": "f77d76b2274c493693200074ff237105",
+      "canonical_url": "https://www.miit.gov.cn/jgsj/kjs/wjfb/art/2026/art_f77d76b2274c493693200074ff237105.html",
+      "published_at": "2026-07-31",
+      "title": "工业和信息化部办公厅关于开展2026年科技型企业孵化器申报工作的通知",
+      "body_sha256": "75b419eec8205f929808f044a8dd055e94d2b009a87b62c5ca15befe093b6d69",
+      "normalized_sha256": "4b33687d7170c74bfca42ecc89bf0220fd1215623a1c26dad2eacebfa3038095",
+      "document_type": "single_company_flash",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "suzhou-robot-association:policy-32",
+      "split": "formal",
+      "source_id": "suzhou-robot-association",
+      "source_article_id": "policy-32",
+      "canonical_url": "https://robotsz.org.cn/policy/32.html",
+      "published_at": "2025-09-15T00:00:00+08:00",
+      "title": "国家明确矿山智能机器人重点方向，共56个",
+      "body_sha256": "316cf76b18a046f0537ad6871831055d0c8534308f9868bd4824d9c7cce9d53f",
+      "normalized_sha256": "36b6e90d5428840b60f96b353b642e9f3f115fa4883a5470e50d0dd9d83b3dfa",
+      "document_type": "single_company_flash",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "iter-china-news:24385",
+      "split": "formal",
+      "source_id": "iter-china-news",
+      "source_article_id": "24385",
+      "canonical_url": "https://www.iterchina.cn/picnews/info/2026/24385.html",
+      "published_at": "2026-07-17T00:00:00+08:00",
+      "title": "我国第一壁技术再突破：在ITER计划中率先完成第一壁钨铜连接认证",
+      "body_sha256": "0fb699bc9774836c9222585da48ed118868bc12bc336791936c37159a6a8e051",
+      "normalized_sha256": "f5d4595d85df1168d026343a8b849b10ac3c4cba9ed708761be9f86950ea00ae",
+      "document_type": "single_company_flash",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "beijing-etown-major-projects:20260708_4752068",
+      "split": "formal",
+      "source_id": "beijing-etown-major-projects",
+      "source_article_id": "20260708_4752068",
+      "canonical_url": "https://kfqgw.beijing.gov.cn/ywdt/gdcyfzgd/zdxm/202607/t20260708_4752068.html",
+      "published_at": "2026-07-08",
+      "title": "北人亦创国际会展中心二期市重点工程竣工",
+      "body_sha256": "4ef71cf867e371d8d2c8b054a0bc41f85fa0efec8170107271c5153393a23a93",
+      "normalized_sha256": "80b3cbc249e51dbb3e0fd13d165a44186e65e9a42567bf6ec11387a0507880e8",
+      "document_type": "single_company_flash",
+      "company_keys": [
+        "个100重点工程——北人亦创国际会展中心暨世界机器人大会永久会址展厅提升及配套"
+      ],
+      "candidate_ids": [
+        "c_320fc67c81",
+        "c_817c1615f3",
+        "c_cf5e27da49"
+      ],
+      "candidate_event_types": [
+        "enterprise_system",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "fusion-industry-media:e566186fccf",
+      "split": "formal",
+      "source_id": "fusion-industry-media",
+      "source_article_id": "e566186fccf",
+      "canonical_url": "https://www.nuclear-fusion.com.cn/blog/e566186fccf",
+      "published_at": "2026-01-28T00:00:00+08:00",
+      "title": "央视新闻：中国发布国际首个聚焦高温超导带材发展战略研究报告，首提“十大关键科学技术问题”",
+      "body_sha256": "27a2358b0fbc0e9f1c5c54c979ef5066c53511aa67e81e759824ab40bac4b0f8",
+      "normalized_sha256": "7f405599a831f075a600cca90ed39adcac325df126c45baca9c39b7a622f2701",
+      "document_type": "single_company_flash",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2442058",
+      "split": "reserve",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2442058",
+      "canonical_url": "https://www.cls.cn/detail/2442058",
+      "published_at": "2026-07-31T07:58:50+08:00",
+      "title": "财联社7月31日早间新闻精选",
+      "body_sha256": "25cab9db6e3225a17cd6455016d7ae6416d7521cfbce614a860d445861b200f9",
+      "normalized_sha256": "8e1c397663e3d13a813d6b3d3d20b39022c2b176c57a4049c1d577dad3244de3",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [
+        "中证指数"
+      ],
+      "candidate_ids": [
+        "c_5238d5f9d0",
+        "c_d1b741d66f"
+      ],
+      "candidate_event_types": [
+        "policy_or_standard",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2443026",
+      "split": "reserve",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2443026",
+      "canonical_url": "https://www.cls.cn/detail/2443026",
+      "published_at": "2026-07-31T21:48:48+08:00",
+      "title": "财联社7月31日晚间新闻精选",
+      "body_sha256": "bb8ef57411a85d52d82e132d23952943bb9ef96ba2e040fba7671b24aed243bc",
+      "normalized_sha256": "2bc7ac9b458bd2bb2e618d45a6a5864deda5d8c7b63ca875670f070f7f9c3cd3",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2442821",
+      "split": "reserve",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2442821",
+      "canonical_url": "https://www.cls.cn/detail/2442821",
+      "published_at": "2026-07-31T18:36:44+08:00",
+      "title": "英国监管机构公布股票交易数据汇总机制范围",
+      "body_sha256": "6c2d2f2660f2a8a7a75de8f805930289fc39b44bf878d6554003814e0f84d4f8",
+      "normalized_sha256": "34db2ba36ea17684da2606512377d904f0f26540c2e089b98f9242d244fc9f70",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2442955",
+      "split": "reserve",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2442955",
+      "canonical_url": "https://www.cls.cn/detail/2442955",
+      "published_at": "2026-07-31T20:20:30+08:00",
+      "title": "美股盘前要闻一览：AI概念股延续涨势，存储、半导体设备、光通信等板块集体上涨，纳指期货涨0.7%；亚马逊大涨13%，苹果重挫7%",
+      "body_sha256": "499387cdf2c9f30c0859b75bedf82ea54cd421414ecee67a2adcc93668c21170",
+      "normalized_sha256": "472c7483354592ed6ed997dc6fc5970ca75ec327c3840b2f554effd7bd9bdab3",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cena-industry-analysis:17959",
+      "split": "reserve",
+      "source_id": "cena-industry-analysis",
+      "source_article_id": "17959",
+      "canonical_url": "https://epaper.cena.com.cn/pc/content/202607/31/content_17959.html",
+      "published_at": "2026-07-31T00:00:00+08:00",
+      "title": "三星HBM5将采用2纳米GAA工艺，速度较HBM4E提升50%以上",
+      "body_sha256": "f5df95ed119cef95fda30418bfadc2ebc492d198320dc5f5c4e7f0a998a3f7a7",
+      "normalized_sha256": "047f029996a9f04bd56f2f72989613588b5a7a9c0b262b18f9b72b483ec8ebfb",
+      "document_type": "roadmap",
+      "company_keys": [
+        "按需采购"
+      ],
+      "candidate_ids": [
+        "ac_29489718d60d",
+        "ac_6de50c421ce1",
+        "ac_88474772b11c",
+        "ac_afb39b3c4070",
+        "ac_ccebfa412ac6",
+        "ac_e5da38cd22d0"
+      ],
+      "candidate_event_types": [
+        "major_order",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "fusion-industry-media:general-fusion-10-spac",
+      "split": "reserve",
+      "source_id": "fusion-industry-media",
+      "source_article_id": "general-fusion-10-spac",
+      "canonical_url": "https://www.nuclear-fusion.com.cn/blog/general-fusion-10-spac",
+      "published_at": "2026-01-23T00:00:00+08:00",
+      "title": "路透社：General Fusion将通过10亿美元的SPAC交易在纳斯达克上市，有望成为全球首家纯聚变上市公司",
+      "body_sha256": "5d328f0b3c51ffda9e6813517648aafb17a39a35f5c62c25625864303f31db66",
+      "normalized_sha256": "3145090dafb0f828050e0546817e89f643ff8e469d53d6c34a5acc31932b2b18",
+      "document_type": "roadmap",
+      "company_keys": [
+        "年底冲刺:"
+      ],
+      "candidate_ids": [
+        "ac_048fe233b69b",
+        "ac_6563a710cb99",
+        "ac_79e4585dc618",
+        "ac_8b9695d27c42",
+        "c_52a545c648",
+        "c_80d5aa61b8",
+        "c_a56e696aff",
+        "c_d5a342f3d4",
+        "c_fc4a294136"
+      ],
+      "candidate_event_types": [
+        "funding",
+        "merger_acquisition",
+        "new_site_or_entity"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4051740",
+      "split": "reserve",
+      "source_id": "stcn-flash",
+      "source_article_id": "4051740",
+      "canonical_url": "https://www.stcn.com/article/detail/4051740.html",
+      "published_at": "2026-07-31T10:31:40+08:00",
+      "title": "华瓷股份等成立中非经贸深度合作服务基金",
+      "body_sha256": "8f7fe660db583a0d6af8964b6f37f5d34d0e45202a554b72d496de5d0c2500a7",
+      "normalized_sha256": "04af5e8d7521804f06cc8698579b5e73a98695cef3eadda7928ae214abe51367",
+      "document_type": "long_feature",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jazzyear-research:164",
+      "split": "reserve",
+      "source_id": "jazzyear-research",
+      "source_article_id": "164",
+      "canonical_url": "https://www.jazzyear.com/study_info.html?id=164",
+      "published_at": "2026-03-25T00:00:00+08:00",
+      "title": "AI原生组织：OpenClaw推动组织形态重塑",
+      "body_sha256": "ff26216daf8fa081f5085b814d351050ad3f93a71386caf2c10e01a5d5d018a5",
+      "normalized_sha256": "3ba4aedf9696518c7187070f08ac27cb55f4c2deb979a4b0b1d2cf711037d5fa",
+      "document_type": "long_feature",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "beijing-etown-major-projects:20260506_4637931",
+      "split": "reserve",
+      "source_id": "beijing-etown-major-projects",
+      "source_article_id": "20260506_4637931",
+      "canonical_url": "https://kfqgw.beijing.gov.cn/ywdt/gdcyfzgd/zdxm/202605/t20260506_4637931.html",
+      "published_at": "2026-05-06",
+      "title": "国产运动医学第一股诞生 北京亦庄企业天星医疗在港交所挂牌上市",
+      "body_sha256": "75b8bc37983d510cee7ef457289b42300b5f445ed82e2779437a3fd755e84b29",
+      "normalized_sha256": "0936847b66dc0364b4d9683de415ed9c61d3bc9b880712a3649f5afd6dfe8b82",
+      "document_type": "roadmap",
+      "company_keys": [],
+      "candidate_ids": [
+        "ac_8ccdb6059144",
+        "ac_8e6f968f3bc0",
+        "c_342fe2297f",
+        "c_528bdac8fa"
+      ],
+      "candidate_event_types": [
+        "ipo_or_listing",
+        "policy_or_standard"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "ccid-report-commentary:1121916",
+      "split": "reserve",
+      "source_id": "ccid-report-commentary",
+      "source_article_id": "1121916",
+      "canonical_url": "https://www.ccidreport.com/zjgd2/1121916.jhtml",
+      "published_at": "2026-07-30T00:00:00+08:00",
+      "title": "《21世纪经济报道》| 关兵：工业出现结构分化，政策应兼顾传统和新兴产业",
+      "body_sha256": "bfce03756d5a1b626d24a29b376064eb3c9aecc427bc6713e880d991451fc747",
+      "normalized_sha256": "97ca06491f8697eb2ffa3ccf67ff01c40a94eaf3b97d14fde3c35c284440e317",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jazzyear-research:167",
+      "split": "reserve",
+      "source_id": "jazzyear-research",
+      "source_article_id": "167",
+      "canonical_url": "https://www.jazzyear.com/study_info.html?id=167",
+      "published_at": "2026-07-19T00:00:00+08:00",
+      "title": "2026中国具身智能行业洞察报告",
+      "body_sha256": "c4fa2e69741f6f75b1e175b9cc3169e7bd76bc37fcb80c96528dc73c10925c98",
+      "normalized_sha256": "530d71bfd542f33db8a45f8919cd0df2bf2b5caedbc25739ac7f20f055a664d1",
+      "document_type": "long_feature",
+      "company_keys": [
+        "人形机器人"
+      ],
+      "candidate_ids": [
+        "c_6712c48379",
+        "c_a3e1678cc1",
+        "c_a8a4bc376b",
+        "c_a93aacaaee"
+      ],
+      "candidate_event_types": [
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cena-industry-analysis:17964",
+      "split": "reserve",
+      "source_id": "cena-industry-analysis",
+      "source_article_id": "17964",
+      "canonical_url": "https://epaper.cena.com.cn/pc/content/202607/31/content_17964.html",
+      "published_at": "2026-07-31T00:00:00+08:00",
+      "title": "三条路径解读“光进铜退”",
+      "body_sha256": "689772ba49ad4862a5e0f71a1ae5420d406dd48b845588b5c21bea8bbab35dfe",
+      "normalized_sha256": "9dde40b355a1df70cb850290a5684b5a3e91af14a0fcba2afe5a1e3e12f276b6",
+      "document_type": "commentary",
+      "company_keys": [
+        "cpo"
+      ],
+      "candidate_ids": [
+        "ac_1994b4e82ba6",
+        "ac_af764f4e7980"
+      ],
+      "candidate_event_types": [
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4052899",
+      "split": "reserve",
+      "source_id": "stcn-flash",
+      "source_article_id": "4052899",
+      "canonical_url": "https://www.stcn.com/article/detail/4052899.html",
+      "published_at": "2026-07-31T18:21:05+08:00",
+      "title": "锚定粮食安全与乡村振兴 全国供销合作社“十五五”发展规划发布",
+      "body_sha256": "7f4539d5dd5ddd8aed4de9c4d6d6948c015d3129e374a5956edfcb451a081ea5",
+      "normalized_sha256": "4127f5994106e4aabcdc611489f64f2d5dd44b54ece658f312860b23410add09",
+      "document_type": "roadmap",
+      "company_keys": [
+        "深化农业社会化服务"
+      ],
+      "candidate_ids": [
+        "c_1292149297"
+      ],
+      "candidate_event_types": [
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jazzyear-research:166",
+      "split": "reserve",
+      "source_id": "jazzyear-research",
+      "source_article_id": "166",
+      "canonical_url": "https://www.jazzyear.com/study_info.html?id=166",
+      "published_at": "2026-06-09T00:00:00+08:00",
+      "title": "AI产业最新趋势解读：词元经济体系下的组织变革新机遇",
+      "body_sha256": "ed25e39afff1857c2ada41d2386dc908c3510a569fc47ff4b4fb5fd53da9b937",
+      "normalized_sha256": "37771d27a3d53ea18a68dbc3b16ddf35d113b192fec9dd4fea49bae64adbf65d",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jiqizhixin-industry-analysis:2026-07-31-3",
+      "split": "reserve",
+      "source_id": "jiqizhixin-industry-analysis",
+      "source_article_id": "2026-07-31-3",
+      "canonical_url": "https://www.jiqizhixin.com/articles/2026-07-31-3",
+      "published_at": "2026-07-31T12:06:44+08:00",
+      "title": "AI 3D七大前沿模型同场竞技，竟被一个4B模型拿下8项第一",
+      "body_sha256": "ea79f6a8eec2bb2c01d18df2348ec9ffa55483c31a356ec18e9e6719defd9855",
+      "normalized_sha256": "60a5a0dbd50b4dad5c551593356f7ed7b1d0ae39f253ca0c09459b3042760060",
+      "document_type": "long_feature",
+      "company_keys": [],
+      "candidate_ids": [
+        "c_ca65bac1a4"
+      ],
+      "candidate_event_types": [
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "ccid-report-commentary:1121917",
+      "split": "reserve",
+      "source_id": "ccid-report-commentary",
+      "source_article_id": "1121917",
+      "canonical_url": "https://www.ccidreport.com/zcjd/1121917.jhtml",
+      "published_at": "2026-07-30T00:00:00+08:00",
+      "title": "聚焦6个方向，2026年工业和信息化领域创新任务揭榜挂帅工作启动",
+      "body_sha256": "7602205931f088f5d18a6b6f0aeb30cf3270f0bdbe4773f1863d55d09eecc13b",
+      "normalized_sha256": "c29942556f24a539cb93ce6c62d03cbf99973c933af9a0bdb4c8b38907d7805c",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [
+        "c_d6157b9664"
+      ],
+      "candidate_event_types": [
+        "policy_or_standard"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "iter-china-news:24397",
+      "split": "reserve",
+      "source_id": "iter-china-news",
+      "source_article_id": "24397",
+      "canonical_url": "https://www.iterchina.cn/picnews/info/2026/24397.html",
+      "published_at": "2026-07-31T00:00:00+08:00",
+      "title": "ITER装置1号扇段完成吊装托卡马克核心部件安装已达三分之二",
+      "body_sha256": "306ff7acc61a15038c6aa721da873741c731832260b57e055544b6d757904903",
+      "normalized_sha256": "7325aeb0a0cc7bf98e480709fed1823edcb528e53fb6f0b53c777b9255a5bd44",
+      "document_type": "single_company_flash",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "zhidx-financing:581331",
+      "split": "reserve",
+      "source_id": "zhidx-financing",
+      "source_article_id": "581331",
+      "canonical_url": "https://zhidx.com/p/581331.html",
+      "published_at": "2026-07-31T11:42:00+08:00",
+      "title": "前菜鸟CTO入局具身智能，获超亿元种子轮融资",
+      "body_sha256": "dbc960a4bde63060e1fcfbdc1303ed3384b64cb9c25befd70b09a3ab9e45b5d5",
+      "normalized_sha256": "da02a866ea3aa9270bc644607d8260799fc020e6b89bda711f46b5f792e56e1c",
+      "document_type": "single_company_flash",
+      "company_keys": [],
+      "candidate_ids": [
+        "c_447bdce5d0",
+        "c_d9bfdd82a1"
+      ],
+      "candidate_event_types": [
+        "funding"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "zhidx-financing:581461",
+      "split": "reserve",
+      "source_id": "zhidx-financing",
+      "source_article_id": "581461",
+      "canonical_url": "https://zhidx.com/p/581461.html",
+      "published_at": "2026-07-31T14:17:00+08:00",
+      "title": "清华特奖得主，00后刘松铭，融资数亿",
+      "body_sha256": "867e4d6708505baeb5a48142eb01ace55dfdc1d0117a74cb2893ee6aacd26e98",
+      "normalized_sha256": "c3b0bd7cd3f7fb55b0ef8f29f86dc9510a5c7810ad2beaedd64ff30e9742966e",
+      "document_type": "single_company_flash",
+      "company_keys": [
+        "liberai",
+        "liberai连续"
+      ],
+      "candidate_ids": [
+        "c_013333cc75",
+        "c_0befaf0657",
+        "c_2343f6f756",
+        "c_2600063c83",
+        "c_49a2274887",
+        "c_6937c8c6f0",
+        "c_848285c724",
+        "c_93dc6f1aaa",
+        "c_967b4cae39",
+        "c_affe93a039",
+        "c_be1d43b5cb",
+        "c_be9579bfd5",
+        "c_c53f3e73ba",
+        "c_ca40c1d850"
+      ],
+      "candidate_event_types": [
+        "funding",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4052825",
+      "split": "reserve",
+      "source_id": "stcn-flash",
+      "source_article_id": "4052825",
+      "canonical_url": "https://www.stcn.com/article/detail/4052825.html",
+      "published_at": "2026-07-31T18:02:08+08:00",
+      "title": "继峰股份：控股子公司获约2.7亿元乘用车座椅总成项目定点",
+      "body_sha256": "c7311b3bbce0590fa0f2cb6623c770e9778d06f9f04db43862afb75e2fe679f6",
+      "normalized_sha256": "d39d6c907e12581fb9fdd6c447d6517eaa30b446ca5cbf6a3aba73f6e6acbb25",
+      "document_type": "single_company_flash",
+      "company_keys": [
+        "77月31日公告,控股子公司继峰座椅泰国有限公司近期收到客户的《提名信》,"
+      ],
+      "candidate_ids": [
+        "ac_c963111ea145",
+        "ac_f7907b81ce4d"
+      ],
+      "candidate_event_types": [
+        "customer_validation"
+      ],
+      "gold_status": "unlabelled"
+    }
+  ]
+}

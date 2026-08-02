@@ -1,0 +1,1279 @@
+{
+  "schema_version": 1,
+  "dataset_version": "semantic-v25-shadow-diagnostic-v1",
+  "status": "diagnostic_not_final",
+  "seed": 20260801,
+  "selection_policy": {
+    "calibration_count": 12,
+    "test_count": 36,
+    "control_count": 12,
+    "minimum_body_chars": 80,
+    "maximum_body_chars": 30000,
+    "exclude_prior_minimax_loop_articles": true,
+    "exclude_known_prior_company_keys": true,
+    "event_type_target_per_type": 2,
+    "source_diversity_target_per_source": 3
+  },
+  "inputs": {
+    "database_path": ".acceptance/server-v23-live.sqlite",
+    "database_sha256": "560b69c9921965cd1ef615cc58e3664ed08c51887fac9349244b914c416c82f8",
+    "prior_experiment_manifest": "experiments/minimax-input-loop/dataset-manifest.json",
+    "prior_experiment_manifest_sha256": "596c6098f69045aec95b5320ed4e84e542a83d5fd1d1990e77dfa49ace1898ad",
+    "excluded_article_count": 27,
+    "excluded_known_company_count": 34,
+    "source_bundle_path": ".acceptance/semantic-v25/shadow-source-bundle.json",
+    "source_bundle_sha256": "03912c7227545215f0fdde6a968c4c6882b9bd468609e64577211984a67c3347"
+  },
+  "leakage_audit": {
+    "body_hashes_unique": true,
+    "known_company_keys_disjoint_between_splits": true,
+    "unknown_company_cases_require_gold_recheck": true,
+    "strictly_unseen": false,
+    "reason": "source database predates the claim-contract freeze and every article has an existing semantic attempt",
+    "may_support_final_acceptance": false
+  },
+  "summary": {
+    "case_count": 48,
+    "split_counts": {
+      "calibration": 12,
+      "test": 36
+    },
+    "control_count": 12,
+    "source_counts": {
+      "36kr-financing-flash": 3,
+      "cls-telegraph": 7,
+      "cyzone-financing": 3,
+      "cyzone-latest": 1,
+      "jazzyear-latest": 1,
+      "lieyunpro-archives": 4,
+      "pedaily-investment-news": 3,
+      "pedaily-vcpe-events": 3,
+      "stcn-flash": 18,
+      "vbdata-funding": 4,
+      "zhidx-financing": 1
+    },
+    "document_type_counts": {
+      "long_feature": 3,
+      "single_company_flash": 45
+    },
+    "candidate_event_type_counts": {
+      "customer_validation": 3,
+      "executive_change": 3,
+      "factory_or_capacity": 3,
+      "funding": 12,
+      "ipo_or_listing": 2,
+      "major_order": 2,
+      "merger_acquisition": 4,
+      "new_site_or_entity": 9,
+      "partnership": 5,
+      "policy_or_standard": 2,
+      "procurement_tender": 2,
+      "regulatory_or_clinical": 3,
+      "technical_milestone": 12
+    },
+    "known_company_count": 24,
+    "unknown_company_case_count": 32
+  },
+  "cases": [
+    {
+      "key": "pedaily-investment-news:564612",
+      "split": "calibration",
+      "source_id": "pedaily-investment-news",
+      "source_article_id": "564612",
+      "canonical_url": "https://news.pedaily.cn/202605/564612.shtml",
+      "published_at": "2026-05-29T14:07:00+08:00",
+      "title": "清科产投投资丨汉康-KY成功挂牌台湾创新板，赋能区域生技资本市场",
+      "index_content_hash": "2e3b0224e3aabbf70996ece622bca03a9a1bd5a63aecea70477755cf7681ee1e",
+      "article_content_hash": "48bcc387fc9b1a571cec1da6a6126f4e2675bdc207f6e267b2233c8d53606967",
+      "body_sha256": "190bc1208ca20ae7bbaa711b276d9a662bdbd6f5827786a04bca89dee518c5cf",
+      "body_chars": 2012,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_52c709d371",
+        "c_d17158fc1a"
+      ],
+      "candidate_event_types": [
+        "ipo_or_listing"
+      ],
+      "candidate_count": 2,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050706",
+      "split": "calibration",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050706",
+      "canonical_url": "https://www.stcn.com/article/detail/4050706.html",
+      "published_at": "2026-07-30T20:10:08+08:00",
+      "title": "嘉亨家化：披露杭州拼便宜要约收购结果 31日复牌",
+      "index_content_hash": "f5346ad33802b42d61f6e3735d1f08af2c7477c5b3a7aa8a58b3db83c3dbbda1",
+      "article_content_hash": "eff76fc38c22c2c3adb323383c2f6b7dc3f43aaa1970b347e99f9b74b67c6122",
+      "body_sha256": "ed1f39d77a89979562dd61ccf5eb8051289431c01ec7820a9e0023e09814f9aa",
+      "body_chars": 258,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_7ef849f9f2"
+      ],
+      "candidate_event_types": [
+        "merger_acquisition"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [
+        "嘉亨家化"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050773",
+      "split": "calibration",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050773",
+      "canonical_url": "https://www.stcn.com/article/detail/4050773.html",
+      "published_at": "2026-07-30T21:07:27+08:00",
+      "title": "公告精选：多家公司披露增持回购计划；有研新材拟投资集成电路用高纯溅射靶材二期扩建项目",
+      "index_content_hash": "52a0aff0dc609d4f2f0fde3b5ad77a4479ed74f293f460d3d7c2825e2188a562",
+      "article_content_hash": "845c2f5fe2396630c3afd05dfb102a2c06690e09c99fa2819a34fa3d4b4729ea",
+      "body_sha256": "f152bfb096522b0bdd1bfd69badc3839b368545b4bf43daeda5146bd34445041",
+      "body_chars": 1275,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_0ad86bd33b",
+        "c_8ad96485d0",
+        "c_414a90420f",
+        "c_3327f4bf94"
+      ],
+      "candidate_event_types": [
+        "major_order",
+        "merger_acquisition",
+        "partnership"
+      ],
+      "candidate_count": 4,
+      "known_company_keys": [
+        "嘉亨家化",
+        "容百",
+        "平安电工",
+        "新北洋",
+        "桂冠电力",
+        "海融",
+        "索菱股份"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050557",
+      "split": "calibration",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050557",
+      "canonical_url": "https://www.stcn.com/article/detail/4050557.html",
+      "published_at": "2026-07-30T19:50:01+08:00",
+      "title": "雷军：小米澎程N90 Max综合续航最高1705km",
+      "index_content_hash": "cdb695bcd2be28d54ae0008d3dd989974d577e36effcafaab61d0cf1fc7c3251",
+      "article_content_hash": "244acbf5164c5f046b529d54503f17f23afbf6e1aecf06adab24d3078f6ee134",
+      "body_sha256": "d8de163433b3085b549e31e06d5f21ea59fea6497a02e2b47a4f5125a76c9ae2",
+      "body_chars": 93,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_a81ff71e4a"
+      ],
+      "candidate_event_types": [
+        "technical_milestone"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4047451",
+      "split": "calibration",
+      "source_id": "stcn-flash",
+      "source_article_id": "4047451",
+      "canonical_url": "https://www.stcn.com/article/detail/4047451.html",
+      "published_at": "2026-07-29T16:38:07+08:00",
+      "title": "华脉科技等成立新公司 含光通信设备业务",
+      "index_content_hash": "6b62d658bfdf499a91d3d9f1b978b08b8f029348a0f342c6af16be34b09951a5",
+      "article_content_hash": "e8fb14619cfe8b24a1f69bf5097f6a6472773bb04c4e6d7387f6937d184b5e88",
+      "body_sha256": "4698130d4ef22b999f9edc12bd1741d8d2b9b05cae563c5dcae0480c176159bc",
+      "body_chars": 98,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cyzone-financing:792468",
+      "split": "calibration",
+      "source_id": "cyzone-financing",
+      "source_article_id": "792468",
+      "canonical_url": "https://www.cyzone.cn/article/792468.html",
+      "published_at": "2025-03-11",
+      "title": "较上月减少5家，2月新增3家国资机构丨睿兽分析",
+      "index_content_hash": "bc2d1b57153d3e4a7491523a0c299a6d284effaed9373ec503c997ea0c1e3bba",
+      "article_content_hash": "5859aebb01448837d19745027d7af6e5af1aa2cb449c79ff33bf4b03c771a3dc",
+      "body_sha256": "712b9cc78c306148fc0814e85fb049a7ab3184ac1db4374b0f833f6c7bb10352",
+      "body_chars": 916,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_dcb80757fd",
+        "c_a6ecac8435"
+      ],
+      "candidate_event_types": [
+        "new_site_or_entity"
+      ],
+      "candidate_count": 2,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050343",
+      "split": "calibration",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050343",
+      "canonical_url": "https://www.stcn.com/article/detail/4050343.html",
+      "published_at": "2026-07-30T18:40:16+08:00",
+      "title": "天微电子：拟9000万元取得秀为科技60%控股股权",
+      "index_content_hash": "c67080a9f60aab1f75f719fe0e1e3a0d0f0240a9525a6f3672856a0df7aaca8b",
+      "article_content_hash": "4f00ba1caf339beb40ea8c66e674836dc63f903e0f2e76ebd580802d3f50443c",
+      "body_sha256": "a7b097848cf664acc299fa80e07cf89180965218dfc08ab64b354d48b674f8c9",
+      "body_chars": 201,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_2c89040f7f"
+      ],
+      "candidate_event_types": [
+        "merger_acquisition"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [
+        "天微电子"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2440456",
+      "split": "calibration",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2440456",
+      "canonical_url": "https://www.cls.cn/detail/2440456",
+      "published_at": "2026-07-29T20:16:22+08:00",
+      "title": "巴基斯坦军方打死32名恐怖分子",
+      "index_content_hash": "8998836755fbec930c153be0bb8454d81b7f739f0bd60f6b7cc4e2130549ccde",
+      "article_content_hash": "5a9c6dc24a4c59c1d2ce557804393ca2695f882b6a2c3abc1f8d6a417a169b3b",
+      "body_sha256": "cc2a9eaba8d818621434d75979c083284afdb35ab13379d36e4df990a654e0fc",
+      "body_chars": 263,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "36kr-financing-flash:3918743493324164",
+      "split": "calibration",
+      "source_id": "36kr-financing-flash",
+      "source_article_id": "3918743493324164",
+      "canonical_url": "https://36kr.com/newsflashes/3918743493324164",
+      "published_at": "2026-07-31T07:49:39+08:00",
+      "title": "Anthropic拟获150亿美元融资建设得州AI数据中心，谷歌提供担保并供应芯片",
+      "index_content_hash": "9f13f91b57afe97b3ed5699b4766fa9d387c89c9c9e237426d50cfc5b113da87",
+      "article_content_hash": "26cbd826258789fbdd7140bdd09a092c5a5a324657f20b9924b75ce1a71e8a30",
+      "body_sha256": "de2a7d3bba5da518bd33a05c1b5c2c737022a2102a0b040a7871121783310cf7",
+      "body_chars": 318,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_3d15367c9a"
+      ],
+      "candidate_event_types": [
+        "funding"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [
+        "anthropic"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050714",
+      "split": "calibration",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050714",
+      "canonical_url": "https://www.stcn.com/article/detail/4050714.html",
+      "published_at": "2026-07-30T20:20:51+08:00",
+      "title": "青鸟智控续签华友钴业年度采购框架协议",
+      "index_content_hash": "03689905dbf56e3bd222b4bdd1151cbe7c482f0ca84ca80c78fe855ce0c86824",
+      "article_content_hash": "07c455ce430b3f3d1c74e3d278959e1ddfbd755256785d0585a66f2bd0dc0777",
+      "body_sha256": "fab1958d8f85fe555a225a5f8630296e3be5815293c343d30bd9860ea9413f90",
+      "body_chars": 115,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_256df46c01"
+      ],
+      "candidate_event_types": [
+        "procurement_tender"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cyzone-financing:809066",
+      "split": "calibration",
+      "source_id": "cyzone-financing",
+      "source_article_id": "809066",
+      "canonical_url": "https://www.cyzone.cn/article/809066.html",
+      "published_at": "2025-09-02",
+      "title": "8月新登记5家私募基金管理人，4家来自江苏丨睿兽分析",
+      "index_content_hash": "c22250f0938c18e66da2918458712696f2b47ebb67d4c617177b92a5b917c289",
+      "article_content_hash": "ccdaff00de739b67ddb18faddc541355796c6db4196a39507e6791e5987e49ee",
+      "body_sha256": "8405f0db1a6af6d27a90f77da1413727686a07681c0cf401565a44697c44e41a",
+      "body_chars": 1681,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_e039ab5204"
+      ],
+      "candidate_event_types": [
+        "new_site_or_entity"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "36kr-financing-flash:3918859563839107",
+      "split": "calibration",
+      "source_id": "36kr-financing-flash",
+      "source_article_id": "3918859563839107",
+      "canonical_url": "https://36kr.com/newsflashes/3918859563839107",
+      "published_at": "2026-07-31T09:49:39+08:00",
+      "title": "“中科欣扬”完成亿元级融资",
+      "index_content_hash": "60f397c71aff243fdd1708f40645c23e2103dc655b163cdb16a12100069a6253",
+      "article_content_hash": "d0e4341945a3ee829b02bcbeeadd8ff52422ec29d086dbe417dd4350dabf5887",
+      "body_sha256": "f0932fde2e99965fc2bc010bc575ba2713175a80f475d60b7883d736b0d71b95",
+      "body_chars": 131,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_d5799545ca",
+        "c_ed2df197ac"
+      ],
+      "candidate_event_types": [
+        "funding"
+      ],
+      "candidate_count": 2,
+      "known_company_keys": [
+        "中科欣扬"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "pedaily-vcpe-events:567004",
+      "split": "test",
+      "source_id": "pedaily-vcpe-events",
+      "source_article_id": "567004",
+      "canonical_url": "https://news.pedaily.cn/202607/567004.shtml",
+      "published_at": "2026-07-30T10:31:00+08:00",
+      "title": "贝联珠贯完成A轮超亿元融资，阿里云领投",
+      "index_content_hash": "278fab6f0a3f2826894d7dd280b660f71b51850038787246e9a1fdfdc7333fa8",
+      "article_content_hash": "7be36d23a7159437a83df510fc449993730a83d2f979aada3fc0e3703666bd04",
+      "body_sha256": "97fa76981e299526f6676adae7d116aff2407ab6aa7135a749989c6b19ecfbe0",
+      "body_chars": 459,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_b1e6bdb234",
+        "c_6bb2b58e64"
+      ],
+      "candidate_event_types": [
+        "funding"
+      ],
+      "candidate_count": 2,
+      "known_company_keys": [
+        "贝联珠贯科技浙江"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050535",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050535",
+      "canonical_url": "https://www.stcn.com/article/detail/4050535.html",
+      "published_at": "2026-07-30T19:34:47+08:00",
+      "title": "雷军：小米汽车累计交付70多万辆",
+      "index_content_hash": "f64e23d8812e0f3f82d34a21bcc827b00518d695154c28602e07f30862d9165c",
+      "article_content_hash": "04df3bcde857066ea9b9f8ab43fbbd494f8dbf624a14bc9b35cf7ed90b1944cb",
+      "body_sha256": "8ceb3efb8c5f4c1f55ce03ad6f34b5e8b31a9656ee689eb9411a12211973d472",
+      "body_chars": 87,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_5e5efac2eb"
+      ],
+      "candidate_event_types": [
+        "technical_milestone"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050745",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050745",
+      "canonical_url": "https://www.stcn.com/article/detail/4050745.html",
+      "published_at": "2026-07-30T20:49:17+08:00",
+      "title": "国联民生承销保荐与中信银行无锡分行达成战略合作",
+      "index_content_hash": "1611c5c68a99a925155fcdaf4e158791883e12e0eaf98fa97de4195196fe722d",
+      "article_content_hash": "63f91d24c3583ab89171bde34984c3958b0890dc5580e710680c4e6fe22ba5c0",
+      "body_sha256": "47997046c98a8540b66d6df566dc6b291a64fde6cd766f5e4425d7809916bbf0",
+      "body_chars": 136,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_9052ddb526"
+      ],
+      "candidate_event_types": [
+        "partnership"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "pedaily-investment-news:565114",
+      "split": "test",
+      "source_id": "pedaily-investment-news",
+      "source_article_id": "565114",
+      "canonical_url": "https://news.pedaily.cn/202606/565114.shtml",
+      "published_at": "2026-06-11T13:35:00+08:00",
+      "title": "创投生态超级链接首日开启： SuperLink苏州启幕",
+      "index_content_hash": "89632196724bd9fdf0e85e41a41c33055e2a3fd6d628f622155e56c47af8c0d9",
+      "article_content_hash": "fce51ff8bdca929b96cc6309b30a70660ee6495adf6f034519e42bde417c5a01",
+      "body_sha256": "4ddfa39954301caaf8a978ef78c7be20e799afd997c08c76a48ff8a80ac8305e",
+      "body_chars": 1654,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_3db146709b"
+      ],
+      "candidate_event_types": [
+        "technical_milestone"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cyzone-latest:841520",
+      "split": "test",
+      "source_id": "cyzone-latest",
+      "source_article_id": "841520",
+      "canonical_url": "https://www.cyzone.cn/article/841520.html",
+      "published_at": "2026-07-29",
+      "title": "融资丨真觉万象（Physen AI）完成数千万元天使轮融资",
+      "index_content_hash": "0aecf86d04a14c55b1acf4f8507b0d87c728974f887758b71c5c3cd0a5647d42",
+      "article_content_hash": "6293cebf19db84ca4026add5d5d9dcb7363384c4547d5f22c03024948399b626",
+      "body_sha256": "15637df78197246c0bd059302e44601167ea0c8e12f8d4e2c908e25f4ab9ef6b",
+      "body_chars": 1837,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_3e551d5356",
+        "c_d06f058707",
+        "c_c89eccc283"
+      ],
+      "candidate_event_types": [
+        "executive_change",
+        "funding",
+        "technical_milestone"
+      ],
+      "candidate_count": 3,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jazzyear-latest:1827",
+      "split": "test",
+      "source_id": "jazzyear-latest",
+      "source_article_id": "1827",
+      "canonical_url": "https://www.jazzyear.com/article_info.html?id=1827",
+      "published_at": "2026-07-29",
+      "title": "WAIC“看见未来”，GDPS“做出未来”丨 “劳动最光荣”国际具身智能技能大赛全球征集启动",
+      "index_content_hash": "55f9291f4eb1ce592e0d25a99f6477c4dc80ee658598e112380048cbd878f29b",
+      "article_content_hash": "e39693851d8cbb3ec8297b228bdc78a823b094f2230896f0039b6ab7b933a927",
+      "body_sha256": "f9bd29cbc101bc6057eff0cc37418e2a29f0042d12bef920d51495ce748e4df6",
+      "body_chars": 5304,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_4336cb4e21",
+        "c_309f0505d7"
+      ],
+      "candidate_event_types": [
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "candidate_count": 2,
+      "known_company_keys": [
+        "gdps",
+        "工业和信息化部"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4047338",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4047338",
+      "canonical_url": "https://www.stcn.com/article/detail/4047338.html",
+      "published_at": "2026-07-29T16:07:29+08:00",
+      "title": "星宇股份投资成立视觉科技公司",
+      "index_content_hash": "4154d0a0e3f3b555ebbdc51aef7ba65e1f3c92ffdcafeaff2e569e7ab04aa6bc",
+      "article_content_hash": "df525d4adaa28f536d2e97e56f1ea1f873d64b44da6ba5654d5d920be10c7893",
+      "body_sha256": "234064f66d0d2ce129783e9af5b47a1f4afc0a08455458a34902ea2b7bc46e5d",
+      "body_chars": 133,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "lieyunpro-archives:502039",
+      "split": "test",
+      "source_id": "lieyunpro-archives",
+      "source_article_id": "502039",
+      "canonical_url": "https://lieyunpro.com/archives/502039",
+      "published_at": "2026-07-29",
+      "title": "具身智能“200亿俱乐部”：8家公司、吸金千亿，豪赌一个未来",
+      "index_content_hash": "a5f291f23230199fe8a4c4aa4a770f7de69dc6cde6ffc815d071ebe832171722",
+      "article_content_hash": "b532da1d99d36c92e16cc1f335553f513e503ada7f118dd6591baa7b0fde1f74",
+      "body_sha256": "cb0c56bef1388504fcf74dc03667d438931dd06e32fad77fd38cb7afccf384ac",
+      "body_chars": 6591,
+      "document_type": "long_feature",
+      "candidate_ids": [
+        "c_b07b172e20",
+        "c_f335addc31",
+        "c_0d61c32aec",
+        "c_bd90e70421",
+        "c_d7d25b39cf",
+        "c_ea687935e3",
+        "c_5579c0dca1",
+        "c_8e397f3bd6",
+        "c_0bdd081f96",
+        "c_2adb875127"
+      ],
+      "candidate_event_types": [
+        "executive_change",
+        "factory_or_capacity",
+        "funding",
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "candidate_count": 10,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cyzone-financing:794842",
+      "split": "test",
+      "source_id": "cyzone-financing",
+      "source_article_id": "794842",
+      "canonical_url": "https://www.cyzone.cn/article/794842.html",
+      "published_at": "2025-04-03",
+      "title": "3月新增10家私募基金管理人，含1家外资机构丨睿兽分析",
+      "index_content_hash": "300e7870ab6ad7df58bd0882bef0107b906597b64225836504f73c9c787cc6af",
+      "article_content_hash": "b42344eb73d65aca80c8d5ee284e6b5d519bf9b69cb2688ef7c33b34d55cb681",
+      "body_sha256": "42c34486b0e811621753929384a5a624a9eefabb7e445ba8ab44ea476be25c69",
+      "body_chars": 2185,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_f602f6a260",
+        "c_6d898518b7"
+      ],
+      "candidate_event_types": [
+        "new_site_or_entity"
+      ],
+      "candidate_count": 2,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2439577",
+      "split": "test",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2439577",
+      "canonical_url": "https://www.cls.cn/detail/2439577",
+      "published_at": "2026-07-29T08:04:28+08:00",
+      "title": "投资日历：周三资本市场大事提醒",
+      "index_content_hash": "eaafb02f69a3e2647a6f3048d569eaa5c6696ca1d6b2165f1387421725cadbc4",
+      "article_content_hash": "ae5a2080386e14023ccb6c668983b2afed67b28ac36289406c1841e4262f5cd2",
+      "body_sha256": "324b850f275d5f9a1cfcbd26e494873c55d4cf9fe49db0bb43ded9a048ac0649",
+      "body_chars": 335,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_069eb90d7c"
+      ],
+      "candidate_event_types": [
+        "ipo_or_listing"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "pedaily-investment-news:564928",
+      "split": "test",
+      "source_id": "pedaily-investment-news",
+      "source_article_id": "564928",
+      "canonical_url": "https://news.pedaily.cn/202606/564928.shtml",
+      "published_at": "2026-06-05T16:29:00+08:00",
+      "title": "毅达资本完成对苏州利亚得智能装备有限公司的独家投资",
+      "index_content_hash": "88e931024e25ae294409fa69f72bdc7082d5cc96a4620606b4ed228f8530c4eb",
+      "article_content_hash": "1144120b4590db7486ae3cbd3043a48e141759aee20499b3694866d228ebf68f",
+      "body_sha256": "7cda0621aed8378fe79371b58a0d30a80ed9b8ea404611b78859b6a5b068ef83",
+      "body_chars": 1100,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_1a4e538186"
+      ],
+      "candidate_event_types": [
+        "customer_validation"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "vbdata-funding:1519083790",
+      "split": "test",
+      "source_id": "vbdata-funding",
+      "source_article_id": "1519083790",
+      "canonical_url": "https://www.vbdata.cn/1519083790",
+      "published_at": "2026-07-12",
+      "title": "单一技术叙事过气？融合脑机接口、AI、具身智能的新范式来了！",
+      "index_content_hash": "9d91592897a9fe45061730e6a1e0b8a1523e22ea4d859e42a6361ae1ff86977f",
+      "article_content_hash": "996ee4c27ac7eb7142a5dc2bbe2a0547dd3a8e332f2aa94dd1539a9b37a69019",
+      "body_sha256": "c58d055eb87cca3039311c4b1dd0119fd53aa37876b2887e43c2209d7f9b391d",
+      "body_chars": 4805,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_90e5d5179e"
+      ],
+      "candidate_event_types": [
+        "technical_milestone"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050697",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050697",
+      "canonical_url": "https://www.stcn.com/article/detail/4050697.html",
+      "published_at": "2026-07-30T20:02:29+08:00",
+      "title": "京东与七腾机器人达成战略合作",
+      "index_content_hash": "515fc168c5c3aabcd9a4456e751d4af8daf48ef67fd4af25b01fcd080c1c3bde",
+      "article_content_hash": "48aa2cd3f9dbbd5d7584909ce6fdd68a2c70ec8864d0357efb44b6a3f86fae2d",
+      "body_sha256": "cc90badfc1732b1e8ac711f0a29b7ead8f36c186b2036f112f479fc075faf97c",
+      "body_chars": 98,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_21d8615db1"
+      ],
+      "candidate_event_types": [
+        "partnership"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [
+        "京东与七腾机器人达成",
+        "京东与特种机器人企业七腾机器人达成"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "pedaily-vcpe-events:566976",
+      "split": "test",
+      "source_id": "pedaily-vcpe-events",
+      "source_article_id": "566976",
+      "canonical_url": "https://news.pedaily.cn/202607/566976.shtml",
+      "published_at": "2026-07-29T17:44:00+08:00",
+      "title": "武汉超导完成近亿元种子轮融资，加速超导装备产业化",
+      "index_content_hash": "f02a160883b126dac25284e27d75ae70e02d11faf2a0692d19f1eea8ce5ab10e",
+      "article_content_hash": "5009f3dfae8ebb5b799833387e21b6e55cab737ae21dc0a9442e801e32d28a26",
+      "body_sha256": "176ba01b12acecfeeb94a774a2d8736622729c0fe3fb1082f79300edc9643f46",
+      "body_chars": 673,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_2339714092",
+        "c_749a566ce3"
+      ],
+      "candidate_event_types": [
+        "funding"
+      ],
+      "candidate_count": 2,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050817",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050817",
+      "canonical_url": "https://www.stcn.com/article/detail/4050817.html",
+      "published_at": "2026-07-30T21:44:59+08:00",
+      "title": "北部湾港集团与天科院交流座谈并签署战略合作协议",
+      "index_content_hash": "2d3d5410ebf5afea3f0cf560e7017ced3ac626c9c21ab89b994ff33746f6f3be",
+      "article_content_hash": "72da45552edbe2a16b92f9a831a29de5961d06d3692423a0dc7de86425e57f87",
+      "body_sha256": "b5c0d786ff4476b4793d2b0e0d9d40454ce1e097caf8d9eced66b92dcc6ca145",
+      "body_chars": 135,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_ec113d8aa0"
+      ],
+      "candidate_event_types": [
+        "partnership"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [
+        "北部湾港集团与天科院交流座谈并",
+        "北部湾港集团与来访的交通运输部天津水运工程科学研究院简称天科院交流座谈并"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "vbdata-funding:1519084331",
+      "split": "test",
+      "source_id": "vbdata-funding",
+      "source_article_id": "1519084331",
+      "canonical_url": "https://www.vbdata.cn/1519084331",
+      "published_at": "2026-07-07",
+      "title": "【首发】洞察科技完成数千万元Pre-A+轮融资， 推动固态纳米孔加速迈向产业化",
+      "index_content_hash": "190823391f1e03ab871f2c08b7453f67c110c4bcd06f513aefd2b32b6185dd31",
+      "article_content_hash": "024e70db90644f751d8a8a28ad69386060ddf9756d37ba4c703c949bc338ba48",
+      "body_sha256": "dcbb4443da5752fce0d79d12b3d6031a4a676b743daaaa834c444dc8149a321b",
+      "body_chars": 1776,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_6b65db1030",
+        "c_dcae419d9b",
+        "c_672eb00bbd",
+        "c_94f409ac28",
+        "c_f490f22cdc",
+        "c_1f51113406",
+        "c_52db481c2d",
+        "c_c61611084c",
+        "c_38254ebff0",
+        "c_abea68b43b",
+        "c_0da3ecfedb",
+        "c_8563a949c8",
+        "c_837b11982c",
+        "c_45ca228390",
+        "c_ddd017ef0d"
+      ],
+      "candidate_event_types": [
+        "customer_validation",
+        "factory_or_capacity",
+        "funding",
+        "major_order",
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "candidate_count": 15,
+      "known_company_keys": [
+        "洞察"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050694",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050694",
+      "canonical_url": "https://www.stcn.com/article/detail/4050694.html",
+      "published_at": "2026-07-30T20:01:51+08:00",
+      "title": "桂冠电力：拟投建潍坊储能项目和老挝纳磨光伏项目",
+      "index_content_hash": "667a2f350eb3c63dd76ac65da4a8d37545e0dddfe6311aaad3b603aba9cf326b",
+      "article_content_hash": "7bdf957cb65710f8dc97a2e124194a90ae983ec39edcf8b9728b3a49837651fe",
+      "body_sha256": "e5fe8cb1c7baabce76278b2aa29fdfa443c30a373198e10997b3144aba8935da",
+      "body_chars": 229,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_516ccdd0d6"
+      ],
+      "candidate_event_types": [
+        "new_site_or_entity"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "36kr-financing-flash:3918858807815810",
+      "split": "test",
+      "source_id": "36kr-financing-flash",
+      "source_article_id": "3918858807815810",
+      "canonical_url": "https://36kr.com/newsflashes/3918858807815810",
+      "published_at": "2026-07-31T09:49:39+08:00",
+      "title": "“昆腾动力”完成超亿元种子轮融资",
+      "index_content_hash": "3ee72c1fec181a534c1c7af42608e1e4f520ab72259c85bd20167c8a3a630385",
+      "article_content_hash": "52ae4dbd520cc941813c04e6aa98fa295fff144291af6ebab26f01fc8673c858",
+      "body_sha256": "7fd490ce63a88c2ec9683652e69b616ab2d0b992b0b52d85d463f3ec0be55bfa",
+      "body_chars": 165,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_bb51297674"
+      ],
+      "candidate_event_types": [
+        "funding"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [
+        "昆腾动力"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "lieyunpro-archives:502019",
+      "split": "test",
+      "source_id": "lieyunpro-archives",
+      "source_article_id": "502019",
+      "canonical_url": "https://lieyunpro.com/archives/502019",
+      "published_at": "2026-07-27",
+      "title": "当锂电不再野蛮",
+      "index_content_hash": "23811953fd3623b3d203bb860d91eebf3dcc63eee27b5f3e6f8fc09e52bd23f2",
+      "article_content_hash": "6fc318c9b5f3b5e812711ea6fbbebd06a483e31bf648e6cadadd42ae7eb5e2ff",
+      "body_sha256": "073ac5836a7c475a855c3f27081dde6ad66b84043db72b6e8e106e31398b846e",
+      "body_chars": 7241,
+      "document_type": "long_feature",
+      "candidate_ids": [
+        "c_1812b36da2",
+        "c_3d0854ab80",
+        "c_56fbb52c75",
+        "c_d18853a44e",
+        "c_3172ff0965",
+        "c_c58c316135"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "policy_or_standard",
+        "regulatory_or_clinical",
+        "technical_milestone"
+      ],
+      "candidate_count": 6,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4046848",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4046848",
+      "canonical_url": "https://www.stcn.com/article/detail/4046848.html",
+      "published_at": "2026-07-29T13:01:17+08:00",
+      "title": "九寨沟景区7月30日起全域恢复开放",
+      "index_content_hash": "ad7a291b9d40218c0bee00d351bf628840396c90ed8ea0d411a992e5ccf58f6a",
+      "article_content_hash": "dff6b156d56d25815119d590b9f69466c2311e698cd03321e1728eeda1ccbb79",
+      "body_sha256": "f3348e6110357f2f142c0bb930db71db8e26abccbcf7fc1cb4e76d7fd84262d0",
+      "body_chars": 88,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2440265",
+      "split": "test",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2440265",
+      "canonical_url": "https://www.cls.cn/detail/2440265",
+      "published_at": "2026-07-29T17:23:41+08:00",
+      "title": "上海：上半年社会融资规模增加6914亿元 上半年本外币贷款增加5315亿元",
+      "index_content_hash": "907d8f2a263d52a8647b5971f611706d9d4a2c1c057dd853156a4006bc74ae22",
+      "article_content_hash": "f7a447aa6b37d3f92de73e8303bf9a2def9a4a72c658e8f0aab5a64ed0890768",
+      "body_sha256": "46b4fc12af1bb774a630919c847fcc87d6aa04488c1134b107ee33fdc49137f3",
+      "body_chars": 304,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "pedaily-vcpe-events:566967",
+      "split": "test",
+      "source_id": "pedaily-vcpe-events",
+      "source_article_id": "566967",
+      "canonical_url": "https://news.pedaily.cn/202607/566967.shtml",
+      "published_at": "2026-07-29T15:21:00+08:00",
+      "title": "Monstar梦塔科技完成超千万元种子+轮融资，构建AI数字生命新范式",
+      "index_content_hash": "f8d3abc8636a3e812dce1341f3e1bc7a4551cb71ea1bbdc674b52304b06536bf",
+      "article_content_hash": "3923c28bf4208ace15a2c12891da15a78b90c100b6a6376718dd15d2d2c6695a",
+      "body_sha256": "103d1a35b9d55a765713bef9d9594363a746d263ae896771f984e68576130599",
+      "body_chars": 1154,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_b26430f7ac",
+        "c_c467b861ba"
+      ],
+      "candidate_event_types": [
+        "funding"
+      ],
+      "candidate_count": 2,
+      "known_company_keys": [
+        "合肥梦塔科技"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "lieyunpro-archives:502052",
+      "split": "test",
+      "source_id": "lieyunpro-archives",
+      "source_article_id": "502052",
+      "canonical_url": "https://lieyunpro.com/archives/502052",
+      "published_at": "2026-07-29",
+      "title": "贾扬清再创业，AI换道",
+      "index_content_hash": "e8b396c79637ad5b23a2af38b6159e860221b16c0aa6873451b63d91373d01ba",
+      "article_content_hash": "b23cb6aa831c4b2b43b474af13e1a3b844e1cfc6b99e37102a74c4c398d7d751",
+      "body_sha256": "5aef324e277d1c8c3bb95b9f10906c534db7b6f9118a4baf933db31a3554aad0",
+      "body_chars": 3602,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_efcf4f167e",
+        "c_98a034a49d",
+        "c_cb33ea48de"
+      ],
+      "candidate_event_types": [
+        "executive_change",
+        "merger_acquisition"
+      ],
+      "candidate_count": 3,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4046699",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4046699",
+      "canonical_url": "https://www.stcn.com/article/detail/4046699.html",
+      "published_at": "2026-07-29T10:53:49+08:00",
+      "title": "超捷股份成立新公司，含火箭发动机研发业务",
+      "index_content_hash": "cbfe1a023e5b1993bae58d638c492cf9c6f87c82fe7faf305ea99b4b419c5ead",
+      "article_content_hash": "7c7d79726b6a82ca388904e0a389861440673a2fa158d2f731dbf12f4834a329",
+      "body_sha256": "c10aec8a45b83137fd41e0ee73389ac751dad5158c71765c3ff12fff69914c23",
+      "body_chars": 108,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2439702",
+      "split": "test",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2439702",
+      "canonical_url": "https://www.cls.cn/detail/2439702",
+      "published_at": "2026-07-29T09:36:07+08:00",
+      "title": "特朗普称与内塔尼亚胡和泽连斯基分别讨论多项重要议题",
+      "index_content_hash": "04dbdef40f847d57bda9ff568e40f99b50f3d9725bd45cc4cc92c3de396b2aff",
+      "article_content_hash": "aa23d84634ec39b8daca0c2de96b3351e50da9e886b0660bdff625381af529e5",
+      "body_sha256": "f2a9e1c4f941d0164da82a8bffdb1586754b7b1f5255498be7e5bafc953b6110",
+      "body_chars": 338,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4049843",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4049843",
+      "canonical_url": "https://www.stcn.com/article/detail/4049843.html",
+      "published_at": "2026-07-30T16:42:36+08:00",
+      "title": "国联股份等成立科技产业发展公司 含AI业务",
+      "index_content_hash": "cf5a5025e6c45c7fdffc96e66025502c1ca2f92589f10f063fce83789c799267",
+      "article_content_hash": "4f78b41a5433aba75634b6381f51a70a23ce5dffbce0789f18a9237e670694c3",
+      "body_sha256": "b08a080f7c1e765820d3304547b102fa5b5407af9bbc95a131c617c6df1b0b81",
+      "body_chars": 113,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "vbdata-funding:1519078230",
+      "split": "test",
+      "source_id": "vbdata-funding",
+      "source_article_id": "1519078230",
+      "canonical_url": "https://www.vbdata.cn/1519078230",
+      "published_at": "2026-07-22",
+      "title": "【首发】南京清普生物完成约6亿元C轮融资，加速创新镇痛药物临床转化与商业化",
+      "index_content_hash": "a7e21740e62d20d1ae06305ce63ac599ce7a6ebb9a8e99862644d892a333e230",
+      "article_content_hash": "40b7a2b684e6f3e6b36ea32975f34dd43fbebe1f382c78cd36834b53cde112b4",
+      "body_sha256": "80fbfc75f10f7920685ada7657b65b840d00d492ee1682740cea9d03d4ee81fb",
+      "body_chars": 7873,
+      "document_type": "long_feature",
+      "candidate_ids": [
+        "c_6fa2989fdf",
+        "c_5375ed7d17",
+        "c_443068cb2a",
+        "c_0377f616d5",
+        "c_b6a3863219",
+        "c_e9bc5192e4",
+        "c_56fdde2a72",
+        "c_4151cc7855",
+        "c_ff32f9f6ab",
+        "c_d357c49262",
+        "c_bd111e5a59",
+        "c_3b23125412",
+        "c_e485d3155e"
+      ],
+      "candidate_event_types": [
+        "funding",
+        "new_site_or_entity",
+        "regulatory_or_clinical",
+        "technical_milestone"
+      ],
+      "candidate_count": 13,
+      "known_company_keys": [
+        "南京清普生物"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4046986",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4046986",
+      "canonical_url": "https://www.stcn.com/article/detail/4046986.html",
+      "published_at": "2026-07-29T14:35:26+08:00",
+      "title": "天键股份等成立电子科技公司，含集成电路芯片业务",
+      "index_content_hash": "61404a8211a732e8107e13e6272d3282cbdb356cfe8dd6e52d519ef246263eed",
+      "article_content_hash": "470d965856d99e2ba16473536701e1467dd97a4a3418c8078741bc1db3f18998",
+      "body_sha256": "aa1e2162e4a1ee6b1ffc784417a5deb47f11b53fe3e21a310fa47dc363cea4d8",
+      "body_chars": 113,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4050754",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4050754",
+      "canonical_url": "https://www.stcn.com/article/detail/4050754.html",
+      "published_at": "2026-07-30T20:54:39+08:00",
+      "title": "金杯电工：中标大唐集团约11.5亿元采购项目",
+      "index_content_hash": "09f16c9fce8b8bd45f9a9f535b6da7bc3144b007b0a59d176c05bf1efdd814f9",
+      "article_content_hash": "b86f3ce4f29b178d15f364242df7ca3a5c5958cddb47983d6e57b5ba19fce581",
+      "body_sha256": "c75340cb5e1951160bc840ba64ecd4cda11e00a98c64292a13dbed3d8201ade7",
+      "body_chars": 204,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_632af96e74"
+      ],
+      "candidate_event_types": [
+        "procurement_tender"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [
+        "金杯电工"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "vbdata-funding:1519087619",
+      "split": "test",
+      "source_id": "vbdata-funding",
+      "source_article_id": "1519087619",
+      "canonical_url": "https://www.vbdata.cn/1519087619",
+      "published_at": "2026-07-28",
+      "title": "【首发】迪英加科技完成数亿元C轮融资，DeepPathAI大模型加速构建数智病理新生态",
+      "index_content_hash": "6c3a971e1d13014392ff3ece46207a480678513a7d8f04992b5d5338efc49a60",
+      "article_content_hash": "17a162e6f7c1dddf5e5943511eda0c0eeb91727992ee55ea32ce159cb8f5e139",
+      "body_sha256": "64525aedb9e1a0be831701d2ece0f551031b5fe9c2b61d568c5da2c830358f99",
+      "body_chars": 3382,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_ed94b03ade",
+        "c_831f7e651e",
+        "c_d9593f2bb9",
+        "c_72645af437",
+        "c_1752a8b031",
+        "c_b6261ce7e3",
+        "c_6871c669e0",
+        "c_9c4a3c56c8",
+        "c_9cbda58664",
+        "c_49570dff46",
+        "c_c0e127e44d",
+        "c_a92f5b1f48",
+        "c_0421c5b07f",
+        "c_425375f3f4",
+        "c_cc487df554",
+        "c_065077c507"
+      ],
+      "candidate_event_types": [
+        "customer_validation",
+        "funding",
+        "new_site_or_entity",
+        "partnership",
+        "regulatory_or_clinical",
+        "technical_milestone"
+      ],
+      "candidate_count": 16,
+      "known_company_keys": [
+        "迪英加"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2440539",
+      "split": "test",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2440539",
+      "canonical_url": "https://www.cls.cn/detail/2440539",
+      "published_at": "2026-07-29T21:56:56+08:00",
+      "title": "刚果（金）埃博拉疫情持续传播",
+      "index_content_hash": "23299cb7dfbe201a24bd08e23ed3ef311cc22be0d58a20cdfc75d6a6d00d612c",
+      "article_content_hash": "4c90f9688ad73873f3cb558847a61c061885d1cfcfa463d93d9c60237b4396eb",
+      "body_sha256": "4cb501d2798918e8a21e53931221b3104f24870c0481d99f49e083fe1f6c7dfc",
+      "body_chars": 443,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_2c7657907b"
+      ],
+      "candidate_event_types": [
+        "technical_milestone"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4046653",
+      "split": "test",
+      "source_id": "stcn-flash",
+      "source_article_id": "4046653",
+      "canonical_url": "https://www.stcn.com/article/detail/4046653.html",
+      "published_at": "2026-07-29T10:27:24+08:00",
+      "title": "合肥：上半年地区生产总值（GDP）7073亿元 同比增长6.8%",
+      "index_content_hash": "76a0e0dec28e8627fdbc6fdc1687b1d4031e62a85bf89d46ee6fa127bea32b10",
+      "article_content_hash": "cf330e6b123633b4b013840064f1a2481eaa0fe435a759dc785498179f93efbf",
+      "body_sha256": "d3185ff73f0102e1ee1e2faf5b171cbd3c4262bef23410053dbb908263b81d8c",
+      "body_chars": 168,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "lieyunpro-archives:502062",
+      "split": "test",
+      "source_id": "lieyunpro-archives",
+      "source_article_id": "502062",
+      "canonical_url": "https://lieyunpro.com/archives/502062",
+      "published_at": "2026-07-30",
+      "title": "行业洞察|从水桶包再度翻红看中国未来奢侈品消费趋势",
+      "index_content_hash": "d3d8fbad4b0870a04dc4e244f3cd77d78e34240b3e7f97b85b97ebb0055e89bf",
+      "article_content_hash": "955623914d3d284e7ae47ee482d0fabef66d94a82354ade0d27fbd806c9211be",
+      "body_sha256": "4f69ab054b535ae433d7735330c5ad96706509103a3e575cebc526d523e78fa0",
+      "body_chars": 2043,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2440136",
+      "split": "test",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2440136",
+      "canonical_url": "https://www.cls.cn/detail/2440136",
+      "published_at": "2026-07-29T16:04:00+08:00",
+      "title": "山西省制造业振兴升级股权投资基金登记成立 出资额100.1亿",
+      "index_content_hash": "1eb8d133f20cfa85b1ca8f65032b307694c46722319902307481bec30749062f",
+      "article_content_hash": "e4db16dbf45a9e6cc0a732fb32a5f0caea85d150c5baf1ea754c91515c05b410",
+      "body_sha256": "7c9b598b0e8fa82fe6aa5a7d7c2233364b16bc3d687ac119bc4dfd885d1f45e2",
+      "body_chars": 230,
+      "document_type": "single_company_flash",
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "candidate_count": 0,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2440228",
+      "split": "test",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2440228",
+      "canonical_url": "https://www.cls.cn/detail/2440228",
+      "published_at": "2026-07-29T17:02:19+08:00",
+      "title": "九部门联合印发《关于加强科技金融领域数据开发利用的通知》",
+      "index_content_hash": "c80bd36c7a1eb0687bdaff92d5c1502a08291d1e6394d190a99245f657374f1e",
+      "article_content_hash": "0387f72df89f3485329ff60f8148d12df21b6244f40d09aa8311a81ca4c09ff4",
+      "body_sha256": "3158772412acd80e855410dde012322140321e341d6109abe77ea2bca1145ec5",
+      "body_chars": 679,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_1cecc28859"
+      ],
+      "candidate_event_types": [
+        "policy_or_standard"
+      ],
+      "candidate_count": 1,
+      "known_company_keys": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "zhidx-financing:580614",
+      "split": "test",
+      "source_id": "zhidx-financing",
+      "source_article_id": "580614",
+      "canonical_url": "https://zhidx.com/p/580614.html",
+      "published_at": "2026-07-29T18:29:00+08:00",
+      "title": "超20亿！蚂蚁又一业务启动外部融资",
+      "index_content_hash": "b8e7e8c3497885aeb6e3184e3c737b2d6501476145e3702a0a35791464e56c05",
+      "article_content_hash": "46328c68a4969999c5a598b8503699baa45a0f5a5c7003d82964b9eb49e946ad",
+      "body_sha256": "95221a324d744a76af94da659da3b95055a8eea22ac191e36ef66fd2774ce7df",
+      "body_chars": 1481,
+      "document_type": "single_company_flash",
+      "candidate_ids": [
+        "c_2868b51c49",
+        "c_36159d113f",
+        "c_a4490b7e9c",
+        "c_02c1bc2d56",
+        "c_57f61df24b",
+        "c_0260d54d9d",
+        "c_4a2835acc5",
+        "c_c65938181f"
+      ],
+      "candidate_event_types": [
+        "funding"
+      ],
+      "candidate_count": 8,
+      "known_company_keys": [
+        "蚂蚁又一业务"
+      ],
+      "gold_status": "unlabelled"
+    }
+  ]
+}

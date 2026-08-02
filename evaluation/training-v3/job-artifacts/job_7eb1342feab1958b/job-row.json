@@ -1,0 +1,72 @@
+{
+  "artifact_id": "job_7eb1342feab1958b",
+  "source_platform": "linkedin-public",
+  "source_job_id": "4401724759",
+  "requested_url": "https://cn.linkedin.com/jobs/view/head-of-marketing-and-corporate-communications-china-at-siemens-healthineers-4401724759",
+  "final_url": "https://cn.linkedin.com/jobs/view/head-of-marketing-and-corporate-communications-china-at-siemens-healthineers-4401724759",
+  "captured_at": "2026-08-01T11:21:54.401000+00:00",
+  "http_status": 200,
+  "mime_type": "text/html",
+  "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_7eb1342feab1958b/raw-browser-capture.json",
+  "raw_artifact_sha256": "3dd7514d07e6515bdd5f43b0f52744e93e8beb40890d832c4556c43d9ffbb31b",
+  "normalized_text_path": "evaluation/training-v3/job-artifacts/job_7eb1342feab1958b/normalized.txt",
+  "normalized_text_sha256": "a556b472448f6d99313320f78cba8f3e06cdeb483fc88d372bb147e421e60532",
+  "extractor_version": "browser-public-job-v1",
+  "company": "西门子医疗（中国）",
+  "canonical_company_id": "co_8471d0ed808b3c21",
+  "corporate_family_id": "fam_8471d0ed808b3c21",
+  "employer_display": "西门子医疗",
+  "employer_match_basis": "unverified_alias",
+  "exact_title": "Head of Marketing and Corporate Communications, China",
+  "title": "Head of Marketing and Corporate Communications, China",
+  "raw_publication_text": "3 个月前",
+  "publication_basis": "relative_date_interval",
+  "publication_interval_start": "2026-04-01",
+  "publication_interval_end_exclusive": "2026-05-02",
+  "date_parser_version": "relative-publication-v1",
+  "timezone": "Asia/Shanghai",
+  "source_job_id_span": {
+    "text": "4401724759",
+    "char_start": 14,
+    "char_end": 24
+  },
+  "title_span": {
+    "text": "Head of Marketing and Corporate Communications, China",
+    "char_start": 31,
+    "char_end": 84
+  },
+  "employer_span": {
+    "text": "西门子医疗",
+    "char_start": 94,
+    "char_end": 99
+  },
+  "publication_span": {
+    "text": "3 个月前",
+    "char_start": 112,
+    "char_end": 117
+  },
+  "scope_spans": [
+    {
+      "text": "Lead marketing and corporate communications team and develop branding communication strategies to address Healthineers' brand message/brand promise through all touch points from press materials, company website, marketing promotional materials to customer events",
+      "char_start": 806,
+      "char_end": 1068
+    },
+    {
+      "text": "Lead team to advance professionalism and expertise development, direct the corporate PR strategy, managing media relations and serving as a key spokesperson when necessary.",
+      "char_start": 1517,
+      "char_end": 1689
+    },
+    {
+      "text": "Develop talents in M&CC team with strong talent succession pipeline.",
+      "char_start": 2031,
+      "char_end": 2099
+    }
+  ],
+  "seniority_label": "director_plus",
+  "seniority_rule_version": "director-plus-artifact-v1",
+  "evaluation_eligible": true,
+  "exclusion_reason": "",
+  "reviewer": "pending",
+  "reviewed_at": "2026-08-01T11:21:54.401000+00:00",
+  "review_status": "pending_human_review"
+}

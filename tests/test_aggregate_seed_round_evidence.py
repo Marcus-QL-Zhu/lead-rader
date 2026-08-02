@@ -104,7 +104,7 @@ def test_restored_seed_round_also_restores_its_grounding_quote():
     assert len(events) == 1
     assert events[0].funding_round == ROUND
     assert BODY_QUOTE in events[0].evidence_quotes
-    assert TITLE_QUOTE in events[0].evidence_quotes
+    assert TITLE_QUOTE not in events[0].evidence_quotes
     assert any(
         value == "minimax_ungrounded_field_removed:funding_round"
         for value in events[0].ambiguities

@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "dataset_version": "semantic-v27-development-v2",
+  "reviewer": "independent_blind_review_v2",
+  "review_method": "逐条查看实体所在文章与上下文；仅把硬科技运营主体计为 tp；基金/VC、人物、政府/会展主体、关系噪声和同文重复实体不计入 lead scope。",
+  "expected_candidate_count": 53,
+  "default_label": "tp",
+  "context_only_keys": [
+    "shenzhen-semiconductor-association:2500:基本半导体"
+  ],
+  "labels": {},
+  "overrides": {}
+}

@@ -1,5 +1,6 @@
 import json
 import sqlite3
+from datetime import date, timedelta
 
 import pytest
 
@@ -186,7 +187,9 @@ def test_expired_draft_cannot_publish(tmp_path):
     changed = store.expire(
         run_date=bundle.run_date,
         direction=bundle.direction,
-        today="2026-08-03",
+        today=(
+            date.fromisoformat(bundle.drafts[0].expires_at) + timedelta(days=1)
+        ).isoformat(),
     )
     assert changed >= 1
     assert store.batch(bundle.run_date, bundle.direction)[0]["status"] == "expired"
@@ -210,15 +213,15 @@ def test_store_rejects_noncanonical_or_inconsistent_expiry_before_writing(tmp_pa
     with pytest.raises(ValueError, match="run_date plus 7 days"):
         store.save_bundle(invalid)
 
-    draft["expires_at"] = "2026-08-02"
+    draft["expires_at"] = bundle.drafts[0].expires_at
     draft["run_date"] = " 2026-07-26 "
     with pytest.raises(ValueError, match="run_date must equal bundle run_date"):
         store.save_bundle(invalid)
 
-    draft["run_date"] = "2026-07-25"
+    draft["run_date"] = (date.fromisoformat(bundle.run_date) - timedelta(days=1)).isoformat()
     with pytest.raises(ValueError, match="run_date must equal bundle run_date"):
         store.save_bundle(invalid)
 
-    invalid["run_date"] = "20260726"
+    invalid["run_date"] = bundle.run_date.replace("-", "")
     with pytest.raises(ValueError, match="run_date must use YYYY-MM-DD"):
         store.save_bundle(invalid)

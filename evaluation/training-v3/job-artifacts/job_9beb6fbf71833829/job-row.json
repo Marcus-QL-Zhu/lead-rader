@@ -1,0 +1,72 @@
+{
+  "artifact_id": "job_9beb6fbf71833829",
+  "source_platform": "linkedin-public",
+  "source_job_id": "4401277529",
+  "requested_url": "https://cn.linkedin.com/jobs/view/head-of-bu-test-systems-china-at-zf-%E9%9B%86%E5%9B%A2-4401277529",
+  "final_url": "https://cn.linkedin.com/jobs/view/head-of-bu-test-systems-china-at-zf-%E9%9B%86%E5%9B%A2-4401277529",
+  "captured_at": "2026-08-01T11:36:25.229000+00:00",
+  "http_status": 200,
+  "mime_type": "text/html",
+  "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_9beb6fbf71833829/raw-browser-capture.json",
+  "raw_artifact_sha256": "9a941dcb4d998a7b9ba53cc665fe5d7a477e9bf0344d89484e31fe62f370dae6",
+  "normalized_text_path": "evaluation/training-v3/job-artifacts/job_9beb6fbf71833829/normalized.txt",
+  "normalized_text_sha256": "602871090e5f2af3e31674e703c1d8c72bf664dd052632041ec63b5fc8cc1709",
+  "extractor_version": "browser-public-job-v1",
+  "company": "采埃孚（中国）",
+  "canonical_company_id": "co_a2a8516159b9316d",
+  "corporate_family_id": "fam_a2a8516159b9316d",
+  "employer_display": "ZF 集团",
+  "employer_match_basis": "unverified_alias",
+  "exact_title": "Head of BU Test Systems China",
+  "title": "Head of BU Test Systems China",
+  "raw_publication_text": "3 个月前",
+  "publication_basis": "relative_date_interval",
+  "publication_interval_start": "2026-04-01",
+  "publication_interval_end_exclusive": "2026-05-02",
+  "date_parser_version": "relative-publication-v1",
+  "timezone": "Asia/Shanghai",
+  "source_job_id_span": {
+    "text": "4401277529",
+    "char_start": 14,
+    "char_end": 24
+  },
+  "title_span": {
+    "text": "Head of BU Test Systems China",
+    "char_start": 31,
+    "char_end": 60
+  },
+  "employer_span": {
+    "text": "ZF 集团",
+    "char_start": 70,
+    "char_end": 75
+  },
+  "publication_span": {
+    "text": "3 个月前",
+    "char_start": 88,
+    "char_end": 93
+  },
+  "scope_spans": [
+    {
+      "text": "We are looking for a new colleague to act as the head of the China Market for Business Unit Test Systems, in charge of a team consisting of four functions: Sales, Project Management, Service, and R&D, at our Songjiang, Shanghai location.",
+      "char_start": 376,
+      "char_end": 613
+    },
+    {
+      "text": "Experience in managing an organization covering the full product life cycle and taking on P&L responsibility similar to a CEO of a small to medium-sized company",
+      "char_start": 1500,
+      "char_end": 1660
+    },
+    {
+      "text": "Managing a team of approximately 50 full-time employees located in different cities in China",
+      "char_start": 2053,
+      "char_end": 2145
+    }
+  ],
+  "seniority_label": "director_plus",
+  "seniority_rule_version": "director-plus-artifact-v1",
+  "evaluation_eligible": true,
+  "exclusion_reason": "",
+  "reviewer": "pending",
+  "reviewed_at": "2026-08-01T11:36:25.229000+00:00",
+  "review_status": "pending_human_review"
+}

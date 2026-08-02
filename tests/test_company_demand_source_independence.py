@@ -12,6 +12,7 @@ from test_direct_talent_generator import demand_response
 
 def test_two_event_types_from_same_publisher_are_not_independent_evidence():
     report = {
+        "manifest": {"as_of": "2026-07-26"},
         "leads": [
             {
                 "company": "test-company",

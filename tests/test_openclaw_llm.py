@@ -161,6 +161,136 @@ def test_direct_runner_retries_one_transient_empty_assistant_response():
     assert [body["reasoning_split"] for body in bodies] == [True, False]
 
 
+def test_direct_runner_can_disable_m3_thinking_for_bounded_extraction():
+    captured = {}
+
+    def transport(request, timeout):
+        del timeout
+        captured.update(json.loads(request.data.decode("utf-8")))
+        return {"choices": [{"message": {"content": '{"events":[]}'}}]}
+
+    runner = OpenClawConfiguredLLMRunner(
+        config=OpenClawLLMConfig(
+            provider="minimax",
+            model="MiniMax-M3",
+            base_url="https://api.minimaxi.com/v1",
+            api_kind="openai-completions",
+            api_key="test-secret",
+        ),
+        thinking_mode="disabled",
+        transport=transport,
+    )
+
+    assert runner.run("prompt", session_id="ignored") == '{"events":[]}'
+    assert captured["thinking"] == {"type": "disabled"}
+    assert captured["reasoning_split"] is True
+
+
+def test_disabled_thinking_does_not_repeat_an_empty_request():
+    call_count = 0
+
+    def transport(request, timeout):
+        del request, timeout
+        nonlocal call_count
+        call_count += 1
+        return {"choices": [{"message": {"content": ""}}]}
+
+    runner = OpenClawConfiguredLLMRunner(
+        config=OpenClawLLMConfig(
+            provider="minimax",
+            model="MiniMax-M3",
+            base_url="https://api.minimaxi.com/v1",
+            api_kind="openai-completions",
+            api_key="test-secret",
+        ),
+        thinking_mode="disabled",
+        transport=transport,
+    )
+
+    with pytest.raises(DirectLLMError, match="no assistant text"):
+        runner.run("prompt", session_id="ignored")
+    assert call_count == 1
+
+
+@pytest.mark.parametrize(
+    ("provider", "model"),
+    [
+        ("minimax", "MiniMax-M2.7-highspeed"),
+        ("compatible", "MiniMax-M3"),
+    ],
+)
+def test_thinking_mode_is_capability_gated(provider, model):
+    with pytest.raises(LLMConfigurationError, match="only.*MiniMax-M3"):
+        OpenClawConfiguredLLMRunner(
+            config=OpenClawLLMConfig(
+                provider=provider,
+                model=model,
+                base_url="https://example.test/v1",
+                api_kind="openai-completions",
+                api_key="test-secret",
+            ),
+            thinking_mode="disabled",
+        )
+
+
+def test_direct_runner_rejects_provider_application_error():
+    runner = OpenClawConfiguredLLMRunner(
+        config=OpenClawLLMConfig(
+            provider="minimax",
+            model="MiniMax-M3",
+            base_url="https://api.minimaxi.com/v1",
+            api_kind="openai-completions",
+            api_key="test-secret",
+        ),
+        thinking_mode="disabled",
+        transport=lambda request, timeout: {
+            "base_resp": {"status_code": 1004, "status_msg": "rate limited"},
+            "choices": [{"message": {"content": "{}"}}],
+        },
+    )
+
+    with pytest.raises(DirectLLMError, match="application error 1004"):
+        runner.run("prompt", session_id="ignored")
+
+
+def test_direct_runner_rejects_truncated_completion():
+    runner = OpenClawConfiguredLLMRunner(
+        config=OpenClawLLMConfig(
+            provider="minimax",
+            model="MiniMax-M3",
+            base_url="https://api.minimaxi.com/v1",
+            api_kind="openai-completions",
+            api_key="test-secret",
+        ),
+        thinking_mode="disabled",
+        transport=lambda request, timeout: {
+            "choices": [
+                {
+                    "finish_reason": "length",
+                    "message": {"content": "{\"events\":["},
+                }
+            ]
+        },
+    )
+
+    with pytest.raises(DirectLLMError, match="truncated"):
+        runner.run("prompt", session_id="ignored")
+
+
+def test_direct_runner_rejects_unknown_thinking_mode():
+    with pytest.raises(ValueError, match="thinking_mode"):
+        OpenClawConfiguredLLMRunner(
+            config=OpenClawLLMConfig(
+                provider="minimax",
+                model="MiniMax-M3",
+                base_url="https://api.minimaxi.com/v1",
+                api_kind="openai-completions",
+                api_key="test-secret",
+            ),
+            thinking_mode="unsupported",
+        )
+
+
 def test_explicit_configured_model_override_uses_same_provider(tmp_path):
     config_path, models_path = write_openclaw_config(tmp_path)
     models = json.loads(models_path.read_text(encoding="utf-8"))

@@ -1,0 +1,23 @@
+{
+  "validation": {
+    "valid": true,
+    "case_count": 40,
+    "failure_count": 0,
+    "failures": {}
+  },
+  "comparison": {
+    "case_count": 40,
+    "agreement_count": 32,
+    "disagreement_count": 8,
+    "disagreement_keys": [
+      "cls-telegraph:2442012",
+      "jazzyear-latest:1828",
+      "jiqizhixin-industry-analysis:2026-07-31-10",
+      "jiqizhixin-industry-analysis:2026-07-31-6",
+      "jiqizhixin-industry-analysis:2026-07-31-9",
+      "stcn-flash:4053338",
+      "vbdata-funding:1519085489",
+      "zhidx-financing:581550"
+    ]
+  }
+}

@@ -1,0 +1,72 @@
+{
+  "artifact_id": "job_f14045acef735ddc",
+  "source_platform": "linkedin-public",
+  "source_job_id": "4407205031",
+  "requested_url": "https://cn.linkedin.com/jobs/view/director-government-relations-china-at-%E6%B1%9F%E6%A3%AE%E8%87%AA%E6%8E%A7-4407205031",
+  "final_url": "https://cn.linkedin.com/jobs/view/director-government-relations-china-at-%E6%B1%9F%E6%A3%AE%E8%87%AA%E6%8E%A7-4407205031",
+  "captured_at": "2026-08-01T11:25:55.220000+00:00",
+  "http_status": 200,
+  "mime_type": "text/html",
+  "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_f14045acef735ddc/raw-browser-capture.json",
+  "raw_artifact_sha256": "1c3639bb558dbeb10c7440da7256b1b09986c23e25ce5c8bc332d04701028703",
+  "normalized_text_path": "evaluation/training-v3/job-artifacts/job_f14045acef735ddc/normalized.txt",
+  "normalized_text_sha256": "6447982a09d0ce575e4ff5fd469605b6810ffff6e343a2d7cdd432a5bcd2798a",
+  "extractor_version": "browser-public-job-v1",
+  "company": "江森自控（中国）",
+  "canonical_company_id": "co_d598e5c881a3ad9c",
+  "corporate_family_id": "fam_d598e5c881a3ad9c",
+  "employer_display": "江森自控",
+  "employer_match_basis": "unverified_alias",
+  "exact_title": "Director, Government Relations China",
+  "title": "Director, Government Relations China",
+  "raw_publication_text": "3 周前",
+  "publication_basis": "relative_date_interval",
+  "publication_interval_start": "2026-07-04",
+  "publication_interval_end_exclusive": "2026-07-12",
+  "date_parser_version": "relative-publication-v1",
+  "timezone": "Asia/Shanghai",
+  "source_job_id_span": {
+    "text": "4407205031",
+    "char_start": 14,
+    "char_end": 24
+  },
+  "title_span": {
+    "text": "Director, Government Relations China",
+    "char_start": 31,
+    "char_end": 67
+  },
+  "employer_span": {
+    "text": "江森自控",
+    "char_start": 77,
+    "char_end": 81
+  },
+  "publication_span": {
+    "text": "3 周前",
+    "char_start": 94,
+    "char_end": 98
+  },
+  "scope_spans": [
+    {
+      "text": "Johnson Controls is hiring a Director of Government Relations, to provide dynamic and effective leadership of the company’s public policy and advocacy efforts throughout China. Reporting to the Vice President & Chief Sustainability and External Relations Officer, and Government Relations Director, and part of a collaborative, diverse, global team, this person will assist in the development and execution of policy campaigns, projects, and initiatives critical to the company’s success on issues including energy, environment, government contracting, government subsidies and technology development.",
+      "char_start": 220,
+      "char_end": 821
+    },
+    {
+      "text": "Ensure the establishment, development, and maintenance of effective working relationships with central, provincial and municipal government officials and government agencies.",
+      "char_start": 844,
+      "char_end": 1018
+    },
+    {
+      "text": "Lead the development and execution of policy and regulatory strategies, orchestrate advocacy campaigns, and monitor progress.",
+      "char_start": 1019,
+      "char_end": 1144
+    }
+  ],
+  "seniority_label": "director_plus",
+  "seniority_rule_version": "director-plus-artifact-v1",
+  "evaluation_eligible": true,
+  "exclusion_reason": "",
+  "reviewer": "pending",
+  "reviewed_at": "2026-08-01T11:25:55.220000+00:00",
+  "review_status": "pending_human_review"
+}

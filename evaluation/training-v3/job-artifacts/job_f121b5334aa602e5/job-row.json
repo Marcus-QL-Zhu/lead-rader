@@ -1,0 +1,72 @@
+{
+  "artifact_id": "job_f121b5334aa602e5",
+  "source_platform": "linkedin-public",
+  "source_job_id": "4422237422",
+  "requested_url": "https://cn.linkedin.com/jobs/view/head-of-sales-electronics-china-at-forvia-hella-4422237422",
+  "final_url": "https://cn.linkedin.com/jobs/view/head-of-sales-electronics-china-at-forvia-hella-4422237422",
+  "captured_at": "2026-08-01T11:33:26.360000+00:00",
+  "http_status": 200,
+  "mime_type": "text/html",
+  "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_f121b5334aa602e5/raw-browser-capture.json",
+  "raw_artifact_sha256": "58de4077957d00b59762cef925d5da9a4351dc4d27a07ebbb7068f865d4fc01b",
+  "normalized_text_path": "evaluation/training-v3/job-artifacts/job_f121b5334aa602e5/normalized.txt",
+  "normalized_text_sha256": "f03a4cd74eeef2e306707292dec7a398593b8fa6b25c0fdf99ad23d8481b5c80",
+  "extractor_version": "browser-public-job-v1",
+  "company": "佛吉亚（中国）",
+  "canonical_company_id": "co_0d2f66e8dae7dc6b",
+  "corporate_family_id": "fam_0d2f66e8dae7dc6b",
+  "employer_display": "海拉",
+  "employer_match_basis": "unverified_alias",
+  "exact_title": "Head of Sales Electronics China",
+  "title": "Head of Sales Electronics China",
+  "raw_publication_text": "1 个月前",
+  "publication_basis": "relative_date_interval",
+  "publication_interval_start": "2026-06-01",
+  "publication_interval_end_exclusive": "2026-07-02",
+  "date_parser_version": "relative-publication-v1",
+  "timezone": "Asia/Shanghai",
+  "source_job_id_span": {
+    "text": "4422237422",
+    "char_start": 14,
+    "char_end": 24
+  },
+  "title_span": {
+    "text": "Head of Sales Electronics China",
+    "char_start": 31,
+    "char_end": 62
+  },
+  "employer_span": {
+    "text": "海拉",
+    "char_start": 72,
+    "char_end": 74
+  },
+  "publication_span": {
+    "text": "1 个月前",
+    "char_start": 87,
+    "char_end": 92
+  },
+  "scope_spans": [
+    {
+      "text": "Develop and execute regional market strategy especially driving China for China Customer Strategy to meet / exceed revenue and acquisition targets",
+      "char_start": 1041,
+      "char_end": 1187
+    },
+    {
+      "text": "Oversee sales forecasting, budgeting and pipeline management",
+      "char_start": 3087,
+      "char_end": 3147
+    },
+    {
+      "text": "Drive agile team transformation through right organizational set up, target cascading, performance evaluation etc.",
+      "char_start": 3216,
+      "char_end": 3330
+    }
+  ],
+  "seniority_label": "director_plus",
+  "seniority_rule_version": "director-plus-artifact-v1",
+  "evaluation_eligible": true,
+  "exclusion_reason": "",
+  "reviewer": "pending",
+  "reviewed_at": "2026-08-01T11:33:26.360000+00:00",
+  "review_status": "pending_human_review"
+}

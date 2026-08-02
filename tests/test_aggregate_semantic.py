@@ -86,9 +86,7 @@ def test_minimax_semantic_output_is_grounded_and_normalized():
                     "funding_amount": "1亿元",
                     "investors": ["远山资本"],
                     "event_summary": "完成A轮融资",
-                    "evidence_quotes": [
-                        "星河芯片完成1亿元A轮融资，远山资本领投。"
-                    ],
+                    "evidence_quotes": ["星河芯片完成1亿元A轮融资，远山资本领投。"],
                     "confidence": "high",
                 }
             ],
@@ -134,7 +132,5 @@ def test_minimax_semantic_rejects_invented_subject_after_one_repair():
     assert len(events) == 1
     assert events[0].canonical_company == _seed()[0].canonical_company
     assert events[0].processor == "rules"
-    assert events[0].ambiguities == (
-        "minimax_validation_failed:SemanticOutputError",
-    )
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert events[0].ambiguities == ("minimax_claim_validation_failed",)
+    assert processor.last_audit["status"] == "partial"

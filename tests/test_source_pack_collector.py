@@ -3,7 +3,7 @@ import json
 import urllib.error
 
 from ht_lead_radar.models import Evidence
-from ht_lead_radar.source_pack_collector import SourcePackCollector
+from ht_lead_radar.source_pack_collector import SourcePackCollector, _env_flag
 from ht_lead_radar.source_packs import SourceDefinition, SourcePack, SourcePackRegistry
 
 
@@ -57,6 +57,34 @@ class StubOpener:
         if isinstance(route, BaseException):
             raise route
         return route
+
+
+def test_dedicated_semantic_production_flags_default_on_and_allow_rollback(
+    monkeypatch,
+):
+    monkeypatch.delenv("LEAD_RADAR_AGGREGATE_STRICT_CLAIMS", raising=False)
+    monkeypatch.delenv("LEAD_RADAR_AGGREGATE_CLAIM_CENTRIC_V27", raising=False)
+
+    assert _env_flag(
+        "LEAD_RADAR_AGGREGATE_STRICT_CLAIMS",
+        default=True,
+        overrides={},
+    )
+    assert _env_flag(
+        "LEAD_RADAR_AGGREGATE_CLAIM_CENTRIC_V27",
+        default=True,
+        overrides={},
+    )
+    assert not _env_flag(
+        "LEAD_RADAR_AGGREGATE_STRICT_CLAIMS",
+        default=True,
+        overrides={"LEAD_RADAR_AGGREGATE_STRICT_CLAIMS": "0"},
+    )
+    assert not _env_flag(
+        "LEAD_RADAR_AGGREGATE_CLAIM_CENTRIC_V27",
+        default=True,
+        overrides={"LEAD_RADAR_AGGREGATE_CLAIM_CENTRIC_V27": "false"},
+    )
 
 
 def _source(

@@ -1,0 +1,1978 @@
+{
+  "schema_version": 1,
+  "dataset_version": "semantic-v27-development-v2",
+  "purpose": "opened-semantic-v27-prompt-loop-holdout",
+  "status": "complete",
+  "model": "minimax/MiniMax-M3",
+  "round": 2,
+  "maximum_rounds": 3,
+  "variant": "b",
+  "selected_keys": [
+    "stcn-flash:4052079",
+    "cyzone-latest:841774",
+    "jazzyear-research:162"
+  ],
+  "prompt_config": {
+    "system_prompt": "你是公司事件Claim裁决器。输入中的实体、Claim与原文Span均由宿主锁定。你只判断每个Claim应接受还是拒绝；接受时从allowed_subject_entity_ids选择一个主体，判断event_status，并提取原文逐字存在的融资字段与投资方。事件不限于融资；融资、量产扩产、订单、合作、产品技术发布、客户验证与销售发货、监管临床、并购控制权、上市、新实体和企业系统等明确公司动作都可接受。event_type_hint通常是宿主锁定的动作类型；接受时event_type必须原样返回event_type_hint。唯一例外是event_type_hint=open_action：此时必须从allowed_event_types中选择最准确的类型，若原文不足以确定公司经营动作则拒绝，严禁返回open_action。funding_round_hint非空时也由宿主锁定，funding_round必须原样返回。若Span确实支持该动作，不要因没有融资字段而拒绝。host_mandatory=true表示宿主高精度规则已锁定该动作，不得拒绝。只围绕每个Claim自己的action_text裁决；同一Span若有多个独立action_text，多个Claim可以分别接受。主体是承担该动作的经营公司，不是产品、模型、平台、部门、人物、媒体或栏目短语。primary_subject_entity_id非空时代表宿主按语法识别的首选主体，应优先采用；但融资/投资的主体必须是获得资金的公司，不能选投资方。产品技术事件选择发布或运营该产品的公司；高管变动选择发生组织任免、加入或离开的公司。标题复述、评论推断和随后有明确详情的摘要Claim应拒绝为duplicate_or_summary。但周报中自包含的公司融资事实，只要逐字给出主体、完成融资动作以及金额或轮次，必须接受；不能仅因它位于汇总栏目而拒绝。公开披露的拟、计划、将要执行的公司动作是有效事件，event_status应为target。不能用event_type_mismatch拒绝：事件类型已由宿主锁定，只判断该action_text是否真实表达公司动作。拒绝reason_code只能是unsupported_company_action、subject_mismatch、historical_or_background、duplicate_or_summary、ambiguous_evidence之一。每个输入claim_id必须且只能出现一次。只输出JSON对象，不输出Markdown。格式为{\"decisions\":[{\"claim_id\":\"ac_x\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_x\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"1亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[\"远山资本\"],\"industry_tags\":[\"semiconductor\"],\"confidence\":\"high\"}]}。拒绝时只填claim_id、decision=reject和reason_code。\n采用主体与时态优先策略：先锁定承担动作的经营公司，投资场景选择融资接收方而不是投资方；产品选择发布或运营方；任免选择发生组织变化的公司。已完成/发布/交付用completed，启动/进入用started，拟/计划/将用target，累计历史汇总用cumulative或按背景拒绝。只有原文不足以支撑主体动作时才拒绝，禁止凭行业常识补事实。\n采用原子事实召回策略：逐个Claim独立裁决，周报短讯只要自包含主体和当前动作就接受；历史沿革、能力介绍和编辑点评拒绝。open_action先找action_text中的谓词，再映射到最窄的allowed_event_type；发布产品或技术成果通常是technical_milestone，实际交付、发货、销售、客户采用通常是customer_validation。",
+    "few_shot": {
+      "examples": [
+        {
+          "input": {
+            "entities": [
+              {
+                "entity_id": "ae_chip",
+                "canonical_name": "星河芯片",
+                "aliases": []
+              },
+              {
+                "entity_id": "ae_investor",
+                "canonical_name": "远山资本",
+                "aliases": []
+              },
+              {
+                "entity_id": "ae_platform",
+                "canonical_name": "星河智能平台",
+                "aliases": []
+              }
+            ],
+            "spans": [
+              {
+                "span_id": "as_funding",
+                "text": "远山资本将向星河芯片投资1亿元。"
+              },
+              {
+                "span_id": "as_product",
+                "text": "星河芯片正式发布星河智能平台。"
+              },
+              {
+                "span_id": "as_summary",
+                "text": "本周硬科技融资信号密集，星河芯片融资规模创新高。"
+              }
+            ],
+            "claims": [
+              {
+                "claim_id": "ac_funding",
+                "span_id": "as_funding",
+                "event_type_hint": "funding",
+                "event_status_hint": "target",
+                "action_text": "向星河芯片投资1亿元",
+                "allowed_subject_entity_ids": [
+                  "ae_investor",
+                  "ae_chip"
+                ],
+                "primary_subject_entity_id": "ae_investor"
+              },
+              {
+                "claim_id": "ac_product",
+                "span_id": "as_product",
+                "event_type_hint": "technical_milestone",
+                "event_status_hint": "completed",
+                "action_text": "发布星河智能平台",
+                "allowed_subject_entity_ids": [
+                  "ae_chip",
+                  "ae_platform"
+                ],
+                "primary_subject_entity_id": "ae_chip"
+              },
+              {
+                "claim_id": "ac_summary",
+                "span_id": "as_summary",
+                "event_type_hint": "funding",
+                "event_status_hint": "completed",
+                "action_text": "融资规模创新高",
+                "allowed_subject_entity_ids": [
+                  "ae_chip"
+                ],
+                "primary_subject_entity_id": "ae_chip"
+              }
+            ]
+          },
+          "output": {
+            "decisions": [
+              {
+                "claim_id": "ac_funding",
+                "decision": "accept",
+                "subject_entity_id": "ae_chip",
+                "event_type": "funding",
+                "event_status": "target",
+                "funding_round": "",
+                "funding_amount": "1亿元",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "远山资本"
+                ],
+                "industry_tags": [
+                  "semiconductor"
+                ],
+                "confidence": "high"
+              },
+              {
+                "claim_id": "ac_product",
+                "decision": "accept",
+                "subject_entity_id": "ae_chip",
+                "event_type": "technical_milestone",
+                "event_status": "completed",
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "industry_tags": [
+                  "semiconductor"
+                ],
+                "confidence": "high"
+              },
+              {
+                "claim_id": "ac_summary",
+                "decision": "reject",
+                "reason_code": "duplicate_or_summary"
+              }
+            ]
+          }
+        },
+        {
+          "input": {
+            "entities": [
+              {
+                "entity_id": "ae_bio",
+                "canonical_name": "星海生物",
+                "aliases": []
+              },
+              {
+                "entity_id": "ae_fund",
+                "canonical_name": "远山资本",
+                "aliases": []
+              }
+            ],
+            "spans": [
+              {
+                "span_id": "as_raise",
+                "text": "星海生物完成B轮融资，由远山资本领投。"
+              }
+            ],
+            "claims": [
+              {
+                "claim_id": "ac_raise",
+                "span_id": "as_raise",
+                "event_type_hint": "funding",
+                "event_status_hint": "completed",
+                "funding_round_hint": "B轮",
+                "action_text": "完成B轮融资",
+                "allowed_subject_entity_ids": [
+                  "ae_bio",
+                  "ae_fund"
+                ],
+                "primary_subject_entity_id": "ae_bio"
+              }
+            ]
+          },
+          "output": {
+            "decisions": [
+              {
+                "claim_id": "ac_raise",
+                "decision": "accept",
+                "subject_entity_id": "ae_bio",
+                "event_type": "funding",
+                "event_status": "completed",
+                "funding_round": "B轮",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "远山资本"
+                ],
+                "industry_tags": [
+                  "biotech"
+                ],
+                "confidence": "high"
+              }
+            ]
+          }
+        },
+        {
+          "input": {
+            "entities": [
+              {
+                "entity_id": "ae_chip",
+                "canonical_name": "凌云芯片",
+                "aliases": []
+              }
+            ],
+            "spans": [
+              {
+                "span_id": "as_now",
+                "text": "本周，凌云芯片发布车规级芯片。"
+              },
+              {
+                "span_id": "as_old",
+                "text": "凌云芯片成立于2019年，长期专注车规芯片。"
+              }
+            ],
+            "claims": [
+              {
+                "claim_id": "ac_now",
+                "span_id": "as_now",
+                "event_type_hint": "open_action",
+                "event_status_hint": "completed",
+                "action_text": "发布车规级芯片",
+                "allowed_subject_entity_ids": [
+                  "ae_chip"
+                ],
+                "primary_subject_entity_id": "ae_chip",
+                "allowed_event_types": [
+                  "technical_milestone",
+                  "customer_validation"
+                ]
+              },
+              {
+                "claim_id": "ac_old",
+                "span_id": "as_old",
+                "event_type_hint": "technical_milestone",
+                "event_status_hint": "completed",
+                "action_text": "长期专注车规芯片",
+                "allowed_subject_entity_ids": [
+                  "ae_chip"
+                ],
+                "primary_subject_entity_id": "ae_chip"
+              }
+            ]
+          },
+          "output": {
+            "decisions": [
+              {
+                "claim_id": "ac_now",
+                "decision": "accept",
+                "subject_entity_id": "ae_chip",
+                "event_type": "technical_milestone",
+                "event_status": "completed",
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "industry_tags": [
+                  "semiconductor"
+                ],
+                "confidence": "high"
+              },
+              {
+                "claim_id": "ac_old",
+                "decision": "reject",
+                "reason_code": "historical_or_background"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+    "contract_version": "v5-open-action-ledger",
+    "lineage": {
+      "round": 2,
+      "variant": "b",
+      "parent_prompt_version": "aggregate-semantic-v27-loop-r1-c"
+    }
+  },
+  "prompt_config_sha256": "e38779c3a0deabd680e44032e920e4bf83e89f025c95406e8a4839506d1315db",
+  "code_contract_sha256": "fad412a274353d2f36b21bf530b4447d56ccffc801d8957d165bff24da95a777",
+  "source_bundle_sha256": "89f54c2de59d3aa48c05d7b70019b0028d978ad1815a8c218d7bf7f4bd7298a1",
+  "source_gold_sha256": "614621e1fe4a5560de2d03e5987cdedb15819d2cb1247d576ab1f37876102dd7",
+  "source_split_sha256": "f393db769b126e44f51b67984eea38dd895676a72b1a8e099921c19a4790d937",
+  "results": [
+    {
+      "key": "stcn-flash:4052079",
+      "position": 1,
+      "events": [],
+      "audit": {
+        "source_id": "stcn-flash",
+        "source_article_id": "4052079",
+        "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+        "claim_contract_version": "v5-open-action-ledger",
+        "model_identity": "minimax/MiniMax-M3",
+        "cache_key": "aggregate-semantic-v27-loop-r2-b|minimax/MiniMax-M3",
+        "entity_count": 1,
+        "eligible_entity_count": 0,
+        "action_span_count": 0,
+        "candidate_count": 0,
+        "batch_count": 0,
+        "document_type": "single_company_flash",
+        "document_route_reason": "adapter_company_field",
+        "document_family": "policy_market",
+        "processing_mode": "policy_rules_then_company_override",
+        "route_gate_confidence": "medium",
+        "route_llm_gate_required": false,
+        "route_gate_signals": [
+          "adapter_company_field",
+          "policy_cue"
+        ],
+        "document_unit_ids": [
+          "u_818358dc2195"
+        ],
+        "accepted_claim_ids": [],
+        "rejected_claim_ids": [],
+        "failed_claim_ids": [],
+        "host_fallback_claim_ids": [],
+        "batch_statuses": [],
+        "first_responses": [],
+        "repair_responses": [],
+        "validation_issues": [],
+        "infrastructure_errors": [],
+        "skipped_claim_ids_due_to_infrastructure": [],
+        "rejection_reason_counts": {},
+        "status": "no_claims",
+        "strict_claim_contract_ready": true,
+        "final_event_count": 0,
+        "semantic_window": {
+          "mode": "full_short",
+          "reason": "under_window_limit",
+          "original_chars": 192,
+          "semantic_chars": 192,
+          "prefix_action_count": 1,
+          "tail_action_count": 0,
+          "prefix_has_concrete_event": true,
+          "interview_cue_count": 0
+        }
+      }
+    },
+    {
+      "key": "cyzone-latest:841774",
+      "position": 2,
+      "events": [
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "360集团",
+            "360"
+          ],
+          "canonical_company": "360集团",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai_software"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月28日，360集团创始人周鸿祎正式发布新一代企业智能体工作平台“纳米Work”。",
+          "evidence_quotes": [
+            "7月28日，360集团创始人周鸿祎正式发布新一代企业智能体工作平台“纳米Work”。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_61ceec9186961e"
+          ],
+          "span_ids": [
+            "as_403e13fb9b71ee"
+          ],
+          "subject_entity_id": "ae_465614e2016e98"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "Meta"
+          ],
+          "canonical_company": "Meta",
+          "event_type": "major_order",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai_infrastructure"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "公司已签署不可撤销合同承诺3493亿美元，主要涉及第三方云协议、服务器及网络基础设施。",
+          "evidence_quotes": [
+            "公司已签署不可撤销合同承诺3493亿美元，主要涉及第三方云协议、服务器及网络基础设施。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_ecc4db5f036b30"
+          ],
+          "span_ids": [
+            "as_59db0a5ced20de"
+          ],
+          "subject_entity_id": "ae_2a6d6627cb9672"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "NAVER"
+          ],
+          "canonical_company": "NAVER",
+          "event_type": "factory_or_capacity",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai_infrastructure"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "近日，NAVER、Brookfield与英伟达宣布了一项韩国自主人工智能工厂基础设施的扩建计划，计划投资将GAK世宗数据中心的英伟达DSX AI工厂的初始部署规模从55兆瓦扩大至2028年的200兆瓦。",
+          "evidence_quotes": [
+            "近日，NAVER、Brookfield与英伟达宣布了一项韩国自主人工智能工厂基础设施的扩建计划，计划投资将GAK世宗数据中心的英伟达DSX AI工厂的初始部署规模从55兆瓦扩大至2028年的200兆瓦。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "target",
+          "claim_ids": [
+            "ac_eeeaf13115b12d"
+          ],
+          "span_ids": [
+            "as_2f1e8e7f7621d7"
+          ],
+          "subject_entity_id": "ae_2c8becd50892a9"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "NAVER"
+          ],
+          "canonical_company": "NAVER",
+          "event_type": "funding",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai_infrastructure"
+          ],
+          "funding_round": "",
+          "funding_amount": "10亿美元",
+          "cumulative_funding_amount": "",
+          "investors": [
+            "英伟达"
+          ],
+          "event_summary": "根据协议条款，英伟达将向NAVER投资10亿美元。",
+          "evidence_quotes": [
+            "根据协议条款，英伟达将向NAVER投资10亿美元。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "target",
+          "claim_ids": [
+            "ac_acdce5ed669eac"
+          ],
+          "span_ids": [
+            "as_c1975de03f7a81"
+          ],
+          "subject_entity_id": "ae_2c8becd50892a9"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "OpenAI"
+          ],
+          "canonical_company": "OpenAI",
+          "event_type": "executive_change",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "OpenAI一位发言人证实，Thinking Machines Lab联合创始人翁荔将重返OpenAI。",
+          "evidence_quotes": [
+            "OpenAI一位发言人证实，Thinking Machines Lab联合创始人翁荔将重返OpenAI。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "target",
+          "claim_ids": [
+            "ac_535de8e119028b"
+          ],
+          "span_ids": [
+            "as_b51fb99c9730e1"
+          ],
+          "subject_entity_id": "ae_3992a83a91d2dd"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "OpenAI"
+          ],
+          "canonical_company": "OpenAI",
+          "event_type": "new_site_or_entity",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "(阿里云) OpenAI将在爱尔兰设立新的欧盟总部，并新增250个工作岗位 据报道，OpenAI当地时间7月27日表示，将在爱尔兰设立新的欧盟总部，并在未来两年内新增250个工作岗位。",
+          "evidence_quotes": [
+            "(阿里云) OpenAI将在爱尔兰设立新的欧盟总部，并新增250个工作岗位 据报道，OpenAI当地时间7月27日表示，将在爱尔兰设立新的欧盟总部，并在未来两年内新增250个工作岗位。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "target",
+          "claim_ids": [
+            "ac_e594cdbcee3e09"
+          ],
+          "span_ids": [
+            "as_6e713c4ae78261"
+          ],
+          "subject_entity_id": "ae_3992a83a91d2dd"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "OpenAI"
+          ],
+          "canonical_company": "OpenAI",
+          "event_type": "partnership",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "semiconductor",
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "（鲁中晨报） 三星李在镕与OpenAI据悉磋商人工智能与半导体领域合作方案 三星电子会长李在镕与OpenAI首席执行官山姆・奥特曼于旧金山OpenAI总部会面，磋商人工智能与半导体领域合作方案。",
+          "evidence_quotes": [
+            "（鲁中晨报） 三星李在镕与OpenAI据悉磋商人工智能与半导体领域合作方案 三星电子会长李在镕与OpenAI首席执行官山姆・奥特曼于旧金山OpenAI总部会面，磋商人工智能与半导体领域合作方案。"
+          ],
+          "ambiguities": [],
+          "confidence": "medium",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "started",
+          "claim_ids": [
+            "ac_5d2aeb884637ee"
+          ],
+          "span_ids": [
+            "as_5845d1ecc2e936"
+          ],
+          "subject_entity_id": "ae_3992a83a91d2dd"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "OpenAI"
+          ],
+          "canonical_company": "OpenAI",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai_software"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月29日消息，OpenAI当地时间7月28日在社交媒体平台X发文称，已发布开源版Codex Security CLI。",
+          "evidence_quotes": [
+            "7月29日消息，OpenAI当地时间7月28日在社交媒体平台X发文称，已发布开源版Codex Security CLI。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_90e03e2b8e4fa7"
+          ],
+          "span_ids": [
+            "as_a8517a130ca82c"
+          ],
+          "subject_entity_id": "ae_3992a83a91d2dd"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "OpenAI"
+          ],
+          "canonical_company": "OpenAI",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "此外，OpenAI在API中推出Fast模式，取代此前的Priority Processing服务。",
+          "evidence_quotes": [
+            "此外，OpenAI在API中推出Fast模式，取代此前的Priority Processing服务。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_d58952ee223171"
+          ],
+          "span_ids": [
+            "as_bc63c0a3bb70c6"
+          ],
+          "subject_entity_id": "ae_3992a83a91d2dd"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "Safe Superintelligence"
+          ],
+          "canonical_company": "Safe Superintelligence",
+          "event_type": "funding",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [
+            "英伟达"
+          ],
+          "event_summary": "两家企业周一对外披露，英伟达在难得深度了解该初创公司研发进展后，完成了一笔大额投资；本次交易具体财务条款并未对外披露。",
+          "evidence_quotes": [
+            "两家企业周一对外披露，英伟达在难得深度了解该初创公司研发进展后，完成了一笔大额投资；本次交易具体财务条款并未对外披露。"
+          ],
+          "ambiguities": [],
+          "confidence": "medium",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_5c2d256de061b6"
+          ],
+          "span_ids": [
+            "as_9427761852fa76"
+          ],
+          "subject_entity_id": "ae_22105606f57377"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "Spur Intelligence"
+          ],
+          "canonical_company": "Spur Intelligence",
+          "event_type": "funding",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai",
+            "defense",
+            "drone"
+          ],
+          "funding_round": "种子轮",
+          "funding_amount": "2亿美元",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "其中，融资额最高的为AI无人机防御平台开发商Spur Intelligence，宣布完成2亿美元种子轮融资。",
+          "evidence_quotes": [
+            "其中，融资额最高的为AI无人机防御平台开发商Spur Intelligence，宣布完成2亿美元种子轮融资。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_037fe6043a9f85"
+          ],
+          "span_ids": [
+            "as_0afa22fdfd23a7"
+          ],
+          "subject_entity_id": "ae_51688ee75d3542"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "Thinking Machines Lab"
+          ],
+          "canonical_company": "Thinking Machines Lab",
+          "event_type": "executive_change",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "本周早些时候，她刚刚宣布因身体原因退出这家她和OpenAI前首席技术官米拉・穆拉蒂等人联合创立的公司。",
+          "evidence_quotes": [
+            "本周早些时候，她刚刚宣布因身体原因退出这家她和OpenAI前首席技术官米拉・穆拉蒂等人联合创立的公司。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_855b55d354356e"
+          ],
+          "span_ids": [
+            "as_04bf81f7612744"
+          ],
+          "subject_entity_id": "ae_4397b8c4f4a0bd"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "xAI",
+            "Grok"
+          ],
+          "canonical_company": "xAI",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "（中国科技网） xAI面向Grok推出Build模型 xAI面向Grok推出Build模型。",
+          "evidence_quotes": [
+            "（中国科技网） xAI面向Grok推出Build模型 xAI面向Grok推出Build模型。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_15f5e83b96368d"
+          ],
+          "span_ids": [
+            "as_d6dd49860c3671"
+          ],
+          "subject_entity_id": "ae_074de1ec584bd1"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "xAI",
+            "Grok"
+          ],
+          "canonical_company": "xAI",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月29日，马斯克当地时间28日表示，xAI下一代大模型Grok 4.6预计将于8月7日前后发布，该模型参数规模将达到1.5万亿，并将在监督微调（SFT）和强化学习（RL）方面实现显著改进。",
+          "evidence_quotes": [
+            "7月29日，马斯克当地时间28日表示，xAI下一代大模型Grok 4.6预计将于8月7日前后发布，该模型参数规模将达到1.5万亿，并将在监督微调（SFT）和强化学习（RL）方面实现显著改进。",
+            "”（蓝鲸新闻） 马斯克称Grok 4.6将于8月7日前后发布，数周后推出Grok 4.7"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "target",
+          "claim_ids": [
+            "ac_4ebda2466bb587",
+            "ac_e710933be898c8"
+          ],
+          "span_ids": [
+            "as_e287de899f0289",
+            "as_0367b015620bc2"
+          ],
+          "subject_entity_id": "ae_074de1ec584bd1"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "Grok"
+          ],
+          "canonical_company": "xAI",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "artificial_intelligence"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "”（蓝鲸新闻） 马斯克称Grok 4.6将于8月7日前后发布，数周后推出Grok 4.7",
+          "evidence_quotes": [
+            "”（蓝鲸新闻） 马斯克称Grok 4.6将于8月7日前后发布，数周后推出Grok 4.7",
+            "马斯克称，Grok 4.7将在Grok4.6发布数周后推出，参数规模预计达到2.1万亿。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "target",
+          "claim_ids": [
+            "ac_62db13e9b1b13c",
+            "ac_390db924426bad"
+          ],
+          "span_ids": [
+            "as_0367b015620bc2",
+            "as_c77c1ae0ea8726"
+          ],
+          "subject_entity_id": "ae_074de1ec584bd1"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "三星电子",
+            "三星",
+            "三星李在镕"
+          ],
+          "canonical_company": "三星电子",
+          "event_type": "partnership",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "semiconductor",
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "（鲁中晨报） 三星李在镕与OpenAI据悉磋商人工智能与半导体领域合作方案 三星电子会长李在镕与OpenAI首席执行官山姆・奥特曼于旧金山OpenAI总部会面，磋商人工智能与半导体领域合作方案。",
+          "evidence_quotes": [
+            "（鲁中晨报） 三星李在镕与OpenAI据悉磋商人工智能与半导体领域合作方案 三星电子会长李在镕与OpenAI首席执行官山姆・奥特曼于旧金山OpenAI总部会面，磋商人工智能与半导体领域合作方案。"
+          ],
+          "ambiguities": [],
+          "confidence": "medium",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "started",
+          "claim_ids": [
+            "ac_2cbbe12f11c953"
+          ],
+          "span_ids": [
+            "as_5845d1ecc2e936"
+          ],
+          "subject_entity_id": "ae_a49c64e5422ac5"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "三星"
+          ],
+          "canonical_company": "三星电子",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "consumer_electronics",
+            "health"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "（新浪财经） 号称首款全面集成AI的个人健康助手，三星推出Health Assistant 三星本周（7月21日）宣布推出Health Assistant，号称是“首款全面集成 AI 的个人健康助手”。",
+          "evidence_quotes": [
+            "（新浪财经） 号称首款全面集成AI的个人健康助手，三星推出Health Assistant 三星本周（7月21日）宣布推出Health Assistant，号称是“首款全面集成 AI 的个人健康助手”。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_aa07f5e8dd1647"
+          ],
+          "span_ids": [
+            "as_9e9f67d1c0e71d"
+          ],
+          "subject_entity_id": "ae_a49c64e5422ac5"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "元戎",
+            "元戎启行"
+          ],
+          "canonical_company": "元戎启行",
+          "event_type": "new_site_or_entity",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "autonomous_driving",
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "据知情人士告诉蓝鲸汽车记者，该实验室于今年5月在元戎内部成立，目前已完成基础设施重构等前期工作，“预计由前DeepSeek核心成员、多模态技术核心研究员阮翀带队。",
+          "evidence_quotes": [
+            "据知情人士告诉蓝鲸汽车记者，该实验室于今年5月在元戎内部成立，目前已完成基础设施重构等前期工作，“预计由前DeepSeek核心成员、多模态技术核心研究员阮翀带队。",
+            "记者获悉，元戎启行旗下新成立的Superfluid Lab（超流体实验室）已开启招聘，重点面向大模型算法、仿真算法、AI Infra等方向招聘。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_2b0987e2828c25",
+            "ac_c4de708beaa2c9"
+          ],
+          "span_ids": [
+            "as_a40e0b0c0920c6",
+            "as_12e55248a51e81"
+          ],
+          "subject_entity_id": "ae_c01e9bb5006b01"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "元戎"
+          ],
+          "canonical_company": "元戎启行",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "autonomous_driving"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "据知情人士告诉蓝鲸汽车记者，该实验室于今年5月在元戎内部成立，目前已完成基础设施重构等前期工作，“预计由前DeepSeek核心成员、多模态技术核心研究员阮翀带队。",
+          "evidence_quotes": [
+            "据知情人士告诉蓝鲸汽车记者，该实验室于今年5月在元戎内部成立，目前已完成基础设施重构等前期工作，“预计由前DeepSeek核心成员、多模态技术核心研究员阮翀带队。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_1c1584ada24313"
+          ],
+          "span_ids": [
+            "as_a40e0b0c0920c6"
+          ],
+          "subject_entity_id": "ae_c01e9bb5006b01"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "字节",
+            "豆包"
+          ],
+          "canonical_company": "字节跳动",
+          "event_type": "new_site_or_entity",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "software"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "（新浪财经） 字节已组建豆包办公部门 目前豆包内部已经组建豆包办公部门，旨在推动豆包深度融入真实办公及协作流程，持续提升办公生产力。",
+          "evidence_quotes": [
+            "（新浪财经） 字节已组建豆包办公部门 目前豆包内部已经组建豆包办公部门，旨在推动豆包深度融入真实办公及协作流程，持续提升办公生产力。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_b5fcc9f81be263"
+          ],
+          "span_ids": [
+            "as_a244a17cb3151c"
+          ],
+          "subject_entity_id": "ae_4b92ba40e70bca"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "字节跳动",
+            "字节",
+            "豆包"
+          ],
+          "canonical_company": "字节跳动",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月31日，字节跳动今天发布公告，宣布推出Seedance 2.5视频生成模型，可单次生成30秒高质量视频片段，陆续上线即梦AI与豆包专业版，API服务也将于近期接入火山方舟。",
+          "evidence_quotes": [
+            "7月31日，字节跳动今天发布公告，宣布推出Seedance 2.5视频生成模型，可单次生成30秒高质量视频片段，陆续上线即梦AI与豆包专业版，API服务也将于近期接入火山方舟。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_03181a92ee2468"
+          ],
+          "span_ids": [
+            "as_7e5df7c3e1e0d9"
+          ],
+          "subject_entity_id": "ae_4b92ba40e70bca"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "字节跳动",
+            "字节",
+            "豆包"
+          ],
+          "canonical_company": "字节跳动",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月31日，字节跳动今天发布公告，宣布推出Seedance 2.5视频生成模型，可单次生成30秒高质量视频片段，陆续上线即梦AI与豆包专业版，API服务也将于近期接入火山方舟。",
+          "evidence_quotes": [
+            "7月31日，字节跳动今天发布公告，宣布推出Seedance 2.5视频生成模型，可单次生成30秒高质量视频片段，陆续上线即梦AI与豆包专业版，API服务也将于近期接入火山方舟。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "target",
+          "claim_ids": [
+            "ac_9e1173e8415253"
+          ],
+          "span_ids": [
+            "as_7e5df7c3e1e0d9"
+          ],
+          "subject_entity_id": "ae_4b92ba40e70bca"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "月之暗面"
+          ],
+          "canonical_company": "月之暗面",
+          "event_type": "funding",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai",
+            "large_model"
+          ],
+          "funding_round": "F轮",
+          "funding_amount": "262.17亿元人民币",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "其中，融资额最高的为通用多模态大模型研发商月之暗面，宣布完成262.17亿元人民币F轮融资。",
+          "evidence_quotes": [
+            "其中，融资额最高的为通用多模态大模型研发商月之暗面，宣布完成262.17亿元人民币F轮融资。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_199c889f0ec885"
+          ],
+          "span_ids": [
+            "as_c74ea4137b9fa2"
+          ],
+          "subject_entity_id": "ae_848db991a65969"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "月之暗面",
+            "Kimi"
+          ],
+          "canonical_company": "月之暗面",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "（证券时报） 月之暗面Kimi K3正式开源 7月27日晚，月之暗面发布Kimi K3的模型权重、技术报告，并开源支撑Kimi K3模型训练的关键Infra技术：MoonEP、FlashKDA和AgentEnv。",
+          "evidence_quotes": [
+            "（证券时报） 月之暗面Kimi K3正式开源 7月27日晚，月之暗面发布Kimi K3的模型权重、技术报告，并开源支撑Kimi K3模型训练的关键Infra技术：MoonEP、FlashKDA和AgentEnv。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_2df1214414ff32"
+          ],
+          "span_ids": [
+            "as_47eb1edc2f82d9"
+          ],
+          "subject_entity_id": "ae_848db991a65969"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "稀宇科技",
+            "MiniMax H3",
+            "稀宇"
+          ],
+          "canonical_company": "稀宇科技",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月31日，稀宇科技正式发布MiniMax H3。",
+          "evidence_quotes": [
+            "7月31日，稀宇科技正式发布MiniMax H3。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_a8d5e85810b779"
+          ],
+          "span_ids": [
+            "as_51635565f5d189"
+          ],
+          "subject_entity_id": "ae_fb93047c42a5ef"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "美团",
+            "CatPaw"
+          ],
+          "canonical_company": "美团",
+          "event_type": "customer_validation",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "目前，CatPaw 已在美团内部覆盖9万名员工、搭建超过3万个 Agent，并在餐饮、美业、宠物医院等多个真实业务场景中完成验证。",
+          "evidence_quotes": [
+            "目前，CatPaw 已在美团内部覆盖9万名员工、搭建超过3万个 Agent，并在餐饮、美业、宠物医院等多个真实业务场景中完成验证。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_17ad6dd3310c0c"
+          ],
+          "span_ids": [
+            "as_b9cbc749c44141"
+          ],
+          "subject_entity_id": "ae_2ef320dc03524b"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "美团",
+            "CatPaw"
+          ],
+          "canonical_company": "美团",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月27日消息，美团全场景AI Agent平台CatPaw全新上线。",
+          "evidence_quotes": [
+            "7月27日消息，美团全场景AI Agent平台CatPaw全新上线。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_3c3ff3e700685a"
+          ],
+          "span_ids": [
+            "as_49f5fabf61f003"
+          ],
+          "subject_entity_id": "ae_2ef320dc03524b"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "腾讯",
+            "WorkBuddy",
+            "腾讯文档"
+          ],
+          "canonical_company": "腾讯",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "software"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月30日，腾讯WorkBuddy（V5.3.5版）联合腾讯文档，正式推出“人机双写”协同编辑能力。",
+          "evidence_quotes": [
+            "7月30日，腾讯WorkBuddy（V5.3.5版）联合腾讯文档，正式推出“人机双写”协同编辑能力。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_a04838b0937769"
+          ],
+          "span_ids": [
+            "as_9ffd9099da9bf4"
+          ],
+          "subject_entity_id": "ae_7ecf8e4b531289"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "腾讯",
+            "微信"
+          ],
+          "canonical_company": "腾讯",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "software"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月27日，据腾讯官方微信公众号，企业微信AI助理\"大圆\"近日开启内测，用户左滑即可唤出。",
+          "evidence_quotes": [
+            "7月27日，据腾讯官方微信公众号，企业微信AI助理\"大圆\"近日开启内测，用户左滑即可唤出。",
+            "（新浪财经） 企业微信AI助理\"大圆\"开启内测，可自动写周报、管待办"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "started",
+          "claim_ids": [
+            "ac_23ce28bb968afc",
+            "ac_b2e95f2677f330"
+          ],
+          "span_ids": [
+            "as_a2c9dab1d101db",
+            "as_5148fa924ebfac"
+          ],
+          "subject_entity_id": "ae_7ecf8e4b531289"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "英伟达"
+          ],
+          "canonical_company": "英伟达",
+          "event_type": "partnership",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai",
+            "semiconductor"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "（同花顺财经） 英伟达押注OpenAI联合创始人全新AI实验室，拓宽算力布局版图 英伟达正投资前OpenAI首席科学家伊尔亚・苏茨克维（Ilya Sutskever）运营的低调人工智能实验室，双方达成长期合作。",
+          "evidence_quotes": [
+            "（同花顺财经） 英伟达押注OpenAI联合创始人全新AI实验室，拓宽算力布局版图 英伟达正投资前OpenAI首席科学家伊尔亚・苏茨克维（Ilya Sutskever）运营的低调人工智能实验室，双方达成长期合作。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_b45bdafdf8a0aa"
+          ],
+          "span_ids": [
+            "as_1dc60fdb44fba9"
+          ],
+          "subject_entity_id": "ae_3510d2b416e00f"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "蚂蚁",
+            "蚂蚁阿福"
+          ],
+          "canonical_company": "蚂蚁",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai",
+            "health"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月29日，蚂蚁阿福升级上线“AI拍饮食”功能，用户可以通过拍照、文字、语音等多种方式，让阿福测算食物的热量和营养信息，获得健康饮食搭配、运动消耗计划等建议。",
+          "evidence_quotes": [
+            "7月29日，蚂蚁阿福升级上线“AI拍饮食”功能，用户可以通过拍照、文字、语音等多种方式，让阿福测算食物的热量和营养信息，获得健康饮食搭配、运动消耗计划等建议。",
+            "（财联社） 蚂蚁阿福升级“AI拍饮食”功能，支持随手拍、记、改"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_45692d4e59e968",
+            "ac_a01c99af00dde9"
+          ],
+          "span_ids": [
+            "as_a1327f604351f7",
+            "as_6bf8c9a99cafdc"
+          ],
+          "subject_entity_id": "ae_dde308c9b24435"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "Gemini"
+          ],
+          "canonical_company": "谷歌",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "他继续说道：“下一代前沿模型需要规模更大的基础模型，我们目前正在训练 Gemini4，并且投入了非常大的资源。",
+          "evidence_quotes": [
+            "他继续说道：“下一代前沿模型需要规模更大的基础模型，我们目前正在训练 Gemini4，并且投入了非常大的资源。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "started",
+          "claim_ids": [
+            "ac_198050be0ef598"
+          ],
+          "span_ids": [
+            "as_8d93c45cee09f0"
+          ],
+          "subject_entity_id": "ae_c111a5058c488b"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "阿里云",
+            "Qoder"
+          ],
+          "canonical_company": "阿里云",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "ai",
+            "cloud"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "（央视财经） Qoder上线实时语音交互智能体Qoder Voice 阿里云Qoder上线实时语音交互智能体Qoder Voice，由全双工语音模型Qwen-Audio-3.0-Realtime驱动。",
+          "evidence_quotes": [
+            "（央视财经） Qoder上线实时语音交互智能体Qoder Voice 阿里云Qoder上线实时语音交互智能体Qoder Voice，由全双工语音模型Qwen-Audio-3.0-Realtime驱动。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_e588bb2e844363"
+          ],
+          "span_ids": [
+            "as_5568a59b640de1"
+          ],
+          "subject_entity_id": "ae_2feff6634aaffe"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "享造Agent",
+            "阿里"
+          ],
+          "canonical_company": "阿里巴巴",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "internet"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "7月27日消息，阿里享造Agent目前已上线App和PC端。",
+          "evidence_quotes": [
+            "7月27日消息，阿里享造Agent目前已上线App和PC端。",
+            "（科创板日报） 阿里1688上线享造Agent，聚焦AI原生柔性定制"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_e51d7fcf269291",
+            "ac_bfe79137a855b6"
+          ],
+          "span_ids": [
+            "as_cc27bdc12ff37b",
+            "as_6212f22291441a"
+          ],
+          "subject_entity_id": "ae_8ac61d5cbbee61"
+        },
+        {
+          "source_id": "cyzone-latest",
+          "source_article_id": "841774",
+          "canonical_url": "https://www.cyzone.cn/article/841774.html",
+          "company_mentions": [
+            "阿里"
+          ],
+          "canonical_company": "阿里巴巴",
+          "event_type": "technical_milestone",
+          "event_date": "2026-08-01",
+          "industry_tags": [
+            "software"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "（和讯网） 阿里AI Agent“千问办公”小范围测试 阿里新款AI Agent产品“千问办公”开始小范围测试，目前上线的是本地桌面客户端，后续将陆续上线网页端和钉钉内置版。",
+          "evidence_quotes": [
+            "（和讯网） 阿里AI Agent“千问办公”小范围测试 阿里新款AI Agent产品“千问办公”开始小范围测试，目前上线的是本地桌面客户端，后续将陆续上线网页端和钉钉内置版。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "e99fd19c81fb6f6320031de898185d4d10c7b2961de8df41fe551ba4ad5ce604",
+          "phase": "strategy_capital",
+          "event_status": "started",
+          "claim_ids": [
+            "ac_ab1c803828529e"
+          ],
+          "span_ids": [
+            "as_468c0f6b6f0abb"
+          ],
+          "subject_entity_id": "ae_8ac61d5cbbee61"
+        }
+      ],
+      "audit": {
+        "source_id": "cyzone-latest",
+        "source_article_id": "841774",
+        "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+        "claim_contract_version": "v5-open-action-ledger",
+        "model_identity": "minimax/MiniMax-M3",
+        "cache_key": "aggregate-semantic-v27-loop-r2-b|minimax/MiniMax-M3",
+        "entity_count": 236,
+        "eligible_entity_count": 21,
+        "action_span_count": 58,
+        "candidate_count": 61,
+        "batch_count": 21,
+        "document_type": "multi_company_bulletin",
+        "document_route_reason": "bulletin_structure",
+        "document_family": "multi_company_funding_digest",
+        "processing_mode": "split_units",
+        "route_gate_confidence": "medium",
+        "route_llm_gate_required": true,
+        "route_gate_signals": [
+          "funding_cue",
+          "institution_cue",
+          "interview_cue",
+          "long_body"
+        ],
+        "document_unit_ids": [
+          "u_8c48f040c403",
+          "u_2d39ea2820a8",
+          "u_c3a510ca390a"
+        ],
+        "accepted_claim_ids": [
+          "ac_03181a92ee2468",
+          "ac_037fe6043a9f85",
+          "ac_15f5e83b96368d",
+          "ac_17ad6dd3310c0c",
+          "ac_198050be0ef598",
+          "ac_199c889f0ec885",
+          "ac_1c1584ada24313",
+          "ac_201ff12d2e3807",
+          "ac_23ce28bb968afc",
+          "ac_2b0987e2828c25",
+          "ac_2cbbe12f11c953",
+          "ac_2df1214414ff32",
+          "ac_390db924426bad",
+          "ac_3c3ff3e700685a",
+          "ac_45692d4e59e968",
+          "ac_4ebda2466bb587",
+          "ac_535de8e119028b",
+          "ac_5c2d256de061b6",
+          "ac_5d2aeb884637ee",
+          "ac_61ceec9186961e",
+          "ac_62db13e9b1b13c",
+          "ac_855b55d354356e",
+          "ac_85aebddfef7e7b",
+          "ac_90e03e2b8e4fa7",
+          "ac_9e1173e8415253",
+          "ac_a01c99af00dde9",
+          "ac_a04838b0937769",
+          "ac_a8d5e85810b779",
+          "ac_aa07f5e8dd1647",
+          "ac_ab1c803828529e",
+          "ac_acdce5ed669eac",
+          "ac_b2e95f2677f330",
+          "ac_b45bdafdf8a0aa",
+          "ac_b5fcc9f81be263",
+          "ac_bfe79137a855b6",
+          "ac_c4de708beaa2c9",
+          "ac_d58952ee223171",
+          "ac_e51d7fcf269291",
+          "ac_e588bb2e844363",
+          "ac_e594cdbcee3e09",
+          "ac_e710933be898c8",
+          "ac_ecc4db5f036b30",
+          "ac_eeeaf13115b12d"
+        ],
+        "rejected_claim_ids": [
+          "ac_34e46539fa3f46",
+          "ac_43c8d0d8514a65",
+          "ac_4792a4e40437e9",
+          "ac_4f6f52e40eddda",
+          "ac_857f7ad62d7854",
+          "ac_8d4973ce5ab865",
+          "ac_92a1f1133479d2",
+          "ac_9e31ab024cbbd9",
+          "ac_a41fccc9243a29",
+          "ac_a4ff9ffde29089",
+          "ac_a8820dea3e3614",
+          "ac_b03deecd4e7406",
+          "ac_bf397584d70f3b",
+          "ac_ca0a209994fdc9",
+          "ac_d27bf561b90ac8",
+          "ac_ecb6fdf3138a10",
+          "ac_fcc470f2715a16",
+          "ac_ff58a5704ef75d"
+        ],
+        "failed_claim_ids": [],
+        "host_fallback_claim_ids": [],
+        "batch_statuses": [
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted"
+        ],
+        "first_responses": [
+          "{\"decisions\":[{\"claim_id\":\"ac_ff58a5704ef75d\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_b5fcc9f81be263\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_4b92ba40e70bca\",\"event_type\":\"new_site_or_entity\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"software\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_4792a4e40437e9\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_9e31ab024cbbd9\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_03181a92ee2468\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_4b92ba40e70bca\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_9e1173e8415253\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_4b92ba40e70bca\",\"event_type\":\"technical_milestone\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_a8d5e85810b779\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_fb93047c42a5ef\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_a04838b0937769\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_7ecf8e4b531289\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"software\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_4f6f52e40eddda\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_15f5e83b96368d\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_074de1ec584bd1\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_a01c99af00dde9\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_dde308c9b24435\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\",\"health\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_45692d4e59e968\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_dde308c9b24435\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\",\"health\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_90e03e2b8e4fa7\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_3992a83a91d2dd\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai_software\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_43c8d0d8514a65\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_61ceec9186961e\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_465614e2016e98\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai_software\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_a8820dea3e3614\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_2df1214414ff32\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_848db991a65969\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_b2e95f2677f330\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_7ecf8e4b531289\",\"event_type\":\"technical_milestone\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"enterprise_software\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_23ce28bb968afc\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_7ecf8e4b531289\",\"event_type\":\"technical_milestone\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"software\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_d27bf561b90ac8\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_ab1c803828529e\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_8ac61d5cbbee61\",\"event_type\":\"technical_milestone\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"software\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_b03deecd4e7406\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"},{\"claim_id\":\"ac_85aebddfef7e7b\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_8ac61d5cbbee61\",\"event_type\":\"technical_milestone\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\",\"enterprise_software\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_bfe79137a855b6\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_8ac61d5cbbee61\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\",\"enterprise_software\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_e51d7fcf269291\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_8ac61d5cbbee61\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"internet\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_a41fccc9243a29\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"},{\"claim_id\":\"ac_857f7ad62d7854\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_eeeaf13115b12d\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_2c8becd50892a9\",\"event_type\":\"factory_or_capacity\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai_infrastructure\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_acdce5ed669eac\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_2c8becd50892a9\",\"event_type\":\"funding\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"10亿美元\",\"cumulative_funding_amount\":\"\",\"investors\":[\"英伟达\"],\"industry_tags\":[\"ai_infrastructure\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_3c3ff3e700685a\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_2ef320dc03524b\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_8d4973ce5ab865\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_17ad6dd3310c0c\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_2ef320dc03524b\",\"event_type\":\"customer_validation\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_d58952ee223171\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_3992a83a91d2dd\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_ecc4db5f036b30\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_2a6d6627cb9672\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai_infrastructure\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_ecb6fdf3138a10\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_535de8e119028b\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_3992a83a91d2dd\",\"event_type\":\"executive_change\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_855b55d354356e\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_4397b8c4f4a0bd\",\"event_type\":\"executive_change\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_c4de708beaa2c9\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_c01e9bb5006b01\",\"event_type\":\"new_site_or_entity\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"autonomous_driving\",\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_2b0987e2828c25\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_c01e9bb5006b01\",\"event_type\":\"new_site_or_entity\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"autonomous_driving\",\"ai\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_1c1584ada24313\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_c01e9bb5006b01\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"autonomous_driving\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_e710933be898c8\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_074de1ec584bd1\",\"event_type\":\"technical_milestone\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"artificial_intelligence\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_62db13e9b1b13c\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_074de1ec584bd1\",\"event_type\":\"technical_milestone\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"artificial_intelligence\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_4ebda2466bb587\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_074de1ec584bd1\",\"event_type\":\"technical_milestone\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_390db924426bad\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_074de1ec584bd1\",\"event_type\":\"technical_milestone\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_a4ff9ffde29089\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_fcc470f2715a16\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_ca0a209994fdc9\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_e588bb2e844363\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_2feff6634aaffe\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\",\"cloud\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_e594cdbcee3e09\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_3992a83a91d2dd\",\"event_type\":\"new_site_or_entity\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_b45bdafdf8a0aa\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_3510d2b416e00f\",\"event_type\":\"partnership\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\",\"semiconductor\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_5c2d256de061b6\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_22105606f57377\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[\"英伟达\"],\"industry_tags\":[\"ai\"],\"confidence\":\"medium\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_201ff12d2e3807\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_c111a5058c488b\",\"event_type\":\"technical_milestone\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_198050be0ef598\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_c111a5058c488b\",\"event_type\":\"technical_milestone\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_34e46539fa3f46\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_92a1f1133479d2\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"},{\"claim_id\":\"ac_2cbbe12f11c953\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_a49c64e5422ac5\",\"event_type\":\"partnership\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"semiconductor\",\"ai\"],\"confidence\":\"medium\"},{\"claim_id\":\"ac_5d2aeb884637ee\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_3992a83a91d2dd\",\"event_type\":\"partnership\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"semiconductor\",\"ai\"],\"confidence\":\"medium\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_bf397584d70f3b\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"},{\"claim_id\":\"ac_aa07f5e8dd1647\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_a49c64e5422ac5\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"consumer_electronics\",\"health\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_199c889f0ec885\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_848db991a65969\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"F轮\",\"funding_amount\":\"262.17亿元人民币\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\",\"large_model\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_037fe6043a9f85\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_51688ee75d3542\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"种子轮\",\"funding_amount\":\"2亿美元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"ai\",\"defense\",\"drone\"],\"confidence\":\"high\"}]}"
+        ],
+        "repair_responses": [
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        "validation_issues": [],
+        "infrastructure_errors": [],
+        "skipped_claim_ids_due_to_infrastructure": [],
+        "rejection_reason_counts": {
+          "unsupported_company_action": 11,
+          "duplicate_or_summary": 1,
+          "ambiguous_evidence": 6
+        },
+        "status": "accepted",
+        "strict_claim_contract_ready": true,
+        "final_event_count": 35,
+        "ledger_sha256": "5bb2f8965dc5d4e6beb42e8400176f35483d3344",
+        "semantic_window": {
+          "mode": "multi_event_digest",
+          "reason": "bulletin_or_digest_structure",
+          "original_chars": 12030,
+          "semantic_chars": 12030,
+          "prefix_action_count": 32,
+          "tail_action_count": 77,
+          "prefix_has_concrete_event": true,
+          "interview_cue_count": 0
+        }
+      }
+    },
+    {
+      "key": "jazzyear-research:162",
+      "position": 3,
+      "events": [
+        {
+          "source_id": "jazzyear-research",
+          "source_article_id": "162",
+          "canonical_url": "https://www.jazzyear.com/study_info.html?id=162",
+          "company_mentions": [
+            "九科信息"
+          ],
+          "canonical_company": "九科信息",
+          "event_type": "technical_milestone",
+          "event_date": "2026-03-23",
+          "industry_tags": [
+            "enterprise_software",
+            "AI"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "九科信息针对国央企及大型企业的严苛需求，推出bit-Agent企业级智能自动化平台，作为连接人类意图与异构系统的“元枢纽”。",
+          "evidence_quotes": [
+            "九科信息针对国央企及大型企业的严苛需求，推出bit-Agent企业级智能自动化平台，作为连接人类意图与异构系统的“元枢纽”。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+          "content_hash": "bc419e8951dfce193124d0bd6a64bd9318239aca3d4d8dc11ccb83ddc8e6e88d",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_b9f8ec2caaf27f"
+          ],
+          "span_ids": [
+            "as_caaa42b333f42e"
+          ],
+          "subject_entity_id": "ae_d93fd8cd045416"
+        }
+      ],
+      "audit": {
+        "source_id": "jazzyear-research",
+        "source_article_id": "162",
+        "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+        "claim_contract_version": "v5-open-action-ledger",
+        "model_identity": "minimax/MiniMax-M3",
+        "cache_key": "aggregate-semantic-v27-loop-r2-b|minimax/MiniMax-M3",
+        "entity_count": 21,
+        "eligible_entity_count": 1,
+        "action_span_count": 7,
+        "candidate_count": 10,
+        "batch_count": 4,
+        "document_type": "long_feature",
+        "document_route_reason": "adapter_document_type",
+        "document_family": "interview_commentary",
+        "processing_mode": "prefix_2000_if_event_else_skip",
+        "route_gate_confidence": "high",
+        "route_llm_gate_required": true,
+        "route_gate_signals": [
+          "interview_cue",
+          "long_body"
+        ],
+        "document_unit_ids": [
+          "u_36b8f571c768"
+        ],
+        "accepted_claim_ids": [
+          "ac_b9f8ec2caaf27f"
+        ],
+        "rejected_claim_ids": [
+          "ac_30ef9c6fbd8a49",
+          "ac_3970a969f626be",
+          "ac_73d2f73e80c7ce",
+          "ac_81490646212fa8",
+          "ac_88938b8a06932d",
+          "ac_af592a8901fa0d",
+          "ac_f2824844fb3f02",
+          "ac_f5aed388bdd6f3",
+          "ac_fbe2313e4b1ebe"
+        ],
+        "failed_claim_ids": [],
+        "host_fallback_claim_ids": [],
+        "batch_statuses": [
+          "accepted",
+          "accepted",
+          "accepted",
+          "accepted"
+        ],
+        "first_responses": [
+          "{\"decisions\":[{\"claim_id\":\"ac_b9f8ec2caaf27f\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_d93fd8cd045416\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"enterprise_software\",\"AI\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_f2824844fb3f02\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"},{\"claim_id\":\"ac_88938b8a06932d\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_3970a969f626be\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_f5aed388bdd6f3\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_fbe2313e4b1ebe\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_af592a8901fa0d\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_81490646212fa8\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_73d2f73e80c7ce\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_30ef9c6fbd8a49\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+        ],
+        "repair_responses": [
+          "",
+          "",
+          "",
+          ""
+        ],
+        "validation_issues": [],
+        "infrastructure_errors": [],
+        "skipped_claim_ids_due_to_infrastructure": [],
+        "rejection_reason_counts": {
+          "ambiguous_evidence": 1,
+          "subject_mismatch": 1,
+          "unsupported_company_action": 7
+        },
+        "status": "accepted",
+        "strict_claim_contract_ready": true,
+        "final_event_count": 1,
+        "ledger_sha256": "35c9c5e1daadc6a79aafcc89c5ab94d93d3bba22",
+        "semantic_window": {
+          "mode": "single_event_expansion",
+          "reason": "concrete_lead_event_followed_by_long_form",
+          "original_chars": 2571,
+          "semantic_chars": 2000,
+          "prefix_action_count": 6,
+          "tail_action_count": 0,
+          "prefix_has_concrete_event": true,
+          "interview_cue_count": 0
+        }
+      }
+    }
+  ],
+  "summary": {
+    "article_count": 3,
+    "event_count": 36,
+    "claim_count": 71,
+    "accepted_claim_count": 44,
+    "rejected_claim_count": 27,
+    "failed_claim_count": 0,
+    "strict_ready_article_count": 3,
+    "partial_article_count": 0
+  }
+}

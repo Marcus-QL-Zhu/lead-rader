@@ -18,6 +18,7 @@ from .company_demand_v2 import (
     parse_single_company_demand,
 )
 from .models import Evidence
+from .company_timeline import build_company_timeline
 from .signals import canonical_event_type
 from .talent_demand_analysis import DemandAnalysisError
 from .taxonomy import classify_seniority
@@ -506,11 +507,8 @@ def build_prediction_packets(
             raise ValueError(
                 f"historical evidence must have one frozen company_type: {company}"
             )
-        packet_evidence = []
-        for item in items[-8:]:
-            identity = "|".join(
-                (item.company, item.event_type, item.event_date, item.source_url)
-            )
+        timeline_input = []
+        for item in items:
             record = asdict(item)
             record.pop("content_sha256", None)
             content_sha256 = _stable_hash(record)
@@ -518,40 +516,25 @@ def build_prediction_packets(
                 raise ValueError(
                     f"historical evidence content hash mismatch: {item.company}"
                 )
-            packet_evidence.append(
-                {
-                    "evidence_id": item.event_id
-                    or "ev_"
-                    + hashlib.sha256(identity.encode("utf-8")).hexdigest()[:12],
-                    "date": item.event_date,
-                    "published_at": item.published_at,
-                    "observed_at": item.observed_at,
-                    "available_at": (
-                        _availability_date(item).isoformat()
-                        if _availability_date(item)
-                        else ""
-                    ),
-                    "content_sha256": content_sha256,
-                    "event_type": item.event_type,
-                    "phase": item.phase,
-                    "source_grade": item.source_grade,
-                    "title": item.title,
-                    "fact": item.source_excerpt[:800],
-                    "source_locator": item.source_locator,
-                    "source_url": item.source_url,
-                    "source_group": _source_group(item),
-                    "people": list(item.people),
-                    "organizations": list(item.organizations),
-                    "late_validation_only": False,
-                }
-            )
+            timeline_input.append({**asdict(item), "content_sha256": content_sha256})
+        timeline = build_company_timeline(
+            timeline_input,
+            as_of=config.cutoff,
+            limit=8,
+            allow_undated=False,
+        )
         packets.append(
             {
                 "lead_index": lead_index,
                 "company": company,
                 "direction": items[0].direction,
                 "simulated_as_of": config.cutoff.isoformat(),
-                "evidence": packet_evidence,
+                "evidence": list(timeline["evidence"]),
+                "timeline": {
+                    key: value
+                    for key, value in timeline.items()
+                    if key not in {"evidence", "buckets"}
+                },
                 "known_context": {},
                 "company_type": items[0].company_type,
             }

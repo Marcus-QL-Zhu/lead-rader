@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "purpose": "frozen-company-isolated-consecutive-holdout-sequence",
+  "split_dataset_version": "semantic-v27-development-v3-split-v2",
+  "prompt_config_sha256": "e38779c3a0deabd680e44032e920e4bf83e89f025c95406e8a4839506d1315db",
+  "seed_sha256": "bf041102fb17ea3da7b470b232ddeda8f7780b380804e9e23a1399c766594b8b",
+  "required_consecutive_passes": 3,
+  "selected_keys": [
+    "stcn-flash:4052079",
+    "cyzone-latest:841774",
+    "jazzyear-research:162"
+  ],
+  "selection_frozen_before_inference": true
+}

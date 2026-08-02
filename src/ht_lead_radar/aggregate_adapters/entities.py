@@ -84,6 +84,7 @@ def canonical_company_name(value: str) -> str:
 
 _NON_ENTITY_START = re.compile(
     r"^(?:\u9488\u5bf9|\u6b64\u5916|\u672c\u6b21|\u8be5|\u8fd9|"
+    r"\u5728(?:\u516c\u5f00|\u4e1a\u5185|\u5f53\u524d)|\u7531|\u5176\u4e2d|"
     r"\u5176|\u56e0|\u636e|\u65e5\u524d|\u8fd1\u65e5|"
     r"\u77e5\u60c5\u4eba\u58eb|\u8bb0\u8005|\u7126\u70b9\u80a1|"
     r"\u6807\u7684\u516c\u53f8|\u4f9b\u5e94\u5546|\u7b2c\u4e8c\u6279|"
@@ -98,7 +99,8 @@ _NON_ENTITY_PREDICATE = re.compile(
     r"\u7b79\u5907|\u795d\u8d3a|\u770b\u9f99\u5934|"
     r"\u516c\u544a|\u8868\u793a|\u5ba3\u5e03|\u8003\u8651|"
     r"\u65e8\u5728|\u8ba1\u5212|\u6b63\u5728|\u5c1a\u65e0|"
-    r"\u4e3a\u516c\u53f8|\u73b0\u5df2|\u8fdb\u5165"
+    r"\u4e3a\u516c\u53f8|\u73b0\u5df2|\u8fdb\u5165|"
+    r"\u7d27\u6263|\u8fc8\u5411|\u6309\u9700\u91c7\u8d2d|\u6362\u5e05"
 )
 _NON_ENTITY_SLOGAN = re.compile(
     r"\u770b\u89c1\u672a\u6765|\u52b3\u52a8\u6700\u5149\u8363|"
@@ -135,14 +137,21 @@ def is_company_like(value: str) -> bool:
         candidate,
     ):
         return False
+    if re.search(
+        r"(?:\u8d5b\u9053|\u9886\u57df|\u884c\u4e1a|\u65b9\u5411).{0,20}"
+        r"(?:\u4ece|\u7d27\u6263|\u8fc8\u5411|\u805a\u7126)|"
+        r"(?:\u5929\u5185|\u901a\u7528\u64cd\u4f5c\u5927\u8111)|"
+        r"(?:\u7814\u7a76\u6240|\u5927\u5b66|\u653f\u5e9c|\u59d4\u5458\u4f1a)$",
+        candidate,
+    ):
+        return False
     return bool(
         re.fullmatch(r"[A-Za-z][A-Za-z0-9 .&+-]{1,39}", candidate)
         or re.search(
             r"\u79d1\u6280|\u667a\u80fd|\u96c6\u56e2|\u8d44\u672c|"
             r"\u673a\u5668\u4eba|\u534a\u5bfc\u4f53|\u7535\u5b50|"
             r"\u836f\u4e1a|\u533b\u7597|\u80a1\u4efd|\u80fd\u6e90|"
-            r"\u6750\u6599|\u822a\u5929|\u6c7d\u8f66|\u7cfb\u7edf|"
-            r"\u7814\u7a76\u6240|\u5927\u5b66$",
+            r"\u6750\u6599|\u822a\u5929|\u6c7d\u8f66|\u7cfb\u7edf",
             candidate,
         )
         or (

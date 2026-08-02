@@ -356,7 +356,7 @@ def test_cyzone_explicit_developer_subject_overrides_editorial_title():
             event.event_status,
         )
         for event in events
-    ] == [("月之暗面", "funding", "started")]
+    ] == [("月之暗面", "funding", "target")]
     assert events[0].company_mentions == ("月之暗面",)
     assert "全球摇人" not in events[0].company_mentions
 

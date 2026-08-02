@@ -44,6 +44,101 @@ def test_processor_cache_key_includes_prompt_and_model():
     assert processor.cache_key == f"{PROMPT_VERSION}|minimax/MiniMax-M3"
 
 
+def test_claim_cache_namespace_and_mode_guards(tmp_path):
+    index = _index()
+    processor = MiniMaxSemanticProcessor(
+        Runner(),
+        claim_centric_v27=True,
+        strict_claim_contract=True,
+    )
+    audit = {
+        "source_id": index.source_id,
+        "source_article_id": index.source_article_id,
+        "prompt_version": processor.semantic_prompt_version,
+        "model_identity": processor.model_identity,
+        "index_content_hash": index.content_hash,
+        "claim_centric_v27": True,
+        "strict_claim_contract": True,
+        "status": "accepted",
+    }
+    assert processor.semantic_prompt_version != PROMPT_VERSION
+    assert processor.cache_key.startswith(f"{processor.semantic_prompt_version}|")
+    with AggregateStateStore(tmp_path / "state.sqlite3") as store:
+        store.store_semantic_audit(audit)
+        assert store.semantic_is_current(
+            index,
+            prompt_version=processor.semantic_prompt_version,
+            model_identity=processor.model_identity,
+            claim_centric_v27=True,
+            strict_claim_contract=True,
+        )
+        assert not store.semantic_is_current(
+            index,
+            prompt_version=processor.semantic_prompt_version,
+            model_identity=processor.model_identity,
+            claim_centric_v27=True,
+            strict_claim_contract=False,
+        )
+        assert not store.semantic_is_current(
+            index,
+            prompt_version=PROMPT_VERSION,
+            model_identity=processor.model_identity,
+            claim_centric_v27=True,
+            strict_claim_contract=True,
+        )
+    with AggregateStateStore(tmp_path / "legacy.sqlite3") as legacy_store:
+        legacy_store.store_semantic_audit(
+            {
+                **audit,
+                "prompt_version": PROMPT_VERSION,
+                "claim_centric_v27": False,
+                "strict_claim_contract": False,
+            }
+        )
+        assert not legacy_store.semantic_is_current(
+            index,
+            prompt_version=processor.semantic_prompt_version,
+            model_identity=processor.model_identity,
+            claim_centric_v27=True,
+            strict_claim_contract=True,
+        )
+
+
+def test_claim_mode_without_runner_keeps_rules_only_cache_namespace():
+    processor = MiniMaxSemanticProcessor(
+        None,
+        claim_centric_v27=True,
+        strict_claim_contract=True,
+    )
+
+    assert processor.semantic_prompt_version == PROMPT_VERSION
+    assert processor.cache_key.startswith("aggregate-semantic-v27-claim-centric-r5|")
+
+
+def test_no_claims_is_a_current_terminal_cache_status(tmp_path):
+    index = _index()
+    with AggregateStateStore(tmp_path / "state.sqlite3") as store:
+        store.store_semantic_audit(
+            {
+                "source_id": index.source_id,
+                "source_article_id": index.source_article_id,
+                "prompt_version": "aggregate-semantic-v27-claim-centric-r5",
+                "model_identity": "minimax/MiniMax-M3",
+                "index_content_hash": index.content_hash,
+                "claim_centric_v27": True,
+                "strict_claim_contract": True,
+                "status": "no_claims",
+            }
+        )
+        assert store.semantic_is_current(
+            index,
+            prompt_version="aggregate-semantic-v27-claim-centric-r5",
+            model_identity="minimax/MiniMax-M3",
+            claim_centric_v27=True,
+            strict_claim_contract=True,
+        )
+
+
 def test_semantic_cache_invalidates_on_model_or_index_change(tmp_path):
     index = _index()
     audit = {
@@ -79,3 +174,34 @@ def test_semantic_cache_invalidates_on_model_or_index_change(tmp_path):
             prompt_version=PROMPT_VERSION,
             model_identity="minimax/MiniMax-M3",
         )
+
+
+def test_claim_dead_letters_are_independent_and_resolved_by_claim_id(tmp_path):
+    index = _index()
+    with AggregateStateStore(tmp_path / "state.sqlite3") as store:
+        store.sync_semantic_claim_dead_letters(
+            source_id=index.source_id,
+            source_article_id=index.source_article_id,
+            canonical_url=index.canonical_url,
+            failed_claim_ids=["c_1", "c_2"],
+            error="two claims remain unresolved",
+        )
+        assert store.health()["open_dead_letter_count"] == 2
+
+        store.sync_semantic_claim_dead_letters(
+            source_id=index.source_id,
+            source_article_id=index.source_article_id,
+            canonical_url=index.canonical_url,
+            failed_claim_ids=["c_2"],
+            error="one claim remains unresolved",
+        )
+        assert store.health()["open_dead_letter_count"] == 1
+
+        store.sync_semantic_claim_dead_letters(
+            source_id=index.source_id,
+            source_article_id=index.source_article_id,
+            canonical_url=index.canonical_url,
+            failed_claim_ids=[],
+            error="",
+        )
+        assert store.health()["open_dead_letter_count"] == 0

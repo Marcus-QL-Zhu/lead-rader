@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "dataset_version": "semantic-v27-development-v3-split-v2",
+  "created_at": "2026-08-01T00:00:00+08:00",
+  "purpose": "opened-development-prompt-optimization-with-company-isolated-holdout",
+  "source_bundle": "evaluation/semantic-v27/development-v2-bundle.jsonl",
+  "source_bundle_sha256": "89f54c2de59d3aa48c05d7b70019b0028d978ad1815a8c218d7bf7f4bd7298a1",
+  "source_gold": "evaluation/semantic-v27/development-v2-gold/adjudication.json",
+  "source_gold_sha256": "614621e1fe4a5560de2d03e5987cdedb15819d2cb1247d576ab1f37876102dd7",
+  "constraints": {
+    "training_articles_per_round": 3,
+    "variant_count_per_round": 3,
+    "maximum_rounds": 3,
+    "training_articles_are_disjoint_across_rounds": true,
+    "holdout_company_overlap_with_training": 0,
+    "holdout_must_not_be_used_for_prompt_selection": true,
+    "strict_test": "three deterministic random holdout articles must pass consecutively"
+  },
+  "rounds": [
+    {
+      "round": 1,
+      "training_keys": [
+        "nbd-vcpe-weekly:4407647",
+        "stcn-flash:4053145",
+        "ccid-report-commentary:1121488"
+      ]
+    },
+    {
+      "round": 2,
+      "training_keys": [
+        "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+        "shenzhen-semiconductor-association:2474",
+        "jazzyear-research:165"
+      ]
+    },
+    {
+      "round": 3,
+      "training_keys": [
+        "cls-telegraph:2442046",
+        "nbd-vcpe-weekly:4426790",
+        "caict-mobile-market-analysis:caict-release-china-mobile-phone-market-analysis-report-april-2026"
+      ]
+    }
+  ],
+  "holdout_keys": [
+    "cyzone-latest:841774",
+    "jazzyear-research:171",
+    "jazzyear-research:162",
+    "shenzhen-semiconductor-association:2482",
+    "stcn-flash:4052079"
+  ],
+  "reserve_keys": [
+    "nbd-vcpe-weekly:4433207",
+    "nbd-vcpe-weekly:4387158",
+    "cena-industry-analysis:17947",
+    "nbd-vcpe-weekly:4440629",
+    "cls-telegraph:2443353",
+    "shenzhen-semiconductor-association:2500",
+    "beijing-etown-major-projects:20260513_4649055",
+    "beijing-etown-major-projects:20260515_4652546",
+    "ccid-report-commentary:1120321",
+    "ccid-report-commentary:1121725",
+    "cls-telegraph:2442773",
+    "iter-china-news:24383",
+    "jiqizhixin-industry-analysis:2026-07-31-7",
+    "jiqizhixin-industry-analysis:2026-08-01-2",
+    "jiqizhixin-industry-analysis:2026-08-01-9",
+    "shenzhen-semiconductor-association:2479"
+  ]
+}

@@ -16,14 +16,29 @@ class DedicatedAdapterRegistry:
 
     @classmethod
     def defaults(cls) -> "DedicatedAdapterRegistry":
+        from .sites.beijing_etown import BeijingEtownMajorProjectsAdapter
+        from .sites.caict_market import CaictMarketAnalysisAdapter
+        from .sites.ccid_report import CcidReportCommentaryAdapter
+        from .sites.cena import CenaAdapter
         from .sites.cls import ClsAdapter
+        from .sites.cnstock import CnstockCompanyChannelAdapter
         from .sites.cyzone import CyzoneAdapter
+        from .sites.fusion import FusionIndustryMediaAdapter, IterChinaAdapter
         from .sites.jazzyear import JazzyearAdapter
+        from .sites.jazzyear_research import JazzyearResearchAdapter
+        from .sites.jiqizhixin import JiqizhixinAdapter
         from .sites.kr36 import Kr36Adapter
         from .sites.lieyun import LieyunAdapter
         from .sites.miit import MiitAdapter
+        from .sites.nbd_vcpe import NbdVcpeWeeklyAdapter
         from .sites.pedaily import PedailyAdapter
+        from .sites.shenzhen_semiconductor import (
+            ShenzhenSemiconductorAssociationAdapter,
+        )
+        from .sites.shenzhen_sasac import ShenzhenSasacAppointmentsAdapter
+        from .sites.shanghai_fgw_annual_plan import ShanghaiFgwAnnualPlanAdapter
         from .sites.stcn import StcnAdapter
+        from .sites.suzhou_robot_association import SuzhouRobotAssociationAdapter
         from .sites.vbdata import VbdataAdapter
         from .sites.zhidx import ZhidxAdapter
 
@@ -37,8 +52,22 @@ class DedicatedAdapterRegistry:
                 JazzyearAdapter(),
                 ZhidxAdapter(),
                 ClsAdapter(),
+                CnstockCompanyChannelAdapter(),
                 StcnAdapter(),
                 MiitAdapter(),
+                IterChinaAdapter(),
+                FusionIndustryMediaAdapter(),
+                SuzhouRobotAssociationAdapter(),
+                BeijingEtownMajorProjectsAdapter(),
+                ShenzhenSemiconductorAssociationAdapter(),
+                ShenzhenSasacAppointmentsAdapter(),
+                CaictMarketAnalysisAdapter(),
+                CcidReportCommentaryAdapter(),
+                CenaAdapter(),
+                JiqizhixinAdapter(),
+                JazzyearResearchAdapter(),
+                ShanghaiFgwAnnualPlanAdapter(),
+                NbdVcpeWeeklyAdapter(),
             )
         )
 

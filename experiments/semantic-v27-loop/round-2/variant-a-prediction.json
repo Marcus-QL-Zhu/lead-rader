@@ -1,0 +1,627 @@
+{
+  "schema_version": 1,
+  "dataset_version": "semantic-v27-development-v2",
+  "purpose": "opened-semantic-v27-prompt-loop-training",
+  "status": "complete",
+  "model": "minimax/MiniMax-M3",
+  "round": 2,
+  "maximum_rounds": 3,
+  "variant": "a",
+  "selected_keys": [
+    "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+    "shenzhen-semiconductor-association:2474",
+    "jazzyear-research:165"
+  ],
+  "prompt_config": {
+    "system_prompt": "你是公司事件Claim裁决器。输入中的实体、Claim与原文Span均由宿主锁定。你只判断每个Claim应接受还是拒绝；接受时从allowed_subject_entity_ids选择一个主体，判断event_status，并提取原文逐字存在的融资字段与投资方。事件不限于融资；融资、量产扩产、订单、合作、产品技术发布、客户验证与销售发货、监管临床、并购控制权、上市、新实体和企业系统等明确公司动作都可接受。event_type_hint通常是宿主锁定的动作类型；接受时event_type必须原样返回event_type_hint。唯一例外是event_type_hint=open_action：此时必须从allowed_event_types中选择最准确的类型，若原文不足以确定公司经营动作则拒绝，严禁返回open_action。funding_round_hint非空时也由宿主锁定，funding_round必须原样返回。若Span确实支持该动作，不要因没有融资字段而拒绝。host_mandatory=true表示宿主高精度规则已锁定该动作，不得拒绝。只围绕每个Claim自己的action_text裁决；同一Span若有多个独立action_text，多个Claim可以分别接受。主体是承担该动作的经营公司，不是产品、模型、平台、部门、人物、媒体或栏目短语。primary_subject_entity_id非空时代表宿主按语法识别的首选主体，应优先采用；但融资/投资的主体必须是获得资金的公司，不能选投资方。产品技术事件选择发布或运营该产品的公司；高管变动选择发生组织任免、加入或离开的公司。标题复述、评论推断和随后有明确详情的摘要Claim应拒绝为duplicate_or_summary。但周报中自包含的公司融资事实，只要逐字给出主体、完成融资动作以及金额或轮次，必须接受；不能仅因它位于汇总栏目而拒绝。公开披露的拟、计划、将要执行的公司动作是有效事件，event_status应为target。不能用event_type_mismatch拒绝：事件类型已由宿主锁定，只判断该action_text是否真实表达公司动作。拒绝reason_code只能是unsupported_company_action、subject_mismatch、historical_or_background、duplicate_or_summary、ambiguous_evidence之一。每个输入claim_id必须且只能出现一次。只输出JSON对象，不输出Markdown。格式为{\"decisions\":[{\"claim_id\":\"ac_x\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_x\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"1亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[\"远山资本\"],\"industry_tags\":[\"semiconductor\"],\"confidence\":\"high\"}]}。拒绝时只填claim_id、decision=reject和reason_code。\n采用主体与时态优先策略：先锁定承担动作的经营公司，投资场景选择融资接收方而不是投资方；产品选择发布或运营方；任免选择发生组织变化的公司。已完成/发布/交付用completed，启动/进入用started，拟/计划/将用target，累计历史汇总用cumulative或按背景拒绝。只有原文不足以支撑主体动作时才拒绝，禁止凭行业常识补事实。\n裁决前按固定顺序检查：第一，action_text是否逐字表达当前或明确计划中的公司动作；第二，动作承担者或融资接收者是哪一个allowed主体；第三，状态由完成词、启动词或计划词决定；第四，仅在同一事实已有更具体Claim时才拒绝摘要。不要把缺少金额、客户名或结果数字当作拒绝理由。",
+    "few_shot": {
+      "examples": [
+        {
+          "input": {
+            "entities": [
+              {
+                "entity_id": "ae_chip",
+                "canonical_name": "星河芯片",
+                "aliases": []
+              },
+              {
+                "entity_id": "ae_investor",
+                "canonical_name": "远山资本",
+                "aliases": []
+              },
+              {
+                "entity_id": "ae_platform",
+                "canonical_name": "星河智能平台",
+                "aliases": []
+              }
+            ],
+            "spans": [
+              {
+                "span_id": "as_funding",
+                "text": "远山资本将向星河芯片投资1亿元。"
+              },
+              {
+                "span_id": "as_product",
+                "text": "星河芯片正式发布星河智能平台。"
+              },
+              {
+                "span_id": "as_summary",
+                "text": "本周硬科技融资信号密集，星河芯片融资规模创新高。"
+              }
+            ],
+            "claims": [
+              {
+                "claim_id": "ac_funding",
+                "span_id": "as_funding",
+                "event_type_hint": "funding",
+                "event_status_hint": "target",
+                "action_text": "向星河芯片投资1亿元",
+                "allowed_subject_entity_ids": [
+                  "ae_investor",
+                  "ae_chip"
+                ],
+                "primary_subject_entity_id": "ae_investor"
+              },
+              {
+                "claim_id": "ac_product",
+                "span_id": "as_product",
+                "event_type_hint": "technical_milestone",
+                "event_status_hint": "completed",
+                "action_text": "发布星河智能平台",
+                "allowed_subject_entity_ids": [
+                  "ae_chip",
+                  "ae_platform"
+                ],
+                "primary_subject_entity_id": "ae_chip"
+              },
+              {
+                "claim_id": "ac_summary",
+                "span_id": "as_summary",
+                "event_type_hint": "funding",
+                "event_status_hint": "completed",
+                "action_text": "融资规模创新高",
+                "allowed_subject_entity_ids": [
+                  "ae_chip"
+                ],
+                "primary_subject_entity_id": "ae_chip"
+              }
+            ]
+          },
+          "output": {
+            "decisions": [
+              {
+                "claim_id": "ac_funding",
+                "decision": "accept",
+                "subject_entity_id": "ae_chip",
+                "event_type": "funding",
+                "event_status": "target",
+                "funding_round": "",
+                "funding_amount": "1亿元",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "远山资本"
+                ],
+                "industry_tags": [
+                  "semiconductor"
+                ],
+                "confidence": "high"
+              },
+              {
+                "claim_id": "ac_product",
+                "decision": "accept",
+                "subject_entity_id": "ae_chip",
+                "event_type": "technical_milestone",
+                "event_status": "completed",
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "industry_tags": [
+                  "semiconductor"
+                ],
+                "confidence": "high"
+              },
+              {
+                "claim_id": "ac_summary",
+                "decision": "reject",
+                "reason_code": "duplicate_or_summary"
+              }
+            ]
+          }
+        },
+        {
+          "input": {
+            "entities": [
+              {
+                "entity_id": "ae_bio",
+                "canonical_name": "星海生物",
+                "aliases": []
+              },
+              {
+                "entity_id": "ae_fund",
+                "canonical_name": "远山资本",
+                "aliases": []
+              }
+            ],
+            "spans": [
+              {
+                "span_id": "as_raise",
+                "text": "星海生物完成B轮融资，由远山资本领投。"
+              }
+            ],
+            "claims": [
+              {
+                "claim_id": "ac_raise",
+                "span_id": "as_raise",
+                "event_type_hint": "funding",
+                "event_status_hint": "completed",
+                "funding_round_hint": "B轮",
+                "action_text": "完成B轮融资",
+                "allowed_subject_entity_ids": [
+                  "ae_bio",
+                  "ae_fund"
+                ],
+                "primary_subject_entity_id": "ae_bio"
+              }
+            ]
+          },
+          "output": {
+            "decisions": [
+              {
+                "claim_id": "ac_raise",
+                "decision": "accept",
+                "subject_entity_id": "ae_bio",
+                "event_type": "funding",
+                "event_status": "completed",
+                "funding_round": "B轮",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "远山资本"
+                ],
+                "industry_tags": [
+                  "biotech"
+                ],
+                "confidence": "high"
+              }
+            ]
+          }
+        },
+        {
+          "input": {
+            "entities": [
+              {
+                "entity_id": "ae_robot",
+                "canonical_name": "远航机器人",
+                "aliases": []
+              }
+            ],
+            "spans": [
+              {
+                "span_id": "as_plan",
+                "text": "远航机器人计划建设年产万台的新工厂。"
+              }
+            ],
+            "claims": [
+              {
+                "claim_id": "ac_plan",
+                "span_id": "as_plan",
+                "event_type_hint": "factory_or_capacity",
+                "event_status_hint": "target",
+                "action_text": "计划建设年产万台的新工厂",
+                "allowed_subject_entity_ids": [
+                  "ae_robot"
+                ],
+                "primary_subject_entity_id": "ae_robot"
+              }
+            ]
+          },
+          "output": {
+            "decisions": [
+              {
+                "claim_id": "ac_plan",
+                "decision": "accept",
+                "subject_entity_id": "ae_robot",
+                "event_type": "factory_or_capacity",
+                "event_status": "target",
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "industry_tags": [
+                  "robotics"
+                ],
+                "confidence": "high"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+    "contract_version": "v5-open-action-ledger",
+    "lineage": {
+      "round": 2,
+      "variant": "a",
+      "parent_prompt_version": "aggregate-semantic-v27-loop-r1-c"
+    }
+  },
+  "prompt_config_sha256": "8351dc53f2440b6e18511fbdb28013720666bd840962c9ced22ed96ba7d8c39c",
+  "code_contract_sha256": "fa96ac80a7acc74ab6046e6f2ebe4510b4e07ec599f85e3a00d4bc599d10820a",
+  "source_bundle_sha256": "89f54c2de59d3aa48c05d7b70019b0028d978ad1815a8c218d7bf7f4bd7298a1",
+  "source_gold_sha256": "614621e1fe4a5560de2d03e5987cdedb15819d2cb1247d576ab1f37876102dd7",
+  "source_split_sha256": "f393db769b126e44f51b67984eea38dd895676a72b1a8e099921c19a4790d937",
+  "results": [
+    {
+      "key": "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+      "position": 1,
+      "events": [
+        {
+          "source_id": "fusion-industry-media",
+          "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+          "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+          "company_mentions": [
+            "中国核工业二三建设有限公司",
+            "中国核工业二三建设"
+          ],
+          "canonical_company": "中国核工业二三建设有限公司",
+          "event_type": "major_order",
+          "event_date": "2026-01-24",
+          "industry_tags": [
+            "nuclear_energy"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+          "evidence_quotes": [
+            "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+          "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_5c1f4b05a27d36"
+          ],
+          "span_ids": [
+            "as_b58f4e66032007"
+          ],
+          "subject_entity_id": "ae_a2055670130719"
+        },
+        {
+          "source_id": "fusion-industry-media",
+          "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+          "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+          "company_mentions": [
+            "中国核电工程有限公司",
+            "中国核电工程"
+          ],
+          "canonical_company": "中国核电工程有限公司",
+          "event_type": "major_order",
+          "event_date": "2026-01-24",
+          "industry_tags": [
+            "nuclear_energy"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+          "evidence_quotes": [
+            "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+          "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_e4dcb02a0a1c86"
+          ],
+          "span_ids": [
+            "as_b58f4e66032007"
+          ],
+          "subject_entity_id": "ae_14bdaac1399a3d"
+        },
+        {
+          "source_id": "fusion-industry-media",
+          "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+          "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+          "company_mentions": [
+            "荣信汇科电气股份有限公司",
+            "荣信汇科电气"
+          ],
+          "canonical_company": "荣信汇科电气股份有限公司",
+          "event_type": "major_order",
+          "event_date": "2026-01-24",
+          "industry_tags": [
+            "nuclear_energy"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+          "evidence_quotes": [
+            "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+          "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_4a41cfebe7eb3f"
+          ],
+          "span_ids": [
+            "as_b58f4e66032007"
+          ],
+          "subject_entity_id": "ae_4cc2be1ba141fc"
+        }
+      ],
+      "audit": {
+        "source_id": "fusion-industry-media",
+        "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+        "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+        "claim_contract_version": "v5-open-action-ledger",
+        "model_identity": "minimax/MiniMax-M3",
+        "cache_key": "aggregate-semantic-v27-loop-r2-a|minimax/MiniMax-M3",
+        "entity_count": 27,
+        "eligible_entity_count": 3,
+        "action_span_count": 2,
+        "candidate_count": 7,
+        "batch_count": 3,
+        "document_type": "single_company_flash",
+        "document_route_reason": "default_single_article",
+        "document_family": "single_company_flash",
+        "processing_mode": "single_unit",
+        "route_gate_confidence": "low",
+        "route_llm_gate_required": true,
+        "route_gate_signals": [],
+        "document_unit_ids": [
+          "u_ec82609a0196"
+        ],
+        "accepted_claim_ids": [
+          "ac_4a41cfebe7eb3f",
+          "ac_5c1f4b05a27d36",
+          "ac_e4dcb02a0a1c86"
+        ],
+        "rejected_claim_ids": [
+          "ac_155786b0e4f4db",
+          "ac_23d8752f0d06e7",
+          "ac_86a9bb71679477",
+          "ac_fb95cd7090640c"
+        ],
+        "failed_claim_ids": [],
+        "host_fallback_claim_ids": [],
+        "batch_statuses": [
+          "repaired",
+          "accepted",
+          "accepted"
+        ],
+        "first_responses": [
+          "{\"decisions\":[{\"claim_id\":\"ac_4a41cfebe7eb3f\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_5c1f4b05a27d36\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_e4dcb02a0a1c86\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_155786b0e4f4db\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_23d8752f0d06e7\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_86a9bb71679477\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_fb95cd7090640c\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+        ],
+        "repair_responses": [
+          "{\"decisions\":[{\"claim_id\":\"ac_4a41cfebe7eb3f\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_4cc2be1ba141fc\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_5c1f4b05a27d36\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_a2055670130719\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_e4dcb02a0a1c86\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_14bdaac1399a3d\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"}]}",
+          "",
+          ""
+        ],
+        "validation_issues": [],
+        "infrastructure_errors": [],
+        "skipped_claim_ids_due_to_infrastructure": [],
+        "rejection_reason_counts": {
+          "subject_mismatch": 3,
+          "unsupported_company_action": 1
+        },
+        "status": "accepted",
+        "strict_claim_contract_ready": true,
+        "final_event_count": 3,
+        "ledger_sha256": "c5a43470fd443d622d1358d7f14d59f4f3777812",
+        "semantic_window": {
+          "mode": "full_short",
+          "reason": "under_window_limit",
+          "original_chars": 1177,
+          "semantic_chars": 1177,
+          "prefix_action_count": 10,
+          "tail_action_count": 0,
+          "prefix_has_concrete_event": true,
+          "interview_cue_count": 0
+        }
+      }
+    },
+    {
+      "key": "shenzhen-semiconductor-association:2474",
+      "position": 2,
+      "events": [
+        {
+          "source_id": "shenzhen-semiconductor-association",
+          "source_article_id": "2474",
+          "canonical_url": "https://www.szsia.com/?p=2474",
+          "company_mentions": [
+            "华大九天"
+          ],
+          "canonical_company": "华大九天",
+          "event_type": "technical_milestone",
+          "event_date": "2022-11-16",
+          "industry_tags": [
+            "semiconductor",
+            "eda"
+          ],
+          "funding_round": "",
+          "funding_amount": "",
+          "cumulative_funding_amount": "",
+          "investors": [],
+          "event_summary": "深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。",
+          "evidence_quotes": [
+            "深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。",
+            "公司不断加大研发投入，快速推出新品，目前已形成模拟电路设计全流程EDA工具系统、数字电路设计EDA工具、平板显示电路设计全流程EDA工具系统和晶圆制造EDA工具四大主干产品线二十多款产品。"
+          ],
+          "ambiguities": [],
+          "confidence": "high",
+          "processor": "minimax",
+          "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+          "content_hash": "6b6b7e7733fd564b2df89d1dd231f68b402371de294dd4b0a58c63d05d5a9e73",
+          "phase": "build_organize",
+          "event_status": "completed",
+          "claim_ids": [
+            "ac_9a3817d3183883",
+            "ac_f13c8e2bc4cd47"
+          ],
+          "span_ids": [
+            "as_3e1402b21a0735",
+            "as_f053840c13a42b"
+          ],
+          "subject_entity_id": "ae_7dacddb0f4d5b4"
+        }
+      ],
+      "audit": {
+        "source_id": "shenzhen-semiconductor-association",
+        "source_article_id": "2474",
+        "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+        "claim_contract_version": "v5-open-action-ledger",
+        "model_identity": "minimax/MiniMax-M3",
+        "cache_key": "aggregate-semantic-v27-loop-r2-a|minimax/MiniMax-M3",
+        "entity_count": 10,
+        "eligible_entity_count": 1,
+        "action_span_count": 5,
+        "candidate_count": 8,
+        "batch_count": 3,
+        "document_type": "roadmap",
+        "document_route_reason": "future_action_density",
+        "document_family": "long_feature",
+        "processing_mode": "future_action_review",
+        "route_gate_confidence": "high",
+        "route_llm_gate_required": false,
+        "route_gate_signals": [],
+        "document_unit_ids": [
+          "u_8ee51836914e"
+        ],
+        "accepted_claim_ids": [
+          "ac_9a3817d3183883",
+          "ac_f13c8e2bc4cd47"
+        ],
+        "rejected_claim_ids": [
+          "ac_099666b5a34162",
+          "ac_153ad6c1f4015c",
+          "ac_8718fa0fea5351",
+          "ac_911f23ff5907a5",
+          "ac_a3119d369feb26",
+          "ac_bb2934f80277e4"
+        ],
+        "failed_claim_ids": [],
+        "host_fallback_claim_ids": [],
+        "batch_statuses": [
+          "accepted",
+          "accepted",
+          "accepted"
+        ],
+        "first_responses": [
+          "{\"decisions\":[{\"claim_id\":\"ac_153ad6c1f4015c\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_8718fa0fea5351\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_911f23ff5907a5\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_bb2934f80277e4\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_f13c8e2bc4cd47\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_7dacddb0f4d5b4\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"semiconductor\",\"eda\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_9a3817d3183883\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_7dacddb0f4d5b4\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"semiconductor\",\"eda\"],\"confidence\":\"high\"}]}",
+          "{\"decisions\":[{\"claim_id\":\"ac_a3119d369feb26\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_099666b5a34162\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+        ],
+        "repair_responses": [
+          "",
+          "",
+          ""
+        ],
+        "validation_issues": [],
+        "infrastructure_errors": [],
+        "skipped_claim_ids_due_to_infrastructure": [],
+        "rejection_reason_counts": {
+          "historical_or_background": 2,
+          "ambiguous_evidence": 1,
+          "unsupported_company_action": 3
+        },
+        "status": "accepted",
+        "strict_claim_contract_ready": true,
+        "final_event_count": 1,
+        "ledger_sha256": "2e4fcfd2e2fd87c93db623a28795fa06fb70243e",
+        "semantic_window": {
+          "mode": "full_short",
+          "reason": "under_window_limit",
+          "original_chars": 888,
+          "semantic_chars": 888,
+          "prefix_action_count": 6,
+          "tail_action_count": 0,
+          "prefix_has_concrete_event": true,
+          "interview_cue_count": 0
+        }
+      }
+    },
+    {
+      "key": "jazzyear-research:165",
+      "position": 3,
+      "events": [],
+      "audit": {
+        "source_id": "jazzyear-research",
+        "source_article_id": "165",
+        "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+        "claim_contract_version": "v5-open-action-ledger",
+        "model_identity": "minimax/MiniMax-M3",
+        "cache_key": "aggregate-semantic-v27-loop-r2-a|minimax/MiniMax-M3",
+        "entity_count": 13,
+        "eligible_entity_count": 0,
+        "action_span_count": 0,
+        "candidate_count": 0,
+        "batch_count": 0,
+        "document_type": "long_feature",
+        "document_route_reason": "adapter_document_type",
+        "document_family": "long_feature",
+        "processing_mode": "prefix_2000_if_event_else_skip",
+        "route_gate_confidence": "medium",
+        "route_llm_gate_required": true,
+        "route_gate_signals": [],
+        "document_unit_ids": [
+          "u_02e7d010d917"
+        ],
+        "accepted_claim_ids": [],
+        "rejected_claim_ids": [],
+        "failed_claim_ids": [],
+        "host_fallback_claim_ids": [],
+        "batch_statuses": [],
+        "first_responses": [],
+        "repair_responses": [],
+        "validation_issues": [],
+        "infrastructure_errors": [],
+        "skipped_claim_ids_due_to_infrastructure": [],
+        "rejection_reason_counts": {},
+        "status": "no_claims",
+        "strict_claim_contract_ready": true,
+        "final_event_count": 0,
+        "semantic_window": {
+          "mode": "full_short",
+          "reason": "under_window_limit",
+          "original_chars": 1162,
+          "semantic_chars": 1162,
+          "prefix_action_count": 2,
+          "tail_action_count": 0,
+          "prefix_has_concrete_event": true,
+          "interview_cue_count": 0
+        }
+      }
+    }
+  ],
+  "summary": {
+    "article_count": 3,
+    "event_count": 4,
+    "claim_count": 15,
+    "accepted_claim_count": 5,
+    "rejected_claim_count": 10,
+    "failed_claim_count": 0,
+    "strict_ready_article_count": 3,
+    "partial_article_count": 0
+  }
+}

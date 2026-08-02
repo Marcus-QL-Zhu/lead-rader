@@ -1,0 +1,3639 @@
+{
+  "schema_version": 1,
+  "purpose": "blind-independent-semantic-v27-round-review",
+  "seed_sha256": "dbfae9146af94cc527532a5546176f0f6cb5a4793e902118340889d93ccf2c02",
+  "selected_keys": [
+    "nbd-vcpe-weekly:4407647",
+    "stcn-flash:4053145",
+    "ccid-report-commentary:1121488"
+  ],
+  "rubric": {
+    "hard_disqualifiers": [
+      "infrastructure failure",
+      "failed or non-terminal Claim",
+      "unsupported or uncited event",
+      "wrong operating-company subject"
+    ],
+    "rank_order": [
+      "company subject precision",
+      "supported strong-current event recall",
+      "event status accuracy",
+      "atomic completeness without summary duplicates",
+      "projection stability"
+    ],
+    "required_output": "rank all eligible anonymous candidates, select at most one winner, cite case-level errors, and say no-winner if all fail"
+  },
+  "gold_cases": [
+    {
+      "key": "nbd-vcpe-weekly:4407647",
+      "article_sha256": "9471835cc7ec5a9fe219e2741431b6acbf0de11d97d69efb53d841de8994b3e4",
+      "source_id": "nbd-vcpe-weekly",
+      "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+      "published_at": "2026-05-25T00:00:00+08:00",
+      "title": "VC/PE周报｜BAI资本完成6亿美元首关；机器人租赁诞生独角兽公司",
+      "document_type": "multi_company_bulletin",
+      "clean_body": "近日，BAI资本宣布完成6亿美元首关，将重点投资已完成商业化验证、具备跨区域扩张潜力的企业；康桥资本与GHO Capital宣布合并，组建规模超210亿美元的医疗健康投资平台。\n投资方面，小米加注人形机器人公司，机器人租赁赛道跑出一家“独角兽”——擎天租完成数亿元融资后估值达70亿元。\nBAI资本宣布募资\n近日，BAI资本宣布新一期目标规模8亿美元的美元基金已完成首关，首关规模6亿美元。\n据介绍，新基金将延续BAI资本在成长型投资上的优势，重点寻找已经完成商业化验证并具备跨区域扩张潜力的企业。具体而言，BAI资本将围绕三类机会展开布局：一是中国冠军企业出海过程中形成的新增长平台；二是从亚洲本土创新出发、逐步走向跨国经营的全球化企业；三是具备全球领先创新能力并有望借助中国市场实现规模化增长的国际化企业。行业方向将覆盖科技与AI、金融服务、消费与娱乐、企业服务等领域。\nBAI资本创始及管理合伙人龙宇表示，如今的投资环境，比过去任何时候都更强调验证、兑现和纪律。BAI新基金的核心不是追逐早期概念，而是支持那些已经在高竞争市场中完成技术、客户和商业化验证，并具备跨区域扩张能力的企业。她相信，亚洲尤其是中国市场锤炼出的技术能力、商业模式和组织效率，正在成为全球增长的重要来源。\nBAI资本前身为贝塔斯曼集团旗下的贝塔斯曼亚洲投资基金，并于2021年完成独立后的首次募资。独立后，BAI资本仍持续依托贝塔斯曼平台，为相关成员企业提供增值支持。\n点评： 在当下全球美元基金募资氛围普遍趋于审慎的背景下，这则募资消息说明具备清晰策略、历史业绩验证和产业背景的GP，依然能获得LP的信任。不再追逐早期概念，而是聚焦已验证的成长型企业——更看重商业化能力、跨区域扩张潜力，而非单纯的技术故事。这与当下市场更看重确定性、现金流和盈利路径的趋势高度吻合。\n康桥资本与GHO Capital宣布合并\n近日，专注于医疗健康行业投资的资产管理机构康桥资本与欧洲医疗健康专业投资机构Global Healthcare Opportunities（以下简称GHO）宣布，双方已签署合并协议，将共同组建全球规模最大的医疗健康投资资产管理平台，合并后资产管理规模（AUM）将超过210亿美元。合并后的平台将在北美、欧洲及亚太地区设有13个办公室，拥有200余名投资及运营专业人士，三大区域合计占全球医疗健康研发投入约90%。合并后的平台将覆盖生物制药、医疗器械、生命科学工具与诊断、医疗健康基础设施以及医疗信息化等领域。投资类别涵盖私募股权、私募信贷、药品特许权投资及不动产等。\n据介绍，合并后的平台管理层由康桥资本与GHO的创始人组成，康桥资本首席执行官傅唯将与GHO Capital管理合伙人兼联合创始人Mike Mortimer担任联席首席执行官，Andrea Ponti与Alan MacKay将分别在公司财务监管及公司治理方面承担董事会职责。本次合并预计于2027年初完成，仍需满足惯常交割条件并获得相关监管批准。合并完成前，康桥资本与GHO将继续独立运营，并各自按照既定投资策略推进基金运作。\n点评： 这一强强联合反映出医疗健康投资正从区域化竞争走向全球化协同，整合运营专长、特许权管理与多元资本工具（私募股权、信贷、不动产等）的能力正成为核心壁垒。\n小米投资一家人形机器人公司\n近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。据介绍，此轮融资距上一轮完成仅不到一个月，光源资本担任孵化方和独家财务顾问。\nRoboParty成立于2025年2月，是一家从算法、控制到硬件整机全栈开源的双足人形机器人公司。核心团队由哈尔滨工业大学智能机器人专业成员组成。据介绍，在商业化层面，RoboParty的首款产品与开源平台已经进入首批数百台交付与用户复现阶段。早期RPO原型机验证了全开源双足人形机器人商业化落地可行性，获得来自海内外高校、labs及开发者社区用户的积极反馈。\n点评： 这则新闻折射出人形机器人赛道正在经历资本与产业的双重加速。RoboParty快速完成两轮融资，且有顺为资本领投、小米战投追加，表明顶级产业资本和财务资本正以争分夺秒的姿态抢占具身智能的早期入口。\n大型无人运输机融资超5亿元\n近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。本轮融资由财金惠风、青实资本、西高投、越秀产业基金、深创投、金浦投资等20家机构联合投资。\n据介绍，华鹰航空聚焦大吨位低空物流运输，区别于小载荷无人机在末端配送中的应用，大吨位无人运输机可深入商业物流、应急物资转运、偏远地区供应链重构等中长距离、高载荷场景，具备支撑真实物流体系运转的系统性能力。\n点评： 如此规模的融资能在早期阶段落地，说明技术成熟度与商业场景验证已初步得到认可。未来，谁能率先打通大吨位无人机的适航审定与常态化运营闭环，谁就有望成为低空经济主干网络的关键基础设施提供者。\n原子矩阵获得A轮投资\n近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。本轮融资由砺思资本领投，民银国际跟投，老股东祥峰中国、L2F光源创业者基金持续超额追加投资。至此，原子矩阵在半年内连续完成三轮数亿元融资。\n据介绍，中性原子是当前量子领域进展颇为迅猛的赛道之一，凭借其可扩展性强、相干时间长、无需极低温环境等核心优势，在大规模比特阵列操控、容错量子计算等关键指标上颇具潜力。原子矩阵专注于中性原子量子计算全栈解决方案，涵盖从核心器件、量子算法到整机系统的模块化设计与集成能力。\n点评： 半年内累计数亿元的融资节奏，反映出资本对“可扩展性优于超导、常温运行优于离子阱”这一差异化路径的强烈兴趣。融资密度与频率的提升，意味着行业已从少数科研团队主导的前期探索，迈入全栈工程化与模块化集成的早期竞争阶段。\n机器人租赁诞生独角兽公司\n近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。\n据悉，擎天租成立于2025年，提供机器人本体直租及场景解决方案租赁服务。此前，擎天租开展机器人租赁业务，主要围绕文旅、商演、展会、商业营销等展示型和互动型场景。完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。\n擎天租CEO李一言表示，机器人进入真实场景的难点，主要在于能否形成稳定、可复制的应用交付能力。“尤其在工业和园区等场景中，客户关注的不再是短期展示效果，而是机器人能否持续运行、按需调度、及时维护，并在具体任务中创造实际价值。”\n点评： 租赁模式跑通“独角兽”估值，验证了产业端对机器人资产轻量化、按需使用的真实需求。租赁形态降低了终端用户的试用门槛与资本支出，加速了机器人在仓储、产线等场景的渗透速度。而这一赛道的崛起也意味着机器人行业的竞争重心正从本体性能较量，转向全生命周期服务与场景适配能力的比拼。\n封面图片来源：AIGC",
+      "document_units": [
+        {
+          "unit_id": "u_65ff8d129694",
+          "char_start": 0,
+          "char_end": 144,
+          "text": "近日，BAI资本宣布完成6亿美元首关，将重点投资已完成商业化验证、具备跨区域扩张潜力的企业；康桥资本与GHO Capital宣布合并，组建规模超210亿美元的医疗健康投资平台。\n投资方面，小米加注人形机器人公司，机器人租赁赛道跑出一家“独角兽”——擎天租完成数亿元融资后估值达70亿元。\n"
+        },
+        {
+          "unit_id": "u_ea8b03038aa9",
+          "char_start": 144,
+          "char_end": 774,
+          "text": "BAI资本宣布募资\n近日，BAI资本宣布新一期目标规模8亿美元的美元基金已完成首关，首关规模6亿美元。\n据介绍，新基金将延续BAI资本在成长型投资上的优势，重点寻找已经完成商业化验证并具备跨区域扩张潜力的企业。具体而言，BAI资本将围绕三类机会展开布局：一是中国冠军企业出海过程中形成的新增长平台；二是从亚洲本土创新出发、逐步走向跨国经营的全球化企业；三是具备全球领先创新能力并有望借助中国市场实现规模化增长的国际化企业。行业方向将覆盖科技与AI、金融服务、消费与娱乐、企业服务等领域。\nBAI资本创始及管理合伙人龙宇表示，如今的投资环境，比过去任何时候都更强调验证、兑现和纪律。BAI新基金的核心不是追逐早期概念，而是支持那些已经在高竞争市场中完成技术、客户和商业化验证，并具备跨区域扩张能力的企业。她相信，亚洲尤其是中国市场锤炼出的技术能力、商业模式和组织效率，正在成为全球增长的重要来源。\nBAI资本前身为贝塔斯曼集团旗下的贝塔斯曼亚洲投资基金，并于2021年完成独立后的首次募资。独立后，BAI资本仍持续依托贝塔斯曼平台，为相关成员企业提供增值支持。\n点评： 在当下全球美元基金募资氛围普遍趋于审慎的背景下，这则募资消息说明具备清晰策略、历史业绩验证和产业背景的GP，依然能获得LP的信任。不再追逐早期概念，而是聚焦已验证的成长型企业——更看重商业化能力、跨区域扩张潜力，而非单纯的技术故事。这与当下市场更看重确定性、现金流和盈利路径的趋势高度吻合。\n"
+        },
+        {
+          "unit_id": "u_ff403bf8238f",
+          "char_start": 774,
+          "char_end": 1371,
+          "text": "康桥资本与GHO Capital宣布合并\n近日，专注于医疗健康行业投资的资产管理机构康桥资本与欧洲医疗健康专业投资机构Global Healthcare Opportunities（以下简称GHO）宣布，双方已签署合并协议，将共同组建全球规模最大的医疗健康投资资产管理平台，合并后资产管理规模（AUM）将超过210亿美元。合并后的平台将在北美、欧洲及亚太地区设有13个办公室，拥有200余名投资及运营专业人士，三大区域合计占全球医疗健康研发投入约90%。合并后的平台将覆盖生物制药、医疗器械、生命科学工具与诊断、医疗健康基础设施以及医疗信息化等领域。投资类别涵盖私募股权、私募信贷、药品特许权投资及不动产等。\n据介绍，合并后的平台管理层由康桥资本与GHO的创始人组成，康桥资本首席执行官傅唯将与GHO Capital管理合伙人兼联合创始人Mike Mortimer担任联席首席执行官，Andrea Ponti与Alan MacKay将分别在公司财务监管及公司治理方面承担董事会职责。本次合并预计于2027年初完成，仍需满足惯常交割条件并获得相关监管批准。合并完成前，康桥资本与GHO将继续独立运营，并各自按照既定投资策略推进基金运作。\n点评： 这一强强联合反映出医疗健康投资正从区域化竞争走向全球化协同，整合运营专长、特许权管理与多元资本工具（私募股权、信贷、不动产等）的能力正成为核心壁垒。\n"
+        },
+        {
+          "unit_id": "u_c8dabbeed20f",
+          "char_start": 1371,
+          "char_end": 1758,
+          "text": "小米投资一家人形机器人公司\n近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。据介绍，此轮融资距上一轮完成仅不到一个月，光源资本担任孵化方和独家财务顾问。\nRoboParty成立于2025年2月，是一家从算法、控制到硬件整机全栈开源的双足人形机器人公司。核心团队由哈尔滨工业大学智能机器人专业成员组成。据介绍，在商业化层面，RoboParty的首款产品与开源平台已经进入首批数百台交付与用户复现阶段。早期RPO原型机验证了全开源双足人形机器人商业化落地可行性，获得来自海内外高校、labs及开发者社区用户的积极反馈。\n点评： 这则新闻折射出人形机器人赛道正在经历资本与产业的双重加速。RoboParty快速完成两轮融资，且有顺为资本领投、小米战投追加，表明顶级产业资本和财务资本正以争分夺秒的姿态抢占具身智能的早期入口。\n"
+        },
+        {
+          "unit_id": "u_ccb4bf469e4d",
+          "char_start": 1758,
+          "char_end": 2052,
+          "text": "大型无人运输机融资超5亿元\n近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。本轮融资由财金惠风、青实资本、西高投、越秀产业基金、深创投、金浦投资等20家机构联合投资。\n据介绍，华鹰航空聚焦大吨位低空物流运输，区别于小载荷无人机在末端配送中的应用，大吨位无人运输机可深入商业物流、应急物资转运、偏远地区供应链重构等中长距离、高载荷场景，具备支撑真实物流体系运转的系统性能力。\n点评： 如此规模的融资能在早期阶段落地，说明技术成熟度与商业场景验证已初步得到认可。未来，谁能率先打通大吨位无人机的适航审定与常态化运营闭环，谁就有望成为低空经济主干网络的关键基础设施提供者。\n"
+        },
+        {
+          "unit_id": "u_0940eec97801",
+          "char_start": 2052,
+          "char_end": 2413,
+          "text": "原子矩阵获得A轮投资\n近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。本轮融资由砺思资本领投，民银国际跟投，老股东祥峰中国、L2F光源创业者基金持续超额追加投资。至此，原子矩阵在半年内连续完成三轮数亿元融资。\n据介绍，中性原子是当前量子领域进展颇为迅猛的赛道之一，凭借其可扩展性强、相干时间长、无需极低温环境等核心优势，在大规模比特阵列操控、容错量子计算等关键指标上颇具潜力。原子矩阵专注于中性原子量子计算全栈解决方案，涵盖从核心器件、量子算法到整机系统的模块化设计与集成能力。\n点评： 半年内累计数亿元的融资节奏，反映出资本对“可扩展性优于超导、常温运行优于离子阱”这一差异化路径的强烈兴趣。融资密度与频率的提升，意味着行业已从少数科研团队主导的前期探索，迈入全栈工程化与模块化集成的早期竞争阶段。\n"
+        },
+        {
+          "unit_id": "u_1b05f9987035",
+          "char_start": 2413,
+          "char_end": 2909,
+          "text": "机器人租赁诞生独角兽公司\n近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。\n据悉，擎天租成立于2025年，提供机器人本体直租及场景解决方案租赁服务。此前，擎天租开展机器人租赁业务，主要围绕文旅、商演、展会、商业营销等展示型和互动型场景。完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。\n擎天租CEO李一言表示，机器人进入真实场景的难点，主要在于能否形成稳定、可复制的应用交付能力。“尤其在工业和园区等场景中，客户关注的不再是短期展示效果，而是机器人能否持续运行、按需调度、及时维护，并在具体任务中创造实际价值。”\n点评： 租赁模式跑通“独角兽”估值，验证了产业端对机器人资产轻量化、按需使用的真实需求。租赁形态降低了终端用户的试用门槛与资本支出，加速了机器人在仓储、产线等场景的渗透速度。而这一赛道的崛起也意味着机器人行业的竞争重心正从本体性能较量，转向全生命周期服务与场景适配能力的比拼。\n封面图片来源：AIGC"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_e8310bb302",
+          "event_type": "merger_acquisition",
+          "funding_round": "",
+          "quote": "康桥资本与GHO Capital宣布合并，组建规模超210亿美元的医疗健康投资平台。",
+          "subject_hint": "康桥资本与GHO Capital",
+          "claim_id": "c_e8310bb302",
+          "span_id": "s_47d2b4b05ec2",
+          "char_start": 46,
+          "char_end": 88,
+          "action_hint": "merger_acquisition",
+          "event_status_hint": "unknown",
+          "time_hints": [],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_e8310bb302"
+          ]
+        },
+        {
+          "id": "c_7232d24634",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "投资方面，小米加注人形机器人公司，机器人租赁赛道跑出一家“独角兽”——擎天租完成数亿元融资后估值达70亿元。",
+          "claim_id": "c_7232d24634",
+          "span_id": "s_8c0eb02a7882",
+          "char_start": 89,
+          "char_end": 143,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_568a05a336ea",
+              "span_id": "s_8c0eb02a7882",
+              "char_start": 89,
+              "char_end": 143,
+              "text": "投资方面，小米加注人形机器人公司，机器人租赁赛道跑出一家“独角兽”——擎天租完成数亿元融资后估值达70亿元。",
+              "action_text": "机器人租赁赛道跑出一家“独角兽”——擎天租完成数亿元融资后估值达70亿元。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_7232d24634"
+          ]
+        },
+        {
+          "id": "c_549c99767f",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "机器人租赁赛道跑出一家“独角兽”——擎天租完成数亿元融资后估值达70亿元。",
+          "subject_hint": "机器人租赁赛道跑出一家“独角兽”——擎天租",
+          "claim_id": "c_549c99767f",
+          "span_id": "s_77a8eb9a17ec",
+          "char_start": 106,
+          "char_end": 143,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_b61b59ed12c0",
+              "span_id": "s_77a8eb9a17ec",
+              "char_start": 106,
+              "char_end": 143,
+              "text": "机器人租赁赛道跑出一家“独角兽”——擎天租完成数亿元融资后估值达70亿元。",
+              "action_text": "机器人租赁赛道跑出一家“独角兽”——擎天租完成数亿元融资后估值达70亿元。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_549c99767f"
+          ]
+        },
+        {
+          "id": "c_f5243c0ce1",
+          "event_type": "customer_validation",
+          "funding_round": "",
+          "quote": "BAI新基金的核心不是追逐早期概念，而是支持那些已经在高竞争市场中完成技术、客户和商业化验证，并具备跨区域扩张能力的企业。",
+          "claim_id": "c_f5243c0ce1",
+          "span_id": "s_089337256e72",
+          "char_start": 434,
+          "char_end": 495,
+          "subject_hint": "",
+          "action_hint": "customer_validation",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_6ffbf709be94",
+              "span_id": "s_089337256e72",
+              "char_start": 434,
+              "char_end": 495,
+              "text": "BAI新基金的核心不是追逐早期概念，而是支持那些已经在高竞争市场中完成技术、客户和商业化验证，并具备跨区域扩张能力的企业。",
+              "action_text": "而是支持那些已经在高竞争市场中完成技术、客户和商业化验证，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_f5243c0ce1"
+          ]
+        },
+        {
+          "id": "c_3be43498bb",
+          "event_type": "executive_change",
+          "funding_round": "",
+          "quote": "据介绍，合并后的平台管理层由康桥资本与GHO的创始人组成，康桥资本首席执行官傅唯将与GHO Capital管理合伙人兼联合创始人Mike Mortimer担任联席首席执行官，Andrea Ponti与Alan MacKay将分别在公司财务监管及公司治理方面承担董事会职责。",
+          "claim_id": "c_3be43498bb",
+          "span_id": "s_cdaf1375ee24",
+          "char_start": 1079,
+          "char_end": 1215,
+          "subject_hint": "",
+          "action_hint": "executive_change",
+          "event_status_hint": "mixed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_2db423d0cc24",
+              "span_id": "s_cdaf1375ee24",
+              "char_start": 1079,
+              "char_end": 1215,
+              "text": "据介绍，合并后的平台管理层由康桥资本与GHO的创始人组成，康桥资本首席执行官傅唯将与GHO Capital管理合伙人兼联合创始人Mike Mortimer担任联席首席执行官，Andrea Ponti与Alan MacKay将分别在公司财务监管及公司治理方面承担董事会职责。",
+              "action_text": "康桥资本首席执行官傅唯将与GHO Capital管理合伙人兼联合创始人Mike Mortimer担任联席首席执行官，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_8745b243de83",
+              "span_id": "s_cdaf1375ee24",
+              "char_start": 1079,
+              "char_end": 1215,
+              "text": "据介绍，合并后的平台管理层由康桥资本与GHO的创始人组成，康桥资本首席执行官傅唯将与GHO Capital管理合伙人兼联合创始人Mike Mortimer担任联席首席执行官，Andrea Ponti与Alan MacKay将分别在公司财务监管及公司治理方面承担董事会职责。",
+              "action_text": "Andrea Ponti与Alan MacKay将分别在公司财务监管及公司治理方面承担董事会职责。",
+              "event_status": "target"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_8745b243de83",
+            "ac_2db423d0cc24"
+          ]
+        },
+        {
+          "id": "c_1a9053ab5c",
+          "event_type": "merger_acquisition",
+          "funding_round": "",
+          "quote": "本次合并预计于2027年初完成，仍需满足惯常交割条件并获得相关监管批准。",
+          "claim_id": "c_1a9053ab5c",
+          "span_id": "s_2a69a6904671",
+          "char_start": 1215,
+          "char_end": 1251,
+          "subject_hint": "",
+          "action_hint": "merger_acquisition",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "2027年"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_01201b03e06d",
+              "span_id": "s_2a69a6904671",
+              "char_start": 1215,
+              "char_end": 1251,
+              "text": "本次合并预计于2027年初完成，仍需满足惯常交割条件并获得相关监管批准。",
+              "action_text": "本次合并预计于2027年初完成，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_7c6241b2cbd3",
+              "span_id": "s_2a69a6904671",
+              "char_start": 1215,
+              "char_end": 1251,
+              "text": "本次合并预计于2027年初完成，仍需满足惯常交割条件并获得相关监管批准。",
+              "action_text": "仍需满足惯常交割条件并获得相关监管批准。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_01201b03e06d",
+            "ac_7c6241b2cbd3"
+          ]
+        },
+        {
+          "id": "c_f01cd163ce",
+          "event_type": "merger_acquisition",
+          "funding_round": "",
+          "quote": "合并完成前，康桥资本与GHO将继续独立运营，并各自按照既定投资策略推进基金运作。",
+          "claim_id": "c_f01cd163ce",
+          "span_id": "s_eda9ec211cc6",
+          "char_start": 1251,
+          "char_end": 1291,
+          "subject_hint": "",
+          "action_hint": "merger_acquisition",
+          "event_status_hint": "mixed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_254a505ef229",
+              "span_id": "s_eda9ec211cc6",
+              "char_start": 1251,
+              "char_end": 1291,
+              "text": "合并完成前，康桥资本与GHO将继续独立运营，并各自按照既定投资策略推进基金运作。",
+              "action_text": "合并完成前，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_fc227e7220da",
+              "span_id": "s_eda9ec211cc6",
+              "char_start": 1251,
+              "char_end": 1291,
+              "text": "合并完成前，康桥资本与GHO将继续独立运营，并各自按照既定投资策略推进基金运作。",
+              "action_text": "康桥资本与GHO将继续独立运营，",
+              "event_status": "target"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_254a505ef229",
+            "ac_fc227e7220da"
+          ]
+        },
+        {
+          "id": "c_6c08ca58bf",
+          "event_type": "funding",
+          "funding_round": "天使轮",
+          "quote": "小米投资一家人形机器人公司\n近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。",
+          "claim_id": "c_6c08ca58bf",
+          "span_id": "s_5a10433da289",
+          "char_start": 1371,
+          "char_end": 1436,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "近日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_593b9b5bc5a3",
+              "span_id": "s_5a10433da289",
+              "char_start": 1371,
+              "char_end": 1436,
+              "text": "小米投资一家人形机器人公司\n近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。",
+              "action_text": "RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_6c08ca58bf"
+          ]
+        },
+        {
+          "id": "c_d71fbf1a32",
+          "event_type": "funding",
+          "funding_round": "天使轮",
+          "quote": "RoboParty（萝博派对）宣布完成数千万美元天使轮+融资",
+          "claim_id": "c_d71fbf1a32",
+          "span_id": "s_0f6ed7f3fc2d",
+          "char_start": 1388,
+          "char_end": 1418,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_b0b58da247eb",
+              "span_id": "s_0f6ed7f3fc2d",
+              "char_start": 1388,
+              "char_end": 1418,
+              "text": "RoboParty（萝博派对）宣布完成数千万美元天使轮+融资",
+              "action_text": "RoboParty（萝博派对）宣布完成数千万美元天使轮+融资",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_d71fbf1a32"
+          ]
+        },
+        {
+          "id": "c_8898d35206",
+          "event_type": "new_site_or_entity",
+          "funding_round": "",
+          "quote": "RoboParty成立于2025年2月，是一家从算法、控制到硬件整机全栈开源的双足人形机器人公司。",
+          "claim_id": "c_8898d35206",
+          "span_id": "s_92e0e6e7506a",
+          "char_start": 1475,
+          "char_end": 1524,
+          "subject_hint": "",
+          "action_hint": "new_site_or_entity",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "2025年2月"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_3b1079826045",
+              "span_id": "s_92e0e6e7506a",
+              "char_start": 1475,
+              "char_end": 1524,
+              "text": "RoboParty成立于2025年2月，是一家从算法、控制到硬件整机全栈开源的双足人形机器人公司。",
+              "action_text": "RoboParty成立于2025年2月，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_8898d35206"
+          ]
+        },
+        {
+          "id": "c_00e2174058",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "据介绍，在商业化层面，RoboParty的首款产品与开源平台已经进入首批数百台交付与用户复现阶段。",
+          "claim_id": "c_00e2174058",
+          "span_id": "s_54c6a69ab026",
+          "char_start": 1548,
+          "char_end": 1597,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "unknown",
+          "time_hints": [],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_00e2174058"
+          ]
+        },
+        {
+          "id": "c_8cf22e61f5",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "RoboParty快速完成两轮融资，且有顺为资本领投、小米战投追加，表明顶级产业资本和财务资本正以争分夺秒的姿态抢占具身智能的早期入口。",
+          "subject_hint": "RoboParty快速",
+          "claim_id": "c_8cf22e61f5",
+          "span_id": "s_95a103a7b98a",
+          "char_start": 1689,
+          "char_end": 1757,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_7afdd7528e58",
+              "span_id": "s_95a103a7b98a",
+              "char_start": 1689,
+              "char_end": 1757,
+              "text": "RoboParty快速完成两轮融资，且有顺为资本领投、小米战投追加，表明顶级产业资本和财务资本正以争分夺秒的姿态抢占具身智能的早期入口。",
+              "action_text": "RoboParty快速完成两轮融资，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_8cf22e61f5"
+          ]
+        },
+        {
+          "id": "c_777a7ff673",
+          "event_type": "funding",
+          "funding_round": "A轮",
+          "quote": "大型无人运输机融资超5亿元\n近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。",
+          "claim_id": "c_777a7ff673",
+          "span_id": "s_55ba8b282c59",
+          "char_start": 1758,
+          "char_end": 1806,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "近日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_a1adbace7fa1",
+              "span_id": "s_55ba8b282c59",
+              "char_start": 1758,
+              "char_end": 1806,
+              "text": "大型无人运输机融资超5亿元\n近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。",
+              "action_text": "国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_777a7ff673"
+          ]
+        },
+        {
+          "id": "c_88fb4e9aaf",
+          "event_type": "funding",
+          "funding_round": "A轮",
+          "quote": "国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。",
+          "claim_id": "c_88fb4e9aaf",
+          "span_id": "s_40ca88a8c3f8",
+          "char_start": 1775,
+          "char_end": 1806,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_45cc46ccdc49",
+              "span_id": "s_40ca88a8c3f8",
+              "char_start": 1775,
+              "char_end": 1806,
+              "text": "国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。",
+              "action_text": "国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_88fb4e9aaf"
+          ]
+        },
+        {
+          "id": "c_0261ea745e",
+          "event_type": "funding",
+          "funding_round": "A轮",
+          "quote": "原子矩阵获得A轮投资\n近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。",
+          "subject_hint": "原子矩阵",
+          "claim_id": "c_0261ea745e",
+          "span_id": "s_5f9b5fa7f473",
+          "char_start": 2052,
+          "char_end": 2097,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "近日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_a53f620f43fb",
+              "span_id": "s_5f9b5fa7f473",
+              "char_start": 2052,
+              "char_end": 2097,
+              "text": "原子矩阵获得A轮投资\n近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。",
+              "action_text": "原子矩阵获得A轮投资\n近日，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_2c641946091e",
+              "span_id": "s_5f9b5fa7f473",
+              "char_start": 2052,
+              "char_end": 2097,
+              "text": "原子矩阵获得A轮投资\n近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。",
+              "action_text": "杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_2c641946091e",
+            "ac_a53f620f43fb"
+          ]
+        },
+        {
+          "id": "c_fbcc0b2d5b",
+          "event_type": "funding",
+          "funding_round": "A轮",
+          "quote": "杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。",
+          "subject_hint": "杭州原子矩阵计算有限公司（以下简称原子矩阵）",
+          "claim_id": "c_fbcc0b2d5b",
+          "span_id": "s_7f16e1a45e68",
+          "char_start": 2066,
+          "char_end": 2097,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_6a1c4df9e6b6",
+              "span_id": "s_7f16e1a45e68",
+              "char_start": 2066,
+              "char_end": 2097,
+              "text": "杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。",
+              "action_text": "杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_fbcc0b2d5b"
+          ]
+        },
+        {
+          "id": "c_5a8095a3b9",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "至此，原子矩阵在半年内连续完成三轮数亿元融资。",
+          "claim_id": "c_5a8095a3b9",
+          "span_id": "s_9155e1aaf232",
+          "char_start": 2143,
+          "char_end": 2166,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_0f5e62e62433",
+              "span_id": "s_9155e1aaf232",
+              "char_start": 2143,
+              "char_end": 2166,
+              "text": "至此，原子矩阵在半年内连续完成三轮数亿元融资。",
+              "action_text": "原子矩阵在半年内连续完成三轮数亿元融资。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_5a8095a3b9"
+          ]
+        },
+        {
+          "id": "c_57adde2dd0",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "原子矩阵在半年内连续完成三轮数亿元融资。",
+          "subject_hint": "原子矩阵在半年内连续",
+          "claim_id": "c_57adde2dd0",
+          "span_id": "s_0e3c06334c26",
+          "char_start": 2146,
+          "char_end": 2166,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_a2cc1a07226c",
+              "span_id": "s_0e3c06334c26",
+              "char_start": 2146,
+              "char_end": 2166,
+              "text": "原子矩阵在半年内连续完成三轮数亿元融资。",
+              "action_text": "原子矩阵在半年内连续完成三轮数亿元融资。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_57adde2dd0"
+          ]
+        },
+        {
+          "id": "c_9dcc20947a",
+          "event_type": "funding",
+          "funding_round": "A轮",
+          "quote": "机器人租赁诞生独角兽公司\n近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。",
+          "claim_id": "c_9dcc20947a",
+          "span_id": "s_43c9c8a27a70",
+          "char_start": 2413,
+          "char_end": 2457,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "近日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_e9bb34be8300",
+              "span_id": "s_43c9c8a27a70",
+              "char_start": 2413,
+              "char_end": 2457,
+              "text": "机器人租赁诞生独角兽公司\n近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。",
+              "action_text": "擎天租完成A轮及A+轮融资，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_9dcc20947a"
+          ]
+        },
+        {
+          "id": "c_a4b3fb5058",
+          "event_type": "funding",
+          "funding_round": "A+轮",
+          "quote": "机器人租赁诞生独角兽公司\n近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。",
+          "claim_id": "c_a4b3fb5058",
+          "span_id": "s_43c9c8a27a70",
+          "char_start": 2413,
+          "char_end": 2457,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "近日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_5e6dc1df89fa",
+              "span_id": "s_43c9c8a27a70",
+              "char_start": 2413,
+              "char_end": 2457,
+              "text": "机器人租赁诞生独角兽公司\n近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。",
+              "action_text": "擎天租完成A轮及A+轮融资，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_a4b3fb5058"
+          ]
+        },
+        {
+          "id": "c_9108e74285",
+          "event_type": "funding",
+          "funding_round": "A轮",
+          "quote": "擎天租完成A轮及A+轮融资",
+          "subject_hint": "擎天租",
+          "claim_id": "c_9108e74285",
+          "span_id": "s_b1a833d61436",
+          "char_start": 2435,
+          "char_end": 2448,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_6334721194be",
+              "span_id": "s_b1a833d61436",
+              "char_start": 2435,
+              "char_end": 2448,
+              "text": "擎天租完成A轮及A+轮融资",
+              "action_text": "擎天租完成A轮及A+轮融资",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_9108e74285"
+          ]
+        },
+        {
+          "id": "c_1531717247",
+          "event_type": "funding",
+          "funding_round": "A+轮",
+          "quote": "擎天租完成A轮及A+轮融资",
+          "subject_hint": "擎天租",
+          "claim_id": "c_1531717247",
+          "span_id": "s_b1a833d61436",
+          "char_start": 2435,
+          "char_end": 2448,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_6b091d8f9f02",
+              "span_id": "s_b1a833d61436",
+              "char_start": 2435,
+              "char_end": 2448,
+              "text": "擎天租完成A轮及A+轮融资",
+              "action_text": "擎天租完成A轮及A+轮融资",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_1531717247"
+          ]
+        },
+        {
+          "id": "c_0a92779504",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。",
+          "claim_id": "c_0a92779504",
+          "span_id": "s_60cf3bf967ea",
+          "char_start": 2567,
+          "char_end": 2644,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "mixed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_aad101c514c4",
+              "span_id": "s_60cf3bf967ea",
+              "char_start": 2567,
+              "char_end": 2644,
+              "text": "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。",
+              "action_text": "完成最新一轮融资后，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_e755631d84c4",
+              "span_id": "s_60cf3bf967ea",
+              "char_start": 2567,
+              "char_end": 2644,
+              "text": "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。",
+              "action_text": "擎天租将进一步把业务重心转向更高频、更刚需的产业场景，",
+              "event_status": "target"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_e755631d84c4",
+            "ac_aad101c514c4"
+          ]
+        }
+      ],
+      "annotation": {
+        "annotation_status": "complete",
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_e8310bb302",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "c_7232d24634",
+            "disposition": "rejected",
+            "reason_code": "non_atomic_multi_round_or_cumulative_summary"
+          },
+          {
+            "claim_id": "c_549c99767f",
+            "disposition": "rejected",
+            "reason_code": "non_atomic_multi_round_or_cumulative_summary"
+          },
+          {
+            "claim_id": "c_f5243c0ce1",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "ac_8745b243de83",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "ac_2db423d0cc24",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "ac_01201b03e06d",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "ac_7c6241b2cbd3",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "ac_254a505ef229",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "ac_fc227e7220da",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "c_6c08ca58bf",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_d71fbf1a32",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_8898d35206",
+            "disposition": "rejected",
+            "reason_code": "historical_or_background"
+          },
+          {
+            "claim_id": "c_00e2174058",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_8cf22e61f5",
+            "disposition": "rejected",
+            "reason_code": "non_atomic_multi_round_or_cumulative_summary"
+          },
+          {
+            "claim_id": "c_777a7ff673",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_88fb4e9aaf",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "ac_2c641946091e",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "ac_a53f620f43fb",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_fbcc0b2d5b",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_5a8095a3b9",
+            "disposition": "rejected",
+            "reason_code": "supporting_detail_only"
+          },
+          {
+            "claim_id": "c_57adde2dd0",
+            "disposition": "rejected",
+            "reason_code": "supporting_detail_only"
+          },
+          {
+            "claim_id": "c_9dcc20947a",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_a4b3fb5058",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_9108e74285",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_1531717247",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "ac_e755631d84c4",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_explicit_company_roadmap_action"
+          },
+          {
+            "claim_id": "ac_aad101c514c4",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "RoboParty",
+            "event_type": "funding",
+            "event_status": "completed",
+            "importance": "strong",
+            "evidence_span": {
+              "char_start": 1385,
+              "char_end": 1436,
+              "text": "近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。"
+            },
+            "claim_ids": [
+              "c_6c08ca58bf",
+              "c_d71fbf1a32"
+            ],
+            "candidate_gap": false
+          },
+          {
+            "canonical_company": "RoboParty",
+            "event_type": "customer_validation",
+            "event_status": "started",
+            "importance": "strong",
+            "evidence_span": {
+              "char_start": 1548,
+              "char_end": 1597,
+              "text": "据介绍，在商业化层面，RoboParty的首款产品与开源平台已经进入首批数百台交付与用户复现阶段。"
+            },
+            "claim_ids": [
+              "c_00e2174058"
+            ],
+            "candidate_gap": false
+          },
+          {
+            "canonical_company": "华鹰航空",
+            "event_type": "funding",
+            "event_status": "completed",
+            "importance": "strong",
+            "evidence_span": {
+              "char_start": 1772,
+              "char_end": 1806,
+              "text": "近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。"
+            },
+            "claim_ids": [
+              "c_777a7ff673",
+              "c_88fb4e9aaf"
+            ],
+            "candidate_gap": false
+          },
+          {
+            "canonical_company": "杭州原子矩阵计算有限公司",
+            "event_type": "funding",
+            "event_status": "completed",
+            "importance": "strong",
+            "evidence_span": {
+              "char_start": 2063,
+              "char_end": 2097,
+              "text": "近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。"
+            },
+            "claim_ids": [
+              "ac_a53f620f43fb",
+              "ac_2c641946091e",
+              "c_fbcc0b2d5b"
+            ],
+            "candidate_gap": false
+          },
+          {
+            "canonical_company": "擎天租",
+            "event_type": "funding",
+            "event_status": "completed",
+            "importance": "strong",
+            "atomic_discriminator": "funding_round=A轮",
+            "evidence_span": {
+              "char_start": 2426,
+              "char_end": 2457,
+              "text": "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。"
+            },
+            "claim_ids": [
+              "c_9dcc20947a",
+              "c_9108e74285"
+            ],
+            "candidate_gap": false
+          },
+          {
+            "canonical_company": "擎天租",
+            "event_type": "funding",
+            "event_status": "completed",
+            "importance": "strong",
+            "atomic_discriminator": "funding_round=A+轮",
+            "evidence_span": {
+              "char_start": 2426,
+              "char_end": 2457,
+              "text": "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。"
+            },
+            "claim_ids": [
+              "c_a4b3fb5058",
+              "c_1531717247"
+            ],
+            "candidate_gap": false
+          },
+          {
+            "canonical_company": "擎天租",
+            "event_type": "customer_validation",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [
+              "ac_e755631d84c4"
+            ],
+            "candidate_gap": false,
+            "evidence_span": {
+              "text": "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。",
+              "char_start": 2567,
+              "char_end": 2644
+            }
+          }
+        ],
+        "article_notes": "Independent adjudication completed under Semantic Gold guide section 9 after case-, event-, and claim-level review."
+      }
+    },
+    {
+      "key": "stcn-flash:4053145",
+      "article_sha256": "051b9402a666483211b37d6947d2a78f6886670a2e79de1c923c592102c4757c",
+      "source_id": "stcn-flash",
+      "canonical_url": "https://www.stcn.com/article/detail/4053145.html",
+      "published_at": "2026-07-31T19:34:38+08:00",
+      "title": "怡亚通：拟公开挂牌转让参股公司芯景铄36%股权",
+      "document_type": "single_company_flash",
+      "clean_body": "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。芯景铄公司全部权益评估值为5.63亿元，芯景铄36%的股权首次挂牌价格以不低于36%股权评估值2.05亿元的原则确定。 芯景铄公司经营范围包括集成电路芯片设计及服务、集成电路芯片及产品销售等，若此次交易完成，公司将不再持有芯景铄股权。",
+      "document_units": [
+        {
+          "unit_id": "u_7614f47529c7",
+          "char_start": 0,
+          "char_end": 190,
+          "text": "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。芯景铄公司全部权益评估值为5.63亿元，芯景铄36%的股权首次挂牌价格以不低于36%股权评估值2.05亿元的原则确定。 芯景铄公司经营范围包括集成电路芯片设计及服务、集成电路芯片及产品销售等，若此次交易完成，公司将不再持有芯景铄股权。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_6644d7dd69",
+          "event_type": "ipo_or_listing",
+          "funding_round": "",
+          "quote": "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+          "subject_hint": "公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+          "claim_id": "c_6644d7dd69",
+          "span_id": "s_cf7ef544b8f6",
+          "char_start": 0,
+          "char_end": 73,
+          "action_hint": "ipo_or_listing",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "7月31日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_ea4caa9f3381",
+              "span_id": "s_cf7ef544b8f6",
+              "char_start": 0,
+              "char_end": 73,
+              "text": "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+              "action_text": "公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_6644d7dd69"
+          ]
+        },
+        {
+          "id": "c_d86d45915e",
+          "event_type": "merger_acquisition",
+          "funding_round": "",
+          "quote": "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+          "subject_hint": "公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+          "claim_id": "c_d86d45915e",
+          "span_id": "s_cf7ef544b8f6",
+          "char_start": 0,
+          "char_end": 73,
+          "action_hint": "merger_acquisition",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "7月31日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_c73ebaedee62",
+              "span_id": "s_cf7ef544b8f6",
+              "char_start": 0,
+              "char_end": 73,
+              "text": "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+              "action_text": "公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_d86d45915e"
+          ]
+        },
+        {
+          "id": "c_864e6f2b22",
+          "event_type": "ipo_or_listing",
+          "funding_round": "",
+          "quote": "芯景铄公司全部权益评估值为5.63亿元，芯景铄36%的股权首次挂牌价格以不低于36%股权评估值2.05亿元的原则确定。",
+          "claim_id": "c_864e6f2b22",
+          "span_id": "s_44dfaed01ca3",
+          "char_start": 73,
+          "char_end": 132,
+          "subject_hint": "",
+          "action_hint": "ipo_or_listing",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_3be62587c553",
+              "span_id": "s_44dfaed01ca3",
+              "char_start": 73,
+              "char_end": 132,
+              "text": "芯景铄公司全部权益评估值为5.63亿元，芯景铄36%的股权首次挂牌价格以不低于36%股权评估值2.05亿元的原则确定。",
+              "action_text": "芯景铄36%的股权首次挂牌价格以不低于36%股权评估值2.05亿元的原则确定。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_864e6f2b22"
+          ]
+        }
+      ],
+      "annotation": {
+        "annotation_status": "complete",
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_6644d7dd69",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_d86d45915e",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_864e6f2b22",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "怡亚通",
+            "event_type": "merger_acquisition",
+            "event_status": "target",
+            "importance": "strong",
+            "evidence_span": {
+              "char_start": 12,
+              "char_end": 73,
+              "text": "怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。"
+            },
+            "claim_ids": [
+              "c_6644d7dd69",
+              "c_d86d45915e"
+            ],
+            "candidate_gap": false
+          }
+        ],
+        "article_notes": "Independent adjudication completed under Semantic Gold guide section 9 after case-, event-, and claim-level review."
+      }
+    },
+    {
+      "key": "ccid-report-commentary:1121488",
+      "article_sha256": "3a2a7fa7c913f4f404f3e3e9ba2d17c81938374fe879817628bf18dd043ec611",
+      "source_id": "ccid-report-commentary",
+      "canonical_url": "https://www.ccidreport.com/zcjd/1121488.jhtml",
+      "published_at": "2026-07-23T00:00:00+08:00",
+      "title": "电动汽车电池耐久性有国家标准啦！一篇讲清所有疑问",
+      "document_type": "commentary",
+      "clean_body": "相信购入电动汽车的你或许心里有时会有这样的焦虑：车上的动力电池衰减状态如何？到底还能用多久？ 想去查查电池状态“电池容量”“健康度”“剩余寿命”……各种说法五花八门就是找不到一个能看懂、能对比的硬指标 今年，这个困扰无数车主的难题终于有了标准答案！ 由工业和信息化部组织制定的GB/T 46991.1-2025《电动汽车车载动力电池耐久性要求及试验方法 第1部分：轻型汽车》推荐性国家标准已于2025年12月31日发布，2026年7月1日起正式实施。 也就是说，自2026年7月1日起，大多数新生产的车型应具备此功能，消费者可以通过车机、手机APP等方式查看电池衰减情况。 这项标准说白了主要就是做一件事：让你明明白白知道，你电动汽车上的动力电池还剩几成“功力”！ 新标准主要内容有哪些？ 1、统一标尺：一个指标教你看懂车载电池真实状态新标准用SOCE（电池可用能量状态）来统一车载动力电池耐久性的评估标尺。 简单来说，SOCE就是当前电池实际可用能量与新车电池可用能量的比值。 比如新车电池能存支持行驶500公里的电。开了几年，存电能力下降了一些，现在只能存支持行驶400公里的电了，那SOCE就是400÷500=80%。 SOCE数值越高，说明电池可用能量越足，续航越接近新车状态；数值越低，代表电池衰减越严重。 2、清晰可查：明确SOCE数据披露要求，且误差不超5%标准对SOCE数据提出披露要求： 车辆需向消费者提供SOCE信息，且显示数值与实测数值之差不能超过5%。 这就意味着，消费者可通过车机中控屏或汽车厂商官方APP查到SOCE数值，且数据真实可信，不虚标、不粉饰，告别对汽车电池寿命的猜测。 3、安心有底：明确性能底线，给消费者最基础的保障新标准为电动汽车动力电池耐久性提出了最低性能要求（MPR）。 在车辆特定里程和时间节点（5年/10万公里、8年/16万公里、10年/20万公里），划定了以SOCE为衡量标准的MPR指标，相当于给车主的电池权益加了一道硬性“安全锁”。 同时，标准兼顾不同用车场景，针对轻型乘用车和轻型商用车设置差异化MPR指标，更贴合实际用车情况。 标准坚持国际协调，做到适度领先 新标准并非国内单独制定同一时期，中国联合牵头了相关联合国全球技术法规UN GTR No.22《轻型电动汽车车载电池耐久性》的制定工作 在SOCE定义、测试方法等技术内容上中国标准与国际标准保持一致 在MPR最低性能要求上中国标准做到了适度领先 标准修订的一小步是改善消费者体验的一大步 对消费者而言电池状态查询从此有据可查长期使用更有保障 对行业而言标准将引导企业把电池造得更好、用得更久让广大消费者选得安心，用得放心",
+      "document_units": [
+        {
+          "unit_id": "u_152bd7f5db0b",
+          "char_start": 0,
+          "char_end": 1120,
+          "text": "相信购入电动汽车的你或许心里有时会有这样的焦虑：车上的动力电池衰减状态如何？到底还能用多久？ 想去查查电池状态“电池容量”“健康度”“剩余寿命”……各种说法五花八门就是找不到一个能看懂、能对比的硬指标 今年，这个困扰无数车主的难题终于有了标准答案！ 由工业和信息化部组织制定的GB/T 46991.1-2025《电动汽车车载动力电池耐久性要求及试验方法 第1部分：轻型汽车》推荐性国家标准已于2025年12月31日发布，2026年7月1日起正式实施。 也就是说，自2026年7月1日起，大多数新生产的车型应具备此功能，消费者可以通过车机、手机APP等方式查看电池衰减情况。 这项标准说白了主要就是做一件事：让你明明白白知道，你电动汽车上的动力电池还剩几成“功力”！ 新标准主要内容有哪些？ 1、统一标尺：一个指标教你看懂车载电池真实状态新标准用SOCE（电池可用能量状态）来统一车载动力电池耐久性的评估标尺。 简单来说，SOCE就是当前电池实际可用能量与新车电池可用能量的比值。 比如新车电池能存支持行驶500公里的电。开了几年，存电能力下降了一些，现在只能存支持行驶400公里的电了，那SOCE就是400÷500=80%。 SOCE数值越高，说明电池可用能量越足，续航越接近新车状态；数值越低，代表电池衰减越严重。 2、清晰可查：明确SOCE数据披露要求，且误差不超5%标准对SOCE数据提出披露要求： 车辆需向消费者提供SOCE信息，且显示数值与实测数值之差不能超过5%。 这就意味着，消费者可通过车机中控屏或汽车厂商官方APP查到SOCE数值，且数据真实可信，不虚标、不粉饰，告别对汽车电池寿命的猜测。 3、安心有底：明确性能底线，给消费者最基础的保障新标准为电动汽车动力电池耐久性提出了最低性能要求（MPR）。 在车辆特定里程和时间节点（5年/10万公里、8年/16万公里、10年/20万公里），划定了以SOCE为衡量标准的MPR指标，相当于给车主的电池权益加了一道硬性“安全锁”。 同时，标准兼顾不同用车场景，针对轻型乘用车和轻型商用车设置差异化MPR指标，更贴合实际用车情况。 标准坚持国际协调，做到适度领先 新标准并非国内单独制定同一时期，中国联合牵头了相关联合国全球技术法规UN GTR No.22《轻型电动汽车车载电池耐久性》的制定工作 在SOCE定义、测试方法等技术内容上中国标准与国际标准保持一致 在MPR最低性能要求上中国标准做到了适度领先 标准修订的一小步是改善消费者体验的一大步 对消费者而言电池状态查询从此有据可查长期使用更有保障 对行业而言标准将引导企业把电池造得更好、用得更久让广大消费者选得安心，用得放心"
+        }
+      ],
+      "candidates": [],
+      "annotation": {
+        "annotation_status": "complete",
+        "candidate_dispositions": [],
+        "gold_events": [],
+        "article_notes": "Independent adjudication completed under Semantic Gold guide section 9 after case-, event-, and claim-level review."
+      }
+    }
+  ],
+  "candidates": [
+    {
+      "label": "candidate-beta",
+      "selection_eligible": false,
+      "ineligibility_reasons": [
+        "unsupported_predicted_events"
+      ],
+      "prediction": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-semantic-v27-prompt-loop-training",
+        "status": "complete",
+        "model": "minimax/MiniMax-M3",
+        "round": 1,
+        "maximum_rounds": 3,
+        "selected_keys": [
+          "nbd-vcpe-weekly:4407647",
+          "stcn-flash:4053145",
+          "ccid-report-commentary:1121488"
+        ],
+        "code_contract_sha256": "76711f40084f9adedf4045a78cb8654da07d86991889938f305b39c2adca580a",
+        "source_bundle_sha256": "89f54c2de59d3aa48c05d7b70019b0028d978ad1815a8c218d7bf7f4bd7298a1",
+        "source_gold_sha256": "614621e1fe4a5560de2d03e5987cdedb15819d2cb1247d576ab1f37876102dd7",
+        "source_split_sha256": "f393db769b126e44f51b67984eea38dd895676a72b1a8e099921c19a4790d937",
+        "results": [
+          {
+            "key": "nbd-vcpe-weekly:4407647",
+            "position": 1,
+            "events": [
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "RoboParty"
+                ],
+                "canonical_company": "RoboParty",
+                "event_type": "customer_validation",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "据介绍，在商业化层面，RoboParty的首款产品与开源平台已经进入首批数百台交付与用户复现阶段。",
+                "evidence_quotes": [
+                  "据介绍，在商业化层面，RoboParty的首款产品与开源平台已经进入首批数百台交付与用户复现阶段。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "strategy_capital",
+                "event_status": "started",
+                "claim_ids": [
+                  "ac_0442a0f548f272"
+                ],
+                "span_ids": [
+                  "as_9ac46640f01a02"
+                ],
+                "subject_entity_id": "ae_1f62c09190f247"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "RoboParty",
+                  "萝博派对"
+                ],
+                "canonical_company": "RoboParty",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "天使轮",
+                "funding_amount": "数千万美元",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "顺为资本",
+                  "小米战投"
+                ],
+                "event_summary": "近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。",
+                "evidence_quotes": [
+                  "近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_a65efc466efadb"
+                ],
+                "span_ids": [
+                  "as_abbdf39a08f1c4"
+                ],
+                "subject_entity_id": "ae_1f62c09190f247"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "华鹰航空"
+                ],
+                "canonical_company": "华鹰航空",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "uav",
+                  "low_altitude_logistics"
+                ],
+                "funding_round": "A轮",
+                "funding_amount": "超5亿元人民币",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "财金惠风",
+                  "青实资本",
+                  "西高投",
+                  "越秀产业基金",
+                  "深创投",
+                  "金浦投资"
+                ],
+                "event_summary": "近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。本轮融资由财金惠风、青实资本、西高投、越秀产业基金、深创投、金浦投资等20家机构联合投资。",
+                "evidence_quotes": [
+                  "近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。本轮融资由财金惠风、青实资本、西高投、越秀产业基金、深创投、金浦投资等20家机构联合投资。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_a5577d2980dc20"
+                ],
+                "span_ids": [
+                  "as_71eb9b53583e70"
+                ],
+                "subject_entity_id": "ae_aa3b867840dec0"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "customer_validation",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。",
+                "evidence_quotes": [
+                  "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "strategy_capital",
+                "event_status": "target",
+                "claim_ids": [
+                  "ac_8169e3fbad551b"
+                ],
+                "span_ids": [
+                  "as_017785059efe87"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "最新一轮",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。",
+                "evidence_quotes": [
+                  "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_579ca6e5389723"
+                ],
+                "span_ids": [
+                  "as_017785059efe87"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "rental_services"
+                ],
+                "funding_round": "A+轮",
+                "funding_amount": "数亿元",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。",
+                "evidence_quotes": [
+                  "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_66b89a6ae81334"
+                ],
+                "span_ids": [
+                  "as_cda5759f4e5144"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "rental_services"
+                ],
+                "funding_round": "A轮",
+                "funding_amount": "数亿元",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。",
+                "evidence_quotes": [
+                  "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_ee14da8c916308"
+                ],
+                "span_ids": [
+                  "as_cda5759f4e5144"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "merger_acquisition",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "finance"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "本次合并预计于2027年初完成，仍需满足惯常交割条件并获得相关监管批准。",
+                "evidence_quotes": [
+                  "本次合并预计于2027年初完成，仍需满足惯常交割条件并获得相关监管批准。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "strategy_capital",
+                "event_status": "target",
+                "claim_ids": [
+                  "ac_36cc75486d585b"
+                ],
+                "span_ids": [
+                  "as_8e7ec6c3c967d9"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "杭州原子矩阵计算有限公司",
+                  "原子矩阵",
+                  "杭州原子矩阵计算",
+                  "杭州原子矩阵计算有限"
+                ],
+                "canonical_company": "杭州原子矩阵计算有限公司",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [],
+                "funding_round": "A轮",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "砺思资本",
+                  "民银国际",
+                  "祥峰中国",
+                  "L2F光源创业者基金"
+                ],
+                "event_summary": "近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。本轮融资由砺思资本领投，民银国际跟投，老股东祥峰中国、L2F光源创业者基金持续超额追加投资。",
+                "evidence_quotes": [
+                  "近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。本轮融资由砺思资本领投，民银国际跟投，老股东祥峰中国、L2F光源创业者基金持续超额追加投资。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_c4c8a98de3b965"
+                ],
+                "span_ids": [
+                  "as_4df4bd36c71037"
+                ],
+                "subject_entity_id": "ae_07fadf02e49e5b"
+              }
+            ],
+            "audit": {
+              "source_id": "nbd-vcpe-weekly",
+              "source_article_id": "4407647",
+              "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r1-a|minimax/MiniMax-M3",
+              "entity_count": 71,
+              "eligible_entity_count": 4,
+              "action_span_count": 27,
+              "candidate_count": 42,
+              "batch_count": 14,
+              "document_type": "multi_company_bulletin",
+              "document_route_reason": "adapter_document_type",
+              "document_family": "multi_company_funding_digest",
+              "processing_mode": "split_units",
+              "route_gate_confidence": "high",
+              "route_llm_gate_required": true,
+              "route_gate_signals": [
+                "adapter_item_boundaries",
+                "funding_cue",
+                "institution_cue",
+                "long_body"
+              ],
+              "document_unit_ids": [
+                "u_65ff8d129694",
+                "u_ea8b03038aa9",
+                "u_ff403bf8238f",
+                "u_c8dabbeed20f",
+                "u_ccb4bf469e4d",
+                "u_0940eec97801",
+                "u_1b05f9987035"
+              ],
+              "accepted_claim_ids": [
+                "ac_0442a0f548f272",
+                "ac_2b5aa9353d81e0",
+                "ac_36cc75486d585b",
+                "ac_579ca6e5389723",
+                "ac_66b89a6ae81334",
+                "ac_8169e3fbad551b",
+                "ac_8ca9f15a7d452c",
+                "ac_a5577d2980dc20",
+                "ac_a55ca46410e5ea",
+                "ac_a65efc466efadb",
+                "ac_c4c8a98de3b965",
+                "ac_e9d5e55e0bfa25",
+                "ac_ee14da8c916308",
+                "ac_fd9f8892d6bb47"
+              ],
+              "rejected_claim_ids": [
+                "ac_00df915048d46b",
+                "ac_06d9fc82ae6f79",
+                "ac_09fa51e106bf8b",
+                "ac_17889eda602e89",
+                "ac_222036eea6cd07",
+                "ac_2c1c27a08f86c9",
+                "ac_3735aa8b6d2789",
+                "ac_4271944c8dccc9",
+                "ac_5239b7fd2ca881",
+                "ac_560fb024e722aa",
+                "ac_5ff24941061d47",
+                "ac_7b3126b10eb853",
+                "ac_7fe94d40618c70",
+                "ac_85f2e87e1bff73",
+                "ac_932cdd9544ff19",
+                "ac_93e3bc9368b220",
+                "ac_99fc4c22afdb42",
+                "ac_aab13aa17264da",
+                "ac_ba6cf725271779",
+                "ac_bbf1436cf68545",
+                "ac_c2669918312190",
+                "ac_c571f8cdd6cbb3",
+                "ac_ca4d03c872aba8",
+                "ac_cd7b6dbcadb98a",
+                "ac_d5adbe4d39f226",
+                "ac_d99ddf6a5c56ef",
+                "ac_ed61842021795f",
+                "ac_fba4624d908151"
+              ],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "repaired",
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "repaired",
+                "accepted",
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_7fe94d40618c70\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"},{\"claim_id\":\"ac_a55ca46410e5ea\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"数亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_bbf1436cf68545\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_cd7b6dbcadb98a\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_932cdd9544ff19\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_17889eda602e89\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_ed61842021795f\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_36cc75486d585b\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"merger_acquisition\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"finance\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_3735aa8b6d2789\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_d99ddf6a5c56ef\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_06d9fc82ae6f79\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_c2669918312190\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_c571f8cdd6cbb3\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_a65efc466efadb\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"天使轮+\",\"funding_amount\":\"数千万美元\",\"cumulative_funding_amount\":\"\",\"investors\":[\"顺为资本\",\"小米战投\"],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_e9d5e55e0bfa25\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_4271944c8dccc9\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_560fb024e722aa\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_5ff24941061d47\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_7b3126b10eb853\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"},{\"claim_id\":\"ac_222036eea6cd07\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_aab13aa17264da\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_0442a0f548f272\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"customer_validation\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_ca4d03c872aba8\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_ba6cf725271779\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_2b5aa9353d81e0\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[\"顺为资本\",\"小米战投\"],\"industry_tags\":[\"robotics\",\"embodied_ai\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_a5577d2980dc20\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_aa3b867840dec0\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"超5亿元人民币\",\"cumulative_funding_amount\":\"\",\"investors\":[\"财金惠风\",\"青实资本\",\"西高投\",\"越秀产业基金\",\"深创投\",\"金浦投资\"],\"industry_tags\":[\"uav\",\"low_altitude_logistics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_99fc4c22afdb42\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_d5adbe4d39f226\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"},{\"claim_id\":\"ac_fba4624d908151\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"},{\"claim_id\":\"ac_fd9f8892d6bb47\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_07fadf02e49e5b\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"computing\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_c4c8a98de3b965\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_07fadf02e49e5b\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[\"砺思资本\",\"民银国际\",\"祥峰中国\",\"L2F光源创业者基金\"],\"industry_tags\":[\"\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_2c1c27a08f86c9\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"},{\"claim_id\":\"ac_85f2e87e1bff73\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_66b89a6ae81334\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A+轮\",\"funding_amount\":\"数亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"rental_services\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_ee14da8c916308\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"数亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"rental_services\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_8ca9f15a7d452c\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_00df915048d46b\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_579ca6e5389723\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"最新一轮\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_8169e3fbad551b\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"customer_validation\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_93e3bc9368b220\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_09fa51e106bf8b\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_5239b7fd2ca881\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+              ],
+              "repair_responses": [
+                "",
+                "",
+                "",
+                "",
+                "{\"decisions\":[{\"claim_id\":\"ac_e9d5e55e0bfa25\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"}]}",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "{\"decisions\":[{\"claim_id\":\"ac_8ca9f15a7d452c\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"rental_services\"],\"confidence\":\"high\"}]}",
+                "",
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {
+                "ambiguous_evidence": 3,
+                "subject_mismatch": 5,
+                "historical_or_background": 1,
+                "unsupported_company_action": 17,
+                "duplicate_or_summary": 2
+              },
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 9,
+              "ledger_sha256": "9d085b3a799f4ed8b78754a27f8e40df126484d6",
+              "semantic_window": {
+                "mode": "multi_event_digest",
+                "reason": "bulletin_or_digest_structure",
+                "original_chars": 2909,
+                "semantic_chars": 2909,
+                "prefix_action_count": 24,
+                "tail_action_count": 12,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "stcn-flash:4053145",
+            "position": 2,
+            "events": [
+              {
+                "source_id": "stcn-flash",
+                "source_article_id": "4053145",
+                "canonical_url": "https://www.stcn.com/article/detail/4053145.html",
+                "company_mentions": [
+                  "怡亚通"
+                ],
+                "canonical_company": "怡亚通",
+                "event_type": "merger_acquisition",
+                "event_date": "2026-07-31",
+                "industry_tags": [
+                  "supply_chain"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+                "evidence_quotes": [
+                  "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+                "content_hash": "70ea99acc40ec6db62e39748027d2f02da71d5fa726fbe3d317bc62186c7f812",
+                "phase": "strategy_capital",
+                "event_status": "target",
+                "claim_ids": [
+                  "ac_b45bf4c40abee3"
+                ],
+                "span_ids": [
+                  "as_42b155a9d54390"
+                ],
+                "subject_entity_id": "ae_3e402777d3841c"
+              }
+            ],
+            "audit": {
+              "source_id": "stcn-flash",
+              "source_article_id": "4053145",
+              "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r1-a|minimax/MiniMax-M3",
+              "entity_count": 7,
+              "eligible_entity_count": 1,
+              "action_span_count": 1,
+              "candidate_count": 1,
+              "batch_count": 1,
+              "document_type": "single_company_flash",
+              "document_route_reason": "adapter_company_field",
+              "document_family": "single_company_flash",
+              "processing_mode": "single_unit",
+              "route_gate_confidence": "medium",
+              "route_llm_gate_required": false,
+              "route_gate_signals": [
+                "adapter_company_field"
+              ],
+              "document_unit_ids": [
+                "u_7614f47529c7"
+              ],
+              "accepted_claim_ids": [
+                "ac_b45bf4c40abee3"
+              ],
+              "rejected_claim_ids": [],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_b45bf4c40abee3\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_3e402777d3841c\",\"event_type\":\"merger_acquisition\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"supply_chain\"],\"confidence\":\"high\"}]}"
+              ],
+              "repair_responses": [
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {},
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 1,
+              "ledger_sha256": "82bba1076c857efa8cf07fc395d181fff3cd7624",
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 190,
+                "semantic_chars": 190,
+                "prefix_action_count": 0,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": false,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "ccid-report-commentary:1121488",
+            "position": 3,
+            "events": [],
+            "audit": {
+              "source_id": "ccid-report-commentary",
+              "source_article_id": "1121488",
+              "prompt_version": "aggregate-semantic-v27-loop-r1-a",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r1-a|minimax/MiniMax-M3",
+              "entity_count": 2,
+              "eligible_entity_count": 0,
+              "action_span_count": 0,
+              "candidate_count": 0,
+              "batch_count": 0,
+              "document_type": "commentary",
+              "document_route_reason": "adapter_document_type",
+              "document_family": "policy_market",
+              "processing_mode": "policy_rules_then_company_override",
+              "route_gate_confidence": "medium",
+              "route_llm_gate_required": false,
+              "route_gate_signals": [
+                "policy_cue"
+              ],
+              "document_unit_ids": [
+                "u_152bd7f5db0b"
+              ],
+              "accepted_claim_ids": [],
+              "rejected_claim_ids": [],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [],
+              "first_responses": [],
+              "repair_responses": [],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {},
+              "status": "no_claims",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 0,
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 1120,
+                "semantic_chars": 1120,
+                "prefix_action_count": 1,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          }
+        ],
+        "summary": {
+          "article_count": 3,
+          "event_count": 10,
+          "claim_count": 43,
+          "accepted_claim_count": 15,
+          "rejected_claim_count": 28,
+          "failed_claim_count": 0,
+          "strict_ready_article_count": 3,
+          "partial_article_count": 0
+        }
+      },
+      "evaluation": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-development-prompt-loop-training-only",
+        "overall": {
+          "gold_event_count": 8,
+          "predicted_event_count": 10,
+          "exact_match_count": 8,
+          "exact_precision": 0.8,
+          "exact_recall": 1.0,
+          "unsupported_predicted_event_count": 2,
+          "event_support_precision": 0.8,
+          "event_support_recall": 1.0,
+          "strong_gold_count": 8,
+          "strong_current_recall": 1.0,
+          "status_comparable_count": 8,
+          "status_accuracy": 1.0,
+          "subject_match_count": 10,
+          "company_subject_precision": 1.0
+        },
+        "by_document_type": {
+          "commentary": {
+            "gold_event_count": 0,
+            "predicted_event_count": 0,
+            "exact_match_count": 0,
+            "exact_precision": null,
+            "exact_recall": null,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": null,
+            "event_support_recall": null,
+            "strong_gold_count": 0,
+            "strong_current_recall": null,
+            "status_comparable_count": 0,
+            "status_accuracy": null,
+            "subject_match_count": 0,
+            "company_subject_precision": null
+          },
+          "multi_company_bulletin": {
+            "gold_event_count": 7,
+            "predicted_event_count": 9,
+            "exact_match_count": 7,
+            "exact_precision": 0.7777777777777778,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 2,
+            "event_support_precision": 0.7777777777777778,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 7,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 7,
+            "status_accuracy": 1.0,
+            "subject_match_count": 9,
+            "company_subject_precision": 1.0
+          },
+          "single_company_flash": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          }
+        },
+        "by_event_type": {
+          "customer_validation": {
+            "gold_event_count": 2,
+            "predicted_event_count": 2,
+            "exact_match_count": 2,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 2,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 2,
+            "status_accuracy": 1.0,
+            "subject_match_count": 2,
+            "company_subject_precision": 1.0
+          },
+          "funding": {
+            "gold_event_count": 5,
+            "predicted_event_count": 6,
+            "exact_match_count": 5,
+            "exact_precision": 0.8333333333333334,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 1,
+            "event_support_precision": 0.8333333333333334,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 5,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 5,
+            "status_accuracy": 1.0,
+            "subject_match_count": 6,
+            "company_subject_precision": 1.0
+          },
+          "merger_acquisition": {
+            "gold_event_count": 1,
+            "predicted_event_count": 2,
+            "exact_match_count": 1,
+            "exact_precision": 0.5,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 1,
+            "event_support_precision": 0.5,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 0.5
+          }
+        },
+        "claim_contract": {
+          "article_count": 3,
+          "event_count": 10,
+          "claim_count": 43,
+          "accepted_claim_count": 15,
+          "rejected_claim_count": 28,
+          "failed_claim_count": 0,
+          "host_fallback_claim_count": 0,
+          "strict_ready_article_count": 3
+        },
+        "host_contract": {
+          "uncited_event_count": 0,
+          "ungrounded_evidence_event_count": 0,
+          "missing_host_id_event_count": 0
+        },
+        "legacy_candidate_dispositions": {
+          "status": "not_applicable",
+          "reason": "V27 Action Claim IDs replace V1 candidate IDs"
+        },
+        "gates": {
+          "prediction_complete": true,
+          "all_articles_strict_ready": true,
+          "all_claims_terminal": true,
+          "no_failed_claims": true,
+          "no_uncited_events": true,
+          "no_ungrounded_evidence": true,
+          "no_missing_host_ids": true,
+          "no_unsupported_predicted_events": false,
+          "company_subject_precision_at_least_98pct": true,
+          "strong_current_recall_at_least_90pct": true,
+          "status_accuracy_at_least_90pct": true
+        },
+        "passed": false
+      }
+    },
+    {
+      "label": "candidate-alpha",
+      "selection_eligible": false,
+      "ineligibility_reasons": [
+        "unsupported_predicted_events"
+      ],
+      "prediction": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-semantic-v27-prompt-loop-training",
+        "status": "complete",
+        "model": "minimax/MiniMax-M3",
+        "round": 1,
+        "maximum_rounds": 3,
+        "selected_keys": [
+          "nbd-vcpe-weekly:4407647",
+          "stcn-flash:4053145",
+          "ccid-report-commentary:1121488"
+        ],
+        "code_contract_sha256": "76711f40084f9adedf4045a78cb8654da07d86991889938f305b39c2adca580a",
+        "source_bundle_sha256": "89f54c2de59d3aa48c05d7b70019b0028d978ad1815a8c218d7bf7f4bd7298a1",
+        "source_gold_sha256": "614621e1fe4a5560de2d03e5987cdedb15819d2cb1247d576ab1f37876102dd7",
+        "source_split_sha256": "f393db769b126e44f51b67984eea38dd895676a72b1a8e099921c19a4790d937",
+        "results": [
+          {
+            "key": "nbd-vcpe-weekly:4407647",
+            "position": 1,
+            "events": [
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "RoboParty"
+                ],
+                "canonical_company": "RoboParty",
+                "event_type": "customer_validation",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "据介绍，在商业化层面，RoboParty的首款产品与开源平台已经进入首批数百台交付与用户复现阶段。",
+                "evidence_quotes": [
+                  "据介绍，在商业化层面，RoboParty的首款产品与开源平台已经进入首批数百台交付与用户复现阶段。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "strategy_capital",
+                "event_status": "started",
+                "claim_ids": [
+                  "ac_0442a0f548f272"
+                ],
+                "span_ids": [
+                  "as_9ac46640f01a02"
+                ],
+                "subject_entity_id": "ae_1f62c09190f247"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "RoboParty",
+                  "萝博派对"
+                ],
+                "canonical_company": "RoboParty",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "天使轮",
+                "funding_amount": "数千万美元",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "顺为资本",
+                  "小米战投"
+                ],
+                "event_summary": "近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。",
+                "evidence_quotes": [
+                  "近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_a65efc466efadb"
+                ],
+                "span_ids": [
+                  "as_abbdf39a08f1c4"
+                ],
+                "subject_entity_id": "ae_1f62c09190f247"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "华鹰航空"
+                ],
+                "canonical_company": "华鹰航空",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "aerospace",
+                  "logistics"
+                ],
+                "funding_round": "A轮",
+                "funding_amount": "超5亿元人民币",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "财金惠风",
+                  "青实资本",
+                  "西高投",
+                  "越秀产业基金",
+                  "深创投",
+                  "金浦投资"
+                ],
+                "event_summary": "近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。本轮融资由财金惠风、青实资本、西高投、越秀产业基金、深创投、金浦投资等20家机构联合投资。",
+                "evidence_quotes": [
+                  "近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。本轮融资由财金惠风、青实资本、西高投、越秀产业基金、深创投、金浦投资等20家机构联合投资。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_a5577d2980dc20"
+                ],
+                "span_ids": [
+                  "as_71eb9b53583e70"
+                ],
+                "subject_entity_id": "ae_aa3b867840dec0"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "customer_validation",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。",
+                "evidence_quotes": [
+                  "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "strategy_capital",
+                "event_status": "target",
+                "claim_ids": [
+                  "ac_8169e3fbad551b"
+                ],
+                "span_ids": [
+                  "as_017785059efe87"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "最新一轮",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。",
+                "evidence_quotes": [
+                  "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。"
+                ],
+                "ambiguities": [],
+                "confidence": "medium",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_579ca6e5389723"
+                ],
+                "span_ids": [
+                  "as_017785059efe87"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "rental_services"
+                ],
+                "funding_round": "A+轮",
+                "funding_amount": "数亿元",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。",
+                "evidence_quotes": [
+                  "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_66b89a6ae81334"
+                ],
+                "span_ids": [
+                  "as_cda5759f4e5144"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "rental_services"
+                ],
+                "funding_round": "A轮",
+                "funding_amount": "数亿元",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。",
+                "evidence_quotes": [
+                  "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_ee14da8c916308"
+                ],
+                "span_ids": [
+                  "as_cda5759f4e5144"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "杭州原子矩阵计算有限公司",
+                  "原子矩阵",
+                  "杭州原子矩阵计算",
+                  "杭州原子矩阵计算有限"
+                ],
+                "canonical_company": "杭州原子矩阵计算有限公司",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [],
+                "funding_round": "A轮",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "砺思资本",
+                  "民银国际",
+                  "祥峰中国",
+                  "L2F光源创业者基金"
+                ],
+                "event_summary": "近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。本轮融资由砺思资本领投，民银国际跟投，老股东祥峰中国、L2F光源创业者基金持续超额追加投资。",
+                "evidence_quotes": [
+                  "近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。本轮融资由砺思资本领投，民银国际跟投，老股东祥峰中国、L2F光源创业者基金持续超额追加投资。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_c4c8a98de3b965"
+                ],
+                "span_ids": [
+                  "as_4df4bd36c71037"
+                ],
+                "subject_entity_id": "ae_07fadf02e49e5b"
+              }
+            ],
+            "audit": {
+              "source_id": "nbd-vcpe-weekly",
+              "source_article_id": "4407647",
+              "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r1-b|minimax/MiniMax-M3",
+              "entity_count": 71,
+              "eligible_entity_count": 4,
+              "action_span_count": 27,
+              "candidate_count": 42,
+              "batch_count": 14,
+              "document_type": "multi_company_bulletin",
+              "document_route_reason": "adapter_document_type",
+              "document_family": "multi_company_funding_digest",
+              "processing_mode": "split_units",
+              "route_gate_confidence": "high",
+              "route_llm_gate_required": true,
+              "route_gate_signals": [
+                "adapter_item_boundaries",
+                "funding_cue",
+                "institution_cue",
+                "long_body"
+              ],
+              "document_unit_ids": [
+                "u_65ff8d129694",
+                "u_ea8b03038aa9",
+                "u_ff403bf8238f",
+                "u_c8dabbeed20f",
+                "u_ccb4bf469e4d",
+                "u_0940eec97801",
+                "u_1b05f9987035"
+              ],
+              "accepted_claim_ids": [
+                "ac_0442a0f548f272",
+                "ac_2b5aa9353d81e0",
+                "ac_2c1c27a08f86c9",
+                "ac_579ca6e5389723",
+                "ac_66b89a6ae81334",
+                "ac_8169e3fbad551b",
+                "ac_8ca9f15a7d452c",
+                "ac_a5577d2980dc20",
+                "ac_a55ca46410e5ea",
+                "ac_a65efc466efadb",
+                "ac_aab13aa17264da",
+                "ac_c4c8a98de3b965",
+                "ac_e9d5e55e0bfa25",
+                "ac_ee14da8c916308",
+                "ac_fd9f8892d6bb47"
+              ],
+              "rejected_claim_ids": [
+                "ac_00df915048d46b",
+                "ac_06d9fc82ae6f79",
+                "ac_09fa51e106bf8b",
+                "ac_17889eda602e89",
+                "ac_222036eea6cd07",
+                "ac_36cc75486d585b",
+                "ac_3735aa8b6d2789",
+                "ac_4271944c8dccc9",
+                "ac_5239b7fd2ca881",
+                "ac_560fb024e722aa",
+                "ac_5ff24941061d47",
+                "ac_7b3126b10eb853",
+                "ac_7fe94d40618c70",
+                "ac_85f2e87e1bff73",
+                "ac_932cdd9544ff19",
+                "ac_93e3bc9368b220",
+                "ac_99fc4c22afdb42",
+                "ac_ba6cf725271779",
+                "ac_bbf1436cf68545",
+                "ac_c2669918312190",
+                "ac_c571f8cdd6cbb3",
+                "ac_ca4d03c872aba8",
+                "ac_cd7b6dbcadb98a",
+                "ac_d5adbe4d39f226",
+                "ac_d99ddf6a5c56ef",
+                "ac_ed61842021795f",
+                "ac_fba4624d908151"
+              ],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "repaired",
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "repaired",
+                "accepted",
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_7fe94d40618c70\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_a55ca46410e5ea\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"数亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_bbf1436cf68545\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_cd7b6dbcadb98a\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_932cdd9544ff19\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_17889eda602e89\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_ed61842021795f\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_36cc75486d585b\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_3735aa8b6d2789\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_d99ddf6a5c56ef\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_06d9fc82ae6f79\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"},{\"claim_id\":\"ac_c2669918312190\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_c571f8cdd6cbb3\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"},{\"claim_id\":\"ac_a65efc466efadb\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"天使轮\",\"funding_amount\":\"数千万美元\",\"cumulative_funding_amount\":\"\",\"investors\":[\"顺为资本\",\"小米战投\"],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_e9d5e55e0bfa25\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_4271944c8dccc9\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_560fb024e722aa\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_5ff24941061d47\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_7b3126b10eb853\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_222036eea6cd07\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_aab13aa17264da\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"technical_milestone\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_0442a0f548f272\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"customer_validation\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_ca4d03c872aba8\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_ba6cf725271779\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_2b5aa9353d81e0\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[\"顺为资本\",\"小米战投\"],\"industry_tags\":[\"robotics\",\"artificial_intelligence\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_a5577d2980dc20\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_aa3b867840dec0\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"超5亿元人民币\",\"cumulative_funding_amount\":\"\",\"investors\":[\"财金惠风\",\"青实资本\",\"西高投\",\"越秀产业基金\",\"深创投\",\"金浦投资\"],\"industry_tags\":[\"aerospace\",\"logistics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_99fc4c22afdb42\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_d5adbe4d39f226\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_fba4624d908151\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"},{\"claim_id\":\"ac_fd9f8892d6bb47\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_07fadf02e49e5b\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"computing\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_c4c8a98de3b965\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_07fadf02e49e5b\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[\"砺思资本\",\"民银国际\",\"祥峰中国\",\"L2F光源创业者基金\"],\"industry_tags\":[],\"confidence\":\"high\"},{\"claim_id\":\"ac_2c1c27a08f86c9\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_07fadf02e49e5b\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"数亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[],\"confidence\":\"high\"},{\"claim_id\":\"ac_85f2e87e1bff73\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_66b89a6ae81334\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A+轮\",\"funding_amount\":\"数亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"rental_services\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_ee14da8c916308\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"数亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"rental_services\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_8ca9f15a7d452c\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_00df915048d46b\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_579ca6e5389723\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"最新一轮\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"medium\"},{\"claim_id\":\"ac_8169e3fbad551b\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"customer_validation\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_93e3bc9368b220\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_09fa51e106bf8b\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_5239b7fd2ca881\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+              ],
+              "repair_responses": [
+                "",
+                "",
+                "",
+                "",
+                "{\"decisions\":[{\"claim_id\":\"ac_e9d5e55e0bfa25\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[\"光源资本\"],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"}]}",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "{\"decisions\":[{\"claim_id\":\"ac_8ca9f15a7d452c\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"rental_services\"],\"confidence\":\"high\"}]}",
+                "",
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {
+                "unsupported_company_action": 10,
+                "subject_mismatch": 11,
+                "duplicate_or_summary": 4,
+                "historical_or_background": 2
+              },
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 8,
+              "ledger_sha256": "9d085b3a799f4ed8b78754a27f8e40df126484d6",
+              "semantic_window": {
+                "mode": "multi_event_digest",
+                "reason": "bulletin_or_digest_structure",
+                "original_chars": 2909,
+                "semantic_chars": 2909,
+                "prefix_action_count": 24,
+                "tail_action_count": 12,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "stcn-flash:4053145",
+            "position": 2,
+            "events": [
+              {
+                "source_id": "stcn-flash",
+                "source_article_id": "4053145",
+                "canonical_url": "https://www.stcn.com/article/detail/4053145.html",
+                "company_mentions": [
+                  "怡亚通"
+                ],
+                "canonical_company": "怡亚通",
+                "event_type": "merger_acquisition",
+                "event_date": "2026-07-31",
+                "industry_tags": [
+                  "semiconductor"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+                "evidence_quotes": [
+                  "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+                "content_hash": "70ea99acc40ec6db62e39748027d2f02da71d5fa726fbe3d317bc62186c7f812",
+                "phase": "strategy_capital",
+                "event_status": "target",
+                "claim_ids": [
+                  "ac_b45bf4c40abee3"
+                ],
+                "span_ids": [
+                  "as_42b155a9d54390"
+                ],
+                "subject_entity_id": "ae_3e402777d3841c"
+              }
+            ],
+            "audit": {
+              "source_id": "stcn-flash",
+              "source_article_id": "4053145",
+              "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r1-b|minimax/MiniMax-M3",
+              "entity_count": 7,
+              "eligible_entity_count": 1,
+              "action_span_count": 1,
+              "candidate_count": 1,
+              "batch_count": 1,
+              "document_type": "single_company_flash",
+              "document_route_reason": "adapter_company_field",
+              "document_family": "single_company_flash",
+              "processing_mode": "single_unit",
+              "route_gate_confidence": "medium",
+              "route_llm_gate_required": false,
+              "route_gate_signals": [
+                "adapter_company_field"
+              ],
+              "document_unit_ids": [
+                "u_7614f47529c7"
+              ],
+              "accepted_claim_ids": [
+                "ac_b45bf4c40abee3"
+              ],
+              "rejected_claim_ids": [],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_b45bf4c40abee3\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_3e402777d3841c\",\"event_type\":\"merger_acquisition\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"semiconductor\"],\"confidence\":\"high\"}]}"
+              ],
+              "repair_responses": [
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {},
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 1,
+              "ledger_sha256": "82bba1076c857efa8cf07fc395d181fff3cd7624",
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 190,
+                "semantic_chars": 190,
+                "prefix_action_count": 0,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": false,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "ccid-report-commentary:1121488",
+            "position": 3,
+            "events": [],
+            "audit": {
+              "source_id": "ccid-report-commentary",
+              "source_article_id": "1121488",
+              "prompt_version": "aggregate-semantic-v27-loop-r1-b",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r1-b|minimax/MiniMax-M3",
+              "entity_count": 2,
+              "eligible_entity_count": 0,
+              "action_span_count": 0,
+              "candidate_count": 0,
+              "batch_count": 0,
+              "document_type": "commentary",
+              "document_route_reason": "adapter_document_type",
+              "document_family": "policy_market",
+              "processing_mode": "policy_rules_then_company_override",
+              "route_gate_confidence": "medium",
+              "route_llm_gate_required": false,
+              "route_gate_signals": [
+                "policy_cue"
+              ],
+              "document_unit_ids": [
+                "u_152bd7f5db0b"
+              ],
+              "accepted_claim_ids": [],
+              "rejected_claim_ids": [],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [],
+              "first_responses": [],
+              "repair_responses": [],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {},
+              "status": "no_claims",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 0,
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 1120,
+                "semantic_chars": 1120,
+                "prefix_action_count": 1,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          }
+        ],
+        "summary": {
+          "article_count": 3,
+          "event_count": 9,
+          "claim_count": 43,
+          "accepted_claim_count": 16,
+          "rejected_claim_count": 27,
+          "failed_claim_count": 0,
+          "strict_ready_article_count": 3,
+          "partial_article_count": 0
+        }
+      },
+      "evaluation": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-development-prompt-loop-training-only",
+        "overall": {
+          "gold_event_count": 8,
+          "predicted_event_count": 9,
+          "exact_match_count": 8,
+          "exact_precision": 0.8888888888888888,
+          "exact_recall": 1.0,
+          "unsupported_predicted_event_count": 1,
+          "event_support_precision": 0.8888888888888888,
+          "event_support_recall": 1.0,
+          "strong_gold_count": 8,
+          "strong_current_recall": 1.0,
+          "status_comparable_count": 8,
+          "status_accuracy": 1.0,
+          "subject_match_count": 9,
+          "company_subject_precision": 1.0
+        },
+        "by_document_type": {
+          "commentary": {
+            "gold_event_count": 0,
+            "predicted_event_count": 0,
+            "exact_match_count": 0,
+            "exact_precision": null,
+            "exact_recall": null,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": null,
+            "event_support_recall": null,
+            "strong_gold_count": 0,
+            "strong_current_recall": null,
+            "status_comparable_count": 0,
+            "status_accuracy": null,
+            "subject_match_count": 0,
+            "company_subject_precision": null
+          },
+          "multi_company_bulletin": {
+            "gold_event_count": 7,
+            "predicted_event_count": 8,
+            "exact_match_count": 7,
+            "exact_precision": 0.875,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 1,
+            "event_support_precision": 0.875,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 7,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 7,
+            "status_accuracy": 1.0,
+            "subject_match_count": 8,
+            "company_subject_precision": 1.0
+          },
+          "single_company_flash": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          }
+        },
+        "by_event_type": {
+          "customer_validation": {
+            "gold_event_count": 2,
+            "predicted_event_count": 2,
+            "exact_match_count": 2,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 2,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 2,
+            "status_accuracy": 1.0,
+            "subject_match_count": 2,
+            "company_subject_precision": 1.0
+          },
+          "funding": {
+            "gold_event_count": 5,
+            "predicted_event_count": 6,
+            "exact_match_count": 5,
+            "exact_precision": 0.8333333333333334,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 1,
+            "event_support_precision": 0.8333333333333334,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 5,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 5,
+            "status_accuracy": 1.0,
+            "subject_match_count": 6,
+            "company_subject_precision": 1.0
+          },
+          "merger_acquisition": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          }
+        },
+        "claim_contract": {
+          "article_count": 3,
+          "event_count": 9,
+          "claim_count": 43,
+          "accepted_claim_count": 16,
+          "rejected_claim_count": 27,
+          "failed_claim_count": 0,
+          "host_fallback_claim_count": 0,
+          "strict_ready_article_count": 3
+        },
+        "host_contract": {
+          "uncited_event_count": 0,
+          "ungrounded_evidence_event_count": 0,
+          "missing_host_id_event_count": 0
+        },
+        "legacy_candidate_dispositions": {
+          "status": "not_applicable",
+          "reason": "V27 Action Claim IDs replace V1 candidate IDs"
+        },
+        "gates": {
+          "prediction_complete": true,
+          "all_articles_strict_ready": true,
+          "all_claims_terminal": true,
+          "no_failed_claims": true,
+          "no_uncited_events": true,
+          "no_ungrounded_evidence": true,
+          "no_missing_host_ids": true,
+          "no_unsupported_predicted_events": false,
+          "company_subject_precision_at_least_98pct": true,
+          "strong_current_recall_at_least_90pct": true,
+          "status_accuracy_at_least_90pct": true
+        },
+        "passed": false
+      }
+    },
+    {
+      "label": "candidate-gamma",
+      "selection_eligible": true,
+      "ineligibility_reasons": [],
+      "prediction": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-semantic-v27-prompt-loop-training",
+        "status": "complete",
+        "model": "minimax/MiniMax-M3",
+        "round": 1,
+        "maximum_rounds": 3,
+        "selected_keys": [
+          "nbd-vcpe-weekly:4407647",
+          "stcn-flash:4053145",
+          "ccid-report-commentary:1121488"
+        ],
+        "code_contract_sha256": "76711f40084f9adedf4045a78cb8654da07d86991889938f305b39c2adca580a",
+        "source_bundle_sha256": "89f54c2de59d3aa48c05d7b70019b0028d978ad1815a8c218d7bf7f4bd7298a1",
+        "source_gold_sha256": "614621e1fe4a5560de2d03e5987cdedb15819d2cb1247d576ab1f37876102dd7",
+        "source_split_sha256": "f393db769b126e44f51b67984eea38dd895676a72b1a8e099921c19a4790d937",
+        "results": [
+          {
+            "key": "nbd-vcpe-weekly:4407647",
+            "position": 1,
+            "events": [
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "RoboParty"
+                ],
+                "canonical_company": "RoboParty",
+                "event_type": "customer_validation",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "据介绍，在商业化层面，RoboParty的首款产品与开源平台已经进入首批数百台交付与用户复现阶段。",
+                "evidence_quotes": [
+                  "据介绍，在商业化层面，RoboParty的首款产品与开源平台已经进入首批数百台交付与用户复现阶段。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "strategy_capital",
+                "event_status": "started",
+                "claim_ids": [
+                  "ac_0442a0f548f272"
+                ],
+                "span_ids": [
+                  "as_9ac46640f01a02"
+                ],
+                "subject_entity_id": "ae_1f62c09190f247"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "RoboParty",
+                  "萝博派对"
+                ],
+                "canonical_company": "RoboParty",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "天使轮",
+                "funding_amount": "数千万美元",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "顺为资本",
+                  "小米战投"
+                ],
+                "event_summary": "近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。",
+                "evidence_quotes": [
+                  "近日，RoboParty（萝博派对）宣布完成数千万美元天使轮+融资，由顺为资本领投，小米战投追加投资。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_a65efc466efadb"
+                ],
+                "span_ids": [
+                  "as_abbdf39a08f1c4"
+                ],
+                "subject_entity_id": "ae_1f62c09190f247"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "华鹰航空"
+                ],
+                "canonical_company": "华鹰航空",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "aviation"
+                ],
+                "funding_round": "A轮",
+                "funding_amount": "超5亿元人民币",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "财金惠风",
+                  "青实资本",
+                  "西高投",
+                  "越秀产业基金",
+                  "深创投",
+                  "金浦投资"
+                ],
+                "event_summary": "近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。本轮融资由财金惠风、青实资本、西高投、越秀产业基金、深创投、金浦投资等20家机构联合投资。",
+                "evidence_quotes": [
+                  "近日，国内大型无人运输机企业华鹰航空宣布完成超5亿元人民币A轮融资。本轮融资由财金惠风、青实资本、西高投、越秀产业基金、深创投、金浦投资等20家机构联合投资。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_a5577d2980dc20"
+                ],
+                "span_ids": [
+                  "as_71eb9b53583e70"
+                ],
+                "subject_entity_id": "ae_aa3b867840dec0"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "customer_validation",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "robotics"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。",
+                "evidence_quotes": [
+                  "完成最新一轮融资后，擎天租将进一步把业务重心转向更高频、更刚需的产业场景，包括进入工业制造、园区运营、仓储物流、商业服务等更接近生产与运营一线的真实场景。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "strategy_capital",
+                "event_status": "target",
+                "claim_ids": [
+                  "ac_8169e3fbad551b"
+                ],
+                "span_ids": [
+                  "as_017785059efe87"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "rental_services"
+                ],
+                "funding_round": "A+轮",
+                "funding_amount": "数亿元",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。",
+                "evidence_quotes": [
+                  "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_66b89a6ae81334"
+                ],
+                "span_ids": [
+                  "as_cda5759f4e5144"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "擎天租"
+                ],
+                "canonical_company": "擎天租",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "rental_services"
+                ],
+                "funding_round": "A轮",
+                "funding_amount": "数亿元",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。",
+                "evidence_quotes": [
+                  "近日，据媒体报道，擎天租完成A轮及A+轮融资，融资金额数亿元。本轮融资完成后，擎天租估值达70亿元，跻身“独角兽”之列。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_ee14da8c916308"
+                ],
+                "span_ids": [
+                  "as_cda5759f4e5144"
+                ],
+                "subject_entity_id": "ae_faaf1920bcbd74"
+              },
+              {
+                "source_id": "nbd-vcpe-weekly",
+                "source_article_id": "4407647",
+                "canonical_url": "https://www.nbd.com.cn/articles/2026-05-25/4407647.html",
+                "company_mentions": [
+                  "杭州原子矩阵计算有限公司",
+                  "原子矩阵",
+                  "杭州原子矩阵计算",
+                  "杭州原子矩阵计算有限"
+                ],
+                "canonical_company": "杭州原子矩阵计算有限公司",
+                "event_type": "funding",
+                "event_date": "2026-05-25",
+                "industry_tags": [
+                  "computing",
+                  "AI"
+                ],
+                "funding_round": "A轮",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [
+                  "砺思资本",
+                  "民银国际",
+                  "祥峰中国",
+                  "L2F光源创业者基金"
+                ],
+                "event_summary": "近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。本轮融资由砺思资本领投，民银国际跟投，老股东祥峰中国、L2F光源创业者基金持续超额追加投资。",
+                "evidence_quotes": [
+                  "近日，杭州原子矩阵计算有限公司（以下简称原子矩阵）宣布完成A轮融资。本轮融资由砺思资本领投，民银国际跟投，老股东祥峰中国、L2F光源创业者基金持续超额追加投资。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+                "content_hash": "2a701ce3b44891310fcae565cce7fd584f1530eca4f8e65f9da6d3216acceaab",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_c4c8a98de3b965"
+                ],
+                "span_ids": [
+                  "as_4df4bd36c71037"
+                ],
+                "subject_entity_id": "ae_07fadf02e49e5b"
+              }
+            ],
+            "audit": {
+              "source_id": "nbd-vcpe-weekly",
+              "source_article_id": "4407647",
+              "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r1-c|minimax/MiniMax-M3",
+              "entity_count": 71,
+              "eligible_entity_count": 4,
+              "action_span_count": 27,
+              "candidate_count": 42,
+              "batch_count": 14,
+              "document_type": "multi_company_bulletin",
+              "document_route_reason": "adapter_document_type",
+              "document_family": "multi_company_funding_digest",
+              "processing_mode": "split_units",
+              "route_gate_confidence": "high",
+              "route_llm_gate_required": true,
+              "route_gate_signals": [
+                "adapter_item_boundaries",
+                "funding_cue",
+                "institution_cue",
+                "long_body"
+              ],
+              "document_unit_ids": [
+                "u_65ff8d129694",
+                "u_ea8b03038aa9",
+                "u_ff403bf8238f",
+                "u_c8dabbeed20f",
+                "u_ccb4bf469e4d",
+                "u_0940eec97801",
+                "u_1b05f9987035"
+              ],
+              "accepted_claim_ids": [
+                "ac_0442a0f548f272",
+                "ac_2b5aa9353d81e0",
+                "ac_579ca6e5389723",
+                "ac_66b89a6ae81334",
+                "ac_8169e3fbad551b",
+                "ac_8ca9f15a7d452c",
+                "ac_a5577d2980dc20",
+                "ac_a55ca46410e5ea",
+                "ac_a65efc466efadb",
+                "ac_aab13aa17264da",
+                "ac_c4c8a98de3b965",
+                "ac_e9d5e55e0bfa25",
+                "ac_ee14da8c916308",
+                "ac_fd9f8892d6bb47"
+              ],
+              "rejected_claim_ids": [
+                "ac_00df915048d46b",
+                "ac_06d9fc82ae6f79",
+                "ac_09fa51e106bf8b",
+                "ac_17889eda602e89",
+                "ac_222036eea6cd07",
+                "ac_2c1c27a08f86c9",
+                "ac_36cc75486d585b",
+                "ac_3735aa8b6d2789",
+                "ac_4271944c8dccc9",
+                "ac_5239b7fd2ca881",
+                "ac_560fb024e722aa",
+                "ac_5ff24941061d47",
+                "ac_7b3126b10eb853",
+                "ac_7fe94d40618c70",
+                "ac_85f2e87e1bff73",
+                "ac_932cdd9544ff19",
+                "ac_93e3bc9368b220",
+                "ac_99fc4c22afdb42",
+                "ac_ba6cf725271779",
+                "ac_bbf1436cf68545",
+                "ac_c2669918312190",
+                "ac_c571f8cdd6cbb3",
+                "ac_ca4d03c872aba8",
+                "ac_cd7b6dbcadb98a",
+                "ac_d5adbe4d39f226",
+                "ac_d99ddf6a5c56ef",
+                "ac_ed61842021795f",
+                "ac_fba4624d908151"
+              ],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "repaired",
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "accepted",
+                "repaired",
+                "accepted",
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_7fe94d40618c70\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_a55ca46410e5ea\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"数亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_bbf1436cf68545\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_cd7b6dbcadb98a\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_932cdd9544ff19\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_17889eda602e89\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_ed61842021795f\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_36cc75486d585b\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_3735aa8b6d2789\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_d99ddf6a5c56ef\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_06d9fc82ae6f79\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_c2669918312190\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_c571f8cdd6cbb3\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_a65efc466efadb\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"天使轮\",\"funding_amount\":\"数千万美元\",\"cumulative_funding_amount\":\"\",\"investors\":[\"顺为资本\",\"小米战投\"],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_e9d5e55e0bfa25\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_4271944c8dccc9\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_560fb024e722aa\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_5ff24941061d47\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_7b3126b10eb853\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_222036eea6cd07\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_aab13aa17264da\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"technical_milestone\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_0442a0f548f272\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"customer_validation\",\"event_status\":\"started\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_ca4d03c872aba8\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_ba6cf725271779\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_2b5aa9353d81e0\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[\"顺为资本\",\"小米战投\"],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_a5577d2980dc20\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_aa3b867840dec0\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"超5亿元人民币\",\"cumulative_funding_amount\":\"\",\"investors\":[\"财金惠风\",\"青实资本\",\"西高投\",\"越秀产业基金\",\"深创投\",\"金浦投资\"],\"industry_tags\":[\"aviation\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_99fc4c22afdb42\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_d5adbe4d39f226\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_fba4624d908151\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"},{\"claim_id\":\"ac_fd9f8892d6bb47\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_07fadf02e49e5b\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"computing\",\"hardware\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_c4c8a98de3b965\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_07fadf02e49e5b\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[\"砺思资本\",\"民银国际\",\"祥峰中国\",\"L2F光源创业者基金\"],\"industry_tags\":[\"computing\",\"AI\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_2c1c27a08f86c9\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"},{\"claim_id\":\"ac_85f2e87e1bff73\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_66b89a6ae81334\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A+轮\",\"funding_amount\":\"数亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"rental_services\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_ee14da8c916308\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"A轮\",\"funding_amount\":\"数亿元\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"rental_services\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_8ca9f15a7d452c\",\"decision\":\"reject\",\"reason_code\":\"duplicate_or_summary\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_00df915048d46b\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"},{\"claim_id\":\"ac_579ca6e5389723\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_8169e3fbad551b\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"customer_validation\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_93e3bc9368b220\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_09fa51e106bf8b\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_5239b7fd2ca881\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+              ],
+              "repair_responses": [
+                "",
+                "",
+                "",
+                "",
+                "{\"decisions\":[{\"claim_id\":\"ac_e9d5e55e0bfa25\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_1f62c09190f247\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[\"光源资本\"],\"industry_tags\":[\"robotics\"],\"confidence\":\"high\"}]}",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "",
+                "{\"decisions\":[{\"claim_id\":\"ac_8ca9f15a7d452c\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_faaf1920bcbd74\",\"event_type\":\"funding\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"70亿元\",\"investors\":[],\"industry_tags\":[\"rental_services\"],\"confidence\":\"high\"}]}",
+                "",
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {
+                "unsupported_company_action": 15,
+                "subject_mismatch": 7,
+                "historical_or_background": 1,
+                "ambiguous_evidence": 3,
+                "duplicate_or_summary": 2
+              },
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 7,
+              "ledger_sha256": "9d085b3a799f4ed8b78754a27f8e40df126484d6",
+              "semantic_window": {
+                "mode": "multi_event_digest",
+                "reason": "bulletin_or_digest_structure",
+                "original_chars": 2909,
+                "semantic_chars": 2909,
+                "prefix_action_count": 24,
+                "tail_action_count": 12,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "stcn-flash:4053145",
+            "position": 2,
+            "events": [
+              {
+                "source_id": "stcn-flash",
+                "source_article_id": "4053145",
+                "canonical_url": "https://www.stcn.com/article/detail/4053145.html",
+                "company_mentions": [
+                  "怡亚通"
+                ],
+                "canonical_company": "怡亚通",
+                "event_type": "merger_acquisition",
+                "event_date": "2026-07-31",
+                "industry_tags": [
+                  "supply_chain"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。",
+                "evidence_quotes": [
+                  "人民财讯7月31日电， 怡亚通(002183)7月31日公告，公司拟公开挂牌转让参股公司芯景铄（上海）科技有限公司（简称“芯景铄”）36%的股权。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+                "content_hash": "70ea99acc40ec6db62e39748027d2f02da71d5fa726fbe3d317bc62186c7f812",
+                "phase": "strategy_capital",
+                "event_status": "target",
+                "claim_ids": [
+                  "ac_b45bf4c40abee3"
+                ],
+                "span_ids": [
+                  "as_42b155a9d54390"
+                ],
+                "subject_entity_id": "ae_3e402777d3841c"
+              }
+            ],
+            "audit": {
+              "source_id": "stcn-flash",
+              "source_article_id": "4053145",
+              "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r1-c|minimax/MiniMax-M3",
+              "entity_count": 7,
+              "eligible_entity_count": 1,
+              "action_span_count": 1,
+              "candidate_count": 1,
+              "batch_count": 1,
+              "document_type": "single_company_flash",
+              "document_route_reason": "adapter_company_field",
+              "document_family": "single_company_flash",
+              "processing_mode": "single_unit",
+              "route_gate_confidence": "medium",
+              "route_llm_gate_required": false,
+              "route_gate_signals": [
+                "adapter_company_field"
+              ],
+              "document_unit_ids": [
+                "u_7614f47529c7"
+              ],
+              "accepted_claim_ids": [
+                "ac_b45bf4c40abee3"
+              ],
+              "rejected_claim_ids": [],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_b45bf4c40abee3\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_3e402777d3841c\",\"event_type\":\"merger_acquisition\",\"event_status\":\"target\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"supply_chain\"],\"confidence\":\"high\"}]}"
+              ],
+              "repair_responses": [
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {},
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 1,
+              "ledger_sha256": "82bba1076c857efa8cf07fc395d181fff3cd7624",
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 190,
+                "semantic_chars": 190,
+                "prefix_action_count": 0,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": false,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "ccid-report-commentary:1121488",
+            "position": 3,
+            "events": [],
+            "audit": {
+              "source_id": "ccid-report-commentary",
+              "source_article_id": "1121488",
+              "prompt_version": "aggregate-semantic-v27-loop-r1-c",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r1-c|minimax/MiniMax-M3",
+              "entity_count": 2,
+              "eligible_entity_count": 0,
+              "action_span_count": 0,
+              "candidate_count": 0,
+              "batch_count": 0,
+              "document_type": "commentary",
+              "document_route_reason": "adapter_document_type",
+              "document_family": "policy_market",
+              "processing_mode": "policy_rules_then_company_override",
+              "route_gate_confidence": "medium",
+              "route_llm_gate_required": false,
+              "route_gate_signals": [
+                "policy_cue"
+              ],
+              "document_unit_ids": [
+                "u_152bd7f5db0b"
+              ],
+              "accepted_claim_ids": [],
+              "rejected_claim_ids": [],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [],
+              "first_responses": [],
+              "repair_responses": [],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {},
+              "status": "no_claims",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 0,
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 1120,
+                "semantic_chars": 1120,
+                "prefix_action_count": 1,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          }
+        ],
+        "summary": {
+          "article_count": 3,
+          "event_count": 8,
+          "claim_count": 43,
+          "accepted_claim_count": 15,
+          "rejected_claim_count": 28,
+          "failed_claim_count": 0,
+          "strict_ready_article_count": 3,
+          "partial_article_count": 0
+        }
+      },
+      "evaluation": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-development-prompt-loop-training-only",
+        "overall": {
+          "gold_event_count": 8,
+          "predicted_event_count": 8,
+          "exact_match_count": 8,
+          "exact_precision": 1.0,
+          "exact_recall": 1.0,
+          "unsupported_predicted_event_count": 0,
+          "event_support_precision": 1.0,
+          "event_support_recall": 1.0,
+          "strong_gold_count": 8,
+          "strong_current_recall": 1.0,
+          "status_comparable_count": 8,
+          "status_accuracy": 1.0,
+          "subject_match_count": 8,
+          "company_subject_precision": 1.0
+        },
+        "by_document_type": {
+          "commentary": {
+            "gold_event_count": 0,
+            "predicted_event_count": 0,
+            "exact_match_count": 0,
+            "exact_precision": null,
+            "exact_recall": null,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": null,
+            "event_support_recall": null,
+            "strong_gold_count": 0,
+            "strong_current_recall": null,
+            "status_comparable_count": 0,
+            "status_accuracy": null,
+            "subject_match_count": 0,
+            "company_subject_precision": null
+          },
+          "multi_company_bulletin": {
+            "gold_event_count": 7,
+            "predicted_event_count": 7,
+            "exact_match_count": 7,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 7,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 7,
+            "status_accuracy": 1.0,
+            "subject_match_count": 7,
+            "company_subject_precision": 1.0
+          },
+          "single_company_flash": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          }
+        },
+        "by_event_type": {
+          "customer_validation": {
+            "gold_event_count": 2,
+            "predicted_event_count": 2,
+            "exact_match_count": 2,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 2,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 2,
+            "status_accuracy": 1.0,
+            "subject_match_count": 2,
+            "company_subject_precision": 1.0
+          },
+          "funding": {
+            "gold_event_count": 5,
+            "predicted_event_count": 5,
+            "exact_match_count": 5,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 5,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 5,
+            "status_accuracy": 1.0,
+            "subject_match_count": 5,
+            "company_subject_precision": 1.0
+          },
+          "merger_acquisition": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          }
+        },
+        "claim_contract": {
+          "article_count": 3,
+          "event_count": 8,
+          "claim_count": 43,
+          "accepted_claim_count": 15,
+          "rejected_claim_count": 28,
+          "failed_claim_count": 0,
+          "host_fallback_claim_count": 0,
+          "strict_ready_article_count": 3
+        },
+        "host_contract": {
+          "uncited_event_count": 0,
+          "ungrounded_evidence_event_count": 0,
+          "missing_host_id_event_count": 0
+        },
+        "legacy_candidate_dispositions": {
+          "status": "not_applicable",
+          "reason": "V27 Action Claim IDs replace V1 candidate IDs"
+        },
+        "gates": {
+          "prediction_complete": true,
+          "all_articles_strict_ready": true,
+          "all_claims_terminal": true,
+          "no_failed_claims": true,
+          "no_uncited_events": true,
+          "no_ungrounded_evidence": true,
+          "no_missing_host_ids": true,
+          "no_unsupported_predicted_events": true,
+          "company_subject_precision_at_least_98pct": true,
+          "strong_current_recall_at_least_90pct": true,
+          "status_accuracy_at_least_90pct": true
+        },
+        "passed": true
+      }
+    }
+  ]
+}

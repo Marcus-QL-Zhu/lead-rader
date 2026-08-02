@@ -1,0 +1,745 @@
+{
+  "schema_version": 1,
+  "purpose": "replayable-director-plus-job-outcomes",
+  "review_policy": "pending rows never become evaluation labels",
+  "counts": {
+    "artifacts": 10,
+    "replayable": 10,
+    "evaluation_eligible": 10,
+    "approved": 0,
+    "pending_human_review": 10
+  },
+  "jobs": [
+    {
+      "artifact_id": "job_149b13af56fe0c92",
+      "source_platform": "linkedin-public",
+      "source_job_id": "4342727908",
+      "requested_url": "https://cn.linkedin.com/jobs/view/head-of-cs-china-duv-ys-at-asml-4342727908",
+      "final_url": "https://cn.linkedin.com/jobs/view/head-of-cs-china-duv-ys-at-asml-4342727908",
+      "captured_at": "2026-08-01T11:35:36.267000+00:00",
+      "http_status": 200,
+      "mime_type": "text/html",
+      "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_149b13af56fe0c92/raw-browser-capture.json",
+      "raw_artifact_sha256": "cce7ef6a7402b22294c1cefba09fb8bff1d5f7255df7199197c188af297b1c65",
+      "normalized_text_path": "evaluation/training-v3/job-artifacts/job_149b13af56fe0c92/normalized.txt",
+      "normalized_text_sha256": "efcd440b085a652dae103ee296ab16e2aab4fbebc50992836d9e316990a417b9",
+      "extractor_version": "browser-public-job-v1",
+      "company": "ASML（中国）",
+      "canonical_company_id": "co_8dd9b7280689b13f",
+      "corporate_family_id": "fam_8dd9b7280689b13f",
+      "employer_display": "ASML",
+      "employer_match_basis": "unverified_alias",
+      "exact_title": "Head of CS China DUV/YS",
+      "title": "Head of CS China DUV/YS",
+      "raw_publication_text": "3 个月前",
+      "publication_basis": "relative_date_interval",
+      "publication_interval_start": "2026-04-01",
+      "publication_interval_end_exclusive": "2026-05-02",
+      "date_parser_version": "relative-publication-v1",
+      "timezone": "Asia/Shanghai",
+      "source_job_id_span": {
+        "text": "4342727908",
+        "char_start": 14,
+        "char_end": 24
+      },
+      "title_span": {
+        "text": "Head of CS China DUV/YS",
+        "char_start": 31,
+        "char_end": 54
+      },
+      "employer_span": {
+        "text": "ASML",
+        "char_start": 64,
+        "char_end": 68
+      },
+      "publication_span": {
+        "text": "3 个月前",
+        "char_start": 81,
+        "char_end": 86
+      },
+      "scope_spans": [
+        {
+          "text": "This position is responsible for managing the {{b}}Customer Support team of DUV & Yieldstar {{/b}}product in the China region. Reporting to the Head of Customer Support, China, the role involves developing and executing long-term strategies and tactical goals for regional DUVYS organization. The incumbent will lead the organization to achieve sector strategies, objectives, and operations roadmaps. As a core member of the China Customer Support Management team, the role also involves driving business and people initiatives across the CS China organization.",
+          "char_start": 225,
+          "char_end": 786
+        },
+        {
+          "text": "Drives the maturity of the organization, via the execution of strategic and operational activities, annual budget planning, long-term capacity planning, and policy/process development and implementation.",
+          "char_start": 787,
+          "char_end": 990
+        },
+        {
+          "text": "Own talent management, develop pipelines, and identify future leaders.",
+          "char_start": 3947,
+          "char_end": 4017
+        }
+      ],
+      "seniority_label": "director_plus",
+      "seniority_rule_version": "director-plus-artifact-v1",
+      "evaluation_eligible": true,
+      "exclusion_reason": "",
+      "reviewer": "pending",
+      "reviewed_at": "2026-08-01T11:35:36.267000+00:00",
+      "review_status": "pending_human_review",
+      "identity_source": "company-pool-v2"
+    },
+    {
+      "artifact_id": "job_7eb1342feab1958b",
+      "source_platform": "linkedin-public",
+      "source_job_id": "4401724759",
+      "requested_url": "https://cn.linkedin.com/jobs/view/head-of-marketing-and-corporate-communications-china-at-siemens-healthineers-4401724759",
+      "final_url": "https://cn.linkedin.com/jobs/view/head-of-marketing-and-corporate-communications-china-at-siemens-healthineers-4401724759",
+      "captured_at": "2026-08-01T11:21:54.401000+00:00",
+      "http_status": 200,
+      "mime_type": "text/html",
+      "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_7eb1342feab1958b/raw-browser-capture.json",
+      "raw_artifact_sha256": "3dd7514d07e6515bdd5f43b0f52744e93e8beb40890d832c4556c43d9ffbb31b",
+      "normalized_text_path": "evaluation/training-v3/job-artifacts/job_7eb1342feab1958b/normalized.txt",
+      "normalized_text_sha256": "a556b472448f6d99313320f78cba8f3e06cdeb483fc88d372bb147e421e60532",
+      "extractor_version": "browser-public-job-v1",
+      "company": "西门子医疗（中国）",
+      "canonical_company_id": "co_8471d0ed808b3c21",
+      "corporate_family_id": "fam_df741df2f67e7acc",
+      "employer_display": "西门子医疗",
+      "employer_match_basis": "unverified_alias",
+      "exact_title": "Head of Marketing and Corporate Communications, China",
+      "title": "Head of Marketing and Corporate Communications, China",
+      "raw_publication_text": "3 个月前",
+      "publication_basis": "relative_date_interval",
+      "publication_interval_start": "2026-04-01",
+      "publication_interval_end_exclusive": "2026-05-02",
+      "date_parser_version": "relative-publication-v1",
+      "timezone": "Asia/Shanghai",
+      "source_job_id_span": {
+        "text": "4401724759",
+        "char_start": 14,
+        "char_end": 24
+      },
+      "title_span": {
+        "text": "Head of Marketing and Corporate Communications, China",
+        "char_start": 31,
+        "char_end": 84
+      },
+      "employer_span": {
+        "text": "西门子医疗",
+        "char_start": 94,
+        "char_end": 99
+      },
+      "publication_span": {
+        "text": "3 个月前",
+        "char_start": 112,
+        "char_end": 117
+      },
+      "scope_spans": [
+        {
+          "text": "Lead marketing and corporate communications team and develop branding communication strategies to address Healthineers' brand message/brand promise through all touch points from press materials, company website, marketing promotional materials to customer events",
+          "char_start": 806,
+          "char_end": 1068
+        },
+        {
+          "text": "Lead team to advance professionalism and expertise development, direct the corporate PR strategy, managing media relations and serving as a key spokesperson when necessary.",
+          "char_start": 1517,
+          "char_end": 1689
+        },
+        {
+          "text": "Develop talents in M&CC team with strong talent succession pipeline.",
+          "char_start": 2031,
+          "char_end": 2099
+        }
+      ],
+      "seniority_label": "director_plus",
+      "seniority_rule_version": "director-plus-artifact-v1",
+      "evaluation_eligible": true,
+      "exclusion_reason": "",
+      "reviewer": "pending",
+      "reviewed_at": "2026-08-01T11:21:54.401000+00:00",
+      "review_status": "pending_human_review",
+      "identity_source": "company-pool-v2"
+    },
+    {
+      "artifact_id": "job_861a7d0abb1e8ac8",
+      "source_platform": "linkedin-public",
+      "source_job_id": "4444050640",
+      "requested_url": "https://cn.linkedin.com/jobs/view/investment-vp-at-%E7%BE%8E%E6%95%A6%E5%8A%9B-4444050640",
+      "final_url": "https://cn.linkedin.com/jobs/view/investment-vp-at-%E7%BE%8E%E6%95%A6%E5%8A%9B-4444050640",
+      "captured_at": "2026-08-01T11:27:41.086000+00:00",
+      "http_status": 200,
+      "mime_type": "text/html",
+      "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_861a7d0abb1e8ac8/raw-browser-capture.json",
+      "raw_artifact_sha256": "0d2a98b85d8a897b705bfba44ee7ff027bc6453e60070c126e7b5b1f4e60fdb9",
+      "normalized_text_path": "evaluation/training-v3/job-artifacts/job_861a7d0abb1e8ac8/normalized.txt",
+      "normalized_text_sha256": "b27de1941de265f900f9af61d0eff9f87497d02da992e0566f2538a574324a00",
+      "extractor_version": "browser-public-job-v1",
+      "company": "美敦力（中国）",
+      "canonical_company_id": "co_98c103b9f3aca013",
+      "corporate_family_id": "fam_98c103b9f3aca013",
+      "employer_display": "美敦力",
+      "employer_match_basis": "unverified_alias",
+      "exact_title": "Investment VP",
+      "title": "Investment VP",
+      "raw_publication_text": "1 周前",
+      "publication_basis": "relative_date_interval",
+      "publication_interval_start": "2026-07-18",
+      "publication_interval_end_exclusive": "2026-07-26",
+      "date_parser_version": "relative-publication-v1",
+      "timezone": "Asia/Shanghai",
+      "source_job_id_span": {
+        "text": "4444050640",
+        "char_start": 14,
+        "char_end": 24
+      },
+      "title_span": {
+        "text": "Investment VP",
+        "char_start": 31,
+        "char_end": 44
+      },
+      "employer_span": {
+        "text": "美敦力",
+        "char_start": 54,
+        "char_end": 57
+      },
+      "publication_span": {
+        "text": "1 周前",
+        "char_start": 70,
+        "char_end": 74
+      },
+      "scope_spans": [
+        {
+          "text": "Lead and execute end-to-end investment process for preferably one or multiple designated portfolio (e.g. CV / NS / MS), covering the full lifecycle from deal sourcing / screening, diligence, negotiation, to closing, portfolio management and exit",
+          "char_start": 665,
+          "char_end": 910
+        },
+        {
+          "text": "Help drive business collaborations related to venture deals in alignment with corporate strategy in collaboration with global and local stakeholders Independently manage deals, including deal execution, IC (investment committee) presentation, and follow-through",
+          "char_start": 1095,
+          "char_end": 1356
+        },
+        {
+          "text": "Enable global–local integration by bridging stakeholders and informing global strategy with China insights.",
+          "char_start": 1761,
+          "char_end": 1868
+        }
+      ],
+      "seniority_label": "director_plus",
+      "seniority_rule_version": "director-plus-artifact-v1",
+      "evaluation_eligible": true,
+      "exclusion_reason": "",
+      "reviewer": "pending",
+      "reviewed_at": "2026-08-01T11:27:41.086000+00:00",
+      "review_status": "pending_human_review",
+      "identity_source": "company-pool-v2"
+    },
+    {
+      "artifact_id": "job_9beb6fbf71833829",
+      "source_platform": "linkedin-public",
+      "source_job_id": "4401277529",
+      "requested_url": "https://cn.linkedin.com/jobs/view/head-of-bu-test-systems-china-at-zf-%E9%9B%86%E5%9B%A2-4401277529",
+      "final_url": "https://cn.linkedin.com/jobs/view/head-of-bu-test-systems-china-at-zf-%E9%9B%86%E5%9B%A2-4401277529",
+      "captured_at": "2026-08-01T11:36:25.229000+00:00",
+      "http_status": 200,
+      "mime_type": "text/html",
+      "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_9beb6fbf71833829/raw-browser-capture.json",
+      "raw_artifact_sha256": "9a941dcb4d998a7b9ba53cc665fe5d7a477e9bf0344d89484e31fe62f370dae6",
+      "normalized_text_path": "evaluation/training-v3/job-artifacts/job_9beb6fbf71833829/normalized.txt",
+      "normalized_text_sha256": "602871090e5f2af3e31674e703c1d8c72bf664dd052632041ec63b5fc8cc1709",
+      "extractor_version": "browser-public-job-v1",
+      "company": "采埃孚（中国）",
+      "canonical_company_id": "co_a2a8516159b9316d",
+      "corporate_family_id": "fam_a2a8516159b9316d",
+      "employer_display": "ZF 集团",
+      "employer_match_basis": "unverified_alias",
+      "exact_title": "Head of BU Test Systems China",
+      "title": "Head of BU Test Systems China",
+      "raw_publication_text": "3 个月前",
+      "publication_basis": "relative_date_interval",
+      "publication_interval_start": "2026-04-01",
+      "publication_interval_end_exclusive": "2026-05-02",
+      "date_parser_version": "relative-publication-v1",
+      "timezone": "Asia/Shanghai",
+      "source_job_id_span": {
+        "text": "4401277529",
+        "char_start": 14,
+        "char_end": 24
+      },
+      "title_span": {
+        "text": "Head of BU Test Systems China",
+        "char_start": 31,
+        "char_end": 60
+      },
+      "employer_span": {
+        "text": "ZF 集团",
+        "char_start": 70,
+        "char_end": 75
+      },
+      "publication_span": {
+        "text": "3 个月前",
+        "char_start": 88,
+        "char_end": 93
+      },
+      "scope_spans": [
+        {
+          "text": "We are looking for a new colleague to act as the head of the China Market for Business Unit Test Systems, in charge of a team consisting of four functions: Sales, Project Management, Service, and R&D, at our Songjiang, Shanghai location.",
+          "char_start": 376,
+          "char_end": 613
+        },
+        {
+          "text": "Experience in managing an organization covering the full product life cycle and taking on P&L responsibility similar to a CEO of a small to medium-sized company",
+          "char_start": 1500,
+          "char_end": 1660
+        },
+        {
+          "text": "Managing a team of approximately 50 full-time employees located in different cities in China",
+          "char_start": 2053,
+          "char_end": 2145
+        }
+      ],
+      "seniority_label": "director_plus",
+      "seniority_rule_version": "director-plus-artifact-v1",
+      "evaluation_eligible": true,
+      "exclusion_reason": "",
+      "reviewer": "pending",
+      "reviewed_at": "2026-08-01T11:36:25.229000+00:00",
+      "review_status": "pending_human_review",
+      "identity_source": "company-pool-v2"
+    },
+    {
+      "artifact_id": "job_9e644265da823fac",
+      "source_platform": "linkedin-public",
+      "source_job_id": "4414850643",
+      "requested_url": "https://cn.linkedin.com/jobs/view/commercial-director-mcs-at-%E8%B5%9B%E9%BB%98%E9%A3%9E%E4%B8%96%E5%B0%94%E7%A7%91%E6%8A%80-4414850643",
+      "final_url": "https://cn.linkedin.com/jobs/view/commercial-director-mcs-at-%E8%B5%9B%E9%BB%98%E9%A3%9E%E4%B8%96%E5%B0%94%E7%A7%91%E6%8A%80-4414850643",
+      "captured_at": "2026-08-01T11:29:08.468000+00:00",
+      "http_status": 200,
+      "mime_type": "text/html",
+      "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_9e644265da823fac/raw-browser-capture.json",
+      "raw_artifact_sha256": "42831869cb2d8d1bad6374ebc8d498fbc3b5dcdb4a581053857529c7e4d8901f",
+      "normalized_text_path": "evaluation/training-v3/job-artifacts/job_9e644265da823fac/normalized.txt",
+      "normalized_text_sha256": "af558d02330796f77ea2c3c89ffccded78c25138594d66f699c356042b33e1f6",
+      "extractor_version": "browser-public-job-v1",
+      "company": "赛默飞世尔（中国）",
+      "canonical_company_id": "co_d8a1571c486c4daf",
+      "corporate_family_id": "fam_d8a1571c486c4daf",
+      "employer_display": "赛默飞世尔科技",
+      "employer_match_basis": "unverified_alias",
+      "exact_title": "Commercial Director, MCS",
+      "title": "Commercial Director, MCS",
+      "raw_publication_text": "2 个月前",
+      "publication_basis": "relative_date_interval",
+      "publication_interval_start": "2026-05-01",
+      "publication_interval_end_exclusive": "2026-06-02",
+      "date_parser_version": "relative-publication-v1",
+      "timezone": "Asia/Shanghai",
+      "source_job_id_span": {
+        "text": "4414850643",
+        "char_start": 14,
+        "char_end": 24
+      },
+      "title_span": {
+        "text": "Commercial Director, MCS",
+        "char_start": 31,
+        "char_end": 55
+      },
+      "employer_span": {
+        "text": "赛默飞世尔科技",
+        "char_start": 65,
+        "char_end": 72
+      },
+      "publication_span": {
+        "text": "2 个月前",
+        "char_start": 85,
+        "char_end": 90
+      },
+      "scope_spans": [
+        {
+          "text": "This role is responsible for CAD MCS product lines’ business performance in China Market, leading a team including Sales and Application Engineers, working closely with global BU and China CAD marketing and other local functions to identify and complete high impact product category and deliver performance.",
+          "char_start": 858,
+          "char_end": 1165
+        },
+        {
+          "text": "Ensures achievement of sales, profit, and strategic objectives for the business unit by providing business direction, leadership, coaching and support to management and employees.",
+          "char_start": 2400,
+          "char_end": 2579
+        },
+        {
+          "text": "Builds a high performing commercial team through strong coaching and leadership. Ensures timely recognition and reward for top performers and deploy performance management actions when needed.",
+          "char_start": 3418,
+          "char_end": 3610
+        }
+      ],
+      "seniority_label": "director_plus",
+      "seniority_rule_version": "director-plus-artifact-v1",
+      "evaluation_eligible": true,
+      "exclusion_reason": "",
+      "reviewer": "pending",
+      "reviewed_at": "2026-08-01T11:29:08.468000+00:00",
+      "review_status": "pending_human_review",
+      "identity_source": "company-pool-v2"
+    },
+    {
+      "artifact_id": "job_a9205a7056c8578f",
+      "source_platform": "linkedin-public",
+      "source_job_id": "4414566181",
+      "requested_url": "https://cn.linkedin.com/jobs/view/general-manager-minimed-greater-china-at-medtronic-4414566181",
+      "final_url": "https://cn.linkedin.com/jobs/view/general-manager-minimed-greater-china-at-medtronic-4414566181",
+      "captured_at": "2026-08-01T11:37:22.419000+00:00",
+      "http_status": 200,
+      "mime_type": "text/html",
+      "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_a9205a7056c8578f/raw-browser-capture.json",
+      "raw_artifact_sha256": "6de7ead646edaaa3c5beabe5d3cfa14203598773e1ef44b32bba04c54c9d9914",
+      "normalized_text_path": "evaluation/training-v3/job-artifacts/job_a9205a7056c8578f/normalized.txt",
+      "normalized_text_sha256": "6dd024b13f605a154f67a0c965e6c04c96bac5c1ec936d73d0a3b70415936928",
+      "extractor_version": "browser-public-job-v1",
+      "company": "美敦力（中国）",
+      "canonical_company_id": "co_98c103b9f3aca013",
+      "corporate_family_id": "fam_98c103b9f3aca013",
+      "employer_display": "美敦力",
+      "employer_match_basis": "unverified_alias",
+      "exact_title": "General Manager, MiniMed Greater China",
+      "title": "General Manager, MiniMed Greater China",
+      "raw_publication_text": "2 个月前",
+      "publication_basis": "relative_date_interval",
+      "publication_interval_start": "2026-05-01",
+      "publication_interval_end_exclusive": "2026-06-02",
+      "date_parser_version": "relative-publication-v1",
+      "timezone": "Asia/Shanghai",
+      "source_job_id_span": {
+        "text": "4414566181",
+        "char_start": 14,
+        "char_end": 24
+      },
+      "title_span": {
+        "text": "General Manager, MiniMed Greater China",
+        "char_start": 31,
+        "char_end": 69
+      },
+      "employer_span": {
+        "text": "美敦力",
+        "char_start": 79,
+        "char_end": 82
+      },
+      "publication_span": {
+        "text": "2 个月前",
+        "char_start": 95,
+        "char_end": 100
+      },
+      "scope_spans": [
+        {
+          "text": "The General Manager (GM), MiniMed Greater China, is fully accountable for the end-to-end performance of the MiniMed business across Greater China, with complete ownership of strategy, P&L, commercial execution, and all enabling functions.",
+          "char_start": 490,
+          "char_end": 728
+        },
+        {
+          "text": "This role leads all commercial teams (Sales, Marketing, Market Access, Channel, Customer Support) and all functions (Finance, HR, IT, Regulatory Affairs, Quality, Supply Chain, Legal, and other shared services), ensuring integrated execution, compliance, and sustainable growth.",
+          "char_start": 730,
+          "char_end": 1008
+        },
+        {
+          "text": "Build, develop, and retain a high-performing leadership team with strong succession planning.",
+          "char_start": 3425,
+          "char_end": 3518
+        }
+      ],
+      "seniority_label": "director_plus",
+      "seniority_rule_version": "director-plus-artifact-v1",
+      "evaluation_eligible": true,
+      "exclusion_reason": "",
+      "reviewer": "pending",
+      "reviewed_at": "2026-08-01T11:37:22.419000+00:00",
+      "review_status": "pending_human_review",
+      "identity_source": "company-pool-v2"
+    },
+    {
+      "artifact_id": "job_c364fb82bcd4bdb5",
+      "source_platform": "linkedin-public",
+      "source_job_id": "4436676216",
+      "requested_url": "https://cn.linkedin.com/jobs/view/ed-vp-medical-science-strategy-oncology-at-thermo-fisher-scientific-4436676216",
+      "final_url": "https://cn.linkedin.com/jobs/view/ed-vp-medical-science-strategy-oncology-at-thermo-fisher-scientific-4436676216",
+      "captured_at": "2026-08-01T11:30:44.587000+00:00",
+      "http_status": 200,
+      "mime_type": "text/html",
+      "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_c364fb82bcd4bdb5/raw-browser-capture.json",
+      "raw_artifact_sha256": "c606c3dccdcc9d2d27e665cb4034151251eec1f677ba44131b14a1823e585d15",
+      "normalized_text_path": "evaluation/training-v3/job-artifacts/job_c364fb82bcd4bdb5/normalized.txt",
+      "normalized_text_sha256": "e8f13f1cb94f92bfc806b76e5bc374735e98c519822c60ad542afcdc8959d379",
+      "extractor_version": "browser-public-job-v1",
+      "company": "赛默飞世尔（中国）",
+      "canonical_company_id": "co_d8a1571c486c4daf",
+      "corporate_family_id": "fam_d8a1571c486c4daf",
+      "employer_display": "赛默飞世尔科技",
+      "employer_match_basis": "unverified_alias",
+      "exact_title": "ED/VP Medical Science & Strategy - Oncology",
+      "title": "ED/VP Medical Science & Strategy - Oncology",
+      "raw_publication_text": "3 周前",
+      "publication_basis": "relative_date_interval",
+      "publication_interval_start": "2026-07-04",
+      "publication_interval_end_exclusive": "2026-07-12",
+      "date_parser_version": "relative-publication-v1",
+      "timezone": "Asia/Shanghai",
+      "source_job_id_span": {
+        "text": "4436676216",
+        "char_start": 14,
+        "char_end": 24
+      },
+      "title_span": {
+        "text": "ED/VP Medical Science & Strategy - Oncology",
+        "char_start": 31,
+        "char_end": 74
+      },
+      "employer_span": {
+        "text": "赛默飞世尔科技",
+        "char_start": 84,
+        "char_end": 91
+      },
+      "publication_span": {
+        "text": "3 周前",
+        "char_start": 104,
+        "char_end": 108
+      },
+      "scope_spans": [
+        {
+          "text": "The position requires proven abilities to drive both strategic and measurable business outcomes. The incumbent’s Oncology track record expertise is required to be extensive and ensure recognition as peer of their Pharmaceutical Industry equivalents. This position is playing a key part in the future success of the PPD clinical research business of Thermo Fisher Scientific, as it seeks to continue its track record of successful growth and expand Industry leading position in Oncology. Medical Science & Strategy physicians are subject matter experts who support sales for proposals and bid defenses, engaging clients senior medical / scientific leadership in discussions and training internal staff on medical and therapeutic requirements of the proposals.",
+          "char_start": 1313,
+          "char_end": 2071
+        },
+        {
+          "text": "Thirdly, the incumbent will be responsible for providing therapeutic and developmental expertise to internal teams, including:",
+          "char_start": 3203,
+          "char_end": 3329
+        },
+        {
+          "text": "Mentor and supervise clinical scientists",
+          "char_start": 3662,
+          "char_end": 3702
+        }
+      ],
+      "seniority_label": "director_plus",
+      "seniority_rule_version": "director-plus-artifact-v1",
+      "evaluation_eligible": true,
+      "exclusion_reason": "",
+      "reviewer": "pending",
+      "reviewed_at": "2026-08-01T11:30:44.587000+00:00",
+      "review_status": "pending_human_review",
+      "identity_source": "company-pool-v2"
+    },
+    {
+      "artifact_id": "job_d2d3245cbeaaec75",
+      "source_platform": "linkedin-public",
+      "source_job_id": "4431731114",
+      "requested_url": "https://cn.linkedin.com/jobs/view/global-head-of-operations-%E2%80%93-motion-drive-products-division-location-asia-us-europe-at-abb-4431731114",
+      "final_url": "https://cn.linkedin.com/jobs/view/global-head-of-operations-%E2%80%93-motion-drive-products-division-location-asia-us-europe-at-abb-4431731114",
+      "captured_at": "2026-08-01T11:34:29.239000+00:00",
+      "http_status": 200,
+      "mime_type": "text/html",
+      "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_d2d3245cbeaaec75/raw-browser-capture.json",
+      "raw_artifact_sha256": "7aa6b3797270c3aa24795125ded74ee7ae7e5d4c65c21276778c98af722ce2b4",
+      "normalized_text_path": "evaluation/training-v3/job-artifacts/job_d2d3245cbeaaec75/normalized.txt",
+      "normalized_text_sha256": "287e926b3099c39b9b630e3a7769575ce74289122a424557b658ba15d8d9dd11",
+      "extractor_version": "browser-public-job-v1",
+      "company": "ABB（中国）",
+      "canonical_company_id": "co_6d4fe92e686b77f0",
+      "corporate_family_id": "fam_6d4fe92e686b77f0",
+      "employer_display": "阿西布朗勃法瑞公司（ABB）",
+      "employer_match_basis": "unverified_alias",
+      "exact_title": "Global Head of Operations – Motion Drive Products Division (Location: Asia, US, Europe)",
+      "title": "Global Head of Operations – Motion Drive Products Division (Location: Asia, US, Europe)",
+      "raw_publication_text": "1 个月前",
+      "publication_basis": "relative_date_interval",
+      "publication_interval_start": "2026-06-01",
+      "publication_interval_end_exclusive": "2026-07-02",
+      "date_parser_version": "relative-publication-v1",
+      "timezone": "Asia/Shanghai",
+      "source_job_id_span": {
+        "text": "4431731114",
+        "char_start": 14,
+        "char_end": 24
+      },
+      "title_span": {
+        "text": "Global Head of Operations – Motion Drive Products Division (Location: Asia, US, Europe)",
+        "char_start": 31,
+        "char_end": 118
+      },
+      "employer_span": {
+        "text": "阿西布朗勃法瑞公司（ABB）",
+        "char_start": 128,
+        "char_end": 142
+      },
+      "publication_span": {
+        "text": "1 个月前",
+        "char_start": 155,
+        "char_end": 160
+      },
+      "scope_spans": [
+        {
+          "text": "In this role, you will lead the Operations function for ABB’s Drive Products division in line with the division’s operating model. You will be accountable for the full value chain—from planning and procurement to production and logistics—while ensuring excellence in health, safety, and environment (HSE), as well as continuous development of processes and systems.",
+          "char_start": 1065,
+          "char_end": 1430
+        },
+        {
+          "text": "Define and execute the global Operations strategy in alignment with Division objectives, ensuring strong collaboration across local units",
+          "char_start": 2027,
+          "char_end": 2164
+        },
+        {
+          "text": "Oversee capital investment planning (CapEx) and operational budgets to ensure sustainable growth, resilience, and value creation across the global operations network",
+          "char_start": 2855,
+          "char_end": 3020
+        }
+      ],
+      "seniority_label": "director_plus",
+      "seniority_rule_version": "director-plus-artifact-v1",
+      "evaluation_eligible": true,
+      "exclusion_reason": "",
+      "reviewer": "pending",
+      "reviewed_at": "2026-08-01T11:34:29.239000+00:00",
+      "review_status": "pending_human_review",
+      "identity_source": "company-pool-v2"
+    },
+    {
+      "artifact_id": "job_f121b5334aa602e5",
+      "source_platform": "linkedin-public",
+      "source_job_id": "4422237422",
+      "requested_url": "https://cn.linkedin.com/jobs/view/head-of-sales-electronics-china-at-forvia-hella-4422237422",
+      "final_url": "https://cn.linkedin.com/jobs/view/head-of-sales-electronics-china-at-forvia-hella-4422237422",
+      "captured_at": "2026-08-01T11:33:26.360000+00:00",
+      "http_status": 200,
+      "mime_type": "text/html",
+      "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_f121b5334aa602e5/raw-browser-capture.json",
+      "raw_artifact_sha256": "58de4077957d00b59762cef925d5da9a4351dc4d27a07ebbb7068f865d4fc01b",
+      "normalized_text_path": "evaluation/training-v3/job-artifacts/job_f121b5334aa602e5/normalized.txt",
+      "normalized_text_sha256": "f03a4cd74eeef2e306707292dec7a398593b8fa6b25c0fdf99ad23d8481b5c80",
+      "extractor_version": "browser-public-job-v1",
+      "company": "佛吉亚（中国）",
+      "canonical_company_id": "co_0d2f66e8dae7dc6b",
+      "corporate_family_id": "fam_0d2f66e8dae7dc6b",
+      "employer_display": "海拉",
+      "employer_match_basis": "unverified_alias",
+      "exact_title": "Head of Sales Electronics China",
+      "title": "Head of Sales Electronics China",
+      "raw_publication_text": "1 个月前",
+      "publication_basis": "relative_date_interval",
+      "publication_interval_start": "2026-06-01",
+      "publication_interval_end_exclusive": "2026-07-02",
+      "date_parser_version": "relative-publication-v1",
+      "timezone": "Asia/Shanghai",
+      "source_job_id_span": {
+        "text": "4422237422",
+        "char_start": 14,
+        "char_end": 24
+      },
+      "title_span": {
+        "text": "Head of Sales Electronics China",
+        "char_start": 31,
+        "char_end": 62
+      },
+      "employer_span": {
+        "text": "海拉",
+        "char_start": 72,
+        "char_end": 74
+      },
+      "publication_span": {
+        "text": "1 个月前",
+        "char_start": 87,
+        "char_end": 92
+      },
+      "scope_spans": [
+        {
+          "text": "Develop and execute regional market strategy especially driving China for China Customer Strategy to meet / exceed revenue and acquisition targets",
+          "char_start": 1041,
+          "char_end": 1187
+        },
+        {
+          "text": "Oversee sales forecasting, budgeting and pipeline management",
+          "char_start": 3087,
+          "char_end": 3147
+        },
+        {
+          "text": "Drive agile team transformation through right organizational set up, target cascading, performance evaluation etc.",
+          "char_start": 3216,
+          "char_end": 3330
+        }
+      ],
+      "seniority_label": "director_plus",
+      "seniority_rule_version": "director-plus-artifact-v1",
+      "evaluation_eligible": true,
+      "exclusion_reason": "",
+      "reviewer": "pending",
+      "reviewed_at": "2026-08-01T11:33:26.360000+00:00",
+      "review_status": "pending_human_review",
+      "identity_source": "company-pool-v2"
+    },
+    {
+      "artifact_id": "job_f14045acef735ddc",
+      "source_platform": "linkedin-public",
+      "source_job_id": "4407205031",
+      "requested_url": "https://cn.linkedin.com/jobs/view/director-government-relations-china-at-%E6%B1%9F%E6%A3%AE%E8%87%AA%E6%8E%A7-4407205031",
+      "final_url": "https://cn.linkedin.com/jobs/view/director-government-relations-china-at-%E6%B1%9F%E6%A3%AE%E8%87%AA%E6%8E%A7-4407205031",
+      "captured_at": "2026-08-01T11:25:55.220000+00:00",
+      "http_status": 200,
+      "mime_type": "text/html",
+      "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_f14045acef735ddc/raw-browser-capture.json",
+      "raw_artifact_sha256": "1c3639bb558dbeb10c7440da7256b1b09986c23e25ce5c8bc332d04701028703",
+      "normalized_text_path": "evaluation/training-v3/job-artifacts/job_f14045acef735ddc/normalized.txt",
+      "normalized_text_sha256": "6447982a09d0ce575e4ff5fd469605b6810ffff6e343a2d7cdd432a5bcd2798a",
+      "extractor_version": "browser-public-job-v1",
+      "company": "江森自控（中国）",
+      "canonical_company_id": "co_d598e5c881a3ad9c",
+      "corporate_family_id": "fam_d598e5c881a3ad9c",
+      "employer_display": "江森自控",
+      "employer_match_basis": "unverified_alias",
+      "exact_title": "Director, Government Relations China",
+      "title": "Director, Government Relations China",
+      "raw_publication_text": "3 周前",
+      "publication_basis": "relative_date_interval",
+      "publication_interval_start": "2026-07-04",
+      "publication_interval_end_exclusive": "2026-07-12",
+      "date_parser_version": "relative-publication-v1",
+      "timezone": "Asia/Shanghai",
+      "source_job_id_span": {
+        "text": "4407205031",
+        "char_start": 14,
+        "char_end": 24
+      },
+      "title_span": {
+        "text": "Director, Government Relations China",
+        "char_start": 31,
+        "char_end": 67
+      },
+      "employer_span": {
+        "text": "江森自控",
+        "char_start": 77,
+        "char_end": 81
+      },
+      "publication_span": {
+        "text": "3 周前",
+        "char_start": 94,
+        "char_end": 98
+      },
+      "scope_spans": [
+        {
+          "text": "Johnson Controls is hiring a Director of Government Relations, to provide dynamic and effective leadership of the company’s public policy and advocacy efforts throughout China. Reporting to the Vice President & Chief Sustainability and External Relations Officer, and Government Relations Director, and part of a collaborative, diverse, global team, this person will assist in the development and execution of policy campaigns, projects, and initiatives critical to the company’s success on issues including energy, environment, government contracting, government subsidies and technology development.",
+          "char_start": 220,
+          "char_end": 821
+        },
+        {
+          "text": "Ensure the establishment, development, and maintenance of effective working relationships with central, provincial and municipal government officials and government agencies.",
+          "char_start": 844,
+          "char_end": 1018
+        },
+        {
+          "text": "Lead the development and execution of policy and regulatory strategies, orchestrate advocacy campaigns, and monitor progress.",
+          "char_start": 1019,
+          "char_end": 1144
+        }
+      ],
+      "seniority_label": "director_plus",
+      "seniority_rule_version": "director-plus-artifact-v1",
+      "evaluation_eligible": true,
+      "exclusion_reason": "",
+      "reviewer": "pending",
+      "reviewed_at": "2026-08-01T11:25:55.220000+00:00",
+      "review_status": "pending_human_review",
+      "identity_source": "company-pool-v2"
+    }
+  ],
+  "manifest_sha256": "41b4d1180249c4ac7a96da37d0ed0cb5b42561f2eadbd0afcc33ea15836876be"
+}

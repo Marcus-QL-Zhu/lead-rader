@@ -1,0 +1,3061 @@
+{
+  "schema_version": 1,
+  "dataset_version": "semantic-v25-reserve-v1",
+  "annotation_role": "adjudication",
+  "annotator_id": "third-party-blind-adjudicator",
+  "instructions": "docs/semantic-event-gold-labeling-guide.md",
+  "source_manifest_sha256": "c9fa968c2a0574b9200d3ad144670c2133bb98b46114e24bfa78067cadbbeeb6",
+  "source_bundle_sha256": "627727ee66551eafcbb88cde59ecf7a4ac93883360cd615d60859a09be7623bb",
+  "cases": [
+    {
+      "key": "cls-telegraph:2442058",
+      "article_sha256": "25cab9db6e3225a17cd6455016d7ae6416d7521cfbce614a860d445861b200f9",
+      "source_id": "cls-telegraph",
+      "canonical_url": "https://www.cls.cn/detail/2442058",
+      "published_at": "2026-07-31T07:58:50+08:00",
+      "title": "财联社7月31日早间新闻精选",
+      "document_type": "multi_company_bulletin",
+      "clean_body": "【财联社7月31日早间新闻精选】 1、中共中央政治局7月30日召开会议，决定今年10月在北京召开中国共产党第二十届中央委员会第五次全体会议。会议强调，深化资本市场投融资综合改革，提升资本市场韧性和信心。会议还强调，及时谋划出台务实管用的增量政策，加大逆周期调节力度，加力扩大内需、优化供给。 2、中美经贸中方牵头人、国务院副总理何立峰于北京时间7月30日晚与美方牵头人、美国财政部长贝森特和贸易代表格里尔举行视频通话，双方围绕落实好中美两国元首北京会晤重要共识，就下一阶段中美双方保持经贸关系稳定、拓展务实合作、妥善解决彼此关切，进行了坦诚、深入、富有建设性的交流。 3、北京证券交易所组织召开公募基金座谈会，邀请8家公募机构代表面对面交流，就促进北交所市场稳定健康发展听取意见建议。大家表示，近期北交所市场表现受外部多重因素与场内阶段性情绪叠加影响有所波动，但长期向好趋势不改，正迎来政策、流动性与估值三重共振的配置窗口期。 4、中证指数有限公司将于2026年7月31日正式发布中证港股通半导体产业指数、中证香港半导体产业指数、中证港股通新能源指数和中证香港新能源指数，为市场提供更丰富的投资标的。 5、据报道，台积电正在开发一种与英特尔已有的先进芯片封装技术类似的产品，这表明这家全球领先的芯片制造商担心竞争对手的竞争。 6、宇树科技公告称，公司首次公开发行股票并在科创板上市，初步询价日为2026年8月5日，网上网下申购日为2026年8月10日。 7、三环集团公告，拟5亿元至10亿元回购公司股份。同日公告，7月20日审议通过回购股份方案已实施完毕，累计回购8.95亿元股份。 8、特锐德公告，拟3亿元-6亿元回购股份。渤海租赁公告，拟2亿元回购公司股份。网宿科技公告，拟以3亿元至6亿元回购股份用于注销。东阳光公告，控股股东提议公司以3亿-6亿元回购股份，同时控股股东拟增持3亿元-6亿元。 9、容百科技公告，拟投资47.23亿元建设仙桃年产30万吨钠电正极材料一体化项目。有研新材公告，拟4.86亿元投建集成电路用高纯溅射靶材二期扩建项目。 10、中际旭创公告，控股股东及其一致行动人持股比例降至16.53%。 11、美股三大指数高开高走，集体收涨。纳指涨2.78%，标普500指数涨1.66%，道指涨1.19%。微软涨超15%，市值单日增加4500亿美元，创美股之最。存储、光通信板块集体大涨，闪迪涨26%，美光科技涨超18%，SK海力士涨超17%。 12、欧盟27国集团的执行官周四表示，欧盟将提供100亿欧元(114亿美元)的资金，资助企业建立7个人工智能巨型工厂，以缩小与美国的人工智能差距。 13、美国总统特朗普当地时间7月30日表示，“和平委员会”当天达成一项“历史性协议”，哈马斯及加沙地带其他所有武装团体将全面解除武装。 14、监管备案文件显示，SK集团会长崔泰源买入3620股SK海力士。按昨日SK海力士收盘价920美元计算，价值约合331万美元。 15、Meta表示，已通过长期和短期协议，承诺了近7000亿美元的未来支出，涉及人工智能数据中心、云计算等领域。 16、苹果第三财季营收1,094.2亿美元，同比增长16%，预估1,088.5亿美元；每股收益2.02美元，同比增长29%，预估1.89美元。 17、OpenAI将GPT-5.6 Luna版本价格下调80%，GPT-5.6 Terra的价格下调20%。Luna API定价为每百万输入Token 0.20美元，输出Token 1.20美元。Terra API定价为每百万输入Token 2美元，输出Token 12美元。 18、谷歌Deepmind宣布推出Gemini Robotics ER 2模型。谷歌表示，可把其看作是机器人的“高级大脑”，它让机器人能够理解物理世界并规划多步骤任务。 19、OpenAI首席财务官内部会议披露，7月年化收入已经超过第二季度的年化营收；OpenAI正与英伟达洽谈最高2500亿美元资金支持新AI数据中心。",
+      "document_units": [
+        {
+          "unit_id": "u_b833e41b2d41",
+          "char_start": 0,
+          "char_end": 284,
+          "text": "【财联社7月31日早间新闻精选】 1、中共中央政治局7月30日召开会议，决定今年10月在北京召开中国共产党第二十届中央委员会第五次全体会议。会议强调，深化资本市场投融资综合改革，提升资本市场韧性和信心。会议还强调，及时谋划出台务实管用的增量政策，加大逆周期调节力度，加力扩大内需、优化供给。 2、中美经贸中方牵头人、国务院副总理何立峰于北京时间7月30日晚与美方牵头人、美国财政部长贝森特和贸易代表格里尔举行视频通话，双方围绕落实好中美两国元首北京会晤重要共识，就下一阶段中美双方保持经贸关系稳定、拓展务实合作、妥善解决彼此关切，进行了坦诚、深入、富有建设性的交流。 "
+        },
+        {
+          "unit_id": "u_14615fc18aba",
+          "char_start": 284,
+          "char_end": 414,
+          "text": "3、北京证券交易所组织召开公募基金座谈会，邀请8家公募机构代表面对面交流，就促进北交所市场稳定健康发展听取意见建议。大家表示，近期北交所市场表现受外部多重因素与场内阶段性情绪叠加影响有所波动，但长期向好趋势不改，正迎来政策、流动性与估值三重共振的配置窗口期。 "
+        },
+        {
+          "unit_id": "u_66e62b86354e",
+          "char_start": 414,
+          "char_end": 501,
+          "text": "4、中证指数有限公司将于2026年7月31日正式发布中证港股通半导体产业指数、中证香港半导体产业指数、中证港股通新能源指数和中证香港新能源指数，为市场提供更丰富的投资标的。 "
+        },
+        {
+          "unit_id": "u_72a2275bbbee",
+          "char_start": 501,
+          "char_end": 563,
+          "text": "5、据报道，台积电正在开发一种与英特尔已有的先进芯片封装技术类似的产品，这表明这家全球领先的芯片制造商担心竞争对手的竞争。 "
+        },
+        {
+          "unit_id": "u_018c33b3686b",
+          "char_start": 563,
+          "char_end": 627,
+          "text": "6、宇树科技公告称，公司首次公开发行股票并在科创板上市，初步询价日为2026年8月5日，网上网下申购日为2026年8月10日。 "
+        },
+        {
+          "unit_id": "u_ff83473f7746",
+          "char_start": 627,
+          "char_end": 692,
+          "text": "7、三环集团公告，拟5亿元至10亿元回购公司股份。同日公告，7月20日审议通过回购股份方案已实施完毕，累计回购8.95亿元股份。 "
+        },
+        {
+          "unit_id": "u_a3b820fb2c43",
+          "char_start": 692,
+          "char_end": 1032,
+          "text": "8、特锐德公告，拟3亿元-6亿元回购股份。渤海租赁公告，拟2亿元回购公司股份。网宿科技公告，拟以3亿元至6亿元回购股份用于注销。东阳光公告，控股股东提议公司以3亿-6亿元回购股份，同时控股股东拟增持3亿元-6亿元。 9、容百科技公告，拟投资47.23亿元建设仙桃年产30万吨钠电正极材料一体化项目。有研新材公告，拟4.86亿元投建集成电路用高纯溅射靶材二期扩建项目。 10、中际旭创公告，控股股东及其一致行动人持股比例降至16.53%。 11、美股三大指数高开高走，集体收涨。纳指涨2.78%，标普500指数涨1.66%，道指涨1.19%。微软涨超15%，市值单日增加4500亿美元，创美股之最。存储、光通信板块集体大涨，闪迪涨26%，美光科技涨超18%，SK海力士涨超17%。 "
+        },
+        {
+          "unit_id": "u_6df8dac60366",
+          "char_start": 1032,
+          "char_end": 1667,
+          "text": "12、欧盟27国集团的执行官周四表示，欧盟将提供100亿欧元(114亿美元)的资金，资助企业建立7个人工智能巨型工厂，以缩小与美国的人工智能差距。 13、美国总统特朗普当地时间7月30日表示，“和平委员会”当天达成一项“历史性协议”，哈马斯及加沙地带其他所有武装团体将全面解除武装。 14、监管备案文件显示，SK集团会长崔泰源买入3620股SK海力士。按昨日SK海力士收盘价920美元计算，价值约合331万美元。 15、Meta表示，已通过长期和短期协议，承诺了近7000亿美元的未来支出，涉及人工智能数据中心、云计算等领域。 16、苹果第三财季营收1,094.2亿美元，同比增长16%，预估1,088.5亿美元；每股收益2.02美元，同比增长29%，预估1.89美元。 17、OpenAI将GPT-5.6 Luna版本价格下调80%，GPT-5.6 Terra的价格下调20%。Luna API定价为每百万输入Token 0.20美元，输出Token 1.20美元。Terra API定价为每百万输入Token 2美元，输出Token 12美元。 18、谷歌Deepmind宣布推出Gemini Robotics ER 2模型。谷歌表示，可把其看作是机器人的“高级大脑”，它让机器人能够理解物理世界并规划多步骤任务。 19、OpenAI首席财务官内部会议披露，7月年化收入已经超过第二季度的年化营收；OpenAI正与英伟达洽谈最高2500亿美元资金支持新AI数据中心。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_d1b741d66f",
+          "event_type": "policy_or_standard",
+          "funding_round": "",
+          "quote": "会议还强调，及时谋划出台务实管用的增量政策，加大逆周期调节力度，加力扩大内需、优化供给。",
+          "claim_id": "c_d1b741d66f",
+          "span_id": "s_9ad170dbc9f1",
+          "char_start": 101,
+          "char_end": 145,
+          "subject_hint": "",
+          "action_hint": "policy_or_standard",
+          "event_status_hint": "unknown",
+          "time_hints": [],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_d1b741d66f"
+          ]
+        },
+        {
+          "id": "c_cbcacaa238",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "5、据报道，台积电正在开发一种与英特尔已有的先进芯片封装技术类似的产品，这表明这家全球领先的芯片制造商担心竞争对手的竞争。",
+          "claim_id": "c_cbcacaa238",
+          "span_id": "s_d62039473646",
+          "char_start": 501,
+          "char_end": 562,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "unknown",
+          "time_hints": [],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_cbcacaa238"
+          ]
+        },
+        {
+          "id": "c_8f8fc244cb",
+          "event_type": "factory_or_capacity",
+          "funding_round": "",
+          "quote": "有研新材公告，拟4.86亿元投建集成电路用高纯溅射靶材二期扩建项目。",
+          "claim_id": "c_8f8fc244cb",
+          "span_id": "s_2ec54c7893b5",
+          "char_start": 841,
+          "char_end": 875,
+          "subject_hint": "",
+          "action_hint": "factory_or_capacity",
+          "event_status_hint": "target",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_6c5afc12d248",
+              "span_id": "s_2ec54c7893b5",
+              "char_start": 841,
+              "char_end": 875,
+              "text": "有研新材公告，拟4.86亿元投建集成电路用高纯溅射靶材二期扩建项目。",
+              "action_text": "拟4.86亿元投建集成电路用高纯溅射靶材二期扩建项目。",
+              "event_status": "target"
+            }
+          ],
+          "required_claim_ids": [
+            "c_8f8fc244cb"
+          ]
+        },
+        {
+          "id": "c_5238d5f9d0",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "18、谷歌Deepmind宣布推出Gemini Robotics ER 2模型。",
+          "claim_id": "c_5238d5f9d0",
+          "span_id": "s_8e08c64d592d",
+          "char_start": 1507,
+          "char_end": 1547,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_0177b4c9d5de",
+              "span_id": "s_8e08c64d592d",
+              "char_start": 1507,
+              "char_end": 1547,
+              "text": "18、谷歌Deepmind宣布推出Gemini Robotics ER 2模型。",
+              "action_text": "18、谷歌Deepmind宣布推出Gemini Robotics ER 2模型。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_5238d5f9d0"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_d1b741d66f",
+            "disposition": "rejected",
+            "reason_code": "invalid_subject_or_non_event"
+          },
+          {
+            "claim_id": "c_cbcacaa238",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          },
+          {
+            "claim_id": "c_8f8fc244cb",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          },
+          {
+            "claim_id": "c_5238d5f9d0",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "中证指数有限公司",
+            "event_type": "technical_milestone",
+            "event_status": "target",
+            "importance": "weak",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 414,
+              "char_end": 500,
+              "text": "4、中证指数有限公司将于2026年7月31日正式发布中证港股通半导体产业指数、中证香港半导体产业指数、中证港股通新能源指数和中证香港新能源指数，为市场提供更丰富的投资标的。"
+            }
+          },
+          {
+            "canonical_company": "台积电",
+            "event_type": "technical_milestone",
+            "event_status": "started",
+            "importance": "strong",
+            "claim_ids": [
+              "c_cbcacaa238"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 501,
+              "char_end": 562,
+              "text": "5、据报道，台积电正在开发一种与英特尔已有的先进芯片封装技术类似的产品，这表明这家全球领先的芯片制造商担心竞争对手的竞争。"
+            }
+          },
+          {
+            "canonical_company": "宇树科技",
+            "event_type": "ipo_or_listing",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 563,
+              "char_end": 626,
+              "text": "6、宇树科技公告称，公司首次公开发行股票并在科创板上市，初步询价日为2026年8月5日，网上网下申购日为2026年8月10日。"
+            }
+          },
+          {
+            "canonical_company": "容百科技",
+            "event_type": "factory_or_capacity",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 800,
+              "char_end": 841,
+              "text": "9、容百科技公告，拟投资47.23亿元建设仙桃年产30万吨钠电正极材料一体化项目。"
+            }
+          },
+          {
+            "canonical_company": "有研新材",
+            "event_type": "factory_or_capacity",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [
+              "c_8f8fc244cb"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 841,
+              "char_end": 875,
+              "text": "有研新材公告，拟4.86亿元投建集成电路用高纯溅射靶材二期扩建项目。"
+            }
+          },
+          {
+            "canonical_company": "Meta",
+            "event_type": "major_order",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 1239,
+              "char_end": 1295,
+              "text": "15、Meta表示，已通过长期和短期协议，承诺了近7000亿美元的未来支出，涉及人工智能数据中心、云计算等领域。"
+            }
+          },
+          {
+            "canonical_company": "谷歌Deepmind",
+            "event_type": "technical_milestone",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [
+              "c_5238d5f9d0"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 1507,
+              "char_end": 1547,
+              "text": "18、谷歌Deepmind宣布推出Gemini Robotics ER 2模型。"
+            }
+          },
+          {
+            "canonical_company": "OpenAI",
+            "event_type": "funding",
+            "event_status": "started",
+            "importance": "strong",
+            "claim_ids": [],
+            "funding_amount": "最高2500亿美元",
+            "investors": [
+              "英伟达"
+            ],
+            "candidate_gap": true,
+            "evidence_span": {
+              "char_start": 1592,
+              "char_end": 1667,
+              "text": "19、OpenAI首席财务官内部会议披露，7月年化收入已经超过第二季度的年化营收；OpenAI正与英伟达洽谈最高2500亿美元资金支持新AI数据中心。"
+            }
+          }
+        ],
+        "article_notes": "??????????????????????????????????????????????????????????",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "????????????????????????????????????????Deepmind???????????????"
+      }
+    },
+    {
+      "key": "cls-telegraph:2443026",
+      "article_sha256": "bb8ef57411a85d52d82e132d23952943bb9ef96ba2e040fba7671b24aed243bc",
+      "source_id": "cls-telegraph",
+      "canonical_url": "https://www.cls.cn/detail/2443026",
+      "published_at": "2026-07-31T21:48:48+08:00",
+      "title": "财联社7月31日晚间新闻精选",
+      "document_type": "multi_company_bulletin",
+      "clean_body": "【财联社7月31日晚间新闻精选】 1、据新闻联播报道，国务院常务会议决定核准辽宁庄河一期工程等四个核电项目。澎湃新闻估算，上述新项目的总投资将超过1700亿元。 2、规范互联网渠道售卡管理，中国电信、中国移动和中国联通停止第三方互联网渠道号卡办理。 3、市场监管总局开展光伏行业价格合规指导，头部企业要发挥示范引领作用，严格规范自身价格行为和竞争行为，为行业树立标杆。 4、券商交易系统接入将迎规范：不得为特定客户提供技术或业务资源差异化安排。 5、美股财报季后，谷歌、亚马逊、微软云业务增速显著抬升，Meta依托AI优化广告投放实现营收增长。亚马逊、谷歌、微软三家云业务积压合同总额接近1.7万亿美元，较一年前增长超一倍。 6、公司新闻方面：①9连板爱丽家居：7月21日至7月31日期间累计涨幅达135.77% 自8月3日起停牌核查。②富瀚微：预计上半年净利同比增长1073%-1420%。③兆易创新：拟以10亿元至20亿元回购股份用于注销。④宏桥控股：拟定增募资不超120亿元 用于风电、光伏、铝深加工项目等。",
+      "document_units": [
+        {
+          "unit_id": "u_dd548819357a",
+          "char_start": 0,
+          "char_end": 81,
+          "text": "【财联社7月31日晚间新闻精选】 1、据新闻联播报道，国务院常务会议决定核准辽宁庄河一期工程等四个核电项目。澎湃新闻估算，上述新项目的总投资将超过1700亿元。 "
+        },
+        {
+          "unit_id": "u_e76a324259c1",
+          "char_start": 81,
+          "char_end": 125,
+          "text": "2、规范互联网渠道售卡管理，中国电信、中国移动和中国联通停止第三方互联网渠道号卡办理。 "
+        },
+        {
+          "unit_id": "u_4f350938f40d",
+          "char_start": 125,
+          "char_end": 313,
+          "text": "3、市场监管总局开展光伏行业价格合规指导，头部企业要发挥示范引领作用，严格规范自身价格行为和竞争行为，为行业树立标杆。 4、券商交易系统接入将迎规范：不得为特定客户提供技术或业务资源差异化安排。 5、美股财报季后，谷歌、亚马逊、微软云业务增速显著抬升，Meta依托AI优化广告投放实现营收增长。亚马逊、谷歌、微软三家云业务积压合同总额接近1.7万亿美元，较一年前增长超一倍。 "
+        },
+        {
+          "unit_id": "u_9b283af93f28",
+          "char_start": 313,
+          "char_end": 457,
+          "text": "6、公司新闻方面：①9连板爱丽家居：7月21日至7月31日期间累计涨幅达135.77% 自8月3日起停牌核查。②富瀚微：预计上半年净利同比增长1073%-1420%。③兆易创新：拟以10亿元至20亿元回购股份用于注销。④宏桥控股：拟定增募资不超120亿元 用于风电、光伏、铝深加工项目等。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_f0b50b6312",
+          "event_type": "ipo_or_listing",
+          "funding_round": "",
+          "quote": "6、公司新闻方面：①9连板爱丽家居：7月21日至7月31日期间累计涨幅达135.77% 自8月3日起停牌核查。",
+          "claim_id": "c_f0b50b6312",
+          "span_id": "s_459cc3bd1c96",
+          "char_start": 313,
+          "char_end": 368,
+          "subject_hint": "",
+          "action_hint": "ipo_or_listing",
+          "event_status_hint": "unknown",
+          "time_hints": [
+            "7月21日",
+            "7月31日",
+            "8月3日"
+          ],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_f0b50b6312"
+          ]
+        },
+        {
+          "id": "c_358f3a4eeb",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "④宏桥控股：拟定增募资不超120亿元 用于风电、光伏、铝深加工项目等。",
+          "claim_id": "c_358f3a4eeb",
+          "span_id": "s_27288e798285",
+          "char_start": 422,
+          "char_end": 457,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "started",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_2640d29a3963",
+              "span_id": "s_27288e798285",
+              "char_start": 422,
+              "char_end": 457,
+              "text": "④宏桥控股：拟定增募资不超120亿元 用于风电、光伏、铝深加工项目等。",
+              "action_text": "④宏桥控股：拟定增募资不超120亿元 用于风电、光伏、铝深加工项目等。",
+              "event_status": "started"
+            }
+          ],
+          "required_claim_ids": [
+            "c_358f3a4eeb"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_f0b50b6312",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          },
+          {
+            "claim_id": "c_358f3a4eeb",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "爱丽家居",
+            "event_type": "ipo_or_listing",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [
+              "c_f0b50b6312"
+            ],
+            "evidence_span": {
+              "char_start": 313,
+              "char_end": 368,
+              "text": "6、公司新闻方面：①9连板爱丽家居：7月21日至7月31日期间累计涨幅达135.77% 自8月3日起停牌核查。"
+            }
+          },
+          {
+            "canonical_company": "宏桥控股",
+            "event_type": "funding",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [
+              "c_358f3a4eeb"
+            ],
+            "evidence_span": {
+              "char_start": 422,
+              "char_end": 457,
+              "text": "④宏桥控股：拟定增募资不超120亿元 用于风电、光伏、铝深加工项目等。"
+            },
+            "funding_amount": "不超120亿元"
+          }
+        ],
+        "article_notes": "核电项目核准与监管指导缺少公司经营主体；保留明确停牌安排与定增计划。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "cls-telegraph:2442821",
+      "article_sha256": "6c2d2f2660f2a8a7a75de8f805930289fc39b44bf878d6554003814e0f84d4f8",
+      "source_id": "cls-telegraph",
+      "canonical_url": "https://www.cls.cn/detail/2442821",
+      "published_at": "2026-07-31T18:36:44+08:00",
+      "title": "英国监管机构公布股票交易数据汇总机制范围",
+      "document_type": "multi_company_bulletin",
+      "clean_body": "【英国监管机构公布股票交易数据汇总机制范围】财联社7月31日电，英国金融行为监管局（FCA）周五公布其允许发布的英国股票交易数据范围，这一举措有望促进伦敦证券交易所的交易活跃度。英国市场监管机构表示，计划最早于明年推出单一数据源，同时发布英国股票交易的交易前和交易后数据，使投资者能够在交易执行前比较不同交易所之间的股票报价。FCA还将就是否应纳入投资银行交易业务数据，以及该产品产生的收入如何分配征求意见。作为一项过渡措施，FCA 将从周五起发布一份英国股票交易的每日收盘汇总报告，即“股票市场活动报告”（MARS）。该报告将帮助市场参与者评估英国股票市场的实际规模，并包含过去一年的数据。",
+      "document_units": [
+        {
+          "unit_id": "u_00b3a1e67a70",
+          "char_start": 0,
+          "char_end": 296,
+          "text": "【英国监管机构公布股票交易数据汇总机制范围】财联社7月31日电，英国金融行为监管局（FCA）周五公布其允许发布的英国股票交易数据范围，这一举措有望促进伦敦证券交易所的交易活跃度。英国市场监管机构表示，计划最早于明年推出单一数据源，同时发布英国股票交易的交易前和交易后数据，使投资者能够在交易执行前比较不同交易所之间的股票报价。FCA还将就是否应纳入投资银行交易业务数据，以及该产品产生的收入如何分配征求意见。作为一项过渡措施，FCA 将从周五起发布一份英国股票交易的每日收盘汇总报告，即“股票市场活动报告”（MARS）。该报告将帮助市场参与者评估英国股票市场的实际规模，并包含过去一年的数据。"
+        }
+      ],
+      "candidates": [],
+      "annotation": {
+        "candidate_dispositions": [],
+        "gold_events": [],
+        "article_notes": "监管机构政策与数据发布不属于公司经营事件。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "cls-telegraph:2442955",
+      "article_sha256": "499387cdf2c9f30c0859b75bedf82ea54cd421414ecee67a2adcc93668c21170",
+      "source_id": "cls-telegraph",
+      "canonical_url": "https://www.cls.cn/detail/2442955",
+      "published_at": "2026-07-31T20:20:30+08:00",
+      "title": "美股盘前要闻一览：AI概念股延续涨势，存储、半导体设备、光通信等板块集体上涨，纳指期货涨0.7%；亚马逊大涨13%，苹果重挫7%",
+      "document_type": "multi_company_bulletin",
+      "clean_body": "【美股盘前要闻一览：AI概念股延续涨势，存储、半导体设备、光通信等板块集体上涨，纳指期货涨0.7%；亚马逊大涨13%，苹果重挫7%】财联社7月31日电，投资者需重点关注的美股市场财经要闻如下： 1、亚马逊美股盘前一度涨13%。公司二季度净销售2006亿美元，同比增长20%，预期1970.1亿美元。亚马逊CEO表示，AWS在AI和非AI领域均呈现强劲增长，订单积压达4960亿美元。 2、苹果美股盘前跌7.8%。苹果预计第四财季营收增长9%至11%，市场预期为增长12.1%。 3、铠侠ADR盘前下跌3.7%，公司第一财季（4-6月）净利润8421.7亿日元，市场预期9738.1亿日元。 4、美股期指在盘前走高，截至目前，道琼斯指数期货涨0.50%，标普500指数期货涨0.21%，纳斯达克100指数期货涨0.74%。 5、美股AI概念股盘前延续涨势，存储芯片股方面，闪迪涨4.5%，西部数据涨5.4%，希捷涨4.8%，美光科技涨3.8%；半导体设备股方面，应用材料涨2.8%，泛林集团涨3.1%，科磊涨2.9%；新一代AI云服务公司方面，Applied Digital涨5.5%，Nebius涨8.2%，CoreWeave涨4.9%；光通信和光子产品公司方面，Applied Optoelectronics涨6.7%，Lumentum涨5.4%，Coherent涨6.1%，康宁涨4.4%。 6、多家投行调整对亚马逊和苹果的目标价，具体如下：加拿大皇家银行将亚马逊目标价从320美元上调至330美元。TD Cowen将亚马逊目标价从340美元上调至350美元。摩根大通将亚马逊目标价从330美元上调至365美元。花旗将亚马逊目标价从325美元上调至350美元。韦德布什将亚马逊目标价格从293美元上调至310美元。Benchmark将亚马逊目标价格从370美元上调至400美元。美国银行全球研究将亚马逊目标价位从310美元上调至320美元。富国银行将亚马逊目标股价从322美元上调至328美元。瑞穗将亚马逊目标价格从320美元上调至330美元。德意志银行将亚马逊目标价从315美元上调至325美元。摩根士丹利将苹果目标价从364美元下调至360美元。摩根大通将苹果目标价从345美元下调至340美元。高盛将苹果目标股价从370美元下调至360美元。富国银行将苹果将目标股价从310美元上调至350美元。杰富瑞将苹果公司目标股价从308.92美元下调至285.56美元。 7、美国克利夫兰联储行长哈玛克表示，目前的政策立场限制性不够强，不相信通胀率会自行达到2%。明尼阿波利斯联储行长卡什卡利表示，更倾向于逐步收紧政策。美国白宫经济顾问哈塞特就利率表示，认为可以维持现状。根据现有数据，很难找到加息的理由。 8、Moderna美股盘前跌2.8%，公司二季度营收略低于预期。 9、诺和诺德盘前一度跌超10%，公司此前发布ZEUS III期临床试验最新进展。 10、电动汽车公司Rivian盘前上涨2.8%，因公司季度收入超出预期。 11、在线视频游戏平台Roblox美股盘前下跌22%，因公司预计第三季度预订量将出现超出预期的显著下降。 12、雪佛龙盘前涨1.2%，公司第二季度营收及其他收入700.6亿美元，预估679.3亿美元；第二季度调整后每股收益为6.06美元，市场预期为5.65美元。 13、欧洲主要股指走高，截至目前，英国富时100指数涨0.17%，法国CAC40指数涨0.78%，德国DAX30指数涨0.25%，富时意大利MIB指数涨0.54%。 14、国际油价走高，截至目前，WTI原油期货价格涨1.99%，报85.251美元/桶；布伦特原油期货价格涨1.72%，报88.373美元/桶。",
+      "document_units": [
+        {
+          "unit_id": "u_d2414cf182a3",
+          "char_start": 0,
+          "char_end": 97,
+          "text": "【美股盘前要闻一览：AI概念股延续涨势，存储、半导体设备、光通信等板块集体上涨，纳指期货涨0.7%；亚马逊大涨13%，苹果重挫7%】财联社7月31日电，投资者需重点关注的美股市场财经要闻如下： "
+        },
+        {
+          "unit_id": "u_95589a671813",
+          "char_start": 97,
+          "char_end": 192,
+          "text": "1、亚马逊美股盘前一度涨13%。公司二季度净销售2006亿美元，同比增长20%，预期1970.1亿美元。亚马逊CEO表示，AWS在AI和非AI领域均呈现强劲增长，订单积压达4960亿美元。 "
+        },
+        {
+          "unit_id": "u_9ee7be85b813",
+          "char_start": 192,
+          "char_end": 239,
+          "text": "2、苹果美股盘前跌7.8%。苹果预计第四财季营收增长9%至11%，市场预期为增长12.1%。 "
+        },
+        {
+          "unit_id": "u_91c23b55a286",
+          "char_start": 239,
+          "char_end": 1155,
+          "text": "3、铠侠ADR盘前下跌3.7%，公司第一财季（4-6月）净利润8421.7亿日元，市场预期9738.1亿日元。 4、美股期指在盘前走高，截至目前，道琼斯指数期货涨0.50%，标普500指数期货涨0.21%，纳斯达克100指数期货涨0.74%。 5、美股AI概念股盘前延续涨势，存储芯片股方面，闪迪涨4.5%，西部数据涨5.4%，希捷涨4.8%，美光科技涨3.8%；半导体设备股方面，应用材料涨2.8%，泛林集团涨3.1%，科磊涨2.9%；新一代AI云服务公司方面，Applied Digital涨5.5%，Nebius涨8.2%，CoreWeave涨4.9%；光通信和光子产品公司方面，Applied Optoelectronics涨6.7%，Lumentum涨5.4%，Coherent涨6.1%，康宁涨4.4%。 6、多家投行调整对亚马逊和苹果的目标价，具体如下：加拿大皇家银行将亚马逊目标价从320美元上调至330美元。TD Cowen将亚马逊目标价从340美元上调至350美元。摩根大通将亚马逊目标价从330美元上调至365美元。花旗将亚马逊目标价从325美元上调至350美元。韦德布什将亚马逊目标价格从293美元上调至310美元。Benchmark将亚马逊目标价格从370美元上调至400美元。美国银行全球研究将亚马逊目标价位从310美元上调至320美元。富国银行将亚马逊目标股价从322美元上调至328美元。瑞穗将亚马逊目标价格从320美元上调至330美元。德意志银行将亚马逊目标价从315美元上调至325美元。摩根士丹利将苹果目标价从364美元下调至360美元。摩根大通将苹果目标价从345美元下调至340美元。高盛将苹果目标股价从370美元下调至360美元。富国银行将苹果将目标股价从310美元上调至350美元。杰富瑞将苹果公司目标股价从308.92美元下调至285.56美元。 7、美国克利夫兰联储行长哈玛克表示，目前的政策立场限制性不够强，不相信通胀率会自行达到2%。明尼阿波利斯联储行长卡什卡利表示，更倾向于逐步收紧政策。美国白宫经济顾问哈塞特就利率表示，认为可以维持现状。根据现有数据，很难找到加息的理由。 "
+        },
+        {
+          "unit_id": "u_31628341137d",
+          "char_start": 1155,
+          "char_end": 1188,
+          "text": "8、Moderna美股盘前跌2.8%，公司二季度营收略低于预期。 "
+        },
+        {
+          "unit_id": "u_3fde2c2d825a",
+          "char_start": 1188,
+          "char_end": 1229,
+          "text": "9、诺和诺德盘前一度跌超10%，公司此前发布ZEUS III期临床试验最新进展。 "
+        },
+        {
+          "unit_id": "u_c9024bb7f0ab",
+          "char_start": 1229,
+          "char_end": 1266,
+          "text": "10、电动汽车公司Rivian盘前上涨2.8%，因公司季度收入超出预期。 "
+        },
+        {
+          "unit_id": "u_4485ade0aee6",
+          "char_start": 1266,
+          "char_end": 1319,
+          "text": "11、在线视频游戏平台Roblox美股盘前下跌22%，因公司预计第三季度预订量将出现超出预期的显著下降。 "
+        },
+        {
+          "unit_id": "u_ea0fc9e5b622",
+          "char_start": 1319,
+          "char_end": 1552,
+          "text": "12、雪佛龙盘前涨1.2%，公司第二季度营收及其他收入700.6亿美元，预估679.3亿美元；第二季度调整后每股收益为6.06美元，市场预期为5.65美元。 13、欧洲主要股指走高，截至目前，英国富时100指数涨0.17%，法国CAC40指数涨0.78%，德国DAX30指数涨0.25%，富时意大利MIB指数涨0.54%。 14、国际油价走高，截至目前，WTI原油期货价格涨1.99%，报85.251美元/桶；布伦特原油期货价格涨1.72%，报88.373美元/桶。"
+        }
+      ],
+      "candidates": [],
+      "annotation": {
+        "candidate_dispositions": [],
+        "gold_events": [],
+        "article_notes": "盘前涨跌、财务业绩、分析师目标价及缺少事实细节的临床进展提及不形成 Gold 公司事件。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "cena-industry-analysis:17959",
+      "article_sha256": "f5df95ed119cef95fda30418bfadc2ebc492d198320dc5f5c4e7f0a998a3f7a7",
+      "source_id": "cena-industry-analysis",
+      "canonical_url": "https://epaper.cena.com.cn/pc/content/202607/31/content_17959.html",
+      "published_at": "2026-07-31T00:00:00+08:00",
+      "title": "三星HBM5将采用2纳米GAA工艺，速度较HBM4E提升50%以上",
+      "document_type": "roadmap",
+      "clean_body": "本报讯 7月27日，三星电子半导体透露，下一代HBM5内存的基础芯片将采用GAA（全环绕栅极）结构的2纳米制程，并实现更高集成度的TSV硅通孔互连。据悉，HBM5的运行速度目标较HBM4E提升50%以上，因此在基础芯片上必须引入能在速度与电力效率两个维度均实现大幅跃升的最先进制程。这是三星迄今对外阐述的最明确的HBM5技术规格与制程路线图。\n三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。三星将HBM产品定位为“交钥匙”解决方案——核心芯片由内存部门制造，基础芯片由代工部门生产，先进封装由TSP部门完成，全流程内部协同。以HBM4基础芯片为例，从首批样品便同时达成性能与良率目标，整个过程仅历时约三个月。\nHBM5路线图的明确化，恰逢AI算力供应链从“按需采购”转向“超长期产能锁定”的关键节点。同日，Anthropic正式向SK海力士提出存储半导体供应需求，用于制造其自研芯片。此外，SK集团还计划在未来五年内额外寻求2500亿美元的全球存储供应合作，进一步巩固其在AI存储供应链中的核心地位。（李 平）",
+      "document_units": [
+        {
+          "unit_id": "u_5ec5fd573595",
+          "char_start": 0,
+          "char_end": 516,
+          "text": "本报讯 7月27日，三星电子半导体透露，下一代HBM5内存的基础芯片将采用GAA（全环绕栅极）结构的2纳米制程，并实现更高集成度的TSV硅通孔互连。据悉，HBM5的运行速度目标较HBM4E提升50%以上，因此在基础芯片上必须引入能在速度与电力效率两个维度均实现大幅跃升的最先进制程。这是三星迄今对外阐述的最明确的HBM5技术规格与制程路线图。\n三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。三星将HBM产品定位为“交钥匙”解决方案——核心芯片由内存部门制造，基础芯片由代工部门生产，先进封装由TSP部门完成，全流程内部协同。以HBM4基础芯片为例，从首批样品便同时达成性能与良率目标，整个过程仅历时约三个月。\nHBM5路线图的明确化，恰逢AI算力供应链从“按需采购”转向“超长期产能锁定”的关键节点。同日，Anthropic正式向SK海力士提出存储半导体供应需求，用于制造其自研芯片。此外，SK集团还计划在未来五年内额外寻求2500亿美元的全球存储供应合作，进一步巩固其在AI存储供应链中的核心地位。（李 平）"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_43f6183260",
+          "event_type": "major_order",
+          "funding_round": "",
+          "quote": "三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。",
+          "claim_id": "c_43f6183260",
+          "span_id": "s_95d8804c60af",
+          "char_start": 172,
+          "char_end": 256,
+          "subject_hint": "",
+          "action_hint": "major_order",
+          "event_status_hint": "mixed",
+          "time_hints": [
+            "2025年",
+            "2026年"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_afb39b3c4070",
+              "span_id": "s_95d8804c60af",
+              "char_start": 172,
+              "char_end": 256,
+              "text": "三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。",
+              "action_text": "其代工部门已于2025年下半年启动2纳米第一代工艺量产，",
+              "event_status": "started"
+            },
+            {
+              "claim_id": "ac_ccebfa412ac6",
+              "span_id": "s_95d8804c60af",
+              "char_start": 172,
+              "char_end": 256,
+              "text": "三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。",
+              "action_text": "计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，",
+              "event_status": "target"
+            },
+            {
+              "claim_id": "ac_29489718d60d",
+              "span_id": "s_95d8804c60af",
+              "char_start": 172,
+              "char_end": 256,
+              "text": "三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。",
+              "action_text": "已获得特斯拉车规级2纳米产品订单。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_29489718d60d",
+            "ac_ccebfa412ac6",
+            "ac_afb39b3c4070"
+          ]
+        },
+        {
+          "id": "c_83d8b0b397",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。",
+          "claim_id": "c_83d8b0b397",
+          "span_id": "s_95d8804c60af",
+          "char_start": 172,
+          "char_end": 256,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "mixed",
+          "time_hints": [
+            "2025年",
+            "2026年"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_6de50c421ce1",
+              "span_id": "s_95d8804c60af",
+              "char_start": 172,
+              "char_end": 256,
+              "text": "三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。",
+              "action_text": "其代工部门已于2025年下半年启动2纳米第一代工艺量产，",
+              "event_status": "started"
+            },
+            {
+              "claim_id": "ac_e5da38cd22d0",
+              "span_id": "s_95d8804c60af",
+              "char_start": 172,
+              "char_end": 256,
+              "text": "三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。",
+              "action_text": "计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，",
+              "event_status": "target"
+            },
+            {
+              "claim_id": "ac_88474772b11c",
+              "span_id": "s_95d8804c60af",
+              "char_start": 172,
+              "char_end": 256,
+              "text": "三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。",
+              "action_text": "已获得特斯拉车规级2纳米产品订单。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_e5da38cd22d0",
+            "ac_88474772b11c",
+            "ac_6de50c421ce1"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "ac_ccebfa412ac6",
+            "disposition": "rejected",
+            "reason_code": "not_current_independent_company_event"
+          },
+          {
+            "claim_id": "ac_29489718d60d",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          },
+          {
+            "claim_id": "ac_afb39b3c4070",
+            "disposition": "rejected",
+            "reason_code": "not_current_independent_company_event"
+          },
+          {
+            "claim_id": "ac_88474772b11c",
+            "disposition": "rejected",
+            "reason_code": "not_current_independent_company_event"
+          },
+          {
+            "claim_id": "ac_6de50c421ce1",
+            "disposition": "rejected",
+            "reason_code": "not_current_independent_company_event"
+          },
+          {
+            "claim_id": "ac_e5da38cd22d0",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "三星电子",
+            "event_type": "technical_milestone",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 74,
+              "text": "本报讯 7月27日，三星电子半导体透露，下一代HBM5内存的基础芯片将采用GAA（全环绕栅极）结构的2纳米制程，并实现更高集成度的TSV硅通孔互连。"
+            }
+          },
+          {
+            "canonical_company": "三星电子",
+            "event_type": "technical_milestone",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [
+              "ac_e5da38cd22d0"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 256,
+              "text": "本报讯 7月27日，三星电子半导体透露，下一代HBM5内存的基础芯片将采用GAA（全环绕栅极）结构的2纳米制程，并实现更高集成度的TSV硅通孔互连。据悉，HBM5的运行速度目标较HBM4E提升50%以上，因此在基础芯片上必须引入能在速度与电力效率两个维度均实现大幅跃升的最先进制程。这是三星迄今对外阐述的最明确的HBM5技术规格与制程路线图。\n三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。"
+            }
+          },
+          {
+            "canonical_company": "三星电子",
+            "event_type": "major_order",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [
+              "ac_29489718d60d"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 256,
+              "text": "本报讯 7月27日，三星电子半导体透露，下一代HBM5内存的基础芯片将采用GAA（全环绕栅极）结构的2纳米制程，并实现更高集成度的TSV硅通孔互连。据悉，HBM5的运行速度目标较HBM4E提升50%以上，因此在基础芯片上必须引入能在速度与电力效率两个维度均实现大幅跃升的最先进制程。这是三星迄今对外阐述的最明确的HBM5技术规格与制程路线图。\n三星同时披露，其代工部门已于2025年下半年启动2纳米第一代工艺量产，计划2026年下半年量产性能与良率进一步提升的第二代2纳米工艺，已获得特斯拉车规级2纳米产品订单。"
+            }
+          },
+          {
+            "canonical_company": "Anthropic",
+            "event_type": "major_order",
+            "event_status": "started",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 411,
+              "char_end": 453,
+              "text": "同日，Anthropic正式向SK海力士提出存储半导体供应需求，用于制造其自研芯片。"
+            }
+          },
+          {
+            "canonical_company": "SK集团",
+            "event_type": "partnership",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 453,
+              "char_end": 511,
+              "text": "此外，SK集团还计划在未来五年内额外寻求2500亿美元的全球存储供应合作，进一步巩固其在AI存储供应链中的核心地位。"
+            }
+          }
+        ],
+        "article_notes": "2025?????????????????2????????????target???????Anthropic?????SK????????????",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "?????2??????????????technical_milestone??claim??????capacity claim?Anthropic?????major_order/started???"
+      }
+    },
+    {
+      "key": "fusion-industry-media:general-fusion-10-spac",
+      "article_sha256": "5d328f0b3c51ffda9e6813517648aafb17a39a35f5c62c25625864303f31db66",
+      "source_id": "fusion-industry-media",
+      "canonical_url": "https://www.nuclear-fusion.com.cn/blog/general-fusion-10-spac",
+      "published_at": "2026-01-23T00:00:00+08:00",
+      "title": "路透社：General Fusion将通过10亿美元的SPAC交易在纳斯达克上市，有望成为全球首家纯聚变上市公司",
+      "document_type": "roadmap",
+      "clean_body": "1月22日，加拿大核聚变技术公司通用聚变（General Fusion）宣布与特殊目的收购公司Spring Valley Acquisition Corp. III（纳斯达克代码：SVAC）签署最终业务合并协议，交易估值达10亿美元。该交易预计于2026年年中完成交割，若顺利推进，合并后的公司计划在纳斯达克上市，股票代码定为“GFUZ”。此举若成行，General Fusion有望成为全球首家登陆公开市场的纯粹核聚变能源公司。 一、上市背景：从资金困境到资本驱动的快速转身 此次SPAC合并并非突然之举，而是General Fusion在资本压力与技术攻坚双重驱动下的必然选择。早在2025年12月初就有传言以PenderFund为代表的投资者正推动General Fusion尽快登陆资本市场。投资者期望借助当前市场对核能领域的热度，进一步提升公司价值，其潜在上市路径可能效仿加拿大同行Xanadu，通过与特殊目的收购公司（SPAC）合并的方式快速实现上市。如今该消息得到了证实。（SPAC全称“Special Purpose Acquisition Company”，通俗说就是“专门为收购其他公司而成立的‘空壳公司’”——它本身没有实际业务。） 这一资本运作的落地，正是建立在公司2025年从资金危机到连续获投的戏剧性转折之上： 年初危机：因1.25亿美元融资目标未达成，公司于5月裁员25%（约35人），缩减非核心业务，集中资源保障LM26装置研发； 续命融资：8月通过“付费参与（Pay-to-Play）”条款，要求老股东按比例跟投，快速筹集3000万加元渡过难关； 年底冲刺：12月9日完成5150万加元（约3677万美元）新一轮融资，其中近5110万加元通过“未来股权简单协议（SAFEs）”募集——该工具允许投资者先注资、待上市或下一轮融资时再折算股份，大幅加速资金到位；剩余部分以普通股认股权证形式筹集，为上市铺路。 二、核心技术：二十年磨一剑的磁化靶聚变（MTF） General Fusion的核心竞争力源于其二十年深耕的磁化靶聚变技术。与传统核裂变或依赖超导磁体、高功率激光器的聚变路径不同，MTF技术通过机械压缩等离子体实现聚变反应，避免了昂贵设备的依赖，大幅降低了商业化门槛。该公司拥有210项已授权及待批专利，技术成熟度处于行业前列。 当前，General Fusion正全力推进其劳森26号机（LM26），在不到两年的时间内完成设计、建造并投入运行。LM26是首个达到商业规模的MTF示范装置，它利用锂衬里机械压缩等离子体，其直径为商业规模的50%旨在实现三大关键技术里程碑： 1千电子伏（约1000万摄氏度）等离子体加热； 10千电子伏（约1亿摄氏度）等离子体加热； 达到“劳森判据”（即等离子体产生净能量增益）。 技术进展：2025年3月，LM26成功产生聚变所需的磁化等离子体，但实现1亿摄氏度反应温度与能量收支平衡（Q=1）仍需资金支持。此次合并所获资金将重点投入LM26项目，目标是在未来几年内以可商业化的规模验证MTF技术的可行性。 三、资本运作：10亿美元估值与超额认购的PIPE融资 此次交易对合并后实体的估值约为10亿美元，资金结构包括： SVAC信托资本：2.3亿美元（假设无股东赎回）； PIPE融资：1.05亿美元，来自机构投资者的超额认购。 General Fusion在交易前已累计融资超过4亿美元，投资者包括机构资本、风险投资公司及政府拨款。此次SPAC合并不仅提供了上市平台，更通过Spring Valley团队在能源领域的资本运作经验（如曾主导NuScale Power上市），为聚变技术的商业化注入强劲动力。 四、市场驱动力：电力需求爆发与聚变能源的竞争优势 国际能源署（IEA）《2025年世界能源展望》预测，到2035年，全球电力需求将因人工智能、数据中心、电动汽车及制造业电气化增长40%-50%。仅美国数据中心能耗就可能在2028年前翻番甚至翻两番。在此背景下，聚变能源的潜力尤为凸显： 能量密度：国际原子能机构数据显示，聚变燃料单位能量产出是核裂变的4倍，是化石燃料的400万倍； 成本与环保：拉扎德2025年报告《平准化能源成本+》指出，聚变能源的平准化成本（LCOE）具备竞争力，且核废料更少、燃料成本更低、监管负担更轻。 General Fusion CEO Greg Twinney直言：“能源需求巨大，现有技术无法满足。我们正与潜在客户合作，确保未来聚变电站可被融资、建设和运营。” 五、团队背景：技术、商业与资本的强强联合 General Fusion管理层：CEO Greg Twinney拥有20年新技术商业化经验，曾主导多家公司IPO与并购；首席科学官Michel Laberge博士为技术创始人；首席战略官Megan Wilson曾任巴Babcock & Wilcox高管，具备能源行业深厚背景。 Spring Valley团队：董事长Chris Sorrells在能源与脱碳领域有30年经验，曾参与NuScale上市、雪佛龙收购可再生能源集团等重大交易。其团队在过去30年完成50余笔能源交易，参与创建17家上市公司。 General Fusion的上市被视为核聚变能源从“科研探索”迈向“商业应用”的分水岭。若LM26示范成功，公司计划于2030年代中期建成全球首座商用聚变电站，为全球能源转型提供“清洁、可持续、可靠的基础负荷电力”。Spring Valley团队强调：“我们相信General Fusion不仅拥有技术，更具备引领全球能源网络变革的团队与执行力。” 此次合并预计于2026年中期完成，需满足监管审批与股东批准等惯例条件。General Fusion的上市进程，将为全球聚变能源行业树立商业化标杆，其后续技术突破与市场拓展，或将重塑未来能源格局。",
+      "document_units": [
+        {
+          "unit_id": "u_351c89a4db64",
+          "char_start": 0,
+          "char_end": 2435,
+          "text": "1月22日，加拿大核聚变技术公司通用聚变（General Fusion）宣布与特殊目的收购公司Spring Valley Acquisition Corp. III（纳斯达克代码：SVAC）签署最终业务合并协议，交易估值达10亿美元。该交易预计于2026年年中完成交割，若顺利推进，合并后的公司计划在纳斯达克上市，股票代码定为“GFUZ”。此举若成行，General Fusion有望成为全球首家登陆公开市场的纯粹核聚变能源公司。 一、上市背景：从资金困境到资本驱动的快速转身 此次SPAC合并并非突然之举，而是General Fusion在资本压力与技术攻坚双重驱动下的必然选择。早在2025年12月初就有传言以PenderFund为代表的投资者正推动General Fusion尽快登陆资本市场。投资者期望借助当前市场对核能领域的热度，进一步提升公司价值，其潜在上市路径可能效仿加拿大同行Xanadu，通过与特殊目的收购公司（SPAC）合并的方式快速实现上市。如今该消息得到了证实。（SPAC全称“Special Purpose Acquisition Company”，通俗说就是“专门为收购其他公司而成立的‘空壳公司’”——它本身没有实际业务。） 这一资本运作的落地，正是建立在公司2025年从资金危机到连续获投的戏剧性转折之上： 年初危机：因1.25亿美元融资目标未达成，公司于5月裁员25%（约35人），缩减非核心业务，集中资源保障LM26装置研发； 续命融资：8月通过“付费参与（Pay-to-Play）”条款，要求老股东按比例跟投，快速筹集3000万加元渡过难关； 年底冲刺：12月9日完成5150万加元（约3677万美元）新一轮融资，其中近5110万加元通过“未来股权简单协议（SAFEs）”募集——该工具允许投资者先注资、待上市或下一轮融资时再折算股份，大幅加速资金到位；剩余部分以普通股认股权证形式筹集，为上市铺路。 二、核心技术：二十年磨一剑的磁化靶聚变（MTF） General Fusion的核心竞争力源于其二十年深耕的磁化靶聚变技术。与传统核裂变或依赖超导磁体、高功率激光器的聚变路径不同，MTF技术通过机械压缩等离子体实现聚变反应，避免了昂贵设备的依赖，大幅降低了商业化门槛。该公司拥有210项已授权及待批专利，技术成熟度处于行业前列。 当前，General Fusion正全力推进其劳森26号机（LM26），在不到两年的时间内完成设计、建造并投入运行。LM26是首个达到商业规模的MTF示范装置，它利用锂衬里机械压缩等离子体，其直径为商业规模的50%旨在实现三大关键技术里程碑： 1千电子伏（约1000万摄氏度）等离子体加热； 10千电子伏（约1亿摄氏度）等离子体加热； 达到“劳森判据”（即等离子体产生净能量增益）。 技术进展：2025年3月，LM26成功产生聚变所需的磁化等离子体，但实现1亿摄氏度反应温度与能量收支平衡（Q=1）仍需资金支持。此次合并所获资金将重点投入LM26项目，目标是在未来几年内以可商业化的规模验证MTF技术的可行性。 三、资本运作：10亿美元估值与超额认购的PIPE融资 此次交易对合并后实体的估值约为10亿美元，资金结构包括： SVAC信托资本：2.3亿美元（假设无股东赎回）； PIPE融资：1.05亿美元，来自机构投资者的超额认购。 General Fusion在交易前已累计融资超过4亿美元，投资者包括机构资本、风险投资公司及政府拨款。此次SPAC合并不仅提供了上市平台，更通过Spring Valley团队在能源领域的资本运作经验（如曾主导NuScale Power上市），为聚变技术的商业化注入强劲动力。 四、市场驱动力：电力需求爆发与聚变能源的竞争优势 国际能源署（IEA）《2025年世界能源展望》预测，到2035年，全球电力需求将因人工智能、数据中心、电动汽车及制造业电气化增长40%-50%。仅美国数据中心能耗就可能在2028年前翻番甚至翻两番。在此背景下，聚变能源的潜力尤为凸显： 能量密度：国际原子能机构数据显示，聚变燃料单位能量产出是核裂变的4倍，是化石燃料的400万倍； 成本与环保：拉扎德2025年报告《平准化能源成本+》指出，聚变能源的平准化成本（LCOE）具备竞争力，且核废料更少、燃料成本更低、监管负担更轻。 General Fusion CEO Greg Twinney直言：“能源需求巨大，现有技术无法满足。我们正与潜在客户合作，确保未来聚变电站可被融资、建设和运营。” 五、团队背景：技术、商业与资本的强强联合 General Fusion管理层：CEO Greg Twinney拥有20年新技术商业化经验，曾主导多家公司IPO与并购；首席科学官Michel Laberge博士为技术创始人；首席战略官Megan Wilson曾任巴Babcock & Wilcox高管，具备能源行业深厚背景。 Spring Valley团队：董事长Chris Sorrells在能源与脱碳领域有30年经验，曾参与NuScale上市、雪佛龙收购可再生能源集团等重大交易。其团队在过去30年完成50余笔能源交易，参与创建17家上市公司。 General Fusion的上市被视为核聚变能源从“科研探索”迈向“商业应用”的分水岭。若LM26示范成功，公司计划于2030年代中期建成全球首座商用聚变电站，为全球能源转型提供“清洁、可持续、可靠的基础负荷电力”。Spring Valley团队强调：“我们相信General Fusion不仅拥有技术，更具备引领全球能源网络变革的团队与执行力。” 此次合并预计于2026年中期完成，需满足监管审批与股东批准等惯例条件。General Fusion的上市进程，将为全球聚变能源行业树立商业化标杆，其后续技术突破与市场拓展，或将重塑未来能源格局。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_80d5aa61b8",
+          "event_type": "merger_acquisition",
+          "funding_round": "",
+          "quote": "1月22日，加拿大核聚变技术公司通用聚变（General Fusion）宣布与特殊目的收购公司Spring Valley Acquisition Corp. III（纳斯达克代码：SVAC）签署最终业务合并协议，交易估值达10亿美元。",
+          "claim_id": "c_80d5aa61b8",
+          "span_id": "s_a1b686568496",
+          "char_start": 0,
+          "char_end": 117,
+          "subject_hint": "",
+          "action_hint": "merger_acquisition",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "1月22日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_b784b0899b31",
+              "span_id": "s_a1b686568496",
+              "char_start": 0,
+              "char_end": 117,
+              "text": "1月22日，加拿大核聚变技术公司通用聚变（General Fusion）宣布与特殊目的收购公司Spring Valley Acquisition Corp. III（纳斯达克代码：SVAC）签署最终业务合并协议，交易估值达10亿美元。",
+              "action_text": "加拿大核聚变技术公司通用聚变（General Fusion）宣布与特殊目的收购公司Spring Valley Acquisition Corp. III（纳斯达克代码：SVAC）签署最终业务合并协议，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_80d5aa61b8"
+          ]
+        },
+        {
+          "id": "c_80bb79fbfe",
+          "event_type": "merger_acquisition",
+          "funding_round": "",
+          "quote": "该交易预计于2026年年中完成交割，若顺利推进，合并后的公司计划在纳斯达克上市，股票代码定为“GFUZ”。",
+          "claim_id": "c_80bb79fbfe",
+          "span_id": "s_d6b0857c4e3e",
+          "char_start": 117,
+          "char_end": 170,
+          "subject_hint": "",
+          "action_hint": "merger_acquisition",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "2026年"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_6563a710cb99",
+              "span_id": "s_d6b0857c4e3e",
+              "char_start": 117,
+              "char_end": 170,
+              "text": "该交易预计于2026年年中完成交割，若顺利推进，合并后的公司计划在纳斯达克上市，股票代码定为“GFUZ”。",
+              "action_text": "该交易预计于2026年年中完成交割，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_8b9695d27c42",
+              "span_id": "s_d6b0857c4e3e",
+              "char_start": 117,
+              "char_end": 170,
+              "text": "该交易预计于2026年年中完成交割，若顺利推进，合并后的公司计划在纳斯达克上市，股票代码定为“GFUZ”。",
+              "action_text": "合并后的公司计划在纳斯达克上市，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_8b9695d27c42",
+            "ac_6563a710cb99"
+          ]
+        },
+        {
+          "id": "c_fc4a294136",
+          "event_type": "new_site_or_entity",
+          "funding_round": "",
+          "quote": "（SPAC全称“Special Purpose Acquisition Company”，通俗说就是“专门为收购其他公司而成立的‘空壳公司’”——它本身没有实际业务。",
+          "claim_id": "c_fc4a294136",
+          "span_id": "s_11910767f007",
+          "char_start": 443,
+          "char_end": 526,
+          "subject_hint": "",
+          "action_hint": "new_site_or_entity",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_602f909f76a1",
+              "span_id": "s_11910767f007",
+              "char_start": 443,
+              "char_end": 526,
+              "text": "（SPAC全称“Special Purpose Acquisition Company”，通俗说就是“专门为收购其他公司而成立的‘空壳公司’”——它本身没有实际业务。",
+              "action_text": "通俗说就是“专门为收购其他公司而成立的‘空壳公司’”——它本身没有实际业务。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_fc4a294136"
+          ]
+        },
+        {
+          "id": "c_a56e696aff",
+          "event_type": "new_site_or_entity",
+          "funding_round": "",
+          "quote": "） 这一资本运作的落地，正是建立在公司2025年从资金危机到连续获投的戏剧性转折之上： 年初危机：因1.25亿美元融资目标未达成，公司于5月裁员25%（约35人），缩减非核心业务，集中资源保障LM26装置研发；",
+          "claim_id": "c_a56e696aff",
+          "span_id": "s_7a29fec774e4",
+          "char_start": 526,
+          "char_end": 631,
+          "subject_hint": "",
+          "action_hint": "new_site_or_entity",
+          "event_status_hint": "target",
+          "time_hints": [
+            "2025年"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_0916163b43f4",
+              "span_id": "s_7a29fec774e4",
+              "char_start": 526,
+              "char_end": 631,
+              "text": "） 这一资本运作的落地，正是建立在公司2025年从资金危机到连续获投的戏剧性转折之上： 年初危机：因1.25亿美元融资目标未达成，公司于5月裁员25%（约35人），缩减非核心业务，集中资源保障LM26装置研发；",
+              "action_text": "正是建立在公司2025年从资金危机到连续获投的戏剧性转折之上： 年初危机：因1.25亿美元融资目标未达成，",
+              "event_status": "target"
+            }
+          ],
+          "required_claim_ids": [
+            "c_a56e696aff"
+          ]
+        },
+        {
+          "id": "c_242179dc69",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "年底冲刺：12月9日完成5150万加元（约3677万美元）新一轮融资，其中近5110万加元通过“未来股权简单协议（SAFEs）”募集——该工具允许投资者先注资、待上市或下一轮融资时再折算股份，大幅加速资金到位；",
+          "subject_hint": "年底冲刺：",
+          "claim_id": "c_242179dc69",
+          "span_id": "s_f2ee927b98b3",
+          "char_start": 691,
+          "char_end": 796,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "12月9日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_79e4585dc618",
+              "span_id": "s_f2ee927b98b3",
+              "char_start": 691,
+              "char_end": 796,
+              "text": "年底冲刺：12月9日完成5150万加元（约3677万美元）新一轮融资，其中近5110万加元通过“未来股权简单协议（SAFEs）”募集——该工具允许投资者先注资、待上市或下一轮融资时再折算股份，大幅加速资金到位；",
+              "action_text": "年底冲刺：12月9日完成5150万加元（约3677万美元）新一轮融资，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_048fe233b69b",
+              "span_id": "s_f2ee927b98b3",
+              "char_start": 691,
+              "char_end": 796,
+              "text": "年底冲刺：12月9日完成5150万加元（约3677万美元）新一轮融资，其中近5110万加元通过“未来股权简单协议（SAFEs）”募集——该工具允许投资者先注资、待上市或下一轮融资时再折算股份，大幅加速资金到位；",
+              "action_text": "其中近5110万加元通过“未来股权简单协议（SAFEs）”募集——该工具允许投资者先注资、待上市或下一轮融资时再折算股份，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_79e4585dc618",
+            "ac_048fe233b69b"
+          ]
+        },
+        {
+          "id": "c_52a545c648",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "其中近5110万加元通过“未来股权简单协议（SAFEs）”募集——该工具允许投资者先注资、待上市或下一轮融资时再折算股份",
+          "claim_id": "c_52a545c648",
+          "span_id": "s_3c1e02a1ee35",
+          "char_start": 726,
+          "char_end": 786,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_f2ed39e2c257",
+              "span_id": "s_3c1e02a1ee35",
+              "char_start": 726,
+              "char_end": 786,
+              "text": "其中近5110万加元通过“未来股权简单协议（SAFEs）”募集——该工具允许投资者先注资、待上市或下一轮融资时再折算股份",
+              "action_text": "其中近5110万加元通过“未来股权简单协议（SAFEs）”募集——该工具允许投资者先注资、待上市或下一轮融资时再折算股份",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_52a545c648"
+          ]
+        },
+        {
+          "id": "c_d5a342f3d4",
+          "event_type": "merger_acquisition",
+          "funding_round": "",
+          "quote": "” 此次合并预计于2026年中期完成，需满足监管审批与股东批准等惯例条件。",
+          "claim_id": "c_d5a342f3d4",
+          "span_id": "s_1d526cbaba86",
+          "char_start": 2336,
+          "char_end": 2373,
+          "subject_hint": "",
+          "action_hint": "merger_acquisition",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "2026年"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_6578c32fe0b7",
+              "span_id": "s_1d526cbaba86",
+              "char_start": 2336,
+              "char_end": 2373,
+              "text": "” 此次合并预计于2026年中期完成，需满足监管审批与股东批准等惯例条件。",
+              "action_text": "” 此次合并预计于2026年中期完成，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_d5a342f3d4"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_80d5aa61b8",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          },
+          {
+            "claim_id": "ac_8b9695d27c42",
+            "disposition": "accepted",
+            "reason_code": "current_company_roadmap"
+          },
+          {
+            "claim_id": "ac_6563a710cb99",
+            "disposition": "accepted",
+            "reason_code": "current_company_roadmap"
+          },
+          {
+            "claim_id": "c_fc4a294136",
+            "disposition": "rejected",
+            "reason_code": "definition_not_company_event"
+          },
+          {
+            "claim_id": "c_a56e696aff",
+            "disposition": "rejected",
+            "reason_code": "historical_background"
+          },
+          {
+            "claim_id": "ac_79e4585dc618",
+            "disposition": "rejected",
+            "reason_code": "historical_background"
+          },
+          {
+            "claim_id": "ac_048fe233b69b",
+            "disposition": "rejected",
+            "reason_code": "historical_background"
+          },
+          {
+            "claim_id": "c_52a545c648",
+            "disposition": "rejected",
+            "reason_code": "historical_duplicate"
+          },
+          {
+            "claim_id": "c_d5a342f3d4",
+            "disposition": "rejected",
+            "reason_code": "duplicate_claim"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "General Fusion",
+            "event_type": "merger_acquisition",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [
+              "c_80d5aa61b8"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 117,
+              "text": "1月22日，加拿大核聚变技术公司通用聚变（General Fusion）宣布与特殊目的收购公司Spring Valley Acquisition Corp. III（纳斯达克代码：SVAC）签署最终业务合并协议，交易估值达10亿美元。"
+            }
+          },
+          {
+            "canonical_company": "General Fusion",
+            "event_type": "merger_acquisition",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [
+              "ac_6563a710cb99"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 170,
+              "text": "1月22日，加拿大核聚变技术公司通用聚变（General Fusion）宣布与特殊目的收购公司Spring Valley Acquisition Corp. III（纳斯达克代码：SVAC）签署最终业务合并协议，交易估值达10亿美元。该交易预计于2026年年中完成交割，若顺利推进，合并后的公司计划在纳斯达克上市，股票代码定为“GFUZ”。"
+            }
+          },
+          {
+            "canonical_company": "General Fusion",
+            "event_type": "ipo_or_listing",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [
+              "ac_8b9695d27c42"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 170,
+              "text": "1月22日，加拿大核聚变技术公司通用聚变（General Fusion）宣布与特殊目的收购公司Spring Valley Acquisition Corp. III（纳斯达克代码：SVAC）签署最终业务合并协议，交易估值达10亿美元。该交易预计于2026年年中完成交割，若顺利推进，合并后的公司计划在纳斯达克上市，股票代码定为“GFUZ”。"
+            }
+          },
+          {
+            "canonical_company": "General Fusion",
+            "event_type": "partnership",
+            "event_status": "started",
+            "importance": "weak",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 1805,
+              "char_end": 1887,
+              "text": "General Fusion CEO Greg Twinney直言：“能源需求巨大，现有技术无法满足。我们正与潜在客户合作，确保未来聚变电站可被融资、建设和运营。”"
+            }
+          },
+          {
+            "canonical_company": "General Fusion",
+            "event_type": "factory_or_capacity",
+            "event_status": "target",
+            "importance": "weak",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 2162,
+              "char_end": 2271,
+              "text": "General Fusion的上市被视为核聚变能源从“科研探索”迈向“商业应用”的分水岭。若LM26示范成功，公司计划于2030年代中期建成全球首座商用聚变电站，为全球能源转型提供“清洁、可持续、可靠的基础负荷电力”。"
+            }
+          }
+        ],
+        "article_notes": "?????????completed???target???target????????2030????????????????2025?????????",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "?????????????????????????partnership/started??????????????factory_or_capacity/target?"
+      }
+    },
+    {
+      "key": "stcn-flash:4051740",
+      "article_sha256": "8f7fe660db583a0d6af8964b6f37f5d34d0e45202a554b72d496de5d0c2500a7",
+      "source_id": "stcn-flash",
+      "canonical_url": "https://www.stcn.com/article/detail/4051740.html",
+      "published_at": "2026-07-31T10:31:40+08:00",
+      "title": "华瓷股份等成立中非经贸深度合作服务基金",
+      "document_type": "long_feature",
+      "clean_body": "人民财讯7月31日电， 企查查APP显示，近日，湖南省金芙蓉中非经贸深度合作服务基金合伙企业（有限合伙）成立，经营范围包含：以私募基金从事股权投资、投资管理、资产管理等活动。企查查股权穿透显示，该企业由华瓷股份等共同出资。",
+      "document_units": [
+        {
+          "unit_id": "u_367088385e84",
+          "char_start": 0,
+          "char_end": 111,
+          "text": "人民财讯7月31日电， 企查查APP显示，近日，湖南省金芙蓉中非经贸深度合作服务基金合伙企业（有限合伙）成立，经营范围包含：以私募基金从事股权投资、投资管理、资产管理等活动。企查查股权穿透显示，该企业由华瓷股份等共同出资。"
+        }
+      ],
+      "candidates": [],
+      "annotation": {
+        "candidate_dispositions": [],
+        "gold_events": [
+          {
+            "canonical_company": "华瓷股份",
+            "event_type": "new_site_or_entity",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 111,
+              "text": "人民财讯7月31日电， 企查查APP显示，近日，湖南省金芙蓉中非经贸深度合作服务基金合伙企业（有限合伙）成立，经营范围包含：以私募基金从事股权投资、投资管理、资产管理等活动。企查查股权穿透显示，该企业由华瓷股份等共同出资。"
+            }
+          }
+        ],
+        "article_notes": "??????????????????????????????????????????",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????????????????????????????????????new_site_or_entity/completed?"
+      }
+    },
+    {
+      "key": "jazzyear-research:164",
+      "article_sha256": "ff26216daf8fa081f5085b814d351050ad3f93a71386caf2c10e01a5d5d018a5",
+      "source_id": "jazzyear-research",
+      "canonical_url": "https://www.jazzyear.com/study_info.html?id=164",
+      "published_at": "2026-03-25T00:00:00+08:00",
+      "title": "AI原生组织：OpenClaw推动组织形态重塑",
+      "document_type": "long_feature",
+      "clean_body": "报告简介：OpenClaw的意义不在于“AI能力增强”，而在于将AI从“认知工具”推进为“执行主体”，从而引发组织形态的范式跃迁：组织的核心不再是“人如何协同”，而是“AI如何被调度”。传统组织在决策、协同与执行层面将会产生颠覆性重塑，需要探索新型组织形态，以满足组织日益增长的智能化变革需求。 为探索组织形态演进的新趋势，甲子光年智库特开展本次研究，提出AI原生组织的新定义，并梳理转型路线图，为行业提供转型方法论的参考。 核心亮点：人工智能经过七十年的发展，已经从生成式AI迈入代理式AI阶段。OpenClaw从初代原型诞生开始，迅速演变成席卷全网的“养虾”热潮，这正是代理式AI真正迈入生产力变革阶段的现实写照。过去大模型受限于对话框交互形态，难以充分释放价值，OpenClaw则突破交互边界，让AI第一次以“数字员工”形态接管工作流，实现跨应用自主执行任务。 OpenClaw的意义不在于“AI能力增强”，而在于将AI从“认知工具”推进为“执行主体”，从而引发组织形态的范式跃迁：组织的核心不再是“人如何协同”，而是“AI如何被调度”。传统组织在决策、协同与执行层面将会产生颠覆性重塑，需要探索新型组织形态，以满足组织日益增长的智能化变革需求。 为探索组织形态演进的新趋势，甲子光年智库提出了代理式AI时代的新型组织形态——AI原生组织。 AI原生组织，是以AI OS为调度中枢、以Agent为执行单元、以动态协同网络为运行机制的新型组织形态 。其典型形态既包括由传统企业演进而来的流态型企业，也包括由传统个体演进而来的生态节点。 甲子智库希望通过定义AI原生组织，为传统企业和个体转型提供一套完整的转型路线图。为此，本报告特意针对AI原生组织的两条转型路径展开分析，为传统企业向流态型企业，传统个体向生态节点的转型提供参考。 报告核心观点： OpenClaw是开源Agent框架，早期定位个人AI助手，目前正向B端场景延展 OpenClaw开启以AI OS为核心的代理执行时代 OpenClaw推动组织形态出现关键跃迁，催生AI原生组织加速到来 AI原生组织是以AI OS为调度中枢、以Agent为执行单元、以动态协同网络为运行机制的新型组织形态 AI原生组织的“五化”特征：系统接口化、经验资产化、交互意图化、协同流态化、接入凭证化 走向AI原生组织有两条路径：企业重构与个体外扩 路径一：从传统企业到流态型企业，构建以意图为中心的无边界立体流态型企业 路径二：从传统个体到生态节点，将个人经验封装为WaaA，成为流态型企业生态中的关键交付节点",
+      "document_units": [
+        {
+          "unit_id": "u_859a43519fa8",
+          "char_start": 0,
+          "char_end": 1078,
+          "text": "报告简介：OpenClaw的意义不在于“AI能力增强”，而在于将AI从“认知工具”推进为“执行主体”，从而引发组织形态的范式跃迁：组织的核心不再是“人如何协同”，而是“AI如何被调度”。传统组织在决策、协同与执行层面将会产生颠覆性重塑，需要探索新型组织形态，以满足组织日益增长的智能化变革需求。 为探索组织形态演进的新趋势，甲子光年智库特开展本次研究，提出AI原生组织的新定义，并梳理转型路线图，为行业提供转型方法论的参考。 核心亮点：人工智能经过七十年的发展，已经从生成式AI迈入代理式AI阶段。OpenClaw从初代原型诞生开始，迅速演变成席卷全网的“养虾”热潮，这正是代理式AI真正迈入生产力变革阶段的现实写照。过去大模型受限于对话框交互形态，难以充分释放价值，OpenClaw则突破交互边界，让AI第一次以“数字员工”形态接管工作流，实现跨应用自主执行任务。 OpenClaw的意义不在于“AI能力增强”，而在于将AI从“认知工具”推进为“执行主体”，从而引发组织形态的范式跃迁：组织的核心不再是“人如何协同”，而是“AI如何被调度”。传统组织在决策、协同与执行层面将会产生颠覆性重塑，需要探索新型组织形态，以满足组织日益增长的智能化变革需求。 为探索组织形态演进的新趋势，甲子光年智库提出了代理式AI时代的新型组织形态——AI原生组织。 AI原生组织，是以AI OS为调度中枢、以Agent为执行单元、以动态协同网络为运行机制的新型组织形态 。其典型形态既包括由传统企业演进而来的流态型企业，也包括由传统个体演进而来的生态节点。 甲子智库希望通过定义AI原生组织，为传统企业和个体转型提供一套完整的转型路线图。为此，本报告特意针对AI原生组织的两条转型路径展开分析，为传统企业向流态型企业，传统个体向生态节点的转型提供参考。 报告核心观点： OpenClaw是开源Agent框架，早期定位个人AI助手，目前正向B端场景延展 OpenClaw开启以AI OS为核心的代理执行时代 OpenClaw推动组织形态出现关键跃迁，催生AI原生组织加速到来 AI原生组织是以AI OS为调度中枢、以Agent为执行单元、以动态协同网络为运行机制的新型组织形态 AI原生组织的“五化”特征：系统接口化、经验资产化、交互意图化、协同流态化、接入凭证化 走向AI原生组织有两条路径：企业重构与个体外扩 路径一：从传统企业到流态型企业，构建以意图为中心的无边界立体流态型企业 路径二：从传统个体到生态节点，将个人经验封装为WaaA，成为流态型企业生态中的关键交付节点"
+        }
+      ],
+      "candidates": [],
+      "annotation": {
+        "candidate_dispositions": [],
+        "gold_events": [],
+        "article_notes": "报告定义、行业趋势与转型方法论不包含可验证的当前公司经营动作。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "beijing-etown-major-projects:20260506_4637931",
+      "article_sha256": "75b8bc37983d510cee7ef457289b42300b5f445ed82e2779437a3fd755e84b29",
+      "source_id": "beijing-etown-major-projects",
+      "canonical_url": "https://kfqgw.beijing.gov.cn/ywdt/gdcyfzgd/zdxm/202605/t20260506_4637931.html",
+      "published_at": "2026-05-06",
+      "title": "国产运动医学第一股诞生 北京亦庄企业天星医疗在港交所挂牌上市",
+      "document_type": "roadmap",
+      "clean_body": "本报讯（融媒体中心 李玉凤）5月5日，随着一声清脆的锣响，北京经济技术开发区（简称北京经开区，又称北京亦庄）企业北京天星医疗股份有限公司（以下简称“天星医疗”，股票代码：01609.HK）正式在香港联合交易所主板挂牌上市，成为国产运动医学领域第一股。 本次港股IPO，天星医疗全球发售H股842.19万股，每股发售价定为98.5港元，上市首日开盘价288港元/股，开盘涨超192%，市值突破157亿港元；募集资金总额约为8.3亿港元，将重点用于智慧工厂建设、创新产品研发、全球营销网络建设等。此外，本次IPO引入JSC International、奥博亚洲四期、大湾区共同家园投资3家知名基石投资者，合计认购约2.88亿港元。香港公开发售认购倍数超7800倍，侧面印证了广大投资人对运动医学赛道优势、企业经营业绩与长期战略发展价值的高度认可。 天星医疗成立于2017年，聚焦肩、膝、髋等关节运动损伤诊疗领域，产品矩阵全面覆盖植入物、手术设备、再生修复及智能康复四大板块，已成为国产运动医学龙头企业。 在核心技术方面，天星医疗在生物可吸收材料制备技术、重载编织植入物制备技术、超高温高分子材料精密注塑成型技术等关键领域实现突破，三项技术被工业和信息化部评定为“国际先进”水平，实现了从原材料、设备、技术到产品的100%进口替代，有效破解了进口企业多年的技术垄断和“卡脖子”难题。目前，天星医疗已成功向中国大陆的3000余家医院供货，其中包括1000多家三级医院，并销往欧洲、中东和东南亚地区等50多个国家和地区，近三年海外收入年复合增长率达到225%。 天星医疗相关负责人表示，上市并非终点，而是履行更大责任、迎接更高发展的新起点。随着募集资金落地、产品矩阵完善与市场渗透深化，天星医疗将进一步巩固国产龙头地位，引领中国运动医学产业突破高端壁垒，迈向全球价值链中高端，为亿万患者提供更优质、更普惠的临床解决方案。随着手术机器人、AI康复智能体、再生医学等创新产品将陆续上市，未来两年公司营收有望保持30%以上的稳定增长。 近年来，北京经开区通过“政策引领+梯队培育+管家服务”相结合的模式，为计划上市企业提供全流程支持。例如，创新发布新的上市专项政策“群雁计划”，从“结果奖励”转向“过程服务”和“培育赋能”，着力完善企业上市服务体系，全方位助力企业登陆资本市场。为企业配置专人管家，持续跟进企业上市进展，响应企业诉求；践行“上市服务专家顾问团队”机制，通过专题培训、“一对一”辅导、“走进交易所”等形式，为企业提供咨询服务等。截至目前，北京经开区年内已新增上市企业4家，上市企业总数达62家，涵盖新一代信息技术、高端汽车和新能源智能汽车、生物技术和大健康、智慧物流等产业领域，形成结构合理、梯次相对完整的上市企业矩阵。同时，储备上市后备企业600余家，其中年内已新增申报企业7家、新增报辅导企业5家，企业上市势头强劲。 下一步，北京经开区将深化落实“群雁计划”，加快创投集聚区建设，持续举办“亦企赢”品牌系列活动，联动更多优质机构完善金融服务矩阵，力争2026年新增上市企业数量“保八争十”。",
+      "document_units": [
+        {
+          "unit_id": "u_c10e2c4cb2bb",
+          "char_start": 0,
+          "char_end": 1296,
+          "text": "本报讯（融媒体中心 李玉凤）5月5日，随着一声清脆的锣响，北京经济技术开发区（简称北京经开区，又称北京亦庄）企业北京天星医疗股份有限公司（以下简称“天星医疗”，股票代码：01609.HK）正式在香港联合交易所主板挂牌上市，成为国产运动医学领域第一股。 本次港股IPO，天星医疗全球发售H股842.19万股，每股发售价定为98.5港元，上市首日开盘价288港元/股，开盘涨超192%，市值突破157亿港元；募集资金总额约为8.3亿港元，将重点用于智慧工厂建设、创新产品研发、全球营销网络建设等。此外，本次IPO引入JSC International、奥博亚洲四期、大湾区共同家园投资3家知名基石投资者，合计认购约2.88亿港元。香港公开发售认购倍数超7800倍，侧面印证了广大投资人对运动医学赛道优势、企业经营业绩与长期战略发展价值的高度认可。 天星医疗成立于2017年，聚焦肩、膝、髋等关节运动损伤诊疗领域，产品矩阵全面覆盖植入物、手术设备、再生修复及智能康复四大板块，已成为国产运动医学龙头企业。 在核心技术方面，天星医疗在生物可吸收材料制备技术、重载编织植入物制备技术、超高温高分子材料精密注塑成型技术等关键领域实现突破，三项技术被工业和信息化部评定为“国际先进”水平，实现了从原材料、设备、技术到产品的100%进口替代，有效破解了进口企业多年的技术垄断和“卡脖子”难题。目前，天星医疗已成功向中国大陆的3000余家医院供货，其中包括1000多家三级医院，并销往欧洲、中东和东南亚地区等50多个国家和地区，近三年海外收入年复合增长率达到225%。 天星医疗相关负责人表示，上市并非终点，而是履行更大责任、迎接更高发展的新起点。随着募集资金落地、产品矩阵完善与市场渗透深化，天星医疗将进一步巩固国产龙头地位，引领中国运动医学产业突破高端壁垒，迈向全球价值链中高端，为亿万患者提供更优质、更普惠的临床解决方案。随着手术机器人、AI康复智能体、再生医学等创新产品将陆续上市，未来两年公司营收有望保持30%以上的稳定增长。 近年来，北京经开区通过“政策引领+梯队培育+管家服务”相结合的模式，为计划上市企业提供全流程支持。例如，创新发布新的上市专项政策“群雁计划”，从“结果奖励”转向“过程服务”和“培育赋能”，着力完善企业上市服务体系，全方位助力企业登陆资本市场。为企业配置专人管家，持续跟进企业上市进展，响应企业诉求；践行“上市服务专家顾问团队”机制，通过专题培训、“一对一”辅导、“走进交易所”等形式，为企业提供咨询服务等。截至目前，北京经开区年内已新增上市企业4家，上市企业总数达62家，涵盖新一代信息技术、高端汽车和新能源智能汽车、生物技术和大健康、智慧物流等产业领域，形成结构合理、梯次相对完整的上市企业矩阵。同时，储备上市后备企业600余家，其中年内已新增申报企业7家、新增报辅导企业5家，企业上市势头强劲。 下一步，北京经开区将深化落实“群雁计划”，加快创投集聚区建设，持续举办“亦企赢”品牌系列活动，联动更多优质机构完善金融服务矩阵，力争2026年新增上市企业数量“保八争十”。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_528bdac8fa",
+          "event_type": "ipo_or_listing",
+          "funding_round": "",
+          "quote": "本报讯（融媒体中心 李玉凤）5月5日，随着一声清脆的锣响，北京经济技术开发区（简称北京经开区，又称北京亦庄）企业北京天星医疗股份有限公司（以下简称“天星医疗”，股票代码：01609.HK）正式在香港联合交易所主板挂牌上市，成为国产运动医学领域第一股。",
+          "claim_id": "c_528bdac8fa",
+          "span_id": "s_43c8aeb492c6",
+          "char_start": 0,
+          "char_end": 125,
+          "subject_hint": "",
+          "action_hint": "ipo_or_listing",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "5月5日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_84e91f40becd",
+              "span_id": "s_43c8aeb492c6",
+              "char_start": 0,
+              "char_end": 125,
+              "text": "本报讯（融媒体中心 李玉凤）5月5日，随着一声清脆的锣响，北京经济技术开发区（简称北京经开区，又称北京亦庄）企业北京天星医疗股份有限公司（以下简称“天星医疗”，股票代码：01609.HK）正式在香港联合交易所主板挂牌上市，成为国产运动医学领域第一股。",
+              "action_text": "股票代码：01609.HK）正式在香港联合交易所主板挂牌上市，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_528bdac8fa"
+          ]
+        },
+        {
+          "id": "c_342fe2297f",
+          "event_type": "ipo_or_listing",
+          "funding_round": "",
+          "quote": "本次港股IPO，天星医疗全球发售H股842.19万股，每股发售价定为98.5港元，上市首日开盘价288港元/股，开盘涨超192%，市值突破157亿港元；",
+          "claim_id": "c_342fe2297f",
+          "span_id": "s_3eb3a62b1697",
+          "char_start": 126,
+          "char_end": 202,
+          "subject_hint": "",
+          "action_hint": "ipo_or_listing",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_ed52b231e4f8",
+              "span_id": "s_3eb3a62b1697",
+              "char_start": 126,
+              "char_end": 202,
+              "text": "本次港股IPO，天星医疗全球发售H股842.19万股，每股发售价定为98.5港元，上市首日开盘价288港元/股，开盘涨超192%，市值突破157亿港元；",
+              "action_text": "上市首日开盘价288港元/股，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_342fe2297f"
+          ]
+        },
+        {
+          "id": "c_32305f6c2b",
+          "event_type": "policy_or_standard",
+          "funding_round": "",
+          "quote": "例如，创新发布新的上市专项政策“群雁计划”，从“结果奖励”转向“过程服务”和“培育赋能”，着力完善企业上市服务体系，全方位助力企业登陆资本市场。",
+          "claim_id": "c_32305f6c2b",
+          "span_id": "s_2f9d72aea5c4",
+          "char_start": 909,
+          "char_end": 981,
+          "subject_hint": "",
+          "action_hint": "policy_or_standard",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_8ccdb6059144",
+              "span_id": "s_2f9d72aea5c4",
+              "char_start": 909,
+              "char_end": 981,
+              "text": "例如，创新发布新的上市专项政策“群雁计划”，从“结果奖励”转向“过程服务”和“培育赋能”，着力完善企业上市服务体系，全方位助力企业登陆资本市场。",
+              "action_text": "创新发布新的上市专项政策“群雁计划”，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_8e6f968f3bc0",
+              "span_id": "s_2f9d72aea5c4",
+              "char_start": 909,
+              "char_end": 981,
+              "text": "例如，创新发布新的上市专项政策“群雁计划”，从“结果奖励”转向“过程服务”和“培育赋能”，着力完善企业上市服务体系，全方位助力企业登陆资本市场。",
+              "action_text": "着力完善企业上市服务体系，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_8ccdb6059144",
+            "ac_8e6f968f3bc0"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_528bdac8fa",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          },
+          {
+            "claim_id": "c_342fe2297f",
+            "disposition": "rejected",
+            "reason_code": "duplicate_same_ipo_event"
+          },
+          {
+            "claim_id": "ac_8ccdb6059144",
+            "disposition": "rejected",
+            "reason_code": "invalid_government_subject"
+          },
+          {
+            "claim_id": "ac_8e6f968f3bc0",
+            "disposition": "rejected",
+            "reason_code": "invalid_government_subject"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "????????????",
+            "event_type": "ipo_or_listing",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [
+              "c_528bdac8fa"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 125,
+              "text": "本报讯（融媒体中心 李玉凤）5月5日，随着一声清脆的锣响，北京经济技术开发区（简称北京经开区，又称北京亦庄）企业北京天星医疗股份有限公司（以下简称“天星医疗”，股票代码：01609.HK）正式在香港联合交易所主板挂牌上市，成为国产运动医学领域第一股。"
+            }
+          },
+          {
+            "canonical_company": "????????????",
+            "event_type": "technical_milestone",
+            "event_status": "target",
+            "importance": "weak",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 676,
+              "char_end": 859,
+              "text": "天星医疗相关负责人表示，上市并非终点，而是履行更大责任、迎接更高发展的新起点。随着募集资金落地、产品矩阵完善与市场渗透深化，天星医疗将进一步巩固国产龙头地位，引领中国运动医学产业突破高端壁垒，迈向全球价值链中高端，为亿万患者提供更优质、更普惠的临床解决方案。随着手术机器人、AI康复智能体、再生医学等创新产品将陆续上市，未来两年公司营收有望保持30%以上的稳定增长。"
+            }
+          }
+        ],
+        "article_notes": "???????????????AI???????????????????target??????????????????",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "????????????????????????????????????????????????"
+      }
+    },
+    {
+      "key": "ccid-report-commentary:1121916",
+      "article_sha256": "bfce03756d5a1b626d24a29b376064eb3c9aecc427bc6713e880d991451fc747",
+      "source_id": "ccid-report-commentary",
+      "canonical_url": "https://www.ccidreport.com/zjgd2/1121916.jhtml",
+      "published_at": "2026-07-30T00:00:00+08:00",
+      "title": "《21世纪经济报道》| 关兵：工业出现结构分化，政策应兼顾传统和新兴产业",
+      "document_type": "commentary",
+      "clean_body": "近日，国家统计局公布上半年经济数据，初步核算，上半年国内生产总值695704亿元，按不变价格计算，同比增长4.7%。如何看待上半年整体经济态势？如何评价工业板块的整体表现？新动能增长势头的可持续性如何？ 围绕相关热点话题，21世纪经济报道记者采访了中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵。 关兵表示，上半年GDP增速在预期内，也具有一定含金量。从外部看，中东冲突等突发事件对全球经济产生干扰，我国经济挺过这次冲击，经济和社会民生保持整体稳定，彰显了较强的韧性。从内部看，在消费、投资等数据表现不佳的情况下，我国工业经济仍实现了较快增长，彰显了新兴产业的发展潜力。新动能对工业增长的支撑作用正在持续释放。 “下半年看，这种增长态势有望进一步持续。”关兵表示，从技术看，AI产品创新和产业化应用仍处于起步阶段，技术持续演进的趋势不会改变；从消费看，AI终端产品消费潜力持续释放的态势不会改变。下半年，在政策方面，供给侧应兼顾传统产业转型升级和新兴产业培育壮大；需求侧应加大力度扩大内需，形成畅通的国内经济大循环。 中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵 AI产业化应用仍处起步阶段 《21世纪》：上半年GDP增长4.7%，落在年初预期目标区间之内。你如何看待上半年整体的经济态势？上半年，全国规模以上工业增加值同比增长5.4%。你如何评价中国经济“半年报”中工业板块的整体表现？ 中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵：上半年GDP增速在预期内，也具有一定含金量。从外部看，中东局势等突发事件对全球经济产生干扰，我国经济挺过这次冲击，经济和社会民生保持整体稳定，彰显了较强的韧性。从内部看，在消费、投资等数据表现不佳的情况下，我国工业经济仍实现了较快增长，彰显了新兴产业的发展潜力。IMF等主要国际机构因看好中国新兴产业，近期调高了我国全年经济增速预期。因此，4.7%的增速体现了我国“高质量发展”的成效。 在消费、投资等数据走低的情况下，经济“半年报”中工业数据的表现可以说很“亮眼”，规模以上工业增加值增速比GDP增速高0.7个百分点，工业对经济增长的贡献率超35%，工业在“稳大盘”中的作用依然稳固。 《21世纪》：经初步测算，上半年，以高技术制造业、数字产品制造业等为代表的新动能领域对规模以上工业增加值增长的贡献率为47.9%，较上年全年提高12个百分点。这是否意味着新动能已经转化为“增长主力”？你如何判断新动能的后续态势？ 中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵：上半年高技术制造业增加值同比增长13.3%，装备制造业增加值同比增长9.3%，集成电路、工业机器人等产品产量快速增长。尽管新动能未能完全弥补传统动能的增长缺口，但新动能对工业增长的支撑作用正在持续释放。这种增长一方面得益于我国持续不断的创新发展和深厚的产业积累，另一方面得益于全球范围内AI从技术研发到产业化应用的显著提速，在内外因素叠加的背景下，新动能表现十分抢眼。 下半年看，这种增长态势有望进一步持续：一是从导向看，我国发展新质生产力的方向不会改变，各类赛道均有布局，新动能陆续涌现的趋势不会改变；二是从技术看，AI产品创新和产业化应用仍处于起步阶段，技术持续演进的趋势不会改变；三是从消费看，AI终端产品持续满足人民美好生活需要，消费潜力持续释放的态势不会改变。因此，新动能仍将保持较快增长态势。 需求侧应加力扩内需 《21世纪》：6月制造业PMI为50.3%，重回扩张区间，企业生产经营活动预期指数为54.3%。你对下半年的工业经济走势有何预判？你认为当前还需要哪些精准政策来巩固工业向好态势？ 中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵：下半年看，全球人工智能发展方兴未艾，部分发展中国家工业化进程仍在提速，我国工业经济增长新动能持续释放；与此同时，在政策支持下，我国在扩内需、稳投资等方面仍将持续发力，消费有望稳步回升。供需双向发力下，工业经济在下半年有望保持稳步增长态势。 在工业经济总体向好的情况下，内部结构性分化较为明显：一方面，新旧动能分化趋势更为明显，AI和绿色转型相关的产业发展良好，传统产业增长动力不足；另一方面，供需分化趋势更为明显，内需不足仍是制约工业经济增长的突出问题，外需增长较快，但仍面临不确定性风险，经济增长的持续性和稳定性仍需关注。 因此，政策在供给侧应兼顾传统产业转型升级和新兴产业培育壮大，在需求侧应加大力度扩大内需，形成畅通的国内经济大循环。 《21世纪》：赛迪研究院方面曾研究指出，全球工业化已进入由技术突破、范式转换、组织重构和治理调整共同驱动的深刻变革期。对于中国而言，这个“深刻变革期”意味着什么？从上半年数据看，中国工业在国际坐标中处于什么位置？与主要经济体相比，各自在“变革期”中的演进路径有何不同？ 中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵：从运行角度看，深刻变革期意味着我们要适应外部形势变化、技术演进趋势和产业发展规律，从产业培育、要素重组、产业治理、国际合作等方面重新思考工业增长的底层逻辑和动力来源，在外部不确定性中寻求稳定的增长元素。 从上半年的数据看，我国工业经济依然保持稳步增长，制造业第一大国的地位仍然稳固。但也应看到，在这轮变革期中，尽管各国在产业发展重点、风险管控态度、产业政策等方面有所不同，但不约而同地将制造业提升至国家战略高度，传统资源、能源以及战略性新兴产业等领域的竞争空前激烈，我国制造业大国地位仍面临多重挑战。",
+      "document_units": [
+        {
+          "unit_id": "u_c9aaf39bd999",
+          "char_start": 0,
+          "char_end": 2308,
+          "text": "近日，国家统计局公布上半年经济数据，初步核算，上半年国内生产总值695704亿元，按不变价格计算，同比增长4.7%。如何看待上半年整体经济态势？如何评价工业板块的整体表现？新动能增长势头的可持续性如何？ 围绕相关热点话题，21世纪经济报道记者采访了中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵。 关兵表示，上半年GDP增速在预期内，也具有一定含金量。从外部看，中东冲突等突发事件对全球经济产生干扰，我国经济挺过这次冲击，经济和社会民生保持整体稳定，彰显了较强的韧性。从内部看，在消费、投资等数据表现不佳的情况下，我国工业经济仍实现了较快增长，彰显了新兴产业的发展潜力。新动能对工业增长的支撑作用正在持续释放。 “下半年看，这种增长态势有望进一步持续。”关兵表示，从技术看，AI产品创新和产业化应用仍处于起步阶段，技术持续演进的趋势不会改变；从消费看，AI终端产品消费潜力持续释放的态势不会改变。下半年，在政策方面，供给侧应兼顾传统产业转型升级和新兴产业培育壮大；需求侧应加大力度扩大内需，形成畅通的国内经济大循环。 中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵 AI产业化应用仍处起步阶段 《21世纪》：上半年GDP增长4.7%，落在年初预期目标区间之内。你如何看待上半年整体的经济态势？上半年，全国规模以上工业增加值同比增长5.4%。你如何评价中国经济“半年报”中工业板块的整体表现？ 中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵：上半年GDP增速在预期内，也具有一定含金量。从外部看，中东局势等突发事件对全球经济产生干扰，我国经济挺过这次冲击，经济和社会民生保持整体稳定，彰显了较强的韧性。从内部看，在消费、投资等数据表现不佳的情况下，我国工业经济仍实现了较快增长，彰显了新兴产业的发展潜力。IMF等主要国际机构因看好中国新兴产业，近期调高了我国全年经济增速预期。因此，4.7%的增速体现了我国“高质量发展”的成效。 在消费、投资等数据走低的情况下，经济“半年报”中工业数据的表现可以说很“亮眼”，规模以上工业增加值增速比GDP增速高0.7个百分点，工业对经济增长的贡献率超35%，工业在“稳大盘”中的作用依然稳固。 《21世纪》：经初步测算，上半年，以高技术制造业、数字产品制造业等为代表的新动能领域对规模以上工业增加值增长的贡献率为47.9%，较上年全年提高12个百分点。这是否意味着新动能已经转化为“增长主力”？你如何判断新动能的后续态势？ 中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵：上半年高技术制造业增加值同比增长13.3%，装备制造业增加值同比增长9.3%，集成电路、工业机器人等产品产量快速增长。尽管新动能未能完全弥补传统动能的增长缺口，但新动能对工业增长的支撑作用正在持续释放。这种增长一方面得益于我国持续不断的创新发展和深厚的产业积累，另一方面得益于全球范围内AI从技术研发到产业化应用的显著提速，在内外因素叠加的背景下，新动能表现十分抢眼。 下半年看，这种增长态势有望进一步持续：一是从导向看，我国发展新质生产力的方向不会改变，各类赛道均有布局，新动能陆续涌现的趋势不会改变；二是从技术看，AI产品创新和产业化应用仍处于起步阶段，技术持续演进的趋势不会改变；三是从消费看，AI终端产品持续满足人民美好生活需要，消费潜力持续释放的态势不会改变。因此，新动能仍将保持较快增长态势。 需求侧应加力扩内需 《21世纪》：6月制造业PMI为50.3%，重回扩张区间，企业生产经营活动预期指数为54.3%。你对下半年的工业经济走势有何预判？你认为当前还需要哪些精准政策来巩固工业向好态势？ 中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵：下半年看，全球人工智能发展方兴未艾，部分发展中国家工业化进程仍在提速，我国工业经济增长新动能持续释放；与此同时，在政策支持下，我国在扩内需、稳投资等方面仍将持续发力，消费有望稳步回升。供需双向发力下，工业经济在下半年有望保持稳步增长态势。 在工业经济总体向好的情况下，内部结构性分化较为明显：一方面，新旧动能分化趋势更为明显，AI和绿色转型相关的产业发展良好，传统产业增长动力不足；另一方面，供需分化趋势更为明显，内需不足仍是制约工业经济增长的突出问题，外需增长较快，但仍面临不确定性风险，经济增长的持续性和稳定性仍需关注。 因此，政策在供给侧应兼顾传统产业转型升级和新兴产业培育壮大，在需求侧应加大力度扩大内需，形成畅通的国内经济大循环。 《21世纪》：赛迪研究院方面曾研究指出，全球工业化已进入由技术突破、范式转换、组织重构和治理调整共同驱动的深刻变革期。对于中国而言，这个“深刻变革期”意味着什么？从上半年数据看，中国工业在国际坐标中处于什么位置？与主要经济体相比，各自在“变革期”中的演进路径有何不同？ 中国电子信息产业发展研究院（赛迪研究院）工业经济研究所所长关兵：从运行角度看，深刻变革期意味着我们要适应外部形势变化、技术演进趋势和产业发展规律，从产业培育、要素重组、产业治理、国际合作等方面重新思考工业增长的底层逻辑和动力来源，在外部不确定性中寻求稳定的增长元素。 从上半年的数据看，我国工业经济依然保持稳步增长，制造业第一大国的地位仍然稳固。但也应看到，在这轮变革期中，尽管各国在产业发展重点、风险管控态度、产业政策等方面有所不同，但不约而同地将制造业提升至国家战略高度，传统资源、能源以及战略性新兴产业等领域的竞争空前激烈，我国制造业大国地位仍面临多重挑战。"
+        }
+      ],
+      "candidates": [],
+      "annotation": {
+        "candidate_dispositions": [],
+        "gold_events": [],
+        "article_notes": "宏观数据、专家观点、行业趋势和政策建议不构成公司经营事件。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "jazzyear-research:167",
+      "article_sha256": "c4fa2e69741f6f75b1e175b9cc3169e7bd76bc37fcb80c96528dc73c10925c98",
+      "source_id": "jazzyear-research",
+      "canonical_url": "https://www.jazzyear.com/study_info.html?id=167",
+      "published_at": "2026-07-19T00:00:00+08:00",
+      "title": "2026中国具身智能行业洞察报告",
+      "document_type": "long_feature",
+      "clean_body": "报告简介：甲子光年智库推出《2026中国具身智能行业洞察报告》，从行业全景、产业链结构、应用场景、企业实践与未来趋势五个层面展开分析，试图越过“机器人又学会了什么动作”的表层叙事，回到一个更重要的判断标准：AI能否真正进入物理世界，并持续创造可验证的真实价值。该报告精选版已于WAIC 2026「AI聚变·具身智能产业生态论坛」上正式发布。 核心亮点：最近两年，具身智能行业最容易被看到的，是机器人能不能跑、能不能跳，能不能完成令人惊艳的动作。 但进入2026年，产业关注的重点正在发生变化：机器人能否离开舞台和实验室，进入工厂、园区、商业空间乃至家庭，长期、稳定地完成真实任务？能否在运行中持续学习，并创造可计算、可复制的经济价值？ 具身智能正在跨越从“能动、能演示”走向“能用、能创造价值”的关键分水岭。 过去十余年，人工智能沿着深度学习、基础模型、生成式AI和Agent不断拓展能力边界，但这些突破主要发生在数字世界。语言和互联网数据能够帮助AI理解“世界是什么”，却难以让其真正掌握物理世界如何变化、行动如何产生结果，以及如何在不确定环境中作出连续决策。 与此同时，机器人也在从固定工位上的自动化设备，演进为能够移动、感知、协作并执行复杂任务的智能实体。当AI开始需要身体和真实反馈，机器人开始需要理解、规划与泛化能力，两条技术曲线便在具身智能处汇合：AI正在获得“身体”，机器人正在获得“大脑”。 这一融合进程正在加速。人形机器人开始进入工厂现场，国家级标准体系和实景实训行动相继推进，世界模型、灵巧手与数据基础设施成为技术和资本关注的新焦点，头部企业也在加快产品迭代、量产交付与场景验证。技术、资本、政策与应用需求正在形成多线共振。 但产业热度越高，越需要回到一些基本问题：概念繁荣是否意味着商业成熟？一次成功的Demo，距离全天候稳定作业还有多远？模型、数据、硬件、本体、系统与场景之间，哪一个环节正在成为产业化的关键约束？哪些场景能够率先形成商业闭环，哪些场景仍需等待技术、成本与基础设施进一步成熟？ 基于此，甲子光年智库推出《2026中国具身智能行业洞察报告》，从行业全景、产业链结构、应用场景、企业实践与未来趋势五个层面展开分析，试图越过“机器人又学会了什么动作”的表层叙事，回到一个更重要的判断标准：AI能否真正进入物理世界，并持续创造可验证的真实价值。该报告精选版已于 WAIC 2026「AI聚变·具身智能产业生态论坛」 上正式发布。 报告核心观点： AI的下一步，不只是继续扩大知识边界，更是在物理世界中拓展行动边界； 具身智能正在从“能动、能演示”，进入“能用、能创造价值”的真实场景检验阶段； 具身智能不仅需要执行动作，还需要理解、预测物理世界，并根据环境变化持续调整行动； 真实场景既是具身智能的应用市场，也是生产高价值数据、推动模型迭代的重要训练基地； 具身智能商业化不会从最复杂的场景开始，而会优先发生在需求明确、任务可定义、价值可核算的场景； 规模化不只是部署更多机器人，更是让每台机器人长期、稳定地创造可核验的产出； 下一阶段的产业竞争，将取决于企业能否将模型、数据、硬件、系统与场景组织成持续运转的闭环。 配合产业链图谱和不同类型企业的实践案例，本报告不仅梳理了主要技术路线，也关注机器人如何完成真实交付，数据如何从场景中回流，以及商业价值如何被验证和复制。 具身智能的竞争，正在从概念竞争、Demo竞争，转向产业能力竞争。这份报告希望提供的，不是一份热点技术清单，而是一张通往真实世界的产业地图：识别关键技术变量，判断场景落地节奏，并观察哪些企业正在建立可持续的产业发展闭环。",
+      "document_units": [
+        {
+          "unit_id": "u_e94d1ad4ae7c",
+          "char_start": 0,
+          "char_end": 1511,
+          "text": "报告简介：甲子光年智库推出《2026中国具身智能行业洞察报告》，从行业全景、产业链结构、应用场景、企业实践与未来趋势五个层面展开分析，试图越过“机器人又学会了什么动作”的表层叙事，回到一个更重要的判断标准：AI能否真正进入物理世界，并持续创造可验证的真实价值。该报告精选版已于WAIC 2026「AI聚变·具身智能产业生态论坛」上正式发布。 核心亮点：最近两年，具身智能行业最容易被看到的，是机器人能不能跑、能不能跳，能不能完成令人惊艳的动作。 但进入2026年，产业关注的重点正在发生变化：机器人能否离开舞台和实验室，进入工厂、园区、商业空间乃至家庭，长期、稳定地完成真实任务？能否在运行中持续学习，并创造可计算、可复制的经济价值？ 具身智能正在跨越从“能动、能演示”走向“能用、能创造价值”的关键分水岭。 过去十余年，人工智能沿着深度学习、基础模型、生成式AI和Agent不断拓展能力边界，但这些突破主要发生在数字世界。语言和互联网数据能够帮助AI理解“世界是什么”，却难以让其真正掌握物理世界如何变化、行动如何产生结果，以及如何在不确定环境中作出连续决策。 与此同时，机器人也在从固定工位上的自动化设备，演进为能够移动、感知、协作并执行复杂任务的智能实体。当AI开始需要身体和真实反馈，机器人开始需要理解、规划与泛化能力，两条技术曲线便在具身智能处汇合：AI正在获得“身体”，机器人正在获得“大脑”。 这一融合进程正在加速。人形机器人开始进入工厂现场，国家级标准体系和实景实训行动相继推进，世界模型、灵巧手与数据基础设施成为技术和资本关注的新焦点，头部企业也在加快产品迭代、量产交付与场景验证。技术、资本、政策与应用需求正在形成多线共振。 但产业热度越高，越需要回到一些基本问题：概念繁荣是否意味着商业成熟？一次成功的Demo，距离全天候稳定作业还有多远？模型、数据、硬件、本体、系统与场景之间，哪一个环节正在成为产业化的关键约束？哪些场景能够率先形成商业闭环，哪些场景仍需等待技术、成本与基础设施进一步成熟？ 基于此，甲子光年智库推出《2026中国具身智能行业洞察报告》，从行业全景、产业链结构、应用场景、企业实践与未来趋势五个层面展开分析，试图越过“机器人又学会了什么动作”的表层叙事，回到一个更重要的判断标准：AI能否真正进入物理世界，并持续创造可验证的真实价值。该报告精选版已于 WAIC 2026「AI聚变·具身智能产业生态论坛」 上正式发布。 报告核心观点： AI的下一步，不只是继续扩大知识边界，更是在物理世界中拓展行动边界； 具身智能正在从“能动、能演示”，进入“能用、能创造价值”的真实场景检验阶段； 具身智能不仅需要执行动作，还需要理解、预测物理世界，并根据环境变化持续调整行动； 真实场景既是具身智能的应用市场，也是生产高价值数据、推动模型迭代的重要训练基地； 具身智能商业化不会从最复杂的场景开始，而会优先发生在需求明确、任务可定义、价值可核算的场景； 规模化不只是部署更多机器人，更是让每台机器人长期、稳定地创造可核验的产出； 下一阶段的产业竞争，将取决于企业能否将模型、数据、硬件、系统与场景组织成持续运转的闭环。 配合产业链图谱和不同类型企业的实践案例，本报告不仅梳理了主要技术路线，也关注机器人如何完成真实交付，数据如何从场景中回流，以及商业价值如何被验证和复制。 具身智能的竞争，正在从概念竞争、Demo竞争，转向产业能力竞争。这份报告希望提供的，不是一份热点技术清单，而是一张通往真实世界的产业地图：识别关键技术变量，判断场景落地节奏，并观察哪些企业正在建立可持续的产业发展闭环。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_a8a4bc376b",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "报告简介：甲子光年智库推出《2026中国具身智能行业洞察报告》，从行业全景、产业链结构、应用场景、企业实践与未来趋势五个层面展开分析，试图越过“机器人又学会了什么动作”的表层叙事，回到一个更重要的判断标准：AI能否真正进入物理世界，并持续创造可验证的真实价值。",
+          "claim_id": "c_a8a4bc376b",
+          "span_id": "s_ba16041d4765",
+          "char_start": 0,
+          "char_end": 130,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_03146be11b01",
+              "span_id": "s_ba16041d4765",
+              "char_start": 0,
+              "char_end": 130,
+              "text": "报告简介：甲子光年智库推出《2026中国具身智能行业洞察报告》，从行业全景、产业链结构、应用场景、企业实践与未来趋势五个层面展开分析，试图越过“机器人又学会了什么动作”的表层叙事，回到一个更重要的判断标准：AI能否真正进入物理世界，并持续创造可验证的真实价值。",
+              "action_text": "报告简介：甲子光年智库推出《2026中国具身智能行业洞察报告》，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_a8a4bc376b"
+          ]
+        },
+        {
+          "id": "c_a93aacaaee",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "人形机器人开始进入工厂现场，国家级标准体系和实景实训行动相继推进，世界模型、灵巧手与数据基础设施成为技术和资本关注的新焦点，头部企业也在加快产品迭代、量产交付与场景验证。",
+          "subject_hint": "人形机器人",
+          "claim_id": "c_a93aacaaee",
+          "span_id": "s_ec02e23372fd",
+          "char_start": 615,
+          "char_end": 700,
+          "action_hint": "technical_milestone",
+          "event_status_hint": "started",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_db96e407af05",
+              "span_id": "s_ec02e23372fd",
+              "char_start": 615,
+              "char_end": 700,
+              "text": "人形机器人开始进入工厂现场，国家级标准体系和实景实训行动相继推进，世界模型、灵巧手与数据基础设施成为技术和资本关注的新焦点，头部企业也在加快产品迭代、量产交付与场景验证。",
+              "action_text": "人形机器人开始进入工厂现场，",
+              "event_status": "started"
+            }
+          ],
+          "required_claim_ids": [
+            "c_a93aacaaee"
+          ]
+        },
+        {
+          "id": "c_a3e1678cc1",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "基于此，甲子光年智库推出《2026中国具身智能行业洞察报告》，从行业全景、产业链结构、应用场景、企业实践与未来趋势五个层面展开分析，试图越过“机器人又学会了什么动作”的表层叙事，回到一个更重要的判断标准：AI能否真正进入物理世界，并持续创造可验证的真实价值。",
+          "claim_id": "c_a3e1678cc1",
+          "span_id": "s_42e4e927ac4b",
+          "char_start": 859,
+          "char_end": 988,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_515d552cc47c",
+              "span_id": "s_42e4e927ac4b",
+              "char_start": 859,
+              "char_end": 988,
+              "text": "基于此，甲子光年智库推出《2026中国具身智能行业洞察报告》，从行业全景、产业链结构、应用场景、企业实践与未来趋势五个层面展开分析，试图越过“机器人又学会了什么动作”的表层叙事，回到一个更重要的判断标准：AI能否真正进入物理世界，并持续创造可验证的真实价值。",
+              "action_text": "甲子光年智库推出《2026中国具身智能行业洞察报告》，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_a3e1678cc1"
+          ]
+        },
+        {
+          "id": "c_6712c48379",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "配合产业链图谱和不同类型企业的实践案例，本报告不仅梳理了主要技术路线，也关注机器人如何完成真实交付，数据如何从场景中回流，以及商业价值如何被验证和复制。",
+          "claim_id": "c_6712c48379",
+          "span_id": "s_926cf74f5c7d",
+          "char_start": 1325,
+          "char_end": 1401,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_bb82f68ca34d",
+              "span_id": "s_926cf74f5c7d",
+              "char_start": 1325,
+              "char_end": 1401,
+              "text": "配合产业链图谱和不同类型企业的实践案例，本报告不仅梳理了主要技术路线，也关注机器人如何完成真实交付，数据如何从场景中回流，以及商业价值如何被验证和复制。",
+              "action_text": "也关注机器人如何完成真实交付，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_6712c48379"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_a8a4bc376b",
+            "disposition": "rejected",
+            "reason_code": "invalid_non_company_subject"
+          },
+          {
+            "claim_id": "c_a93aacaaee",
+            "disposition": "rejected",
+            "reason_code": "industry_generalization"
+          },
+          {
+            "claim_id": "c_a3e1678cc1",
+            "disposition": "rejected",
+            "reason_code": "invalid_non_company_duplicate"
+          },
+          {
+            "claim_id": "c_6712c48379",
+            "disposition": "rejected",
+            "reason_code": "report_description_not_event"
+          }
+        ],
+        "gold_events": [],
+        "article_notes": "智库报告发布、行业泛化和报告内容描述均不满足公司经营主体要求。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "cena-industry-analysis:17964",
+      "article_sha256": "689772ba49ad4862a5e0f71a1ae5420d406dd48b845588b5c21bea8bbab35dfe",
+      "source_id": "cena-industry-analysis",
+      "canonical_url": "https://epaper.cena.com.cn/pc/content/202607/31/content_17964.html",
+      "published_at": "2026-07-31T00:00:00+08:00",
+      "title": "三条路径解读“光进铜退”",
+      "document_type": "commentary",
+      "clean_body": "当大模型参数突破万亿，以铜为介质构建的算力互联方案同时撞上了带宽、延迟和功耗“三堵墙”，而“光”正成为化解上述“三堵墙”的破局之道。以光为介质构建的算力互联基础设施，将给光互连、光交换、光计算三条赛道带来新的想象空间。\n那么，“光进铜退”的进展究竟如何？近日，曦智科技创始人、CEO沈亦晨对“光进铜退”的三条路径进行了细致解读。\n光互连：NPO将迎落地元年\n如今市面上的数据中心九成以上依旧采用铜线连接。然而，随着数据中心内部数据传输需求不断提升，铜导线带宽不足、延迟高、功耗大等核心痛点愈加明显。在沈亦晨看来，算力中心互连“铜转光”是必然趋势。不仅如此，算力光互连未来的市场体量庞大，至少是传统光纤传输行业的10倍，成长空间十分广阔。由于当前行业尚未形成统一标准，不同AI芯片厂商需求各有差异，定制化落地机会充足，创新企业更容易打造独有的竞争优势；相比传统赛道，这一赛道比拼的并非是基础代工制造，而是一整套芯片系统综合设计能力，技术壁垒更高。\n可插拔光模块是数据中心互连网络“光代铜”的第一种形态。光模块作为电信号与光信号之间的转换器，连接服务器板卡与光纤，使数据传输的距离得以延长。但光模块只是计算互连网络“光代铜”的“初级形态”。传统可插拔光模块置于服务器远端，需搭载博通、迈威尔等企业供应的DSP芯片进行信号纠错。该芯片成本高、功耗大，还会增加传输时延。\nCPO（光电共封装）因具备超低功耗、高带宽密度、能实现信号完整性等特征，是行业中公认的能够解决光模块方案现存问题的解决方案。它将光学引擎与交换或计算芯片（如ASIC、GPU）封装在同一基板上，将电信号传输距离从厘米级缩短到毫米级，大幅减少长距离电线带来的电力损耗与发热，能效比传统方案提升数倍；超短电气路径最大程度减少高频信号衰减与失真，保障极高传输速率下的稳定性。\n但受封装良率、供应链等因素制约，CPO方案暂未实现大规模量产。\n在产业链探索CPO的过程中，作为由光模块方案向CPO过渡的近封装光学（NPO）将有望在未来两年内实现批量应用。NPO的设计思路是将光电转换的芯片和计算芯片放在同一个板卡上，在省去DSP芯片的同时大幅缩短铜线传输距离。沈亦晨表示，未来12~24个月，主流的互联网大厂将逐步开始采用NPO方案，待放量后海内外NPO光芯片市场规模可达百万至千万颗级别。\n光交换：国产方案后发跟进\n如果说光互连解决的是“芯片之间传数据太慢”的问题，那么，光交换解决的则是“大规模集群怎么灵活调度”的问题。电交换需要反复将光信号转换成电信号，处理后再转回光信号，延迟更长，功耗更高。光交换可省去光电转换环节，传输速度更快、能耗更低。\n国内外光交换赛道的发展存在明显代差。作为在光交换赛道布局较早的海外领军企业，谷歌在2012年便推出了微秒级光路交换机（OCS）原型Mordia，现已将OCS光交换技术深度整合进TPU超级计算机集群中。相比海外，国内缺少垂直整合光交换技术的领军企业，整体落后近十年。\n今年WAIC上，曦智科技与合作伙伴共同推出的基于光互连光交换方案的光跃超节点实现了数千卡落地，成为国内首个国产、商业化的光互连光交换千卡算力集群。\n在沈亦晨看来，未来，光交换方案存在巨大发展潜力。“在大模型发展初期，由于市场上应用的模型变化很快，电交换是一种更灵活的部署方案，但电交换方案的效率相对更低。”但现在，模型快速迭代的阶段已经过去，市场主流模型逐渐确立，已经进入更高效的产出Token的新阶段。在这个阶段，用更经济的方式产出更多高质量Token是AI基础设施厂商的核心目标，更看重AI基础设施的效率和成本。而光交换方案在实现高效率、低成本方面具有天然优势。一方面能够减少数据中心一半的光模块用量，另一方面能够实现更低的时延。“虽然采用光交换方案会使数据中心丧失一定的灵活性，但随着更多为大模型推理定制的算力中心方案出现，光交换会有更大的市场。”沈亦晨说道。\n光计算：进入市场渗透期\n光计算依靠光子替代电子完成AI矩阵运算，具备低功耗、高并行的算力优势。从整体来看，我国在光计算研发投入、产品成熟度、商业化落地进度上均领先海外市场。近两年国内新增20余家光计算相关创业公司，今年WAIC大会期间，曦智、光本位、每刻深思等多家企业展出光计算硬件，路线各有不同：曦智主打硅光集成路线，光本位发力光子存内计算，每刻深思深耕空间光计算芯片。\n沈亦晨给光计算芯片划定了产业发展的不同阶段：2017年以前属于实验室理论研究阶段；2017年至2026年为产品突破阶段；2027年后，光计算芯片将进入市场渗透期，将在适合部署的垂直领域实现批量落地。\n沈亦晨认为，相比大模型训练，光芯片将优先在推理领域部署。在推理赛道跑通量产与商业化闭环、积累成熟方案后，再逐步探索训练场景。\n基于光计算芯片本身具备的低延时特征，该类芯片将在如视觉智能、大模型、具身智能、AI for Science、金融量化、太空算力等对时延敏感的垂直场景优先布局。\n下一步，光计算芯片在商业推广过程中将面临生态难题。沈亦晨表示，光计算芯片真正实现商用，需要配套规模庞大的软件团队、构建全栈系统开发能力、具备针对行业场景的专属算法，并投入不亚于传统GPU厂商的研发人力。但同时他也认为，光计算真正的市场空间并不是分流目前GPU的应用市场，而是会涌现出新的、针对光计算硬件开发的杀手级应用，为光计算开辟新的商业空间。目前来看，光计算芯片要实现规模化商用仍需两到三年时间。",
+      "document_units": [
+        {
+          "unit_id": "u_776055f1351a",
+          "char_start": 0,
+          "char_end": 2249,
+          "text": "当大模型参数突破万亿，以铜为介质构建的算力互联方案同时撞上了带宽、延迟和功耗“三堵墙”，而“光”正成为化解上述“三堵墙”的破局之道。以光为介质构建的算力互联基础设施，将给光互连、光交换、光计算三条赛道带来新的想象空间。\n那么，“光进铜退”的进展究竟如何？近日，曦智科技创始人、CEO沈亦晨对“光进铜退”的三条路径进行了细致解读。\n光互连：NPO将迎落地元年\n如今市面上的数据中心九成以上依旧采用铜线连接。然而，随着数据中心内部数据传输需求不断提升，铜导线带宽不足、延迟高、功耗大等核心痛点愈加明显。在沈亦晨看来，算力中心互连“铜转光”是必然趋势。不仅如此，算力光互连未来的市场体量庞大，至少是传统光纤传输行业的10倍，成长空间十分广阔。由于当前行业尚未形成统一标准，不同AI芯片厂商需求各有差异，定制化落地机会充足，创新企业更容易打造独有的竞争优势；相比传统赛道，这一赛道比拼的并非是基础代工制造，而是一整套芯片系统综合设计能力，技术壁垒更高。\n可插拔光模块是数据中心互连网络“光代铜”的第一种形态。光模块作为电信号与光信号之间的转换器，连接服务器板卡与光纤，使数据传输的距离得以延长。但光模块只是计算互连网络“光代铜”的“初级形态”。传统可插拔光模块置于服务器远端，需搭载博通、迈威尔等企业供应的DSP芯片进行信号纠错。该芯片成本高、功耗大，还会增加传输时延。\nCPO（光电共封装）因具备超低功耗、高带宽密度、能实现信号完整性等特征，是行业中公认的能够解决光模块方案现存问题的解决方案。它将光学引擎与交换或计算芯片（如ASIC、GPU）封装在同一基板上，将电信号传输距离从厘米级缩短到毫米级，大幅减少长距离电线带来的电力损耗与发热，能效比传统方案提升数倍；超短电气路径最大程度减少高频信号衰减与失真，保障极高传输速率下的稳定性。\n但受封装良率、供应链等因素制约，CPO方案暂未实现大规模量产。\n在产业链探索CPO的过程中，作为由光模块方案向CPO过渡的近封装光学（NPO）将有望在未来两年内实现批量应用。NPO的设计思路是将光电转换的芯片和计算芯片放在同一个板卡上，在省去DSP芯片的同时大幅缩短铜线传输距离。沈亦晨表示，未来12~24个月，主流的互联网大厂将逐步开始采用NPO方案，待放量后海内外NPO光芯片市场规模可达百万至千万颗级别。\n光交换：国产方案后发跟进\n如果说光互连解决的是“芯片之间传数据太慢”的问题，那么，光交换解决的则是“大规模集群怎么灵活调度”的问题。电交换需要反复将光信号转换成电信号，处理后再转回光信号，延迟更长，功耗更高。光交换可省去光电转换环节，传输速度更快、能耗更低。\n国内外光交换赛道的发展存在明显代差。作为在光交换赛道布局较早的海外领军企业，谷歌在2012年便推出了微秒级光路交换机（OCS）原型Mordia，现已将OCS光交换技术深度整合进TPU超级计算机集群中。相比海外，国内缺少垂直整合光交换技术的领军企业，整体落后近十年。\n今年WAIC上，曦智科技与合作伙伴共同推出的基于光互连光交换方案的光跃超节点实现了数千卡落地，成为国内首个国产、商业化的光互连光交换千卡算力集群。\n在沈亦晨看来，未来，光交换方案存在巨大发展潜力。“在大模型发展初期，由于市场上应用的模型变化很快，电交换是一种更灵活的部署方案，但电交换方案的效率相对更低。”但现在，模型快速迭代的阶段已经过去，市场主流模型逐渐确立，已经进入更高效的产出Token的新阶段。在这个阶段，用更经济的方式产出更多高质量Token是AI基础设施厂商的核心目标，更看重AI基础设施的效率和成本。而光交换方案在实现高效率、低成本方面具有天然优势。一方面能够减少数据中心一半的光模块用量，另一方面能够实现更低的时延。“虽然采用光交换方案会使数据中心丧失一定的灵活性，但随着更多为大模型推理定制的算力中心方案出现，光交换会有更大的市场。”沈亦晨说道。\n光计算：进入市场渗透期\n光计算依靠光子替代电子完成AI矩阵运算，具备低功耗、高并行的算力优势。从整体来看，我国在光计算研发投入、产品成熟度、商业化落地进度上均领先海外市场。近两年国内新增20余家光计算相关创业公司，今年WAIC大会期间，曦智、光本位、每刻深思等多家企业展出光计算硬件，路线各有不同：曦智主打硅光集成路线，光本位发力光子存内计算，每刻深思深耕空间光计算芯片。\n沈亦晨给光计算芯片划定了产业发展的不同阶段：2017年以前属于实验室理论研究阶段；2017年至2026年为产品突破阶段；2027年后，光计算芯片将进入市场渗透期，将在适合部署的垂直领域实现批量落地。\n沈亦晨认为，相比大模型训练，光芯片将优先在推理领域部署。在推理赛道跑通量产与商业化闭环、积累成熟方案后，再逐步探索训练场景。\n基于光计算芯片本身具备的低延时特征，该类芯片将在如视觉智能、大模型、具身智能、AI for Science、金融量化、太空算力等对时延敏感的垂直场景优先布局。\n下一步，光计算芯片在商业推广过程中将面临生态难题。沈亦晨表示，光计算芯片真正实现商用，需要配套规模庞大的软件团队、构建全栈系统开发能力、具备针对行业场景的专属算法，并投入不亚于传统GPU厂商的研发人力。但同时他也认为，光计算真正的市场空间并不是分流目前GPU的应用市场，而是会涌现出新的、针对光计算硬件开发的杀手级应用，为光计算开辟新的商业空间。目前来看，光计算芯片要实现规模化商用仍需两到三年时间。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_46ed8f4c65",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "作为在光交换赛道布局较早的海外领军企业，谷歌在2012年便推出了微秒级光路交换机（OCS）原型Mordia，现已将OCS光交换技术深度整合进TPU超级计算机集群中。",
+          "claim_id": "c_46ed8f4c65",
+          "span_id": "s_00a6ca795103",
+          "char_start": 1120,
+          "char_end": 1202,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "mixed",
+          "time_hints": [
+            "2012年"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_af764f4e7980",
+              "span_id": "s_00a6ca795103",
+              "char_start": 1120,
+              "char_end": 1202,
+              "text": "作为在光交换赛道布局较早的海外领军企业，谷歌在2012年便推出了微秒级光路交换机（OCS）原型Mordia，现已将OCS光交换技术深度整合进TPU超级计算机集群中。",
+              "action_text": "谷歌在2012年便推出了微秒级光路交换机（OCS）原型Mordia，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_1994b4e82ba6",
+              "span_id": "s_00a6ca795103",
+              "char_start": 1120,
+              "char_end": 1202,
+              "text": "作为在光交换赛道布局较早的海外领军企业，谷歌在2012年便推出了微秒级光路交换机（OCS）原型Mordia，现已将OCS光交换技术深度整合进TPU超级计算机集群中。",
+              "action_text": "现已将OCS光交换技术深度整合进TPU超级计算机集群中。",
+              "event_status": "target"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_1994b4e82ba6",
+            "ac_af764f4e7980"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "ac_1994b4e82ba6",
+            "disposition": "rejected",
+            "reason_code": "third_party_comparison_background"
+          },
+          {
+            "claim_id": "ac_af764f4e7980",
+            "disposition": "rejected",
+            "reason_code": "historical_background"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "曦智科技",
+            "event_type": "technical_milestone",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [],
+            "evidence_span": {
+              "char_start": 1235,
+              "char_end": 1308,
+              "text": "今年WAIC上，曦智科技与合作伙伴共同推出的基于光互连光交换方案的光跃超节点实现了数千卡落地，成为国内首个国产、商业化的光互连光交换千卡算力集群。"
+            },
+            "candidate_gap": true
+          }
+        ],
+        "article_notes": "谷歌2012年原型及当前集成仅作为海外比较背景；曦智科技当年发布并落地千卡集群是当前主线进展。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "stcn-flash:4052899",
+      "article_sha256": "7f4539d5dd5ddd8aed4de9c4d6d6948c015d3129e374a5956edfcb451a081ea5",
+      "source_id": "stcn-flash",
+      "canonical_url": "https://www.stcn.com/article/detail/4052899.html",
+      "published_at": "2026-07-31T18:21:05+08:00",
+      "title": "锚定粮食安全与乡村振兴 全国供销合作社“十五五”发展规划发布",
+      "document_type": "roadmap",
+      "clean_body": "人民财讯7月31日电， 近日，全国供销合作社“十五五”发展规划正式发布，锚定粮食安全与乡村振兴两大核心，部署十八项重点任务。 守牢农资保供闸门，稳住粮食生产基本盘 作为农资流通主渠道，“十五五”时期，全国供销合作社系统将通过网络建设和绿色发展“两手抓”，进一步夯实保供稳价基础。新建或改造100个左右国家战略性农资（储备）库、1000个左右县域农资配送中心。 2026年是“十五五”开局之年，全国供销合作社系统将力争新建改造20个左右国家战略性农资（储备）库、200多个县域农资配送中心，打造高效畅通的农资流通网络。为国家粮食安全保驾护航。 深化农业社会化服务：打造“国家队” 围绕千亿斤粮食产能提升行动，全国供销合作社系统推出“农资+农技+农服”一体化服务模式，解决农户单家独户购机贵、作业难问题。 规划明确量化服务目标： 硬件配套：五年新建改造1000家标准化为农服务中心； 作业规模：全系统耕种防收服务规模突破3亿亩次。 流通是供销合作社传统优势，“十五五”时期，全系统推动产销两端双向提质畅通城乡流通，促进农产品出山、消费品进村： 常态化办“产销对接”，每年开展超1万场供销集市； 持续做强“832平台”，打通帮扶地区农副产品销售渠道。",
+      "document_units": [
+        {
+          "unit_id": "u_5bdc08d586c3",
+          "char_start": 0,
+          "char_end": 522,
+          "text": "人民财讯7月31日电， 近日，全国供销合作社“十五五”发展规划正式发布，锚定粮食安全与乡村振兴两大核心，部署十八项重点任务。 守牢农资保供闸门，稳住粮食生产基本盘 作为农资流通主渠道，“十五五”时期，全国供销合作社系统将通过网络建设和绿色发展“两手抓”，进一步夯实保供稳价基础。新建或改造100个左右国家战略性农资（储备）库、1000个左右县域农资配送中心。 2026年是“十五五”开局之年，全国供销合作社系统将力争新建改造20个左右国家战略性农资（储备）库、200多个县域农资配送中心，打造高效畅通的农资流通网络。为国家粮食安全保驾护航。 深化农业社会化服务：打造“国家队” 围绕千亿斤粮食产能提升行动，全国供销合作社系统推出“农资+农技+农服”一体化服务模式，解决农户单家独户购机贵、作业难问题。 规划明确量化服务目标： 硬件配套：五年新建改造1000家标准化为农服务中心； 作业规模：全系统耕种防收服务规模突破3亿亩次。 流通是供销合作社传统优势，“十五五”时期，全系统推动产销两端双向提质畅通城乡流通，促进农产品出山、消费品进村： 常态化办“产销对接”，每年开展超1万场供销集市； 持续做强“832平台”，打通帮扶地区农副产品销售渠道。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_530774badb",
+          "event_type": "factory_or_capacity",
+          "funding_round": "",
+          "quote": "深化农业社会化服务：打造“国家队” 围绕千亿斤粮食产能提升行动，全国供销合作社系统推出“农资+农技+农服”一体化服务模式，解决农户单家独户购机贵、作业难问题。",
+          "claim_id": "c_530774badb",
+          "span_id": "s_4e139fc46b68",
+          "char_start": 271,
+          "char_end": 350,
+          "subject_hint": "",
+          "action_hint": "factory_or_capacity",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_7e2c1748873f",
+              "span_id": "s_4e139fc46b68",
+              "char_start": 271,
+              "char_end": 350,
+              "text": "深化农业社会化服务：打造“国家队” 围绕千亿斤粮食产能提升行动，全国供销合作社系统推出“农资+农技+农服”一体化服务模式，解决农户单家独户购机贵、作业难问题。",
+              "action_text": "全国供销合作社系统推出“农资+农技+农服”一体化服务模式，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_530774badb"
+          ]
+        },
+        {
+          "id": "c_1292149297",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "深化农业社会化服务：打造“国家队” 围绕千亿斤粮食产能提升行动，全国供销合作社系统推出“农资+农技+农服”一体化服务模式，解决农户单家独户购机贵、作业难问题。",
+          "claim_id": "c_1292149297",
+          "span_id": "s_4e139fc46b68",
+          "char_start": 271,
+          "char_end": 350,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_209124a623b7",
+              "span_id": "s_4e139fc46b68",
+              "char_start": 271,
+              "char_end": 350,
+              "text": "深化农业社会化服务：打造“国家队” 围绕千亿斤粮食产能提升行动，全国供销合作社系统推出“农资+农技+农服”一体化服务模式，解决农户单家独户购机贵、作业难问题。",
+              "action_text": "全国供销合作社系统推出“农资+农技+农服”一体化服务模式，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_1292149297"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_530774badb",
+            "disposition": "rejected",
+            "reason_code": "invalid_non_company_subject"
+          },
+          {
+            "claim_id": "c_1292149297",
+            "disposition": "rejected",
+            "reason_code": "invalid_non_company_duplicate"
+          }
+        ],
+        "gold_events": [],
+        "article_notes": "供销合作社系统与规划任务不是公司经营主体或公司事件。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "jazzyear-research:166",
+      "article_sha256": "ed25e39afff1857c2ada41d2386dc908c3510a569fc47ff4b4fb5fd53da9b937",
+      "source_id": "jazzyear-research",
+      "canonical_url": "https://www.jazzyear.com/study_info.html?id=166",
+      "published_at": "2026-06-09T00:00:00+08:00",
+      "title": "AI产业最新趋势解读：词元经济体系下的组织变革新机遇",
+      "document_type": "commentary",
+      "clean_body": "报告简介：解读人工智能产业发展最新趋势，针对智能经济新形态展开分析，提出词元经济的新概念，并分析词元经济的全新产业链，拆解词元经济体系下云厂商的战略变革机遇。 核心亮点：AI经过七十年发展，已经走过了感知式AI和生成式AI两个阶段，正在迈入代理式AI阶段 代理智能阶段，OpenClaw推动AI应用从AI助手向AI员工演进 新经济形态从“数字经济”走向“词元经济”，核心生产要素将会从数据变为更小单元的词元 词元经济是智能经济新形态的最新演进，也是如今各大云厂商重点布局的战略方向 词元经济形成了“算力生产—智能调度—能力分发—应用消费”的新型结构 词元经济从根本性改写生产函数，标志着经济系统从“要素驱动”转向“调度驱动” AI原生组织，传统企业将向流态型企业转型，其本质是AI调度的生产网络 AI原生组织 ， 传统个体将向生态节点转型，生产函数转变，个体收益天花板被打开 词元经济的AI云厂商新型生态体系， 云计算的底层范式，需要从传统的云原生架构向AI云架构转型，构建全新的AI原生基础设施 词元经济全新产业链驱动云计算、大数据和AI技术的融合生态体系开始形成 围绕词元的全流程来重新调整云厂商的各层定位，重塑AI云生态体系 从数据到词元，云厂商迎来第二次历史机遇 词元经济下的云厂商转型策略： Token的生产、调度、流通、消费与安全治理构成了词元经济完整的运转逻辑",
+      "document_units": [
+        {
+          "unit_id": "u_988f6b50226e",
+          "char_start": 0,
+          "char_end": 587,
+          "text": "报告简介：解读人工智能产业发展最新趋势，针对智能经济新形态展开分析，提出词元经济的新概念，并分析词元经济的全新产业链，拆解词元经济体系下云厂商的战略变革机遇。 核心亮点：AI经过七十年发展，已经走过了感知式AI和生成式AI两个阶段，正在迈入代理式AI阶段 代理智能阶段，OpenClaw推动AI应用从AI助手向AI员工演进 新经济形态从“数字经济”走向“词元经济”，核心生产要素将会从数据变为更小单元的词元 词元经济是智能经济新形态的最新演进，也是如今各大云厂商重点布局的战略方向 词元经济形成了“算力生产—智能调度—能力分发—应用消费”的新型结构 词元经济从根本性改写生产函数，标志着经济系统从“要素驱动”转向“调度驱动” AI原生组织，传统企业将向流态型企业转型，其本质是AI调度的生产网络 AI原生组织 ， 传统个体将向生态节点转型，生产函数转变，个体收益天花板被打开 词元经济的AI云厂商新型生态体系， 云计算的底层范式，需要从传统的云原生架构向AI云架构转型，构建全新的AI原生基础设施 词元经济全新产业链驱动云计算、大数据和AI技术的融合生态体系开始形成 围绕词元的全流程来重新调整云厂商的各层定位，重塑AI云生态体系 从数据到词元，云厂商迎来第二次历史机遇 词元经济下的云厂商转型策略： Token的生产、调度、流通、消费与安全治理构成了词元经济完整的运转逻辑"
+        }
+      ],
+      "candidates": [],
+      "annotation": {
+        "candidate_dispositions": [],
+        "gold_events": [],
+        "article_notes": "报告概念、行业趋势和云厂商泛化建议不包含具体公司动作。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "jiqizhixin-industry-analysis:2026-07-31-3",
+      "article_sha256": "ea79f6a8eec2bb2c01d18df2348ec9ffa55483c31a356ec18e9e6719defd9855",
+      "source_id": "jiqizhixin-industry-analysis",
+      "canonical_url": "https://www.jiqizhixin.com/articles/2026-07-31-3",
+      "published_at": "2026-07-31T12:06:44+08:00",
+      "title": "AI 3D七大前沿模型同场竞技，竟被一个4B模型拿下8项第一",
+      "document_type": "long_feature",
+      "clean_body": "如今的 AI，已经很会「画」3D 了。\n输入一句话，模型可以生成一个足够逼真的耳机盒或咖啡杯。材质、光影、甚至连轮廓都像模像样，放进宣传片里几乎挑不出毛病。\n但把它交给工程师，问题会立刻暴露出来。\n物体孔位间距能不能从 20 毫米改成 25 毫米？修改其中一个尺寸后，其他结构能否自动保持约束关系？\n对于大多数生成式 3D 模型，答案并不乐观。它们交付的是一个可以渲染的外形，内部却缺少工程设计真正依赖的参数、特征、结构关系和构建逻辑。尺寸一变，往往只能重新生成；想要调整局部，也很难像编辑 CAD 文件一样继续加工。\n这条边界，决定了生成式 3D 能否从内容工具走进真实制造，也决定了它能否成为机器人、世界模型和 Physical AI 所需要的数据基础设施。\n近日， 比特无限发布的 Arko-T ，是一款面向 Text-to-Structured 3D Generation 的 4B 参数基础模型。该模型由比特无限联创、首席科学家 周平义博士 带队完成。\n它接收自然语言描述，直接输出可执行的 Build123d 程序。程序经过 CAD 内核运行后，可以得到 带有命名参数、结构特征和建模过程的 CAD 设计实体 。\n更引人关注的是它的结果。在与 GPT-5.2、Claude-4.5-sonnet、Gemini-3.5-flash、DeepSeek-V4-Pro、Qwen3.6-max、Kimi-k2.6、GLM-5.1 这 七个当今最顶尖的通用大模型的正面对抗中 ， 在 12 项量化指标里拿下 8 项第一 、3 项第二。\n论文地址：https://arxiv.org/pdf/2606.30429\n不仅如此，Arko-T 在本地 GPU 上处理单个样本的平均耗时为 0.41 秒 ，相比所有 API 基线模型至少快一个数量级。完成整套基准测试的成本为 0.28 美元 ，约为最便宜 API 基线 DeepSeek 的六分之一，后者成本为 1.69 美元；相比最昂贵的 Claude，则低约 65 倍，后者成本为 18.14 美元。\n对于没有出现在训练集中的部件，Arko-T 也能够基于已有的结构知识进行组合与生成。\n这项研究在 X 上同样收获了好评：很多网友认为这是一次颠覆性的突破。\n更有网友表示「小体量、低延迟与高性能同时出现，成为这项研究最令人惊喜的亮点之一。」\n除了在模型评测中达到 SOTA， Sparkoh AI 还将这项能力落到了原生 3D 建模平台中 ，支持用户直接用自然语言描述需求，系统会自动理解尺寸、结构等关键信息，并生成对应的 3D 模型。\n比如「请帮我生成一个杯垫。」对于这一需求，模型生成的是一份具备明确结构、可调参数和完整构建逻辑的设计文件。该模型可以继续用于 3D 打印，并进一步转化为能够实际制造和使用的产品。\n接下来是定制一个有线耳机收纳盒，用户还可以上传草图作为参考。对生成结果不满意时，也能继续用自然语言提出修改，例如将 IEM 槽位简化并适当放大。设计确认后，即可进入 3D 打印环节。\n由此，即便没有专业建模经验，普通用户也能以更低门槛参与 3D 设计，把一个想法逐步变成真实物体。\n从「生成一个形状」，走向「生成一个设计」\n过去几年，Text-to-3D 的进步主要发生在视觉层面。\nDreamFusion、Magic3D 等路线证明，自然语言可以成为 3D 生成的有效条件。后来大量模型继续提高几何完整度、纹理质量和生成速度，让一句话生成 3D 逐渐成为消费级产品中的常见能力。\n这类模型通常输出 Mesh、NeRF、3DGS 或其他视觉资产。它们适合展示、游戏、美术和数字内容创作，却很难完整承载工程意图。\nCAD 世界关心的对象完全不同。\n一块机械支架，不只是一组表面。它包含孔、槽、倒角、加强筋等明确特征；厚度、半径、间距、数量等可调整参数；还包含草图、拉伸、切除、圆角等按顺序组织的建模历史。特征附着在哪个面、引用哪条边，同样会影响后续编辑是否稳定。\nArko-T 将这套结构概括为一个「设计状态」：特征集合、参数集合、约束关系、构造历史，以及将特征绑定到面、边和草图平面的引用关系。\n这个定义的重要性在于，它把 Text-to-3D 的目标从生成一个形状，推进到生成一个设计实体。\n例如，当用户要求「设计一个带四个安装孔和三角加强筋的支架」时，模型需要理解安装孔属于可编辑特征，孔径和孔距应当成为命名参数，加强筋要连接到合理的承力边，整个零件还需要按照草图、拉伸、切孔、增加加强筋和倒角的顺序构建。\n只要这些信息被保留下来，工程师就可以继续修改。孔径变化时，模型无需推倒重来；厚度调整后，相关特征仍能跟随更新；设计文件也可以进入更标准的制造、仿真和审查流程。\n这正是「结构化 3D」与普通视觉 3D 的分水岭。前者保存设计逻辑，后者保存外观结果。\n4B 模型为什么能跑赢通用大模型？\nArko-T 是一个拥有 40 亿参数的 Transformer 模型，以序列到序列的方式进行生成： 输入是一段描述单个零件的文本提示，输出则是一段 Build123d 程序 。该程序能够定义具名参数、构建几何结构，并组合参数化 CAD 的完整操作词汇，最终生成一个实体对象。\nArko-T 训练语料约为 130 万组「文本提示 —Build123d 程序」数据 。\n一部分数据由 DeepCAD 等现有 CAD 数据集转换而来，另一部分来自开源 CAD 项目与内部设计。所有程序都要经过 CAD 内核执行过滤，只有能够生成有效、非空实体的数据才会进入训练集。\n更关键的一步是 代码标准化 。\n真实世界里的 CAD 代码风格非常混乱：参数可能埋在某个常量里，变量名可能毫无意义，建模顺序也可能被无关逻辑打断。直接拿这些数据训练，模型容易学会表面格式，却没有掌握设计结构。\nArko-T 将每一份训练代码重新整理：把孔、壳、阵列等机械特征对应到较稳定的代码模式；把半径、厚度、数量和间距提取成顶部的命名参数；让构建过程遵循草图、拉伸、次级特征、表面处理的相对一致顺序；将对称、间距、面和边的引用尽可能显式表达。\n经过这一处理，训练语料库中的每一段程序既是可执行代码，也是一份清晰、可读的设计意图说明。\n训练分为持续预训练和监督微调两个阶段 。第一阶段先让模型学习 Build123d、CadQuery、OpenSCAD 等参数化建模工具的文档和设计语言；第二阶段再使用 130 万组配对数据进行监督微调。\n这也解释了为什么 40 亿参数的模型，可以在特定任务上超过更大的通用模型。\n通用模型需要覆盖写作、编程、数学和多模态理解等大量任务，结构化 3D 只占其中很小一部分。Arko-T 的训练目标高度集中，数据又被整理成统一的设计语言。参数规模更小，单项能力反而更容易形成优势。\nSOTA 之外，比特无限还想造一台物理 3D 数据引擎\n到这里，Arko-T 论文回答的仍是一个相对明确的技术问题：AI 能否生成可执行、可编辑的参数化 CAD 设计。\n但对比特无限而言，Arko-T 并不是终点。 公司希望把这项能力放进更大的数据闭环中 ：前端连接 Maker 和 3D 打印用户，在真实设计与制造过程中积累修改反馈；后端则将结构化 3D 能力继续延伸到机器人仿真所需的 OpenUSD、SimReady 级资产。\n关于世界模型，李飞飞给出定义：世界模型 = 渲染器（Renderer）+ 模拟器（Simulator）+ 规划器（Planner）。三个环节里，渲染器已经卷成一片红海，规划器也出现了 VLA、机器人策略模型等相对清晰的技术路线。\n真正长期受限的，是负责建模世界状态与物理演化的模拟器，原因在于支撑这些能力的数据长期没有得到规模化积累。\n峰瑞资本创始合伙人李丰说得很直接：世界模型和物理模型之所以成为具身智能领域最大的投资热点，根源就是没有数据 —— 人类从来没有大规模产生过包含物理量和物理世界交互规律的结构化数据。互联网文本可以养出 LLM，但符合物理约束的结构化 3D 数据，没办法凭空合成，只能从真实交互中一点点采样出来。\n更现实的参照系是特斯拉：FSD 之所以能一直进化，是因为每一辆在路上跑的车，每天都在给它交回真实世界的驾驶反馈，这是一台真正跑起来的数据引擎，而不是关起门来在虚拟环境里合成数据。\n物理 3D 世界目前还没有这样一台数据引擎。\n英伟达自己的 Physical AI 技术栈，明确要求 SimReady/OpenUSD 级别的资产，既要有结构装配信息，又要有物理运动学信息，这类数据人工建模一套动辄上千小时学习门槛，纯算法合成又天然带着 Sim-to-Real Gap。\n而绝大多数建模软件本身就有壁垒，物体的运动学关节、轴向、限位这些信息，根本没有标准化的方式被保存下来。\n比特无限的判断是，真正能够推动 Physical AI 持续进化的数据，更可能来自嵌入真实用户行为中的长期反馈闭环。\nMaker 和 3D 打印用户他们每天进行家居改造、零件设计和 3D 打印等项目，实际上包含设计意图、几何参数、制造结果和修正动作。\n团队希望把这类交互变成模型的后训练数据，数据生产被嵌入真实用户场景，产品使用与模型提升形成同一个循环。与只能用于展示的 Mesh 相比， 这类结果更接近一份真正可以继续修改和制造的工程设计。\n模型生成之后，真正有价值的反馈才开始出现。\n用户会通过自然语言提出修改（比如杯垫可能大了 0.5 毫米），这一过程沉淀出语义需求、二维表现、三维几何、装配关系等多种数据。对于专用模型而言，它们构成了极具价值的后训练信号。\n每增加一次 C 端用户交互，都会进一步提升专用模型的能力；模型能力提升后，又可以生成更贴近真实物理世界的 OpenUSD 资产。\n因此，这条链路的终点并没有停留在 3D 打印。经过专用模型处理后，一份普通的参数化设计还可以继续扩展为面向仿真的结构化资产。最终形成能够进入机器人仿真环境的 OpenUSD 资产，从而解决机器人训练中的基础问题。\n这条技术路线，也让比特无限逐渐进入头部 AI 基础设施公司的生态体系。目前，比特无限已经加入 NVIDIA Inception 创业加速计划。此外，比特无限也已经进入智谱公开展示的合作伙伴生态，并落地上海模速空间。\n从万亿参数预训练到物理 3D，周平义博士带队打造\nArko-T 是由比特无限联创、首席科学家周平义博士带队完成的重要研究成果。\n放在整个行业里看，周平义的履历几乎是稀缺资产本身。他是全球目前仅有的约 3000 名主导过万亿参数级别预训练的科学家之一，而这批人里，只有 8% 选择了创业公司。\n比特无限联创、首席科学家周平义博士\n周平义于 2019 年获得武汉大学计算机软件与理论方向博士学位，在华为期间，他曾参与第一代 Pangu-Alpha 2000 亿参数 Dense 大模型的架构设计与预训练，并在第二代 Pangu-Sigma 万亿参数 MoE 大模型研发中承担核心工作，覆盖数据处理、模型架构、预训练、推理和评测等环节。\n这段经历的价值，不只在于训练过足够大的模型。\n在大模型训练仍处于早期探索阶段时，周平义所在团队需要在国产算力、训练框架和大规模集群上解决一系列底层工程问题。模型结构、数据质量、训练稳定性和集群效率必须同时推进。长期参与这一过程，使其积累了从模型架构到工程落地的完整经验。\n加入比特无限后，周平义负责搭建物理 3D 模型的预训练和数据工程体系。他对模型研发的判断很明确：模型能力的上限，很大程度上由数据决定；对于物理 3D 这种数据稀缺、格式分散、设计过程难以保留的领域，数据工程需要先于模型工程建立起来。\n这也成为 Arko-T 技术路线的起点，Arko-T 的优势背后是一套从数据获取、结构化处理、执行验证到模型训练的完整管线。\n这也解释了为什么一款 40 亿参数的专用模型，可以在结构化 CAD 生成任务上超过多款前沿通用模型。通用模型掌握了广泛的代码能力，比特无限进一步补上了物理 3D 领域缺失的设计知识、几何关系和工程约束。\n在团队看来，物理 3D 的竞争最终仍会回到四个要素：算法、算力、数据和真实用户反馈。初创公司很难在算力上与大厂正面竞争，但可以通过专用模型人才、稀缺数据和 Maker 用户形成的交互闭环，在垂直领域建立时间窗口。\n结语\n物理 3D 数据，正在成为具身智能、世界模型、VLA 这些赛道共同卡住的瓶颈，英伟达自己的 Physical AI 技术栈，明确要求 SimReady/OpenUSD 级别的资产，既要有结构装配信息，又要有物理运动学信息，这类数据人工建模一套动辄上千小时学习门槛，纯算法合成又天然带着 Sim-to-Real Gap。\n比特无限是把 3D 打印和 Makers 这个全球超过 5 亿人的存量场景，变成第三类可规模化的 Physical AI 数据引擎，不同于 Google 式的互联网标注，也不同于 Tesla FSD 式的上路传感，而是让用户每一次「画草图 — 建模 — 打印 — 失败 — 修改」的真实闭环，持续反哺给一个越来越懂物理世界的专用模型。\n往大了看，这件事对应的是一块正在快速膨胀的市场：仅 Makers 这一个 C 端场景，2026 年就是 3400 亿美元规模，到 2030 年预计冲到 5000 亿美元；B 端 Physical AI 从 62 亿美元奔着 4000 亿美元去，3D 打印厂商这个细分从 134 亿到 400 亿美元，工业 AI 从 374 亿一路到 1500 亿美元。\n这些数字背后是同一个事实：谁先握住能被工程师直接拿去改、拿去用的结构化物理 3D 数据能力，谁就先握住了这些赛道共同的入口。\n互联网曾经为语言模型提供了文本世界，真实道路为自动驾驶提供了行动世界。如今，比特无限正在为 Physical AI 打开结构化物理世界的入口。",
+      "document_units": [
+        {
+          "unit_id": "u_def2e401ba09",
+          "char_start": 0,
+          "char_end": 4984,
+          "text": "如今的 AI，已经很会「画」3D 了。\n输入一句话，模型可以生成一个足够逼真的耳机盒或咖啡杯。材质、光影、甚至连轮廓都像模像样，放进宣传片里几乎挑不出毛病。\n但把它交给工程师，问题会立刻暴露出来。\n物体孔位间距能不能从 20 毫米改成 25 毫米？修改其中一个尺寸后，其他结构能否自动保持约束关系？\n对于大多数生成式 3D 模型，答案并不乐观。它们交付的是一个可以渲染的外形，内部却缺少工程设计真正依赖的参数、特征、结构关系和构建逻辑。尺寸一变，往往只能重新生成；想要调整局部，也很难像编辑 CAD 文件一样继续加工。\n这条边界，决定了生成式 3D 能否从内容工具走进真实制造，也决定了它能否成为机器人、世界模型和 Physical AI 所需要的数据基础设施。\n近日， 比特无限发布的 Arko-T ，是一款面向 Text-to-Structured 3D Generation 的 4B 参数基础模型。该模型由比特无限联创、首席科学家 周平义博士 带队完成。\n它接收自然语言描述，直接输出可执行的 Build123d 程序。程序经过 CAD 内核运行后，可以得到 带有命名参数、结构特征和建模过程的 CAD 设计实体 。\n更引人关注的是它的结果。在与 GPT-5.2、Claude-4.5-sonnet、Gemini-3.5-flash、DeepSeek-V4-Pro、Qwen3.6-max、Kimi-k2.6、GLM-5.1 这 七个当今最顶尖的通用大模型的正面对抗中 ， 在 12 项量化指标里拿下 8 项第一 、3 项第二。\n论文地址：https://arxiv.org/pdf/2606.30429\n不仅如此，Arko-T 在本地 GPU 上处理单个样本的平均耗时为 0.41 秒 ，相比所有 API 基线模型至少快一个数量级。完成整套基准测试的成本为 0.28 美元 ，约为最便宜 API 基线 DeepSeek 的六分之一，后者成本为 1.69 美元；相比最昂贵的 Claude，则低约 65 倍，后者成本为 18.14 美元。\n对于没有出现在训练集中的部件，Arko-T 也能够基于已有的结构知识进行组合与生成。\n这项研究在 X 上同样收获了好评：很多网友认为这是一次颠覆性的突破。\n更有网友表示「小体量、低延迟与高性能同时出现，成为这项研究最令人惊喜的亮点之一。」\n除了在模型评测中达到 SOTA， Sparkoh AI 还将这项能力落到了原生 3D 建模平台中 ，支持用户直接用自然语言描述需求，系统会自动理解尺寸、结构等关键信息，并生成对应的 3D 模型。\n比如「请帮我生成一个杯垫。」对于这一需求，模型生成的是一份具备明确结构、可调参数和完整构建逻辑的设计文件。该模型可以继续用于 3D 打印，并进一步转化为能够实际制造和使用的产品。\n接下来是定制一个有线耳机收纳盒，用户还可以上传草图作为参考。对生成结果不满意时，也能继续用自然语言提出修改，例如将 IEM 槽位简化并适当放大。设计确认后，即可进入 3D 打印环节。\n由此，即便没有专业建模经验，普通用户也能以更低门槛参与 3D 设计，把一个想法逐步变成真实物体。\n从「生成一个形状」，走向「生成一个设计」\n过去几年，Text-to-3D 的进步主要发生在视觉层面。\nDreamFusion、Magic3D 等路线证明，自然语言可以成为 3D 生成的有效条件。后来大量模型继续提高几何完整度、纹理质量和生成速度，让一句话生成 3D 逐渐成为消费级产品中的常见能力。\n这类模型通常输出 Mesh、NeRF、3DGS 或其他视觉资产。它们适合展示、游戏、美术和数字内容创作，却很难完整承载工程意图。\nCAD 世界关心的对象完全不同。\n一块机械支架，不只是一组表面。它包含孔、槽、倒角、加强筋等明确特征；厚度、半径、间距、数量等可调整参数；还包含草图、拉伸、切除、圆角等按顺序组织的建模历史。特征附着在哪个面、引用哪条边，同样会影响后续编辑是否稳定。\nArko-T 将这套结构概括为一个「设计状态」：特征集合、参数集合、约束关系、构造历史，以及将特征绑定到面、边和草图平面的引用关系。\n这个定义的重要性在于，它把 Text-to-3D 的目标从生成一个形状，推进到生成一个设计实体。\n例如，当用户要求「设计一个带四个安装孔和三角加强筋的支架」时，模型需要理解安装孔属于可编辑特征，孔径和孔距应当成为命名参数，加强筋要连接到合理的承力边，整个零件还需要按照草图、拉伸、切孔、增加加强筋和倒角的顺序构建。\n只要这些信息被保留下来，工程师就可以继续修改。孔径变化时，模型无需推倒重来；厚度调整后，相关特征仍能跟随更新；设计文件也可以进入更标准的制造、仿真和审查流程。\n这正是「结构化 3D」与普通视觉 3D 的分水岭。前者保存设计逻辑，后者保存外观结果。\n4B 模型为什么能跑赢通用大模型？\nArko-T 是一个拥有 40 亿参数的 Transformer 模型，以序列到序列的方式进行生成： 输入是一段描述单个零件的文本提示，输出则是一段 Build123d 程序 。该程序能够定义具名参数、构建几何结构，并组合参数化 CAD 的完整操作词汇，最终生成一个实体对象。\nArko-T 训练语料约为 130 万组「文本提示 —Build123d 程序」数据 。\n一部分数据由 DeepCAD 等现有 CAD 数据集转换而来，另一部分来自开源 CAD 项目与内部设计。所有程序都要经过 CAD 内核执行过滤，只有能够生成有效、非空实体的数据才会进入训练集。\n更关键的一步是 代码标准化 。\n真实世界里的 CAD 代码风格非常混乱：参数可能埋在某个常量里，变量名可能毫无意义，建模顺序也可能被无关逻辑打断。直接拿这些数据训练，模型容易学会表面格式，却没有掌握设计结构。\nArko-T 将每一份训练代码重新整理：把孔、壳、阵列等机械特征对应到较稳定的代码模式；把半径、厚度、数量和间距提取成顶部的命名参数；让构建过程遵循草图、拉伸、次级特征、表面处理的相对一致顺序；将对称、间距、面和边的引用尽可能显式表达。\n经过这一处理，训练语料库中的每一段程序既是可执行代码，也是一份清晰、可读的设计意图说明。\n训练分为持续预训练和监督微调两个阶段 。第一阶段先让模型学习 Build123d、CadQuery、OpenSCAD 等参数化建模工具的文档和设计语言；第二阶段再使用 130 万组配对数据进行监督微调。\n这也解释了为什么 40 亿参数的模型，可以在特定任务上超过更大的通用模型。\n通用模型需要覆盖写作、编程、数学和多模态理解等大量任务，结构化 3D 只占其中很小一部分。Arko-T 的训练目标高度集中，数据又被整理成统一的设计语言。参数规模更小，单项能力反而更容易形成优势。\nSOTA 之外，比特无限还想造一台物理 3D 数据引擎\n到这里，Arko-T 论文回答的仍是一个相对明确的技术问题：AI 能否生成可执行、可编辑的参数化 CAD 设计。\n但对比特无限而言，Arko-T 并不是终点。 公司希望把这项能力放进更大的数据闭环中 ：前端连接 Maker 和 3D 打印用户，在真实设计与制造过程中积累修改反馈；后端则将结构化 3D 能力继续延伸到机器人仿真所需的 OpenUSD、SimReady 级资产。\n关于世界模型，李飞飞给出定义：世界模型 = 渲染器（Renderer）+ 模拟器（Simulator）+ 规划器（Planner）。三个环节里，渲染器已经卷成一片红海，规划器也出现了 VLA、机器人策略模型等相对清晰的技术路线。\n真正长期受限的，是负责建模世界状态与物理演化的模拟器，原因在于支撑这些能力的数据长期没有得到规模化积累。\n峰瑞资本创始合伙人李丰说得很直接：世界模型和物理模型之所以成为具身智能领域最大的投资热点，根源就是没有数据 —— 人类从来没有大规模产生过包含物理量和物理世界交互规律的结构化数据。互联网文本可以养出 LLM，但符合物理约束的结构化 3D 数据，没办法凭空合成，只能从真实交互中一点点采样出来。\n更现实的参照系是特斯拉：FSD 之所以能一直进化，是因为每一辆在路上跑的车，每天都在给它交回真实世界的驾驶反馈，这是一台真正跑起来的数据引擎，而不是关起门来在虚拟环境里合成数据。\n物理 3D 世界目前还没有这样一台数据引擎。\n英伟达自己的 Physical AI 技术栈，明确要求 SimReady/OpenUSD 级别的资产，既要有结构装配信息，又要有物理运动学信息，这类数据人工建模一套动辄上千小时学习门槛，纯算法合成又天然带着 Sim-to-Real Gap。\n而绝大多数建模软件本身就有壁垒，物体的运动学关节、轴向、限位这些信息，根本没有标准化的方式被保存下来。\n比特无限的判断是，真正能够推动 Physical AI 持续进化的数据，更可能来自嵌入真实用户行为中的长期反馈闭环。\nMaker 和 3D 打印用户他们每天进行家居改造、零件设计和 3D 打印等项目，实际上包含设计意图、几何参数、制造结果和修正动作。\n团队希望把这类交互变成模型的后训练数据，数据生产被嵌入真实用户场景，产品使用与模型提升形成同一个循环。与只能用于展示的 Mesh 相比， 这类结果更接近一份真正可以继续修改和制造的工程设计。\n模型生成之后，真正有价值的反馈才开始出现。\n用户会通过自然语言提出修改（比如杯垫可能大了 0.5 毫米），这一过程沉淀出语义需求、二维表现、三维几何、装配关系等多种数据。对于专用模型而言，它们构成了极具价值的后训练信号。\n每增加一次 C 端用户交互，都会进一步提升专用模型的能力；模型能力提升后，又可以生成更贴近真实物理世界的 OpenUSD 资产。\n因此，这条链路的终点并没有停留在 3D 打印。经过专用模型处理后，一份普通的参数化设计还可以继续扩展为面向仿真的结构化资产。最终形成能够进入机器人仿真环境的 OpenUSD 资产，从而解决机器人训练中的基础问题。\n这条技术路线，也让比特无限逐渐进入头部 AI 基础设施公司的生态体系。目前，比特无限已经加入 NVIDIA Inception 创业加速计划。此外，比特无限也已经进入智谱公开展示的合作伙伴生态，并落地上海模速空间。\n从万亿参数预训练到物理 3D，周平义博士带队打造\nArko-T 是由比特无限联创、首席科学家周平义博士带队完成的重要研究成果。\n放在整个行业里看，周平义的履历几乎是稀缺资产本身。他是全球目前仅有的约 3000 名主导过万亿参数级别预训练的科学家之一，而这批人里，只有 8% 选择了创业公司。\n比特无限联创、首席科学家周平义博士\n周平义于 2019 年获得武汉大学计算机软件与理论方向博士学位，在华为期间，他曾参与第一代 Pangu-Alpha 2000 亿参数 Dense 大模型的架构设计与预训练，并在第二代 Pangu-Sigma 万亿参数 MoE 大模型研发中承担核心工作，覆盖数据处理、模型架构、预训练、推理和评测等环节。\n这段经历的价值，不只在于训练过足够大的模型。\n在大模型训练仍处于早期探索阶段时，周平义所在团队需要在国产算力、训练框架和大规模集群上解决一系列底层工程问题。模型结构、数据质量、训练稳定性和集群效率必须同时推进。长期参与这一过程，使其积累了从模型架构到工程落地的完整经验。\n加入比特无限后，周平义负责搭建物理 3D 模型的预训练和数据工程体系。他对模型研发的判断很明确：模型能力的上限，很大程度上由数据决定；对于物理 3D 这种数据稀缺、格式分散、设计过程难以保留的领域，数据工程需要先于模型工程建立起来。\n这也成为 Arko-T 技术路线的起点，Arko-T 的优势背后是一套从数据获取、结构化处理、执行验证到模型训练的完整管线。\n这也解释了为什么一款 40 亿参数的专用模型，可以在结构化 CAD 生成任务上超过多款前沿通用模型。通用模型掌握了广泛的代码能力，比特无限进一步补上了物理 3D 领域缺失的设计知识、几何关系和工程约束。\n"
+        },
+        {
+          "unit_id": "u_7b09ab083e59",
+          "char_start": 4984,
+          "char_end": 5733,
+          "text": "在团队看来，物理 3D 的竞争最终仍会回到四个要素：算法、算力、数据和真实用户反馈。初创公司很难在算力上与大厂正面竞争，但可以通过专用模型人才、稀缺数据和 Maker 用户形成的交互闭环，在垂直领域建立时间窗口。\n结语\n物理 3D 数据，正在成为具身智能、世界模型、VLA 这些赛道共同卡住的瓶颈，英伟达自己的 Physical AI 技术栈，明确要求 SimReady/OpenUSD 级别的资产，既要有结构装配信息，又要有物理运动学信息，这类数据人工建模一套动辄上千小时学习门槛，纯算法合成又天然带着 Sim-to-Real Gap。\n比特无限是把 3D 打印和 Makers 这个全球超过 5 亿人的存量场景，变成第三类可规模化的 Physical AI 数据引擎，不同于 Google 式的互联网标注，也不同于 Tesla FSD 式的上路传感，而是让用户每一次「画草图 — 建模 — 打印 — 失败 — 修改」的真实闭环，持续反哺给一个越来越懂物理世界的专用模型。\n往大了看，这件事对应的是一块正在快速膨胀的市场：仅 Makers 这一个 C 端场景，2026 年就是 3400 亿美元规模，到 2030 年预计冲到 5000 亿美元；B 端 Physical AI 从 62 亿美元奔着 4000 亿美元去，3D 打印厂商这个细分从 134 亿到 400 亿美元，工业 AI 从 374 亿一路到 1500 亿美元。\n这些数字背后是同一个事实：谁先握住能被工程师直接拿去改、拿去用的结构化物理 3D 数据能力，谁就先握住了这些赛道共同的入口。\n互联网曾经为语言模型提供了文本世界，真实道路为自动驾驶提供了行动世界。如今，比特无限正在为 Physical AI 打开结构化物理世界的入口。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_ca65bac1a4",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "近日， 比特无限发布的 Arko-T ，是一款面向 Text-to-Structured 3D Generation 的 4B 参数基础模型。",
+          "claim_id": "c_ca65bac1a4",
+          "span_id": "s_2aa4a6254589",
+          "char_start": 332,
+          "char_end": 403,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "近日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_6e0480b80c6d",
+              "span_id": "s_2aa4a6254589",
+              "char_start": 332,
+              "char_end": 403,
+              "text": "近日， 比特无限发布的 Arko-T ，是一款面向 Text-to-Structured 3D Generation 的 4B 参数基础模型。",
+              "action_text": "比特无限发布的 Arko-T ，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_ca65bac1a4"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_ca65bac1a4",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "比特无限",
+            "event_type": "technical_milestone",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [
+              "c_ca65bac1a4"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 332,
+              "char_end": 403,
+              "text": "近日， 比特无限发布的 Arko-T ，是一款面向 Text-to-Structured 3D Generation 的 4B 参数基础模型。"
+            }
+          },
+          {
+            "canonical_company": "比特无限",
+            "event_type": "partnership",
+            "event_status": "completed",
+            "importance": "weak",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 4142,
+              "char_end": 4213,
+              "text": "这条技术路线，也让比特无限逐渐进入头部 AI 基础设施公司的生态体系。目前，比特无限已经加入 NVIDIA Inception 创业加速计划。"
+            }
+          },
+          {
+            "canonical_company": "比特无限",
+            "event_type": "partnership",
+            "event_status": "completed",
+            "importance": "weak",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 4213,
+              "char_end": 4249,
+              "text": "此外，比特无限也已经进入智谱公开展示的合作伙伴生态，并落地上海模速空间。"
+            }
+          },
+          {
+            "canonical_company": "比特无限",
+            "event_type": "new_site_or_entity",
+            "event_status": "completed",
+            "importance": "weak",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 4213,
+              "char_end": 4249,
+              "text": "此外，比特无限也已经进入智谱公开展示的合作伙伴生态，并落地上海模速空间。"
+            }
+          }
+        ],
+        "article_notes": "Arko-T???????????NVIDIA Inception????????????????????????????/?????",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "?????????????????????????????????????"
+      }
+    },
+    {
+      "key": "ccid-report-commentary:1121917",
+      "article_sha256": "7602205931f088f5d18a6b6f0aeb30cf3270f0bdbe4773f1863d55d09eecc13b",
+      "source_id": "ccid-report-commentary",
+      "canonical_url": "https://www.ccidreport.com/zcjd/1121917.jhtml",
+      "published_at": "2026-07-30T00:00:00+08:00",
+      "title": "聚焦6个方向，2026年工业和信息化领域创新任务揭榜挂帅工作启动",
+      "document_type": "commentary",
+      "clean_body": "为加快推动科技创新与产业创新深度融合，以关键技术攻关推动产业高质量发展，工业和信息化部、应急管理部、中国人民银行、国家金融监管总局、中国证监会、中国科学院、国家文物局等七部门近日联合印发通知，部署开展2026年工业和信息化领域创新任务揭榜挂帅工作。本批揭榜挂帅围绕未来产业、装备制造、信息技术、通信、人工智能、消费品6个方向，系统布局24个专题。各地工业和信息化主管部门、中央企业等推荐单位可通过政府引导、企业自愿的方式，优先推荐创新能力突出、产业化前景好、行业带动作用明显的项目。 关于开展2026年工业和信息化领域创新任务揭榜挂帅工作的通知 工信厅联科函〔2026〕363号 各省、自治区、直辖市及新疆生产建设兵团工业和信息化主管部门、通信管理局、应急管理部门、中国人民银行分行、金融监管局、证监局、文物局（文化和旅游厅/局），中国人民银行上海总部，中国科学院院属各单位，有关中央企业： 为加快推动科技创新与产业创新深度融合，以关键技术攻关推动产业高质量发展，现启动2026年首批工业和信息化领域创新任务揭榜挂帅工作（以下简称揭榜挂帅）。有关事项通知如下： 一、揭榜挂帅方向内容 本批揭榜挂帅围绕未来产业、装备制造、信息技术、通信、人工智能、消费品6个方向，系统布局24个专题。具体如下： 未来产业方向设置人形机器人与具身智能技术、原子级制造技术、生物制造高性能分离纯化装备、类脑智能、激光制造前沿技术5个专题。其中，人形机器人与具身智能技术专题为工业和信息化部与应急管理部共同开展，生物制造高性能分离纯化装备专题为工业和信息化部与中国科学院共同开展。 装备制造方向设置节水技术装备、智能制造系统解决方案、文物保护装备、先进电力装备技术、汽车行业绿色制冷剂装备5个专题。其中，文物保护装备专题为工业和信息化部与国家文物局共同开展。 信息技术方向设置工业专用软件、大数据技术、元宇宙技术、金融信息技术、虚拟现实技术5个专题。其中，金融信息技术专题为工业和信息化部与中国人民银行、国家金融监督管理总局、中国证券监督管理委员会共同开展。 通信方向设置通信设备、算力高质量发展技术、信息通信业数据要素利用技术、基础电信网络安全科技创新技术4个专题（其中，基础电信网络安全科技创新技术专题申报要求另行通知）。 人工智能方向设置基础底座技术、赋能应用技术、智能产品装备、共性基础支撑技术4个专题。 消费品方向设置化纤油剂技术1个专题。 二、申报基本条件 （一）申报主体应为在中华人民共和国境内注册的法人或非法人组织，近三年财务状况良好、无重大违法违规行为、未发生较大及以上生产安全事故和环境污染事故。已列入前期揭榜优胜的项目不得重复申报。 （二）申报主体应在所申报专题领域具有较好的研发积累和技术基础，具备支撑任务攻关的场地、设备、人员等要素以及技术研发、实验验证、仿真测试、软硬件开发、系统集成等条件。涉及应用示范的项目，应具有明确的用户单位或市场前景。此外，申报主体还应符合所申报专题指南中规定的其他要求。 （三）各省、自治区、直辖市及新疆生产建设兵团工业和信息化主管部门，中央企业等推荐单位按照“英雄不问出处，谁有本事谁就揭榜”的原则，通过政府引导、企业自愿的方式，优先推荐创新能力突出、产业化前景好、行业带动作用明显的项目，避免简单以企业规模、知识产权数量、人才“帽子”数量等评价项目质量。 （四）对于每个专题，每个申报主体申报不超过3项任务，每个任务最多提交1项申报。鼓励企业、科技服务机构、高校、科研院所及新型研发机构等以联合体方式申报。牵头单位为1家，联合参与单位不超过4家。 三、征集程序 （一）各申报主体应根据所选方向申报指南（见附件1—6）有关要求填写申报材料（附件7），于2026年8月21日（周五）前反馈推荐单位。 （二）请推荐单位组织各方积极参与，遵循公开、公平、公正的原则，确认推荐名单，并于2026年9月7日（周一）前将推荐汇总表（附件8）报送至部内相应主责司局。 （三）工业和信息化部牵头组织遴选入围单位，并发布入围单位名单。入围单位完成攻关任务后（名单公布之日起不超过2年），工业和信息化部将委托第三方专业机构开展测评工作，择优确定优胜单位。 四、工作要求 （一）请推荐单位高度重视、认真组织揭榜挂帅工作，充分调动企业、高校、科研院所、相关产业联盟及行业协会的积极性，公开、公平、公正做好推荐工作。 （二）请各省（市）立足地方发展优势和特色禀赋，在政策资金支持、场景开放、应用推广等方面为入围和优胜单位予以支持，保障揭榜任务顺利完成。 （三）申报方式包括线上系统申报与线下材料申报两种方式。具体方式以各专题申报指南相关要求为准。 （四）原则上各省级推荐单位每个专题推荐数量不超过20个，各央企推荐单位每个专题推荐数量不超过3个。具体数量以各专题申报指南相关要求为准。 附件： 1.未来产业方向创新任务揭榜挂帅申报指南 2.装备制造方向创新任务揭榜挂帅申报指南 3.信息技术方向创新任务揭榜挂帅申报指南 4.通信方向创新任务揭榜挂帅申报指南 5.人工智能方向创新任务揭榜挂帅申报指南 6.消费品方向创新任务揭榜挂帅申报指南 7.2026年工业和信息化领域创新任务揭榜挂帅申报材料 8.2026年工业和信息化领域创新任务揭榜单位推荐汇总表 工业和信息化部办公厅 应急管理部办公厅 中国人民银行办公厅 国家金融监督管理总局办公厅 中国证券监督管理委员会办公厅 中国科学院办公厅 国家文物局办公室 2026年7月24日",
+      "document_units": [
+        {
+          "unit_id": "u_7457e9194246",
+          "char_start": 0,
+          "char_end": 2268,
+          "text": "为加快推动科技创新与产业创新深度融合，以关键技术攻关推动产业高质量发展，工业和信息化部、应急管理部、中国人民银行、国家金融监管总局、中国证监会、中国科学院、国家文物局等七部门近日联合印发通知，部署开展2026年工业和信息化领域创新任务揭榜挂帅工作。本批揭榜挂帅围绕未来产业、装备制造、信息技术、通信、人工智能、消费品6个方向，系统布局24个专题。各地工业和信息化主管部门、中央企业等推荐单位可通过政府引导、企业自愿的方式，优先推荐创新能力突出、产业化前景好、行业带动作用明显的项目。 关于开展2026年工业和信息化领域创新任务揭榜挂帅工作的通知 工信厅联科函〔2026〕363号 各省、自治区、直辖市及新疆生产建设兵团工业和信息化主管部门、通信管理局、应急管理部门、中国人民银行分行、金融监管局、证监局、文物局（文化和旅游厅/局），中国人民银行上海总部，中国科学院院属各单位，有关中央企业： 为加快推动科技创新与产业创新深度融合，以关键技术攻关推动产业高质量发展，现启动2026年首批工业和信息化领域创新任务揭榜挂帅工作（以下简称揭榜挂帅）。有关事项通知如下： 一、揭榜挂帅方向内容 本批揭榜挂帅围绕未来产业、装备制造、信息技术、通信、人工智能、消费品6个方向，系统布局24个专题。具体如下： 未来产业方向设置人形机器人与具身智能技术、原子级制造技术、生物制造高性能分离纯化装备、类脑智能、激光制造前沿技术5个专题。其中，人形机器人与具身智能技术专题为工业和信息化部与应急管理部共同开展，生物制造高性能分离纯化装备专题为工业和信息化部与中国科学院共同开展。 装备制造方向设置节水技术装备、智能制造系统解决方案、文物保护装备、先进电力装备技术、汽车行业绿色制冷剂装备5个专题。其中，文物保护装备专题为工业和信息化部与国家文物局共同开展。 信息技术方向设置工业专用软件、大数据技术、元宇宙技术、金融信息技术、虚拟现实技术5个专题。其中，金融信息技术专题为工业和信息化部与中国人民银行、国家金融监督管理总局、中国证券监督管理委员会共同开展。 通信方向设置通信设备、算力高质量发展技术、信息通信业数据要素利用技术、基础电信网络安全科技创新技术4个专题（其中，基础电信网络安全科技创新技术专题申报要求另行通知）。 人工智能方向设置基础底座技术、赋能应用技术、智能产品装备、共性基础支撑技术4个专题。 消费品方向设置化纤油剂技术1个专题。 二、申报基本条件 （一）申报主体应为在中华人民共和国境内注册的法人或非法人组织，近三年财务状况良好、无重大违法违规行为、未发生较大及以上生产安全事故和环境污染事故。已列入前期揭榜优胜的项目不得重复申报。 （二）申报主体应在所申报专题领域具有较好的研发积累和技术基础，具备支撑任务攻关的场地、设备、人员等要素以及技术研发、实验验证、仿真测试、软硬件开发、系统集成等条件。涉及应用示范的项目，应具有明确的用户单位或市场前景。此外，申报主体还应符合所申报专题指南中规定的其他要求。 （三）各省、自治区、直辖市及新疆生产建设兵团工业和信息化主管部门，中央企业等推荐单位按照“英雄不问出处，谁有本事谁就揭榜”的原则，通过政府引导、企业自愿的方式，优先推荐创新能力突出、产业化前景好、行业带动作用明显的项目，避免简单以企业规模、知识产权数量、人才“帽子”数量等评价项目质量。 （四）对于每个专题，每个申报主体申报不超过3项任务，每个任务最多提交1项申报。鼓励企业、科技服务机构、高校、科研院所及新型研发机构等以联合体方式申报。牵头单位为1家，联合参与单位不超过4家。 三、征集程序 （一）各申报主体应根据所选方向申报指南（见附件1—6）有关要求填写申报材料（附件7），于2026年8月21日（周五）前反馈推荐单位。 （二）请推荐单位组织各方积极参与，遵循公开、公平、公正的原则，确认推荐名单，并于2026年9月7日（周一）前将推荐汇总表（附件8）报送至部内相应主责司局。 （三）工业和信息化部牵头组织遴选入围单位，并发布入围单位名单。入围单位完成攻关任务后（名单公布之日起不超过2年），工业和信息化部将委托第三方专业机构开展测评工作，择优确定优胜单位。 四、工作要求 （一）请推荐单位高度重视、认真组织揭榜挂帅工作，充分调动企业、高校、科研院所、相关产业联盟及行业协会的积极性，公开、公平、公正做好推荐工作。 （二）请各省（市）立足地方发展优势和特色禀赋，在政策资金支持、场景开放、应用推广等方面为入围和优胜单位予以支持，保障揭榜任务顺利完成。 （三）申报方式包括线上系统申报与线下材料申报两种方式。具体方式以各专题申报指南相关要求为准。 （四）原则上各省级推荐单位每个专题推荐数量不超过20个，各央企推荐单位每个专题推荐数量不超过3个。具体数量以各专题申报指南相关要求为准。 附件： 1.未来产业方向创新任务揭榜挂帅申报指南 2.装备制造方向创新任务揭榜挂帅申报指南 3.信息技术方向创新任务揭榜挂帅申报指南 4.通信方向创新任务揭榜挂帅申报指南 5.人工智能方向创新任务揭榜挂帅申报指南 6.消费品方向创新任务揭榜挂帅申报指南 7.2026年工业和信息化领域创新任务揭榜挂帅申报材料 8.2026年工业和信息化领域创新任务揭榜单位推荐汇总表 工业和信息化部办公厅 应急管理部办公厅 中国人民银行办公厅 国家金融监督管理总局办公厅 中国证券监督管理委员会办公厅 中国科学院办公厅 国家文物局办公室 2026年7月24日"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_d6157b9664",
+          "event_type": "policy_or_standard",
+          "funding_round": "",
+          "quote": "为加快推动科技创新与产业创新深度融合，以关键技术攻关推动产业高质量发展，工业和信息化部、应急管理部、中国人民银行、国家金融监管总局、中国证监会、中国科学院、国家文物局等七部门近日联合印发通知，部署开展2026年工业和信息化领域创新任务揭榜挂帅工作。",
+          "claim_id": "c_d6157b9664",
+          "span_id": "s_b0f055759eec",
+          "char_start": 0,
+          "char_end": 124,
+          "subject_hint": "",
+          "action_hint": "policy_or_standard",
+          "event_status_hint": "unknown",
+          "time_hints": [
+            "近日",
+            "2026年"
+          ],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_d6157b9664"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_d6157b9664",
+            "disposition": "rejected",
+            "reason_code": "invalid_government_subject"
+          }
+        ],
+        "gold_events": [],
+        "article_notes": "七部门通知与揭榜任务属于政府政策流程，不是公司经营事件。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "iter-china-news:24397",
+      "article_sha256": "306ff7acc61a15038c6aa721da873741c731832260b57e055544b6d757904903",
+      "source_id": "iter-china-news",
+      "canonical_url": "https://www.iterchina.cn/picnews/info/2026/24397.html",
+      "published_at": "2026-07-31T00:00:00+08:00",
+      "title": "ITER装置1号扇段完成吊装托卡马克核心部件安装已达三分之二",
+      "document_type": "single_company_flash",
+      "clean_body": "7月28日， 国际热核聚变实验堆（ ITER） 托卡马克 真空室 1号扇 段 成功落位基坑，成为 9个扇 段 中第 6个 就位 的 模块。至此， 等离子体真空室三分之二 扇段 就位 ， 实现 ITER装配 的一大 里程碑 。 中 方团队 牵头顺利完成此次关键吊装，近 30小时 连续作业 ，实现安全零事故、质量零事件，为后续总装任务奠定坚实基础，充分彰显团队严谨高效的协同作业能力。 吊装 部署 了 多 种 高精度传感器，为吊装 的 安全平稳实施提供 有力 数字化支撑。 1400吨扇 段 依靠数字化传感监测系统实现毫米级精准定位。 本次吊装前，基坑内已有 4号、5号、6号、7号、 8 号共 5个扇段就位。项目计划于今年年底前启动第7个扇段的转运吊装工作。",
+      "document_units": [
+        {
+          "unit_id": "u_942af11a12ea",
+          "char_start": 0,
+          "char_end": 329,
+          "text": "7月28日， 国际热核聚变实验堆（ ITER） 托卡马克 真空室 1号扇 段 成功落位基坑，成为 9个扇 段 中第 6个 就位 的 模块。至此， 等离子体真空室三分之二 扇段 就位 ， 实现 ITER装配 的一大 里程碑 。 中 方团队 牵头顺利完成此次关键吊装，近 30小时 连续作业 ，实现安全零事故、质量零事件，为后续总装任务奠定坚实基础，充分彰显团队严谨高效的协同作业能力。 吊装 部署 了 多 种 高精度传感器，为吊装 的 安全平稳实施提供 有力 数字化支撑。 1400吨扇 段 依靠数字化传感监测系统实现毫米级精准定位。 本次吊装前，基坑内已有 4号、5号、6号、7号、 8 号共 5个扇段就位。项目计划于今年年底前启动第7个扇段的转运吊装工作。"
+        }
+      ],
+      "candidates": [],
+      "annotation": {
+        "candidate_dispositions": [],
+        "gold_events": [],
+        "article_notes": "ITER为国际项目，中方团队亦未指明公司主体；不生成公司 Gold 事件。",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "???????candidate disposition???????????"
+      }
+    },
+    {
+      "key": "zhidx-financing:581331",
+      "article_sha256": "dbc960a4bde63060e1fcfbdc1303ed3384b64cb9c25befd70b09a3ab9e45b5d5",
+      "source_id": "zhidx-financing",
+      "canonical_url": "https://zhidx.com/p/581331.html",
+      "published_at": "2026-07-31T11:42:00+08:00",
+      "title": "前菜鸟CTO入局具身智能，获超亿元种子轮融资",
+      "document_type": "single_company_flash",
+      "clean_body": "机器人前瞻（公众号：robot_pro） 作者 | 刘俐杉 编辑 | 许丽思 机器人前瞻7月31日报道，今日，Physical AI平台公司昆腾动力（Quantum Dynamics）宣布完成 超亿元种子轮融资 ，本轮由云启资本、商汤国香资本联合投资。 融资资金将主要用于 Physical AI核心技术研发、人才梯队建设及全球化市场拓展 ，加速其面向物理世界的智能系统从底层模型到场景化落地的全链路构建。多维资本参与项目孵化与团队组建。 据企查查公开信息显示，该公司创立于2026年3月，专注于打造面向物理世界的Physical AI平台。该公司目前已与浙江大学、南洋理工大学、上海创智学院、香港科技大学等众多国内外高校和机构建立科研合作。 该公司创始人李强在阿里巴巴任职17年，曾任 菜鸟集团CTO、阿里巴巴国际数字商业板块CTO ，他曾带领团队对接过海外200个国家的邮政体系，对全球物流生态有一线的实操认知。 在该公司核心团队方面，该公司CTO曾任行业头部自动驾驶公司的在线算法负责人，深耕自动驾驶全栈技术；首席科学家专攻具身智能基础模型，拥有北美名校、具身智能实验室访问学者和博士后背景，现任国内顶尖机构助理教授。 该公司硬件负责人曾是某上市公司人形机器人业务的技术带头人，深耕 机械臂与灵巧手领域 ；商业化负责人毕业于马里兰大学物理系，曾在高盛、亚马逊、Meta担任算法专家，拥有10年物流调度系统创业经验，手握联想、乐天等等海内外合作客户资源。 在数据方面，昆腾动力认为高质量、封闭、海量的真实场景数据应该由每一台部署在仓库的机器人采集，而数据越多，模型的泛化能力和成功率就越高，模型越强，接入新客户、新场景的成本和周期就越低。 在应用场景上，围绕创始人的经历，昆腾动力决定将物流场景作为起始点，2026年先进入仓库与分拨中心，聚焦B2C与B2小B仓库的 补货上架、拣选、打包 三大人力占比最高的核心岗位，以人机混场的方式稳步推进。 国内电商仓则从 美妆、医药 这类SKU丰富、货品相对规整的场景入手做拣货与打包。 等到场景跑通、模型成熟，2027年之后再向数量庞大、环境更复杂的快递网点拓展，最终沿着 物流到工业产线、零售补货、医药分拣等类物流场景，再到商业服务，最终走向养老家庭 等民生服务的路径，一步步扩大应用场景。 而借力开源方案把场景跑通只是第一步，昆腾动力的第二步是反向定义属于自己的基础模型，搭建起技术底座，做深场景、做宽平台。 但昆腾动力的核心不是做一个单点能力模型，而是构建一套 从真实部署中持续进化的具身智能系统 。 首先是具身原生的World-Action Model，联合 理解视觉、动作、本体状态和触觉 ，学习“动作会如何改变物理世界”，同时满足机器人实时控制要求。 其次是建立大规模数据闭环，以真机和人类操作数据为主，把原始日志自动加工成带有 任务阶段、失败原因、恢复动作和业务结果 的高价值训练数据，实现秒级检索、自动清洗标注和天级模型迭代。 然后，利用高效Human-in-the-Loop降低人工成本和提升成功率。系统判断机器人什么时候真的需要人工介入，把每次介入转化为训练数据，一个人可以管理更多机器人。 之后再通过轻量级World Model Corrector实时监控执行偏差，在机器人动作失效前 及时纠偏、重规划和重试， 提高真实场景中的成功率。 在这个过程中，新客户和新仓库不需要重新训练整个模型的权重。而是通过Test-Time Training、少样本示范和历史经验复用，机器人可以快速适应新的货物、货架、光照和流程。 最后，所有机器人就能组成一个持续学习和自我进化的舰队。每台机器人产生的成功、失败、干预和恢复经验，都会通过 离线强化学习、偏好优化、仿真训练和真机验证， 更新到整个舰队。 物流是目前具身智能赛道里最扎实的落地赛道之一，依托创始人的物流、电商产业认知优势，叠加团队具备的产业资源协同，昆腾动力具备着天然优势。不过行业整体仍存在硬件成本、复杂场景适配等待解难题，对昆腾动力而言，想要完成底层模型打磨、多场景规模化部署，后续仍需面对技术落地与商业化层面的挑战。",
+      "document_units": [
+        {
+          "unit_id": "u_33fe47564419",
+          "char_start": 0,
+          "char_end": 1718,
+          "text": "机器人前瞻（公众号：robot_pro） 作者 | 刘俐杉 编辑 | 许丽思 机器人前瞻7月31日报道，今日，Physical AI平台公司昆腾动力（Quantum Dynamics）宣布完成 超亿元种子轮融资 ，本轮由云启资本、商汤国香资本联合投资。 融资资金将主要用于 Physical AI核心技术研发、人才梯队建设及全球化市场拓展 ，加速其面向物理世界的智能系统从底层模型到场景化落地的全链路构建。多维资本参与项目孵化与团队组建。 据企查查公开信息显示，该公司创立于2026年3月，专注于打造面向物理世界的Physical AI平台。该公司目前已与浙江大学、南洋理工大学、上海创智学院、香港科技大学等众多国内外高校和机构建立科研合作。 该公司创始人李强在阿里巴巴任职17年，曾任 菜鸟集团CTO、阿里巴巴国际数字商业板块CTO ，他曾带领团队对接过海外200个国家的邮政体系，对全球物流生态有一线的实操认知。 在该公司核心团队方面，该公司CTO曾任行业头部自动驾驶公司的在线算法负责人，深耕自动驾驶全栈技术；首席科学家专攻具身智能基础模型，拥有北美名校、具身智能实验室访问学者和博士后背景，现任国内顶尖机构助理教授。 该公司硬件负责人曾是某上市公司人形机器人业务的技术带头人，深耕 机械臂与灵巧手领域 ；商业化负责人毕业于马里兰大学物理系，曾在高盛、亚马逊、Meta担任算法专家，拥有10年物流调度系统创业经验，手握联想、乐天等等海内外合作客户资源。 在数据方面，昆腾动力认为高质量、封闭、海量的真实场景数据应该由每一台部署在仓库的机器人采集，而数据越多，模型的泛化能力和成功率就越高，模型越强，接入新客户、新场景的成本和周期就越低。 在应用场景上，围绕创始人的经历，昆腾动力决定将物流场景作为起始点，2026年先进入仓库与分拨中心，聚焦B2C与B2小B仓库的 补货上架、拣选、打包 三大人力占比最高的核心岗位，以人机混场的方式稳步推进。 国内电商仓则从 美妆、医药 这类SKU丰富、货品相对规整的场景入手做拣货与打包。 等到场景跑通、模型成熟，2027年之后再向数量庞大、环境更复杂的快递网点拓展，最终沿着 物流到工业产线、零售补货、医药分拣等类物流场景，再到商业服务，最终走向养老家庭 等民生服务的路径，一步步扩大应用场景。 而借力开源方案把场景跑通只是第一步，昆腾动力的第二步是反向定义属于自己的基础模型，搭建起技术底座，做深场景、做宽平台。 但昆腾动力的核心不是做一个单点能力模型，而是构建一套 从真实部署中持续进化的具身智能系统 。 首先是具身原生的World-Action Model，联合 理解视觉、动作、本体状态和触觉 ，学习“动作会如何改变物理世界”，同时满足机器人实时控制要求。 其次是建立大规模数据闭环，以真机和人类操作数据为主，把原始日志自动加工成带有 任务阶段、失败原因、恢复动作和业务结果 的高价值训练数据，实现秒级检索、自动清洗标注和天级模型迭代。 然后，利用高效Human-in-the-Loop降低人工成本和提升成功率。系统判断机器人什么时候真的需要人工介入，把每次介入转化为训练数据，一个人可以管理更多机器人。 之后再通过轻量级World Model Corrector实时监控执行偏差，在机器人动作失效前 及时纠偏、重规划和重试， 提高真实场景中的成功率。 在这个过程中，新客户和新仓库不需要重新训练整个模型的权重。而是通过Test-Time Training、少样本示范和历史经验复用，机器人可以快速适应新的货物、货架、光照和流程。 最后，所有机器人就能组成一个持续学习和自我进化的舰队。每台机器人产生的成功、失败、干预和恢复经验，都会通过 离线强化学习、偏好优化、仿真训练和真机验证， 更新到整个舰队。 物流是目前具身智能赛道里最扎实的落地赛道之一，依托创始人的物流、电商产业认知优势，叠加团队具备的产业资源协同，昆腾动力具备着天然优势。不过行业整体仍存在硬件成本、复杂场景适配等待解难题，对昆腾动力而言，想要完成底层模型打磨、多场景规模化部署，后续仍需面对技术落地与商业化层面的挑战。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_447bdce5d0",
+          "event_type": "funding",
+          "funding_round": "种子轮",
+          "quote": "机器人前瞻（公众号：robot_pro） 作者 | 刘俐杉 编辑 | 许丽思 机器人前瞻7月31日报道，今日，Physical AI平台公司昆腾动力（Quantum Dynamics）宣布完成 超亿元种子轮融资 ，本轮由云启资本、商汤国香资本联合投资。",
+          "claim_id": "c_447bdce5d0",
+          "span_id": "s_c622fbf8c552",
+          "char_start": 0,
+          "char_end": 126,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "7月31日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_59ba73b2c44b",
+              "span_id": "s_c622fbf8c552",
+              "char_start": 0,
+              "char_end": 126,
+              "text": "机器人前瞻（公众号：robot_pro） 作者 | 刘俐杉 编辑 | 许丽思 机器人前瞻7月31日报道，今日，Physical AI平台公司昆腾动力（Quantum Dynamics）宣布完成 超亿元种子轮融资 ，本轮由云启资本、商汤国香资本联合投资。",
+              "action_text": "Physical AI平台公司昆腾动力（Quantum Dynamics）宣布完成 超亿元种子轮融资 ，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_447bdce5d0"
+          ]
+        },
+        {
+          "id": "c_d9bfdd82a1",
+          "event_type": "funding",
+          "funding_round": "种子轮",
+          "quote": "Physical AI平台公司昆腾动力（Quantum Dynamics）宣布完成 超亿元种子轮融资",
+          "claim_id": "c_d9bfdd82a1",
+          "span_id": "s_64f187da9aeb",
+          "char_start": 55,
+          "char_end": 105,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_9c523b3ee05a",
+              "span_id": "s_64f187da9aeb",
+              "char_start": 55,
+              "char_end": 105,
+              "text": "Physical AI平台公司昆腾动力（Quantum Dynamics）宣布完成 超亿元种子轮融资",
+              "action_text": "Physical AI平台公司昆腾动力（Quantum Dynamics）宣布完成 超亿元种子轮融资",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_d9bfdd82a1"
+          ]
+        },
+        {
+          "id": "c_f24c5de577",
+          "event_type": "partnership",
+          "funding_round": "",
+          "quote": "该公司目前已与浙江大学、南洋理工大学、上海创智学院、香港科技大学等众多国内外高校和机构建立科研合作。",
+          "subject_hint": "学、南洋理工大学、上海创智学院、香港科技大学等众多国内外高校和机构建立科研合作。",
+          "claim_id": "c_f24c5de577",
+          "span_id": "s_a890ae27b684",
+          "char_start": 271,
+          "char_end": 321,
+          "action_hint": "partnership",
+          "event_status_hint": "unknown",
+          "time_hints": [],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_f24c5de577"
+          ]
+        },
+        {
+          "id": "c_d2f574a842",
+          "event_type": "factory_or_capacity",
+          "funding_round": "",
+          "quote": "等到场景跑通、模型成熟，2027年之后再向数量庞大、环境更复杂的快递网点拓展，最终沿着 物流到工业产线、零售补货、医药分拣等类物流场景，再到商业服务，最终走向养老家庭 等民生服务的路径，一步步扩大应用场景。",
+          "claim_id": "c_d2f574a842",
+          "span_id": "s_1319e0aa0267",
+          "char_start": 865,
+          "char_end": 968,
+          "subject_hint": "",
+          "action_hint": "factory_or_capacity",
+          "event_status_hint": "unknown",
+          "time_hints": [
+            "2027年"
+          ],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_d2f574a842"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_447bdce5d0",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          },
+          {
+            "claim_id": "c_d9bfdd82a1",
+            "disposition": "rejected",
+            "reason_code": "duplicate_same_funding_event"
+          },
+          {
+            "claim_id": "c_f24c5de577",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          },
+          {
+            "claim_id": "c_d2f574a842",
+            "disposition": "accepted",
+            "reason_code": "current_company_roadmap"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "昆腾动力",
+            "event_type": "funding",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [
+              "c_447bdce5d0"
+            ],
+            "funding_amount": "超亿元",
+            "investors": [
+              "云启资本",
+              "商汤国香资本"
+            ],
+            "candidate_gap": false,
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 126,
+              "text": "机器人前瞻（公众号：robot_pro） 作者 | 刘俐杉 编辑 | 许丽思 机器人前瞻7月31日报道，今日，Physical AI平台公司昆腾动力（Quantum Dynamics）宣布完成 超亿元种子轮融资 ，本轮由云启资本、商汤国香资本联合投资。"
+            },
+            "funding_round": "???"
+          },
+          {
+            "canonical_company": "昆腾动力",
+            "event_type": "partnership",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [
+              "c_f24c5de577"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 220,
+              "char_end": 321,
+              "text": "据企查查公开信息显示，该公司创立于2026年3月，专注于打造面向物理世界的Physical AI平台。该公司目前已与浙江大学、南洋理工大学、上海创智学院、香港科技大学等众多国内外高校和机构建立科研合作。"
+            }
+          },
+          {
+            "canonical_company": "昆腾动力",
+            "event_type": "customer_validation",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 722,
+              "char_end": 823,
+              "text": "在应用场景上，围绕创始人的经历，昆腾动力决定将物流场景作为起始点，2026年先进入仓库与分拨中心，聚焦B2C与B2小B仓库的 补货上架、拣选、打包 三大人力占比最高的核心岗位，以人机混场的方式稳步推进。"
+            }
+          },
+          {
+            "canonical_company": "昆腾动力",
+            "event_type": "customer_validation",
+            "event_status": "target",
+            "importance": "weak",
+            "claim_ids": [
+              "c_d2f574a842"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 722,
+              "char_end": 968,
+              "text": "在应用场景上，围绕创始人的经历，昆腾动力决定将物流场景作为起始点，2026年先进入仓库与分拨中心，聚焦B2C与B2小B仓库的 补货上架、拣选、打包 三大人力占比最高的核心岗位，以人机混场的方式稳步推进。 国内电商仓则从 美妆、医药 这类SKU丰富、货品相对规整的场景入手做拣货与打包。 等到场景跑通、模型成熟，2027年之后再向数量庞大、环境更复杂的快递网点拓展，最终沿着 物流到工业产线、零售补货、医药分拣等类物流场景，再到商业服务，最终走向养老家庭 等民生服务的路径，一步步扩大应用场景。"
+            }
+          },
+          {
+            "canonical_company": "昆腾动力",
+            "event_type": "technical_milestone",
+            "event_status": "target",
+            "importance": "weak",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 969,
+              "char_end": 1028,
+              "text": "而借力开源方案把场景跑通只是第一步，昆腾动力的第二步是反向定义属于自己的基础模型，搭建起技术底座，做深场景、做宽平台。"
+            }
+          }
+        ],
+        "article_notes": "??????????????????2026??????2027?????????????????????????????????????",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "?????2027???????target?????????????????????????????enterprise_system???"
+      }
+    },
+    {
+      "key": "zhidx-financing:581461",
+      "article_sha256": "867e4d6708505baeb5a48142eb01ace55dfdc1d0117a74cb2893ee6aacd26e98",
+      "source_id": "zhidx-financing",
+      "canonical_url": "https://zhidx.com/p/581461.html",
+      "published_at": "2026-07-31T14:17:00+08:00",
+      "title": "清华特奖得主，00后刘松铭，融资数亿",
+      "document_type": "single_company_flash",
+      "clean_body": "机器人前瞻（公众号：robot_pro） 作者 | 周加琦 编辑 | 漠影 机器人前瞻7月31日报道，今天，LiberAI宣布完成新一轮 数亿元Pre-A+轮融资 ，投资方包括360战投、国开金融、创新工场、CMC资本、彬复资本等，老股东红杉中国自天使轮连续追加四轮。 今年5月，LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；6月，该公司再次宣布完成数亿元Pre-A轮融资。投资方包括红杉中国、真格基金、美团龙珠等。 三个月内，LiberAI连续完成三轮亿级融资。 LiberAI成立于2025年，专注于研发世界模型，聚焦原生多模态预训练，同时构建自有的数采和硬件体系。 在模型部署的硬件形态上，该公司选择灵巧手，并发布 高自由度灵巧手精细操作具身模型 。该模型搭载五指灵巧手，可实现拧瓶盖、颠锅、煎蛋等精细化操作的长时序任务。 为落地该路线，LiberAI从三个方面着手： 1.数据基建与工程算法 ，包含如何清洗数据、检测手部并优化检测算子的速度等。目前这套data infra和数据管线的自动化率在90%以上。 2. 模型本身训练 ，该公司做了大量的human data和多模态训练，将它们对齐到统一空间。 3. 数采手套 ，LiberAI自研的人类数据手套实现高精度、可穿戴性、抗电磁干扰且抗遮挡，已进入量产阶段。 LiberAI构建了一个“数据金字塔”，以互联网人类视频为底层基础、自研数据手套为中间层、真机数据为顶层。其中，人类视频数据规模比手套数据高1-2个数量级，手套数据比真机数据高1-2个数量级。 该公司依靠分层的数据组合模式，充分利用低成本人类数据，减少训练过程中对高成本真机数据的依赖。 LiberAI创始人刘松铭 ，出生于2000年，是清华大学计算机系博士，曾获得清华大学特等奖学金，多年保持年级第一。刘松铭师从视频生成模型领域学者朱军教授，主要研究方向涵盖人工智能、具身智能及世界模型。他在ICML、NeurIPS等顶会发表过多篇论文。 在博士期间，刘松铭曾牵头研发了 双臂机器人操作扩散大模型RDT-1B ——全球首个使用大规模预训练+扩散Transformer范式的基座模型，实现跨机器人动作时间的统一表达与物理知识迁移，解决双臂机器人操作的多模态行为分布与训练数据稀缺难题。 后来，他又推出RDT-2，领先Generalist的Gen-0模型一个月，是首个使用大规模UMI人类数据预训练的基模。 据刘松铭透露，LiberAI在高自由度灵巧手上，从模型训练到部署都已跑通，自研人类数据手套也已进入量产阶段，自研仿人本体也启动量产。 LiberAI称，今年年底前，团队将重点推进两项工作： 一是验证人类数据预训练存在规模化效应，模型在数据体量突破临界值后涌现跨场景的泛化能力。 二是在模型架构上，LiberAI想做兼具推理agent的世界模型。",
+      "document_units": [
+        {
+          "unit_id": "u_e2f974fbabae",
+          "char_start": 0,
+          "char_end": 1193,
+          "text": "机器人前瞻（公众号：robot_pro） 作者 | 周加琦 编辑 | 漠影 机器人前瞻7月31日报道，今天，LiberAI宣布完成新一轮 数亿元Pre-A+轮融资 ，投资方包括360战投、国开金融、创新工场、CMC资本、彬复资本等，老股东红杉中国自天使轮连续追加四轮。 今年5月，LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；6月，该公司再次宣布完成数亿元Pre-A轮融资。投资方包括红杉中国、真格基金、美团龙珠等。 三个月内，LiberAI连续完成三轮亿级融资。 LiberAI成立于2025年，专注于研发世界模型，聚焦原生多模态预训练，同时构建自有的数采和硬件体系。 在模型部署的硬件形态上，该公司选择灵巧手，并发布 高自由度灵巧手精细操作具身模型 。该模型搭载五指灵巧手，可实现拧瓶盖、颠锅、煎蛋等精细化操作的长时序任务。 为落地该路线，LiberAI从三个方面着手： 1.数据基建与工程算法 ，包含如何清洗数据、检测手部并优化检测算子的速度等。目前这套data infra和数据管线的自动化率在90%以上。 2. 模型本身训练 ，该公司做了大量的human data和多模态训练，将它们对齐到统一空间。 3. 数采手套 ，LiberAI自研的人类数据手套实现高精度、可穿戴性、抗电磁干扰且抗遮挡，已进入量产阶段。 LiberAI构建了一个“数据金字塔”，以互联网人类视频为底层基础、自研数据手套为中间层、真机数据为顶层。其中，人类视频数据规模比手套数据高1-2个数量级，手套数据比真机数据高1-2个数量级。 该公司依靠分层的数据组合模式，充分利用低成本人类数据，减少训练过程中对高成本真机数据的依赖。 LiberAI创始人刘松铭 ，出生于2000年，是清华大学计算机系博士，曾获得清华大学特等奖学金，多年保持年级第一。刘松铭师从视频生成模型领域学者朱军教授，主要研究方向涵盖人工智能、具身智能及世界模型。他在ICML、NeurIPS等顶会发表过多篇论文。 在博士期间，刘松铭曾牵头研发了 双臂机器人操作扩散大模型RDT-1B ——全球首个使用大规模预训练+扩散Transformer范式的基座模型，实现跨机器人动作时间的统一表达与物理知识迁移，解决双臂机器人操作的多模态行为分布与训练数据稀缺难题。 后来，他又推出RDT-2，领先Generalist的Gen-0模型一个月，是首个使用大规模UMI人类数据预训练的基模。 据刘松铭透露，LiberAI在高自由度灵巧手上，从模型训练到部署都已跑通，自研人类数据手套也已进入量产阶段，自研仿人本体也启动量产。 LiberAI称，今年年底前，团队将重点推进两项工作： 一是验证人类数据预训练存在规模化效应，模型在数据体量突破临界值后涌现跨场景的泛化能力。 二是在模型架构上，LiberAI想做兼具推理agent的世界模型。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_ca40c1d850",
+          "event_type": "funding",
+          "funding_round": "Pre-A+",
+          "quote": "机器人前瞻（公众号：robot_pro） 作者 | 周加琦 编辑 | 漠影 机器人前瞻7月31日报道，今天，LiberAI宣布完成新一轮 数亿元Pre-A+轮融资 ，投资方包括360战投、国开金融、创新工场、CMC资本、彬复资本等，老股东红杉中国自天使轮连续追加四轮。",
+          "claim_id": "c_ca40c1d850",
+          "span_id": "s_35e1f7838edc",
+          "char_start": 0,
+          "char_end": 134,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "7月31日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_dbf232638770",
+              "span_id": "s_35e1f7838edc",
+              "char_start": 0,
+              "char_end": 134,
+              "text": "机器人前瞻（公众号：robot_pro） 作者 | 周加琦 编辑 | 漠影 机器人前瞻7月31日报道，今天，LiberAI宣布完成新一轮 数亿元Pre-A+轮融资 ，投资方包括360战投、国开金融、创新工场、CMC资本、彬复资本等，老股东红杉中国自天使轮连续追加四轮。",
+              "action_text": "LiberAI宣布完成新一轮 数亿元Pre-A+轮融资 ，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_ca40c1d850"
+          ]
+        },
+        {
+          "id": "c_967b4cae39",
+          "event_type": "funding",
+          "funding_round": "天使轮",
+          "quote": "机器人前瞻（公众号：robot_pro） 作者 | 周加琦 编辑 | 漠影 机器人前瞻7月31日报道，今天，LiberAI宣布完成新一轮 数亿元Pre-A+轮融资 ，投资方包括360战投、国开金融、创新工场、CMC资本、彬复资本等，老股东红杉中国自天使轮连续追加四轮。",
+          "claim_id": "c_967b4cae39",
+          "span_id": "s_35e1f7838edc",
+          "char_start": 0,
+          "char_end": 134,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "unknown",
+          "time_hints": [
+            "7月31日"
+          ],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_967b4cae39"
+          ]
+        },
+        {
+          "id": "c_848285c724",
+          "event_type": "funding",
+          "funding_round": "Pre-A+",
+          "quote": "LiberAI宣布完成新一轮 数亿元Pre-A+轮融资",
+          "subject_hint": "LiberAI",
+          "claim_id": "c_848285c724",
+          "span_id": "s_f0ae4c171009",
+          "char_start": 54,
+          "char_end": 81,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_cad65459dc30",
+              "span_id": "s_f0ae4c171009",
+              "char_start": 54,
+              "char_end": 81,
+              "text": "LiberAI宣布完成新一轮 数亿元Pre-A+轮融资",
+              "action_text": "LiberAI宣布完成新一轮 数亿元Pre-A+轮融资",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_848285c724"
+          ]
+        },
+        {
+          "id": "c_affe93a039",
+          "event_type": "funding",
+          "funding_round": "种子轮",
+          "quote": "今年5月，LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+          "claim_id": "c_affe93a039",
+          "span_id": "s_43eb2c41bc6f",
+          "char_start": 135,
+          "char_end": 170,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_5e393bb01cb0",
+              "span_id": "s_43eb2c41bc6f",
+              "char_start": 135,
+              "char_end": 170,
+              "text": "今年5月，LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+              "action_text": "LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_affe93a039"
+          ]
+        },
+        {
+          "id": "c_0befaf0657",
+          "event_type": "funding",
+          "funding_round": "天使轮",
+          "quote": "今年5月，LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+          "claim_id": "c_0befaf0657",
+          "span_id": "s_43eb2c41bc6f",
+          "char_start": 135,
+          "char_end": 170,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_067c3e35671d",
+              "span_id": "s_43eb2c41bc6f",
+              "char_start": 135,
+              "char_end": 170,
+              "text": "今年5月，LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+              "action_text": "LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_0befaf0657"
+          ]
+        },
+        {
+          "id": "c_2600063c83",
+          "event_type": "funding",
+          "funding_round": "种子轮",
+          "quote": "LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+          "subject_hint": "LiberAI",
+          "claim_id": "c_2600063c83",
+          "span_id": "s_4acca67a0786",
+          "char_start": 140,
+          "char_end": 170,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_48f5d3fd9f82",
+              "span_id": "s_4acca67a0786",
+              "char_start": 140,
+              "char_end": 170,
+              "text": "LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+              "action_text": "LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_2600063c83"
+          ]
+        },
+        {
+          "id": "c_be1d43b5cb",
+          "event_type": "funding",
+          "funding_round": "天使轮",
+          "quote": "LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+          "subject_hint": "LiberAI",
+          "claim_id": "c_be1d43b5cb",
+          "span_id": "s_4acca67a0786",
+          "char_start": 140,
+          "char_end": 170,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_3ae2033edc64",
+              "span_id": "s_4acca67a0786",
+              "char_start": 140,
+              "char_end": 170,
+              "text": "LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+              "action_text": "LiberAI宣布完成近5亿的种子轮、天使轮和天使+轮融资；",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_be1d43b5cb"
+          ]
+        },
+        {
+          "id": "c_6937c8c6f0",
+          "event_type": "funding",
+          "funding_round": "Pre-A",
+          "quote": "6月，该公司再次宣布完成数亿元Pre-A轮融资。",
+          "claim_id": "c_6937c8c6f0",
+          "span_id": "s_0939a6c082ea",
+          "char_start": 170,
+          "char_end": 194,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_f7ee6000f7e3",
+              "span_id": "s_0939a6c082ea",
+              "char_start": 170,
+              "char_end": 194,
+              "text": "6月，该公司再次宣布完成数亿元Pre-A轮融资。",
+              "action_text": "该公司再次宣布完成数亿元Pre-A轮融资。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_6937c8c6f0"
+          ]
+        },
+        {
+          "id": "c_2343f6f756",
+          "event_type": "funding",
+          "funding_round": "Pre-A",
+          "quote": "该公司再次宣布完成数亿元Pre-A轮融资。",
+          "claim_id": "c_2343f6f756",
+          "span_id": "s_c0fa05a4ea01",
+          "char_start": 173,
+          "char_end": 194,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_3c725107db06",
+              "span_id": "s_c0fa05a4ea01",
+              "char_start": 173,
+              "char_end": 194,
+              "text": "该公司再次宣布完成数亿元Pre-A轮融资。",
+              "action_text": "该公司再次宣布完成数亿元Pre-A轮融资。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_2343f6f756"
+          ]
+        },
+        {
+          "id": "c_c53f3e73ba",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "三个月内，LiberAI连续完成三轮亿级融资。",
+          "claim_id": "c_c53f3e73ba",
+          "span_id": "s_f53e6791c9b2",
+          "char_start": 216,
+          "char_end": 239,
+          "subject_hint": "",
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_64110c33678b",
+              "span_id": "s_f53e6791c9b2",
+              "char_start": 216,
+              "char_end": 239,
+              "text": "三个月内，LiberAI连续完成三轮亿级融资。",
+              "action_text": "LiberAI连续完成三轮亿级融资。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_c53f3e73ba"
+          ]
+        },
+        {
+          "id": "c_be9579bfd5",
+          "event_type": "funding",
+          "funding_round": "",
+          "quote": "LiberAI连续完成三轮亿级融资。",
+          "subject_hint": "LiberAI连续",
+          "claim_id": "c_be9579bfd5",
+          "span_id": "s_6b8782f4c882",
+          "char_start": 221,
+          "char_end": 239,
+          "action_hint": "funding",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_29509ba5b5a8",
+              "span_id": "s_6b8782f4c882",
+              "char_start": 221,
+              "char_end": 239,
+              "text": "LiberAI连续完成三轮亿级融资。",
+              "action_text": "LiberAI连续完成三轮亿级融资。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_be9579bfd5"
+          ]
+        },
+        {
+          "id": "c_93dc6f1aaa",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "在模型部署的硬件形态上，该公司选择灵巧手，并发布 高自由度灵巧手精细操作具身模型 。",
+          "claim_id": "c_93dc6f1aaa",
+          "span_id": "s_c728c1d49a6c",
+          "char_start": 293,
+          "char_end": 335,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_d6c3bdbe3d24",
+              "span_id": "s_c728c1d49a6c",
+              "char_start": 293,
+              "char_end": 335,
+              "text": "在模型部署的硬件形态上，该公司选择灵巧手，并发布 高自由度灵巧手精细操作具身模型 。",
+              "action_text": "并发布 高自由度灵巧手精细操作具身模型 。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_93dc6f1aaa"
+          ]
+        },
+        {
+          "id": "c_013333cc75",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "后来，他又推出RDT-2，领先Generalist的Gen-0模型一个月，是首个使用大规模UMI人类数据预训练的基模。",
+          "claim_id": "c_013333cc75",
+          "span_id": "s_ff7722e80b69",
+          "char_start": 961,
+          "char_end": 1020,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "completed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_b5982f0b70a3",
+              "span_id": "s_ff7722e80b69",
+              "char_start": 961,
+              "char_end": 1020,
+              "text": "后来，他又推出RDT-2，领先Generalist的Gen-0模型一个月，是首个使用大规模UMI人类数据预训练的基模。",
+              "action_text": "他又推出RDT-2，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_013333cc75"
+          ]
+        },
+        {
+          "id": "c_49a2274887",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "据刘松铭透露，LiberAI在高自由度灵巧手上，从模型训练到部署都已跑通，自研人类数据手套也已进入量产阶段，自研仿人本体也启动量产。",
+          "claim_id": "c_49a2274887",
+          "span_id": "s_44986e1cedfa",
+          "char_start": 1021,
+          "char_end": 1087,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "started",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_31f4cdb852a7",
+              "span_id": "s_44986e1cedfa",
+              "char_start": 1021,
+              "char_end": 1087,
+              "text": "据刘松铭透露，LiberAI在高自由度灵巧手上，从模型训练到部署都已跑通，自研人类数据手套也已进入量产阶段，自研仿人本体也启动量产。",
+              "action_text": "自研仿人本体也启动量产。",
+              "event_status": "started"
+            }
+          ],
+          "required_claim_ids": [
+            "c_49a2274887"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_ca40c1d850",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          },
+          {
+            "claim_id": "c_967b4cae39",
+            "disposition": "rejected",
+            "reason_code": "misparsed_round_detail"
+          },
+          {
+            "claim_id": "c_848285c724",
+            "disposition": "rejected",
+            "reason_code": "duplicate_same_funding_event"
+          },
+          {
+            "claim_id": "c_affe93a039",
+            "disposition": "rejected",
+            "reason_code": "financing_history"
+          },
+          {
+            "claim_id": "c_0befaf0657",
+            "disposition": "rejected",
+            "reason_code": "financing_history_duplicate"
+          },
+          {
+            "claim_id": "c_2600063c83",
+            "disposition": "rejected",
+            "reason_code": "financing_history_duplicate"
+          },
+          {
+            "claim_id": "c_be1d43b5cb",
+            "disposition": "rejected",
+            "reason_code": "financing_history_duplicate"
+          },
+          {
+            "claim_id": "c_6937c8c6f0",
+            "disposition": "rejected",
+            "reason_code": "financing_history"
+          },
+          {
+            "claim_id": "c_2343f6f756",
+            "disposition": "rejected",
+            "reason_code": "financing_history_duplicate"
+          },
+          {
+            "claim_id": "c_c53f3e73ba",
+            "disposition": "rejected",
+            "reason_code": "financing_history_summary"
+          },
+          {
+            "claim_id": "c_be9579bfd5",
+            "disposition": "rejected",
+            "reason_code": "financing_history_duplicate"
+          },
+          {
+            "claim_id": "c_93dc6f1aaa",
+            "disposition": "rejected",
+            "reason_code": "product_background"
+          },
+          {
+            "claim_id": "c_013333cc75",
+            "disposition": "rejected",
+            "reason_code": "founder_history_invalid_subject"
+          },
+          {
+            "claim_id": "c_49a2274887",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "LiberAI",
+            "event_type": "funding",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [
+              "c_ca40c1d850"
+            ],
+            "funding_amount": "数亿元",
+            "investors": [
+              "360战投",
+              "国开金融",
+              "创新工场",
+              "CMC资本",
+              "彬复资本",
+              "红杉中国"
+            ],
+            "candidate_gap": false,
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 134,
+              "text": "机器人前瞻（公众号：robot_pro） 作者 | 周加琦 编辑 | 漠影 机器人前瞻7月31日报道，今天，LiberAI宣布完成新一轮 数亿元Pre-A+轮融资 ，投资方包括360战投、国开金融、创新工场、CMC资本、彬复资本等，老股东红杉中国自天使轮连续追加四轮。"
+            },
+            "funding_round": "Pre-A+?"
+          },
+          {
+            "canonical_company": "LiberAI",
+            "event_type": "technical_milestone",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 1021,
+              "char_end": 1058,
+              "text": "据刘松铭透露，LiberAI在高自由度灵巧手上，从模型训练到部署都已跑通，"
+            }
+          },
+          {
+            "canonical_company": "LiberAI",
+            "event_type": "factory_or_capacity",
+            "event_status": "started",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 1021,
+              "char_end": 1075,
+              "text": "据刘松铭透露，LiberAI在高自由度灵巧手上，从模型训练到部署都已跑通，自研人类数据手套也已进入量产阶段，"
+            }
+          },
+          {
+            "canonical_company": "LiberAI",
+            "event_type": "factory_or_capacity",
+            "event_status": "started",
+            "importance": "strong",
+            "claim_ids": [
+              "c_49a2274887"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 1021,
+              "char_end": 1087,
+              "text": "据刘松铭透露，LiberAI在高自由度灵巧手上，从模型训练到部署都已跑通，自研人类数据手套也已进入量产阶段，自研仿人本体也启动量产。"
+            }
+          },
+          {
+            "canonical_company": "LiberAI",
+            "event_type": "technical_milestone",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 1088,
+              "char_end": 1159,
+              "text": "LiberAI称，今年年底前，团队将重点推进两项工作： 一是验证人类数据预训练存在规模化效应，模型在数据体量突破临界值后涌现跨场景的泛化能力。"
+            }
+          },
+          {
+            "canonical_company": "LiberAI",
+            "event_type": "technical_milestone",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [],
+            "candidate_gap": true,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 1088,
+              "char_end": 1193,
+              "text": "LiberAI称，今年年底前，团队将重点推进两项工作： 一是验证人类数据预训练存在规模化效应，模型在数据体量突破临界值后涌现跨场景的泛化能力。 二是在模型架构上，LiberAI想做兼具推理agent的世界模型。"
+            }
+          }
+        ],
+        "article_notes": "????Pre-A+????????????????????????????????????????????5??6???????????",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "??Pre-A+?????????/????????????????????????claim???????????"
+      }
+    },
+    {
+      "key": "stcn-flash:4052825",
+      "article_sha256": "c7311b3bbce0590fa0f2cb6623c770e9778d06f9f04db43862afb75e2fe679f6",
+      "source_id": "stcn-flash",
+      "canonical_url": "https://www.stcn.com/article/detail/4052825.html",
+      "published_at": "2026-07-31T18:02:08+08:00",
+      "title": "继峰股份：控股子公司获约2.7亿元乘用车座椅总成项目定点",
+      "document_type": "single_company_flash",
+      "clean_body": "人民财讯7月31日电， 继峰股份(603997)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，获得两个乘用车座椅总成项目定点，将为客户开发、生产整车座椅总成产品。根据客户规划，上述两个项目预计分别于2027年8月和2027年9月开始量产，项目生命周期均为4年，预计生命周期总金额约为2.7亿元。",
+      "document_units": [
+        {
+          "unit_id": "u_c93d0f4c56db",
+          "char_start": 0,
+          "char_end": 162,
+          "text": "人民财讯7月31日电， 继峰股份(603997)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，获得两个乘用车座椅总成项目定点，将为客户开发、生产整车座椅总成产品。根据客户规划，上述两个项目预计分别于2027年8月和2027年9月开始量产，项目生命周期均为4年，预计生命周期总金额约为2.7亿元。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_9baeb57b89",
+          "event_type": "major_order",
+          "funding_round": "",
+          "quote": "人民财讯7月31日电， 继峰股份(603997)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，获得两个乘用车座椅总成项目定点，将为客户开发、生产整车座椅总成产品。",
+          "subject_hint": "7)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，",
+          "claim_id": "c_9baeb57b89",
+          "span_id": "s_91da098c48d7",
+          "char_start": 0,
+          "char_end": 96,
+          "action_hint": "major_order",
+          "event_status_hint": "mixed",
+          "time_hints": [
+            "7月31日",
+            "近期"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_2a04b64aa75f",
+              "span_id": "s_91da098c48d7",
+              "char_start": 0,
+              "char_end": 96,
+              "text": "人民财讯7月31日电， 继峰股份(603997)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，获得两个乘用车座椅总成项目定点，将为客户开发、生产整车座椅总成产品。",
+              "action_text": "获得两个乘用车座椅总成项目定点，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_ef6c2b707a1b",
+              "span_id": "s_91da098c48d7",
+              "char_start": 0,
+              "char_end": 96,
+              "text": "人民财讯7月31日电， 继峰股份(603997)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，获得两个乘用车座椅总成项目定点，将为客户开发、生产整车座椅总成产品。",
+              "action_text": "将为客户开发、生产整车座椅总成产品。",
+              "event_status": "target"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_2a04b64aa75f",
+            "ac_ef6c2b707a1b"
+          ]
+        },
+        {
+          "id": "c_ec8c246516",
+          "event_type": "customer_validation",
+          "funding_round": "",
+          "quote": "人民财讯7月31日电， 继峰股份(603997)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，获得两个乘用车座椅总成项目定点，将为客户开发、生产整车座椅总成产品。",
+          "subject_hint": "7)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，",
+          "claim_id": "c_ec8c246516",
+          "span_id": "s_91da098c48d7",
+          "char_start": 0,
+          "char_end": 96,
+          "action_hint": "customer_validation",
+          "event_status_hint": "mixed",
+          "time_hints": [
+            "7月31日",
+            "近期"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_f7907b81ce4d",
+              "span_id": "s_91da098c48d7",
+              "char_start": 0,
+              "char_end": 96,
+              "text": "人民财讯7月31日电， 继峰股份(603997)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，获得两个乘用车座椅总成项目定点，将为客户开发、生产整车座椅总成产品。",
+              "action_text": "获得两个乘用车座椅总成项目定点，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_c963111ea145",
+              "span_id": "s_91da098c48d7",
+              "char_start": 0,
+              "char_end": 96,
+              "text": "人民财讯7月31日电， 继峰股份(603997)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，获得两个乘用车座椅总成项目定点，将为客户开发、生产整车座椅总成产品。",
+              "action_text": "将为客户开发、生产整车座椅总成产品。",
+              "event_status": "target"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_f7907b81ce4d",
+            "ac_c963111ea145"
+          ]
+        }
+      ],
+      "annotation": {
+        "candidate_dispositions": [
+          {
+            "claim_id": "ac_2a04b64aa75f",
+            "disposition": "rejected",
+            "reason_code": "duplicate_wrong_event_type"
+          },
+          {
+            "claim_id": "ac_ef6c2b707a1b",
+            "disposition": "accepted",
+            "reason_code": "current_company_roadmap"
+          },
+          {
+            "claim_id": "ac_c963111ea145",
+            "disposition": "rejected",
+            "reason_code": "duplicate_wrong_event_type"
+          },
+          {
+            "claim_id": "ac_f7907b81ce4d",
+            "disposition": "accepted",
+            "reason_code": "current_company_event"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "继峰座椅（泰国）有限公司",
+            "event_type": "customer_validation",
+            "event_status": "completed",
+            "importance": "strong",
+            "claim_ids": [
+              "ac_f7907b81ce4d"
+            ],
+            "candidate_gap": false,
+            "funding_amount": "",
+            "investors": [],
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 96,
+              "text": "人民财讯7月31日电， 继峰股份(603997)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，获得两个乘用车座椅总成项目定点，将为客户开发、生产整车座椅总成产品。"
+            }
+          },
+          {
+            "canonical_company": "继峰座椅（泰国）有限公司",
+            "event_type": "factory_or_capacity",
+            "event_status": "target",
+            "importance": "strong",
+            "claim_ids": [
+              "ac_ef6c2b707a1b"
+            ],
+            "evidence_span": {
+              "char_start": 0,
+              "char_end": 162,
+              "text": "人民财讯7月31日电， 继峰股份(603997)7月31日公告，控股子公司继峰座椅（泰国）有限公司近期收到客户的《提名信》，获得两个乘用车座椅总成项目定点，将为客户开发、生产整车座椅总成产品。根据客户规划，上述两个项目预计分别于2027年8月和2027年9月开始量产，项目生命周期均为4年，预计生命周期总金额约为2.7亿元。"
+            }
+          }
+        ],
+        "article_notes": "???????customer_validation/completed????????2027????????factory_or_capacity/target?????claim???",
+        "annotation_status": "complete"
+      },
+      "adjudication_audit": {
+        "resolution": "?????customer_validation/completed?????????????????factory_or_capacity/target???major_order/technical claims??????????"
+      }
+    }
+  ],
+  "comparison": {
+    "primary_a": "annotator-a",
+    "primary_b": "annotator-b",
+    "agreement_count": 11,
+    "disagreement_count": 9,
+    "resolved_count": 9
+  },
+  "status": "complete"
+}

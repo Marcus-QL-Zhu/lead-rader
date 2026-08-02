@@ -109,7 +109,7 @@ def classify_seniority(title: str, description: str = '') -> tuple[str, bool, li
         term for term in TARGET_TERMS if not re.search(r'[a-z]', term)
     )
     ascii_target = re.search(
-        r'\b(?:director|vice\s+president|svp|evp|vp|cxo)\b',
+        r'\b(?:director|vice\s+president|svp|evp|vp|cxo|general\s+manager)\b',
         title_text,
     )
     if any(term in title_text for term in chinese_targets) or ascii_target:

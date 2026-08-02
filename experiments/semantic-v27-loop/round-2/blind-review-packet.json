@@ -1,0 +1,2033 @@
+{
+  "schema_version": 1,
+  "purpose": "blind-independent-semantic-v27-round-review",
+  "seed_sha256": "09108559b91271b82990591e294a98f586399156aefa4e52885f6ea98604521a",
+  "selected_keys": [
+    "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+    "shenzhen-semiconductor-association:2474",
+    "jazzyear-research:165"
+  ],
+  "rubric": {
+    "hard_disqualifiers": [
+      "infrastructure failure",
+      "failed or non-terminal Claim",
+      "unsupported or uncited event",
+      "wrong operating-company subject"
+    ],
+    "rank_order": [
+      "company subject precision",
+      "supported strong-current event recall",
+      "event status accuracy",
+      "atomic completeness without summary duplicates",
+      "projection stability"
+    ],
+    "required_output": "rank all eligible anonymous candidates, select at most one winner, cite case-level errors, and say no-winner if all fail"
+  },
+  "gold_cases": [
+    {
+      "key": "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+      "article_sha256": "e246b7c58009f81ef32450c5ae3f0752f3795df77167af08618b32bd060776ef",
+      "source_id": "fusion-industry-media",
+      "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+      "published_at": "2026-01-24T00:00:00+08:00",
+      "title": "中方联合体签署ITER边缘局域模电源系统重大合同",
+      "document_type": "single_company_flash",
+      "clean_body": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。此次签约标志着中方在ITER电源领域取得重要进展，体现了中国参与全球最大聚变合作项目的持续贡献与技术实力。 激烈竞标脱颖而出 中国方案获国际认可 此次合同签署是中方联合体在2025年12月15日成功中标后的具体落实。此前，该国际招标竞争异常激烈，吸引了全球多家顶尖能源企业及联合体参与，仅六方通过严苛的资格预审。面对强劲对手，在中国国际核聚变能源计划执行中心的统筹指导下，西物院整合国内聚变电源设计、高端制造、工程安装与调试等优势力量，历经近一年精心筹备，凭借先进的技术路线、合理的成本控制及全方位优化、满足ITER项目需求的综合解决方案，最终在竞争中脱颖而出。 该合同为“交钥匙工程”，内容涵盖为ITER三组独立真空室内部线圈提供27套可调输出电源的设计、制造、测试、安装及调试全过程。此次成功中标与签约，是国际上对西物院牵头复杂大科学工程能力的高度认可，彰显了我国在高端电力能源装备领域已达到世界先进水平，具备为全球最具挑战性的大科学工程提供可靠“中国方案”的整体实力。 签约仪式深化互信 务实合作展望未来 在1月22日于法国ITER总部举行的签约仪式上，ITER组织总干事彼得罗·巴拉巴斯基高度赞赏西物院团队脚踏实地的务实作风。他表示，ITER组织与西物院之间建立了牢固的信任关系，西物院牵头的联合体团队表现出极强的投入度和持续可靠的合作精神，取得了卓越的工作成果，期待双方进一步深化务实合作，共同推动ITER的建设。 西物院党委书记刘叶在仪式上表示，将组织好联合体各方，统筹协调多方力量，配备精兵强将，按时保质完成合同任务。他还特别就中核集团首席科学家段旭如担任ITER STAC主席和ITPA协调委员会主席对ITER组织表达感谢，表示将全力支持段旭如主席履职。 联合体模式协同创新 中国动力注入全球聚变发展 中方企业以协同创新的联合体模式参与竞标与实施，充分发挥了各自在专业领域的优势，形成了强大的攻坚合力。这种模式生动体现了中国科技力量在全球舞台上团结协作、攻坚克难、互利共赢的创新精神与合作风貌。本次合同的成功签署，不仅体现了中方参与ITER计划的持续贡献与技术实力，也体现了双方在长期合作中形成的深度互信，为全球聚变能发展注入了强劲的中国动力。 随着合同的正式签署与实施，中方联合体将全力以赴，为ITER这一关乎人类未来能源前景的重大科学工程提供关键系统支撑，进一步巩固中国在国际热核聚变研究领域的重要地位。",
+      "document_units": [
+        {
+          "unit_id": "u_ec82609a0196",
+          "char_start": 0,
+          "char_end": 1177,
+          "text": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。此次签约标志着中方在ITER电源领域取得重要进展，体现了中国参与全球最大聚变合作项目的持续贡献与技术实力。 激烈竞标脱颖而出 中国方案获国际认可 此次合同签署是中方联合体在2025年12月15日成功中标后的具体落实。此前，该国际招标竞争异常激烈，吸引了全球多家顶尖能源企业及联合体参与，仅六方通过严苛的资格预审。面对强劲对手，在中国国际核聚变能源计划执行中心的统筹指导下，西物院整合国内聚变电源设计、高端制造、工程安装与调试等优势力量，历经近一年精心筹备，凭借先进的技术路线、合理的成本控制及全方位优化、满足ITER项目需求的综合解决方案，最终在竞争中脱颖而出。 该合同为“交钥匙工程”，内容涵盖为ITER三组独立真空室内部线圈提供27套可调输出电源的设计、制造、测试、安装及调试全过程。此次成功中标与签约，是国际上对西物院牵头复杂大科学工程能力的高度认可，彰显了我国在高端电力能源装备领域已达到世界先进水平，具备为全球最具挑战性的大科学工程提供可靠“中国方案”的整体实力。 签约仪式深化互信 务实合作展望未来 在1月22日于法国ITER总部举行的签约仪式上，ITER组织总干事彼得罗·巴拉巴斯基高度赞赏西物院团队脚踏实地的务实作风。他表示，ITER组织与西物院之间建立了牢固的信任关系，西物院牵头的联合体团队表现出极强的投入度和持续可靠的合作精神，取得了卓越的工作成果，期待双方进一步深化务实合作，共同推动ITER的建设。 西物院党委书记刘叶在仪式上表示，将组织好联合体各方，统筹协调多方力量，配备精兵强将，按时保质完成合同任务。他还特别就中核集团首席科学家段旭如担任ITER STAC主席和ITPA协调委员会主席对ITER组织表达感谢，表示将全力支持段旭如主席履职。 联合体模式协同创新 中国动力注入全球聚变发展 中方企业以协同创新的联合体模式参与竞标与实施，充分发挥了各自在专业领域的优势，形成了强大的攻坚合力。这种模式生动体现了中国科技力量在全球舞台上团结协作、攻坚克难、互利共赢的创新精神与合作风貌。本次合同的成功签署，不仅体现了中方参与ITER计划的持续贡献与技术实力，也体现了双方在长期合作中形成的深度互信，为全球聚变能发展注入了强劲的中国动力。 随着合同的正式签署与实施，中方联合体将全力以赴，为ITER这一关乎人类未来能源前景的重大科学工程提供关键系统支撑，进一步巩固中国在国际热核聚变研究领域的重要地位。"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_a426d1537a",
+          "event_type": "major_order",
+          "funding_round": "",
+          "quote": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+          "subject_hint": "理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三",
+          "claim_id": "c_a426d1537a",
+          "span_id": "s_b14da2d285a9",
+          "char_start": 0,
+          "char_end": 165,
+          "action_hint": "major_order",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "2026年1月22日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_ca13ab539aa5",
+              "span_id": "s_b14da2d285a9",
+              "char_start": 0,
+              "char_end": 165,
+              "text": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+              "action_text": "在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_a426d1537a"
+          ]
+        },
+        {
+          "id": "c_b002bd6a6f",
+          "event_type": "major_order",
+          "funding_round": "",
+          "quote": "激烈竞标脱颖而出 中国方案获国际认可 此次合同签署是中方联合体在2025年12月15日成功中标后的具体落实。",
+          "claim_id": "c_b002bd6a6f",
+          "span_id": "s_2213c388b887",
+          "char_start": 219,
+          "char_end": 273,
+          "subject_hint": "",
+          "action_hint": "major_order",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "2025年12月15日"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_8a9254fdc619",
+              "span_id": "s_2213c388b887",
+              "char_start": 219,
+              "char_end": 273,
+              "text": "激烈竞标脱颖而出 中国方案获国际认可 此次合同签署是中方联合体在2025年12月15日成功中标后的具体落实。",
+              "action_text": "激烈竞标脱颖而出 中国方案获国际认可 此次合同签署是中方联合体在2025年12月15日成功中标后的具体落实。",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_b002bd6a6f"
+          ]
+        },
+        {
+          "id": "c_3f12ec8a59",
+          "event_type": "partnership",
+          "funding_round": "",
+          "quote": "他表示，ITER组织与西物院之间建立了牢固的信任关系，西物院牵头的联合体团队表现出极强的投入度和持续可靠的合作精神，取得了卓越的工作成果，期待双方进一步深化务实合作，共同推动ITER的建设。",
+          "claim_id": "c_3f12ec8a59",
+          "span_id": "s_41c7acc3630a",
+          "char_start": 682,
+          "char_end": 777,
+          "subject_hint": "",
+          "action_hint": "partnership",
+          "event_status_hint": "unknown",
+          "time_hints": [],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_3f12ec8a59"
+          ]
+        },
+        {
+          "id": "c_1f0c6644a3",
+          "event_type": "partnership",
+          "funding_round": "",
+          "quote": "本次合同的成功签署，不仅体现了中方参与ITER计划的持续贡献与技术实力，也体现了双方在长期合作中形成的深度互信，为全球聚变能发展注入了强劲的中国动力。",
+          "claim_id": "c_1f0c6644a3",
+          "span_id": "s_d4680c24cf1c",
+          "char_start": 1020,
+          "char_end": 1095,
+          "subject_hint": "",
+          "action_hint": "partnership",
+          "event_status_hint": "mixed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_1e3cdc0b4e66",
+              "span_id": "s_d4680c24cf1c",
+              "char_start": 1020,
+              "char_end": 1095,
+              "text": "本次合同的成功签署，不仅体现了中方参与ITER计划的持续贡献与技术实力，也体现了双方在长期合作中形成的深度互信，为全球聚变能发展注入了强劲的中国动力。",
+              "action_text": "本次合同的成功签署，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_dd669561b80b",
+              "span_id": "s_d4680c24cf1c",
+              "char_start": 1020,
+              "char_end": 1095,
+              "text": "本次合同的成功签署，不仅体现了中方参与ITER计划的持续贡献与技术实力，也体现了双方在长期合作中形成的深度互信，为全球聚变能发展注入了强劲的中国动力。",
+              "action_text": "不仅体现了中方参与ITER计划的持续贡献与技术实力，",
+              "event_status": "target"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_1e3cdc0b4e66",
+            "ac_dd669561b80b"
+          ]
+        }
+      ],
+      "annotation": {
+        "annotation_status": "complete",
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_a426d1537a",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          },
+          {
+            "claim_id": "c_b002bd6a6f",
+            "disposition": "rejected",
+            "reason_code": "historical_or_background"
+          },
+          {
+            "claim_id": "c_3f12ec8a59",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "ac_1e3cdc0b4e66",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "ac_dd669561b80b",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "荣信汇科电气股份有限公司",
+            "event_type": "major_order",
+            "event_status": "completed",
+            "importance": "strong",
+            "evidence_span": {
+              "char_start": 19,
+              "char_end": 165,
+              "text": "2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+            },
+            "claim_ids": [
+              "c_a426d1537a"
+            ],
+            "candidate_gap": false
+          },
+          {
+            "canonical_company": "中国核工业二三建设有限公司",
+            "event_type": "major_order",
+            "event_status": "completed",
+            "importance": "strong",
+            "evidence_span": {
+              "char_start": 19,
+              "char_end": 165,
+              "text": "2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+            },
+            "claim_ids": [],
+            "candidate_gap": true
+          },
+          {
+            "canonical_company": "中国核电工程有限公司",
+            "event_type": "major_order",
+            "event_status": "completed",
+            "importance": "strong",
+            "evidence_span": {
+              "char_start": 19,
+              "char_end": 165,
+              "text": "2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+            },
+            "claim_ids": [],
+            "candidate_gap": true
+          }
+        ],
+        "article_notes": "Independent adjudication completed under Semantic Gold guide section 9 after case-, event-, and claim-level review."
+      }
+    },
+    {
+      "key": "shenzhen-semiconductor-association:2474",
+      "article_sha256": "527aaf148289883ddecd932026b8a7594bc483225c5f2967067242d6c7d83e7c",
+      "source_id": "shenzhen-semiconductor-association",
+      "canonical_url": "https://www.szsia.com/?p=2474",
+      "published_at": "2022-11-16",
+      "title": "国内首个国产EDA产品推介会在深圳成功举办",
+      "document_type": "roadmap",
+      "clean_body": "11月16日，由深圳市发改和改革委员会主办的国内首个国产EDA产品推介会——“深圳市国产EDA产品推介会”在深圳福田区国资国企产业创新中心成功举办。 深圳市发改委副主任郑铁军，深圳市重投集团董事长戴军，深圳市投控公司副总经理、深港科创公司董事长王昱文，深圳市软件协会秘书长郑飞，以及来自大湾区知名集成电路企业、面板行业企业、科研院所、高校、联盟等单位代表齐聚推介会。 深圳是我国集成电路产业的集散中心、应用中心和设计中心，近年来保持行业快速发展，相关设计企业不断增多，对于EDA工具的需求量也在持续猛增。深圳市高度重视国产EDA发展，市发改委围绕《深圳市培育发展半导体与集成电路产业集群行动计划（2022-2025年）》工作目标，编制完成配套政策《深圳市关于促进半导体与集成电路产业高质量发展的若干措施（征求意见稿）》，对国产EDA工具推广应用给予了更大力度的支持，是提升我国集成电路产业链、供应链的稳定性和竞争力的重要举措。 华大九天公司是国内规模最大、产品线最完整、综合技术实力最强的EDA企业之一，落地深圳以来受到深圳市政府及相关部门的关注和支持。深圳华大九天坐落于福田河套深港科技创新合作区，具备与香港开展技术和人才交流合作的先天优势，为公司拓展国际技术合作提供了便利条件。公司不断加大研发投入，快速推出新品，目前已形成模拟电路设计全流程EDA工具系统、数字电路设计EDA工具、平板显示电路设计全流程EDA工具系统和晶圆制造EDA工具四大主干产品线二十多款产品。 深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。下一步，深圳将不断落实“20+8”的产业集群行动计划，把政策真正落到实处，为企业搭建更广阔的平台，坚定企业发展信心决心，打造具有影响力的半导体与集成电路产业集群，推动半导体与集成电路行业实现高质量发展。 深圳卫视&壹深圳客户端记者：毛芸",
+      "document_units": [
+        {
+          "unit_id": "u_8ee51836914e",
+          "char_start": 0,
+          "char_end": 888,
+          "text": "11月16日，由深圳市发改和改革委员会主办的国内首个国产EDA产品推介会——“深圳市国产EDA产品推介会”在深圳福田区国资国企产业创新中心成功举办。 深圳市发改委副主任郑铁军，深圳市重投集团董事长戴军，深圳市投控公司副总经理、深港科创公司董事长王昱文，深圳市软件协会秘书长郑飞，以及来自大湾区知名集成电路企业、面板行业企业、科研院所、高校、联盟等单位代表齐聚推介会。 深圳是我国集成电路产业的集散中心、应用中心和设计中心，近年来保持行业快速发展，相关设计企业不断增多，对于EDA工具的需求量也在持续猛增。深圳市高度重视国产EDA发展，市发改委围绕《深圳市培育发展半导体与集成电路产业集群行动计划（2022-2025年）》工作目标，编制完成配套政策《深圳市关于促进半导体与集成电路产业高质量发展的若干措施（征求意见稿）》，对国产EDA工具推广应用给予了更大力度的支持，是提升我国集成电路产业链、供应链的稳定性和竞争力的重要举措。 华大九天公司是国内规模最大、产品线最完整、综合技术实力最强的EDA企业之一，落地深圳以来受到深圳市政府及相关部门的关注和支持。深圳华大九天坐落于福田河套深港科技创新合作区，具备与香港开展技术和人才交流合作的先天优势，为公司拓展国际技术合作提供了便利条件。公司不断加大研发投入，快速推出新品，目前已形成模拟电路设计全流程EDA工具系统、数字电路设计EDA工具、平板显示电路设计全流程EDA工具系统和晶圆制造EDA工具四大主干产品线二十多款产品。 深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。下一步，深圳将不断落实“20+8”的产业集群行动计划，把政策真正落到实处，为企业搭建更广阔的平台，坚定企业发展信心决心，打造具有影响力的半导体与集成电路产业集群，推动半导体与集成电路行业实现高质量发展。 深圳卫视&壹深圳客户端记者：毛芸"
+        }
+      ],
+      "candidates": [
+        {
+          "id": "c_fc3c4e15e2",
+          "event_type": "new_site_or_entity",
+          "funding_round": "",
+          "quote": "华大九天公司是国内规模最大、产品线最完整、综合技术实力最强的EDA企业之一，落地深圳以来受到深圳市政府及相关部门的关注和支持。",
+          "claim_id": "c_fc3c4e15e2",
+          "span_id": "s_965f26e768d1",
+          "char_start": 414,
+          "char_end": 477,
+          "subject_hint": "",
+          "action_hint": "new_site_or_entity",
+          "event_status_hint": "unknown",
+          "time_hints": [],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_fc3c4e15e2"
+          ]
+        },
+        {
+          "id": "c_b7a11feaf1",
+          "event_type": "partnership",
+          "funding_round": "",
+          "quote": "深圳华大九天坐落于福田河套深港科技创新合作区，具备与香港开展技术和人才交流合作的先天优势，为公司拓展国际技术合作提供了便利条件。",
+          "claim_id": "c_b7a11feaf1",
+          "span_id": "s_4c01d94b02f0",
+          "char_start": 477,
+          "char_end": 541,
+          "subject_hint": "",
+          "action_hint": "partnership",
+          "event_status_hint": "unknown",
+          "time_hints": [],
+          "atomic_action_hints": [],
+          "required_claim_ids": [
+            "c_b7a11feaf1"
+          ]
+        },
+        {
+          "id": "c_00e0b1f492",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "公司不断加大研发投入，快速推出新品，目前已形成模拟电路设计全流程EDA工具系统、数字电路设计EDA工具、平板显示电路设计全流程EDA工具系统和晶圆制造EDA工具四大主干产品线二十多款产品。",
+          "claim_id": "c_00e0b1f492",
+          "span_id": "s_9cd27940ff08",
+          "char_start": 541,
+          "char_end": 635,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "mixed",
+          "time_hints": [],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_9a06240220f5",
+              "span_id": "s_9cd27940ff08",
+              "char_start": 541,
+              "char_end": 635,
+              "text": "公司不断加大研发投入，快速推出新品，目前已形成模拟电路设计全流程EDA工具系统、数字电路设计EDA工具、平板显示电路设计全流程EDA工具系统和晶圆制造EDA工具四大主干产品线二十多款产品。",
+              "action_text": "快速推出新品，",
+              "event_status": "completed"
+            },
+            {
+              "claim_id": "ac_260c7f640032",
+              "span_id": "s_9cd27940ff08",
+              "char_start": 541,
+              "char_end": 635,
+              "text": "公司不断加大研发投入，快速推出新品，目前已形成模拟电路设计全流程EDA工具系统、数字电路设计EDA工具、平板显示电路设计全流程EDA工具系统和晶圆制造EDA工具四大主干产品线二十多款产品。",
+              "action_text": "目前已形成模拟电路设计全流程EDA工具系统、数字电路设计EDA工具、平板显示电路设计全流程EDA工具系统和晶圆制造EDA工具四大主干产品线二十多款产品。",
+              "event_status": "target"
+            }
+          ],
+          "required_claim_ids": [
+            "ac_260c7f640032",
+            "ac_9a06240220f5"
+          ]
+        },
+        {
+          "id": "c_88d7756841",
+          "event_type": "technical_milestone",
+          "funding_round": "",
+          "quote": "深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。",
+          "claim_id": "c_88d7756841",
+          "span_id": "s_53977823c0d1",
+          "char_start": 636,
+          "char_end": 770,
+          "subject_hint": "",
+          "action_hint": "technical_milestone",
+          "event_status_hint": "completed",
+          "time_hints": [
+            "2022年"
+          ],
+          "atomic_action_hints": [
+            {
+              "claim_id": "ac_e00c27769e03",
+              "span_id": "s_53977823c0d1",
+              "char_start": 636,
+              "char_end": 770,
+              "text": "深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。",
+              "action_text": "华大九天还发布了两款2022年度EDA重点产品与方案，",
+              "event_status": "completed"
+            }
+          ],
+          "required_claim_ids": [
+            "c_88d7756841"
+          ]
+        }
+      ],
+      "annotation": {
+        "annotation_status": "complete",
+        "candidate_dispositions": [
+          {
+            "claim_id": "c_fc3c4e15e2",
+            "disposition": "rejected",
+            "reason_code": "historical_or_background"
+          },
+          {
+            "claim_id": "c_b7a11feaf1",
+            "disposition": "rejected",
+            "reason_code": "historical_or_background"
+          },
+          {
+            "claim_id": "ac_260c7f640032",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "ac_9a06240220f5",
+            "disposition": "rejected",
+            "reason_code": "no_verifiable_company_operating_event"
+          },
+          {
+            "claim_id": "c_88d7756841",
+            "disposition": "accepted",
+            "reason_code": "adjudicated_current_atomic_company_event"
+          }
+        ],
+        "gold_events": [
+          {
+            "canonical_company": "华大九天",
+            "event_type": "technical_milestone",
+            "event_status": "completed",
+            "importance": "strong",
+            "evidence_span": {
+              "char_start": 681,
+              "char_end": 707,
+              "text": "华大九天还发布了两款2022年度EDA重点产品与方案"
+            },
+            "claim_ids": [
+              "c_88d7756841"
+            ],
+            "candidate_gap": false
+          }
+        ],
+        "article_notes": "Independent adjudication completed under Semantic Gold guide section 9 after case-, event-, and claim-level review."
+      }
+    },
+    {
+      "key": "jazzyear-research:165",
+      "article_sha256": "785b3c3c0cf7f7d05beb8188a793ab5d5c9bb84170d5f2f7e8d9e3cc23f9886e",
+      "source_id": "jazzyear-research",
+      "canonical_url": "https://www.jazzyear.com/study_info.html?id=165",
+      "published_at": "2026-04-13T00:00:00+08:00",
+      "title": "跨 OS GUI 智能体基础设施白皮书——重新定义人机交互自动化",
+      "document_type": "long_feature",
+      "clean_body": "报告简介：OpenClaw 的横空出世，宣告全球人工智能正式从Chat时代走到了Act时代，各主要厂商不再只做Agent，而是推动Agent成为AI时代新的超级入口，GUI Agent也成为这一探索中最重要的路径。本报告介绍了 GUI Agent 的概念、定义、技术实现路径、主要应用场景、发展未来以及未来可能面临的瓶颈。 核心亮点：本白皮书总结了 GUI Agent的概念、发展阻碍、技术架构和核心实现、产品形态和场景落地、未来与展望。 人工智能的演进将经历算法阶段、模型阶段、智能体阶段和智能体生态阶段四个阶段，其中算法阶段的核心特征是主要解决“如何计算”的问题，由统计学和传统的机器学习算法驱动，智能体阶段的核心特征是大模型不再是一个简单的Chatbot，而是可以主动完成任务的智能助理，智能体生态阶段的核心特征是AI将从单体智能走向多智能体协作和智能体工作流。不同的 Agent扮演不同的角色（如程序员、测试员）共同完成庞大的工程。 GUI Agent 是人机交互自动化的范式革命。人机交互经历了三次浪潮，分别是CLI阶段、GUI阶段、GUI Agent阶段，GUI Agent正在引发继“命令行”到“图形界面”之后的第三次人机交互革命，其核心是从“人操作机器”转向“机器理解并执行人的意图”，最终将消灭“应用孤岛”，使操作系统回归‘用户意图执行者“的本质。主要表现在交互逻辑革命、用户角色革命、能力边界革命、生态模式革命四个方面。 GUI Agent 驱动因素由Agent 面临的智能化困境和大模型底层技术的突破进展两方面组成。在 Agent面临的智能化困境方面，“API覆盖率不足”造成的“长尾软件孤岛”、传统 RPA 维护成本过高、跨应用跨生态造成的碎片化工作流、复杂软件使用和学习门槛较高是传统 Agent 面临的最大阻碍；在大模型底层技术的突破进展方面，VLM视觉理解能力飞跃，从“鉴赏”到“操作”的进化和LLM实现从“直觉式反应”到“深思熟虑”的进化是让 GUI Agent 得以实现的关键因素。 GUI Agent 组成包括感知模块、决策与规划模块、执行模块、反馈优化模块等四个最重要的模块，同时底层沙盒环境也是GUI Agent 安全可控的良好保障。基于各个模块设计逻辑的不同，GUI Agent形成了端到端视觉大模型、代码生成路径、多智能体协作路径三大主流技术路径。并且基于实践经验，将每个模块的核心内容、困难和挑战、技术考量维度、技术解决方案进行详细的展开和解释，期望能够与行业从业者交流、讨论和反馈。 详细介绍了 GUI Agent 可能的产品形态和落地场景，包括对手机、电脑、OS 生态和人机自动化交互具体场景的可能性。同时，提出了未来 GUI Agent 的发展可能性、面临的困难和挑战等。",
+      "document_units": [
+        {
+          "unit_id": "u_02e7d010d917",
+          "char_start": 0,
+          "char_end": 1162,
+          "text": "报告简介：OpenClaw 的横空出世，宣告全球人工智能正式从Chat时代走到了Act时代，各主要厂商不再只做Agent，而是推动Agent成为AI时代新的超级入口，GUI Agent也成为这一探索中最重要的路径。本报告介绍了 GUI Agent 的概念、定义、技术实现路径、主要应用场景、发展未来以及未来可能面临的瓶颈。 核心亮点：本白皮书总结了 GUI Agent的概念、发展阻碍、技术架构和核心实现、产品形态和场景落地、未来与展望。 人工智能的演进将经历算法阶段、模型阶段、智能体阶段和智能体生态阶段四个阶段，其中算法阶段的核心特征是主要解决“如何计算”的问题，由统计学和传统的机器学习算法驱动，智能体阶段的核心特征是大模型不再是一个简单的Chatbot，而是可以主动完成任务的智能助理，智能体生态阶段的核心特征是AI将从单体智能走向多智能体协作和智能体工作流。不同的 Agent扮演不同的角色（如程序员、测试员）共同完成庞大的工程。 GUI Agent 是人机交互自动化的范式革命。人机交互经历了三次浪潮，分别是CLI阶段、GUI阶段、GUI Agent阶段，GUI Agent正在引发继“命令行”到“图形界面”之后的第三次人机交互革命，其核心是从“人操作机器”转向“机器理解并执行人的意图”，最终将消灭“应用孤岛”，使操作系统回归‘用户意图执行者“的本质。主要表现在交互逻辑革命、用户角色革命、能力边界革命、生态模式革命四个方面。 GUI Agent 驱动因素由Agent 面临的智能化困境和大模型底层技术的突破进展两方面组成。在 Agent面临的智能化困境方面，“API覆盖率不足”造成的“长尾软件孤岛”、传统 RPA 维护成本过高、跨应用跨生态造成的碎片化工作流、复杂软件使用和学习门槛较高是传统 Agent 面临的最大阻碍；在大模型底层技术的突破进展方面，VLM视觉理解能力飞跃，从“鉴赏”到“操作”的进化和LLM实现从“直觉式反应”到“深思熟虑”的进化是让 GUI Agent 得以实现的关键因素。 GUI Agent 组成包括感知模块、决策与规划模块、执行模块、反馈优化模块等四个最重要的模块，同时底层沙盒环境也是GUI Agent 安全可控的良好保障。基于各个模块设计逻辑的不同，GUI Agent形成了端到端视觉大模型、代码生成路径、多智能体协作路径三大主流技术路径。并且基于实践经验，将每个模块的核心内容、困难和挑战、技术考量维度、技术解决方案进行详细的展开和解释，期望能够与行业从业者交流、讨论和反馈。 详细介绍了 GUI Agent 可能的产品形态和落地场景，包括对手机、电脑、OS 生态和人机自动化交互具体场景的可能性。同时，提出了未来 GUI Agent 的发展可能性、面临的困难和挑战等。"
+        }
+      ],
+      "candidates": [],
+      "annotation": {
+        "annotation_status": "complete",
+        "candidate_dispositions": [],
+        "gold_events": [],
+        "article_notes": "Independent adjudication completed under Semantic Gold guide section 9 after case-, event-, and claim-level review."
+      }
+    }
+  ],
+  "candidates": [
+    {
+      "label": "candidate-beta",
+      "selection_eligible": true,
+      "ineligibility_reasons": [],
+      "prediction": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-semantic-v27-prompt-loop-training",
+        "status": "complete",
+        "model": "minimax/MiniMax-M3",
+        "round": 2,
+        "maximum_rounds": 3,
+        "selected_keys": [
+          "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+          "shenzhen-semiconductor-association:2474",
+          "jazzyear-research:165"
+        ],
+        "code_contract_sha256": "fa96ac80a7acc74ab6046e6f2ebe4510b4e07ec599f85e3a00d4bc599d10820a",
+        "source_bundle_sha256": "89f54c2de59d3aa48c05d7b70019b0028d978ad1815a8c218d7bf7f4bd7298a1",
+        "source_gold_sha256": "614621e1fe4a5560de2d03e5987cdedb15819d2cb1247d576ab1f37876102dd7",
+        "source_split_sha256": "f393db769b126e44f51b67984eea38dd895676a72b1a8e099921c19a4790d937",
+        "results": [
+          {
+            "key": "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+            "position": 1,
+            "events": [
+              {
+                "source_id": "fusion-industry-media",
+                "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "company_mentions": [
+                  "中国核工业二三建设有限公司",
+                  "中国核工业二三建设"
+                ],
+                "canonical_company": "中国核工业二三建设有限公司",
+                "event_type": "major_order",
+                "event_date": "2026-01-24",
+                "industry_tags": [
+                  "nuclear_energy"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+                "evidence_quotes": [
+                  "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+                "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_5c1f4b05a27d36"
+                ],
+                "span_ids": [
+                  "as_b58f4e66032007"
+                ],
+                "subject_entity_id": "ae_a2055670130719"
+              },
+              {
+                "source_id": "fusion-industry-media",
+                "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "company_mentions": [
+                  "中国核电工程有限公司",
+                  "中国核电工程"
+                ],
+                "canonical_company": "中国核电工程有限公司",
+                "event_type": "major_order",
+                "event_date": "2026-01-24",
+                "industry_tags": [
+                  "nuclear_energy"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+                "evidence_quotes": [
+                  "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+                "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_e4dcb02a0a1c86"
+                ],
+                "span_ids": [
+                  "as_b58f4e66032007"
+                ],
+                "subject_entity_id": "ae_14bdaac1399a3d"
+              },
+              {
+                "source_id": "fusion-industry-media",
+                "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "company_mentions": [
+                  "荣信汇科电气股份有限公司",
+                  "荣信汇科电气"
+                ],
+                "canonical_company": "荣信汇科电气股份有限公司",
+                "event_type": "major_order",
+                "event_date": "2026-01-24",
+                "industry_tags": [
+                  "nuclear_energy"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+                "evidence_quotes": [
+                  "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+                "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_4a41cfebe7eb3f"
+                ],
+                "span_ids": [
+                  "as_b58f4e66032007"
+                ],
+                "subject_entity_id": "ae_4cc2be1ba141fc"
+              }
+            ],
+            "audit": {
+              "source_id": "fusion-industry-media",
+              "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+              "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r2-a|minimax/MiniMax-M3",
+              "entity_count": 27,
+              "eligible_entity_count": 3,
+              "action_span_count": 2,
+              "candidate_count": 7,
+              "batch_count": 3,
+              "document_type": "single_company_flash",
+              "document_route_reason": "default_single_article",
+              "document_family": "single_company_flash",
+              "processing_mode": "single_unit",
+              "route_gate_confidence": "low",
+              "route_llm_gate_required": true,
+              "route_gate_signals": [],
+              "document_unit_ids": [
+                "u_ec82609a0196"
+              ],
+              "accepted_claim_ids": [
+                "ac_4a41cfebe7eb3f",
+                "ac_5c1f4b05a27d36",
+                "ac_e4dcb02a0a1c86"
+              ],
+              "rejected_claim_ids": [
+                "ac_155786b0e4f4db",
+                "ac_23d8752f0d06e7",
+                "ac_86a9bb71679477",
+                "ac_fb95cd7090640c"
+              ],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "repaired",
+                "accepted",
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_4a41cfebe7eb3f\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_5c1f4b05a27d36\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_e4dcb02a0a1c86\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_155786b0e4f4db\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_23d8752f0d06e7\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_86a9bb71679477\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_fb95cd7090640c\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+              ],
+              "repair_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_4a41cfebe7eb3f\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_4cc2be1ba141fc\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_5c1f4b05a27d36\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_a2055670130719\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_e4dcb02a0a1c86\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_14bdaac1399a3d\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"}]}",
+                "",
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {
+                "subject_mismatch": 3,
+                "unsupported_company_action": 1
+              },
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 3,
+              "ledger_sha256": "c5a43470fd443d622d1358d7f14d59f4f3777812",
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 1177,
+                "semantic_chars": 1177,
+                "prefix_action_count": 10,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "shenzhen-semiconductor-association:2474",
+            "position": 2,
+            "events": [
+              {
+                "source_id": "shenzhen-semiconductor-association",
+                "source_article_id": "2474",
+                "canonical_url": "https://www.szsia.com/?p=2474",
+                "company_mentions": [
+                  "华大九天"
+                ],
+                "canonical_company": "华大九天",
+                "event_type": "technical_milestone",
+                "event_date": "2022-11-16",
+                "industry_tags": [
+                  "semiconductor",
+                  "eda"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。",
+                "evidence_quotes": [
+                  "深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。",
+                  "公司不断加大研发投入，快速推出新品，目前已形成模拟电路设计全流程EDA工具系统、数字电路设计EDA工具、平板显示电路设计全流程EDA工具系统和晶圆制造EDA工具四大主干产品线二十多款产品。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+                "content_hash": "6b6b7e7733fd564b2df89d1dd231f68b402371de294dd4b0a58c63d05d5a9e73",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_9a3817d3183883",
+                  "ac_f13c8e2bc4cd47"
+                ],
+                "span_ids": [
+                  "as_3e1402b21a0735",
+                  "as_f053840c13a42b"
+                ],
+                "subject_entity_id": "ae_7dacddb0f4d5b4"
+              }
+            ],
+            "audit": {
+              "source_id": "shenzhen-semiconductor-association",
+              "source_article_id": "2474",
+              "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r2-a|minimax/MiniMax-M3",
+              "entity_count": 10,
+              "eligible_entity_count": 1,
+              "action_span_count": 5,
+              "candidate_count": 8,
+              "batch_count": 3,
+              "document_type": "roadmap",
+              "document_route_reason": "future_action_density",
+              "document_family": "long_feature",
+              "processing_mode": "future_action_review",
+              "route_gate_confidence": "high",
+              "route_llm_gate_required": false,
+              "route_gate_signals": [],
+              "document_unit_ids": [
+                "u_8ee51836914e"
+              ],
+              "accepted_claim_ids": [
+                "ac_9a3817d3183883",
+                "ac_f13c8e2bc4cd47"
+              ],
+              "rejected_claim_ids": [
+                "ac_099666b5a34162",
+                "ac_153ad6c1f4015c",
+                "ac_8718fa0fea5351",
+                "ac_911f23ff5907a5",
+                "ac_a3119d369feb26",
+                "ac_bb2934f80277e4"
+              ],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted",
+                "accepted",
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_153ad6c1f4015c\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_8718fa0fea5351\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_911f23ff5907a5\",\"decision\":\"reject\",\"reason_code\":\"ambiguous_evidence\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_bb2934f80277e4\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_f13c8e2bc4cd47\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_7dacddb0f4d5b4\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"semiconductor\",\"eda\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_9a3817d3183883\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_7dacddb0f4d5b4\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"semiconductor\",\"eda\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_a3119d369feb26\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_099666b5a34162\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+              ],
+              "repair_responses": [
+                "",
+                "",
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {
+                "historical_or_background": 2,
+                "ambiguous_evidence": 1,
+                "unsupported_company_action": 3
+              },
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 1,
+              "ledger_sha256": "2e4fcfd2e2fd87c93db623a28795fa06fb70243e",
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 888,
+                "semantic_chars": 888,
+                "prefix_action_count": 6,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "jazzyear-research:165",
+            "position": 3,
+            "events": [],
+            "audit": {
+              "source_id": "jazzyear-research",
+              "source_article_id": "165",
+              "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r2-a|minimax/MiniMax-M3",
+              "entity_count": 13,
+              "eligible_entity_count": 0,
+              "action_span_count": 0,
+              "candidate_count": 0,
+              "batch_count": 0,
+              "document_type": "long_feature",
+              "document_route_reason": "adapter_document_type",
+              "document_family": "long_feature",
+              "processing_mode": "prefix_2000_if_event_else_skip",
+              "route_gate_confidence": "medium",
+              "route_llm_gate_required": true,
+              "route_gate_signals": [],
+              "document_unit_ids": [
+                "u_02e7d010d917"
+              ],
+              "accepted_claim_ids": [],
+              "rejected_claim_ids": [],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [],
+              "first_responses": [],
+              "repair_responses": [],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {},
+              "status": "no_claims",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 0,
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 1162,
+                "semantic_chars": 1162,
+                "prefix_action_count": 2,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          }
+        ],
+        "summary": {
+          "article_count": 3,
+          "event_count": 4,
+          "claim_count": 15,
+          "accepted_claim_count": 5,
+          "rejected_claim_count": 10,
+          "failed_claim_count": 0,
+          "strict_ready_article_count": 3,
+          "partial_article_count": 0
+        }
+      },
+      "evaluation": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-development-prompt-loop-training-only",
+        "overall": {
+          "gold_event_count": 4,
+          "predicted_event_count": 4,
+          "exact_match_count": 4,
+          "exact_precision": 1.0,
+          "exact_recall": 1.0,
+          "unsupported_predicted_event_count": 0,
+          "event_support_precision": 1.0,
+          "event_support_recall": 1.0,
+          "strong_gold_count": 4,
+          "strong_current_recall": 1.0,
+          "status_comparable_count": 4,
+          "status_accuracy": 1.0,
+          "subject_match_count": 4,
+          "company_subject_precision": 1.0
+        },
+        "by_document_type": {
+          "long_feature": {
+            "gold_event_count": 0,
+            "predicted_event_count": 0,
+            "exact_match_count": 0,
+            "exact_precision": null,
+            "exact_recall": null,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": null,
+            "event_support_recall": null,
+            "strong_gold_count": 0,
+            "strong_current_recall": null,
+            "status_comparable_count": 0,
+            "status_accuracy": null,
+            "subject_match_count": 0,
+            "company_subject_precision": null
+          },
+          "roadmap": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          },
+          "single_company_flash": {
+            "gold_event_count": 3,
+            "predicted_event_count": 3,
+            "exact_match_count": 3,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 3,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 3,
+            "status_accuracy": 1.0,
+            "subject_match_count": 3,
+            "company_subject_precision": 1.0
+          }
+        },
+        "by_event_type": {
+          "major_order": {
+            "gold_event_count": 3,
+            "predicted_event_count": 3,
+            "exact_match_count": 3,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 3,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 3,
+            "status_accuracy": 1.0,
+            "subject_match_count": 3,
+            "company_subject_precision": 1.0
+          },
+          "technical_milestone": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          }
+        },
+        "claim_contract": {
+          "article_count": 3,
+          "event_count": 4,
+          "claim_count": 15,
+          "accepted_claim_count": 5,
+          "rejected_claim_count": 10,
+          "failed_claim_count": 0,
+          "host_fallback_claim_count": 0,
+          "strict_ready_article_count": 3
+        },
+        "host_contract": {
+          "uncited_event_count": 0,
+          "ungrounded_evidence_event_count": 0,
+          "missing_host_id_event_count": 0
+        },
+        "legacy_candidate_dispositions": {
+          "status": "not_applicable",
+          "reason": "V27 Action Claim IDs replace V1 candidate IDs"
+        },
+        "gates": {
+          "prediction_complete": true,
+          "all_articles_strict_ready": true,
+          "all_claims_terminal": true,
+          "no_failed_claims": true,
+          "no_uncited_events": true,
+          "no_ungrounded_evidence": true,
+          "no_missing_host_ids": true,
+          "no_unsupported_predicted_events": true,
+          "company_subject_precision_at_least_98pct": true,
+          "strong_current_recall_at_least_90pct": true,
+          "status_accuracy_at_least_90pct": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "label": "candidate-gamma",
+      "selection_eligible": true,
+      "ineligibility_reasons": [],
+      "prediction": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-semantic-v27-prompt-loop-training",
+        "status": "complete",
+        "model": "minimax/MiniMax-M3",
+        "round": 2,
+        "maximum_rounds": 3,
+        "selected_keys": [
+          "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+          "shenzhen-semiconductor-association:2474",
+          "jazzyear-research:165"
+        ],
+        "code_contract_sha256": "fa96ac80a7acc74ab6046e6f2ebe4510b4e07ec599f85e3a00d4bc599d10820a",
+        "source_bundle_sha256": "89f54c2de59d3aa48c05d7b70019b0028d978ad1815a8c218d7bf7f4bd7298a1",
+        "source_gold_sha256": "614621e1fe4a5560de2d03e5987cdedb15819d2cb1247d576ab1f37876102dd7",
+        "source_split_sha256": "f393db769b126e44f51b67984eea38dd895676a72b1a8e099921c19a4790d937",
+        "results": [
+          {
+            "key": "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+            "position": 1,
+            "events": [
+              {
+                "source_id": "fusion-industry-media",
+                "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "company_mentions": [
+                  "中国核工业二三建设有限公司",
+                  "中国核工业二三建设"
+                ],
+                "canonical_company": "中国核工业二三建设有限公司",
+                "event_type": "major_order",
+                "event_date": "2026-01-24",
+                "industry_tags": [
+                  "nuclear_energy"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+                "evidence_quotes": [
+                  "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+                "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_5c1f4b05a27d36"
+                ],
+                "span_ids": [
+                  "as_b58f4e66032007"
+                ],
+                "subject_entity_id": "ae_a2055670130719"
+              },
+              {
+                "source_id": "fusion-industry-media",
+                "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "company_mentions": [
+                  "中国核电工程有限公司",
+                  "中国核电工程"
+                ],
+                "canonical_company": "中国核电工程有限公司",
+                "event_type": "major_order",
+                "event_date": "2026-01-24",
+                "industry_tags": [
+                  "nuclear_energy"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+                "evidence_quotes": [
+                  "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+                "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_e4dcb02a0a1c86"
+                ],
+                "span_ids": [
+                  "as_b58f4e66032007"
+                ],
+                "subject_entity_id": "ae_14bdaac1399a3d"
+              },
+              {
+                "source_id": "fusion-industry-media",
+                "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "company_mentions": [
+                  "荣信汇科电气股份有限公司",
+                  "荣信汇科电气"
+                ],
+                "canonical_company": "荣信汇科电气股份有限公司",
+                "event_type": "major_order",
+                "event_date": "2026-01-24",
+                "industry_tags": [
+                  "nuclear_energy",
+                  "power_equipment"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+                "evidence_quotes": [
+                  "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+                "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_4a41cfebe7eb3f"
+                ],
+                "span_ids": [
+                  "as_b58f4e66032007"
+                ],
+                "subject_entity_id": "ae_4cc2be1ba141fc"
+              }
+            ],
+            "audit": {
+              "source_id": "fusion-industry-media",
+              "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+              "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r2-b|minimax/MiniMax-M3",
+              "entity_count": 27,
+              "eligible_entity_count": 3,
+              "action_span_count": 2,
+              "candidate_count": 7,
+              "batch_count": 3,
+              "document_type": "single_company_flash",
+              "document_route_reason": "default_single_article",
+              "document_family": "single_company_flash",
+              "processing_mode": "single_unit",
+              "route_gate_confidence": "low",
+              "route_llm_gate_required": true,
+              "route_gate_signals": [],
+              "document_unit_ids": [
+                "u_ec82609a0196"
+              ],
+              "accepted_claim_ids": [
+                "ac_4a41cfebe7eb3f",
+                "ac_5c1f4b05a27d36",
+                "ac_e4dcb02a0a1c86"
+              ],
+              "rejected_claim_ids": [
+                "ac_155786b0e4f4db",
+                "ac_23d8752f0d06e7",
+                "ac_86a9bb71679477",
+                "ac_fb95cd7090640c"
+              ],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted",
+                "accepted",
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_4a41cfebe7eb3f\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_4cc2be1ba141fc\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\",\"power_equipment\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_5c1f4b05a27d36\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_a2055670130719\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_e4dcb02a0a1c86\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_14bdaac1399a3d\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_155786b0e4f4db\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_23d8752f0d06e7\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"},{\"claim_id\":\"ac_86a9bb71679477\",\"decision\":\"reject\",\"reason_code\":\"subject_mismatch\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_fb95cd7090640c\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+              ],
+              "repair_responses": [
+                "",
+                "",
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {
+                "subject_mismatch": 3,
+                "unsupported_company_action": 1
+              },
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 3,
+              "ledger_sha256": "c5a43470fd443d622d1358d7f14d59f4f3777812",
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 1177,
+                "semantic_chars": 1177,
+                "prefix_action_count": 10,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "shenzhen-semiconductor-association:2474",
+            "position": 2,
+            "events": [
+              {
+                "source_id": "shenzhen-semiconductor-association",
+                "source_article_id": "2474",
+                "canonical_url": "https://www.szsia.com/?p=2474",
+                "company_mentions": [
+                  "华大九天"
+                ],
+                "canonical_company": "华大九天",
+                "event_type": "technical_milestone",
+                "event_date": "2022-11-16",
+                "industry_tags": [
+                  "semiconductor"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。",
+                "evidence_quotes": [
+                  "深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+                "content_hash": "6b6b7e7733fd564b2df89d1dd231f68b402371de294dd4b0a58c63d05d5a9e73",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_9a3817d3183883"
+                ],
+                "span_ids": [
+                  "as_3e1402b21a0735"
+                ],
+                "subject_entity_id": "ae_7dacddb0f4d5b4"
+              }
+            ],
+            "audit": {
+              "source_id": "shenzhen-semiconductor-association",
+              "source_article_id": "2474",
+              "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r2-b|minimax/MiniMax-M3",
+              "entity_count": 10,
+              "eligible_entity_count": 1,
+              "action_span_count": 5,
+              "candidate_count": 8,
+              "batch_count": 3,
+              "document_type": "roadmap",
+              "document_route_reason": "future_action_density",
+              "document_family": "long_feature",
+              "processing_mode": "future_action_review",
+              "route_gate_confidence": "high",
+              "route_llm_gate_required": false,
+              "route_gate_signals": [],
+              "document_unit_ids": [
+                "u_8ee51836914e"
+              ],
+              "accepted_claim_ids": [
+                "ac_9a3817d3183883"
+              ],
+              "rejected_claim_ids": [
+                "ac_099666b5a34162",
+                "ac_153ad6c1f4015c",
+                "ac_8718fa0fea5351",
+                "ac_911f23ff5907a5",
+                "ac_a3119d369feb26",
+                "ac_bb2934f80277e4",
+                "ac_f13c8e2bc4cd47"
+              ],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted",
+                "accepted",
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_153ad6c1f4015c\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_8718fa0fea5351\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_911f23ff5907a5\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_bb2934f80277e4\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_f13c8e2bc4cd47\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_9a3817d3183883\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_7dacddb0f4d5b4\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"semiconductor\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_a3119d369feb26\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_099666b5a34162\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+              ],
+              "repair_responses": [
+                "",
+                "",
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {
+                "historical_or_background": 5,
+                "unsupported_company_action": 2
+              },
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 1,
+              "ledger_sha256": "2e4fcfd2e2fd87c93db623a28795fa06fb70243e",
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 888,
+                "semantic_chars": 888,
+                "prefix_action_count": 6,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "jazzyear-research:165",
+            "position": 3,
+            "events": [],
+            "audit": {
+              "source_id": "jazzyear-research",
+              "source_article_id": "165",
+              "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r2-b|minimax/MiniMax-M3",
+              "entity_count": 13,
+              "eligible_entity_count": 0,
+              "action_span_count": 0,
+              "candidate_count": 0,
+              "batch_count": 0,
+              "document_type": "long_feature",
+              "document_route_reason": "adapter_document_type",
+              "document_family": "long_feature",
+              "processing_mode": "prefix_2000_if_event_else_skip",
+              "route_gate_confidence": "medium",
+              "route_llm_gate_required": true,
+              "route_gate_signals": [],
+              "document_unit_ids": [
+                "u_02e7d010d917"
+              ],
+              "accepted_claim_ids": [],
+              "rejected_claim_ids": [],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [],
+              "first_responses": [],
+              "repair_responses": [],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {},
+              "status": "no_claims",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 0,
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 1162,
+                "semantic_chars": 1162,
+                "prefix_action_count": 2,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          }
+        ],
+        "summary": {
+          "article_count": 3,
+          "event_count": 4,
+          "claim_count": 15,
+          "accepted_claim_count": 4,
+          "rejected_claim_count": 11,
+          "failed_claim_count": 0,
+          "strict_ready_article_count": 3,
+          "partial_article_count": 0
+        }
+      },
+      "evaluation": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-development-prompt-loop-training-only",
+        "overall": {
+          "gold_event_count": 4,
+          "predicted_event_count": 4,
+          "exact_match_count": 4,
+          "exact_precision": 1.0,
+          "exact_recall": 1.0,
+          "unsupported_predicted_event_count": 0,
+          "event_support_precision": 1.0,
+          "event_support_recall": 1.0,
+          "strong_gold_count": 4,
+          "strong_current_recall": 1.0,
+          "status_comparable_count": 4,
+          "status_accuracy": 1.0,
+          "subject_match_count": 4,
+          "company_subject_precision": 1.0
+        },
+        "by_document_type": {
+          "long_feature": {
+            "gold_event_count": 0,
+            "predicted_event_count": 0,
+            "exact_match_count": 0,
+            "exact_precision": null,
+            "exact_recall": null,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": null,
+            "event_support_recall": null,
+            "strong_gold_count": 0,
+            "strong_current_recall": null,
+            "status_comparable_count": 0,
+            "status_accuracy": null,
+            "subject_match_count": 0,
+            "company_subject_precision": null
+          },
+          "roadmap": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          },
+          "single_company_flash": {
+            "gold_event_count": 3,
+            "predicted_event_count": 3,
+            "exact_match_count": 3,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 3,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 3,
+            "status_accuracy": 1.0,
+            "subject_match_count": 3,
+            "company_subject_precision": 1.0
+          }
+        },
+        "by_event_type": {
+          "major_order": {
+            "gold_event_count": 3,
+            "predicted_event_count": 3,
+            "exact_match_count": 3,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 3,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 3,
+            "status_accuracy": 1.0,
+            "subject_match_count": 3,
+            "company_subject_precision": 1.0
+          },
+          "technical_milestone": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          }
+        },
+        "claim_contract": {
+          "article_count": 3,
+          "event_count": 4,
+          "claim_count": 15,
+          "accepted_claim_count": 4,
+          "rejected_claim_count": 11,
+          "failed_claim_count": 0,
+          "host_fallback_claim_count": 0,
+          "strict_ready_article_count": 3
+        },
+        "host_contract": {
+          "uncited_event_count": 0,
+          "ungrounded_evidence_event_count": 0,
+          "missing_host_id_event_count": 0
+        },
+        "legacy_candidate_dispositions": {
+          "status": "not_applicable",
+          "reason": "V27 Action Claim IDs replace V1 candidate IDs"
+        },
+        "gates": {
+          "prediction_complete": true,
+          "all_articles_strict_ready": true,
+          "all_claims_terminal": true,
+          "no_failed_claims": true,
+          "no_uncited_events": true,
+          "no_ungrounded_evidence": true,
+          "no_missing_host_ids": true,
+          "no_unsupported_predicted_events": true,
+          "company_subject_precision_at_least_98pct": true,
+          "strong_current_recall_at_least_90pct": true,
+          "status_accuracy_at_least_90pct": true
+        },
+        "passed": true
+      }
+    },
+    {
+      "label": "candidate-alpha",
+      "selection_eligible": true,
+      "ineligibility_reasons": [],
+      "prediction": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-semantic-v27-prompt-loop-training",
+        "status": "complete",
+        "model": "minimax/MiniMax-M3",
+        "round": 2,
+        "maximum_rounds": 3,
+        "selected_keys": [
+          "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+          "shenzhen-semiconductor-association:2474",
+          "jazzyear-research:165"
+        ],
+        "code_contract_sha256": "fa96ac80a7acc74ab6046e6f2ebe4510b4e07ec599f85e3a00d4bc599d10820a",
+        "source_bundle_sha256": "89f54c2de59d3aa48c05d7b70019b0028d978ad1815a8c218d7bf7f4bd7298a1",
+        "source_gold_sha256": "614621e1fe4a5560de2d03e5987cdedb15819d2cb1247d576ab1f37876102dd7",
+        "source_split_sha256": "f393db769b126e44f51b67984eea38dd895676a72b1a8e099921c19a4790d937",
+        "results": [
+          {
+            "key": "fusion-industry-media:iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+            "position": 1,
+            "events": [
+              {
+                "source_id": "fusion-industry-media",
+                "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "company_mentions": [
+                  "中国核工业二三建设有限公司",
+                  "中国核工业二三建设"
+                ],
+                "canonical_company": "中国核工业二三建设有限公司",
+                "event_type": "major_order",
+                "event_date": "2026-01-24",
+                "industry_tags": [
+                  "nuclear_energy"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+                "evidence_quotes": [
+                  "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-c",
+                "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_5c1f4b05a27d36"
+                ],
+                "span_ids": [
+                  "as_b58f4e66032007"
+                ],
+                "subject_entity_id": "ae_a2055670130719"
+              },
+              {
+                "source_id": "fusion-industry-media",
+                "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "company_mentions": [
+                  "中国核电工程有限公司",
+                  "中国核电工程"
+                ],
+                "canonical_company": "中国核电工程有限公司",
+                "event_type": "major_order",
+                "event_date": "2026-01-24",
+                "industry_tags": [
+                  "nuclear_energy"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+                "evidence_quotes": [
+                  "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-c",
+                "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_e4dcb02a0a1c86"
+                ],
+                "span_ids": [
+                  "as_b58f4e66032007"
+                ],
+                "subject_entity_id": "ae_14bdaac1399a3d"
+              },
+              {
+                "source_id": "fusion-industry-media",
+                "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "canonical_url": "https://www.nuclear-fusion.com.cn/blog/iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+                "company_mentions": [
+                  "荣信汇科电气股份有限公司",
+                  "荣信汇科电气"
+                ],
+                "canonical_company": "荣信汇科电气股份有限公司",
+                "event_type": "major_order",
+                "event_date": "2026-01-24",
+                "industry_tags": [
+                  "nuclear_energy"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。",
+                "evidence_quotes": [
+                  "以下内容转载自：核工业西南物理研究院 2026年1月22日，由核工业西南物理研究院（以下简称“西物院”）牵头，联合荣信汇科电气股份有限公司、中国核工业二三建设有限公司、中国核电工程有限公司、中国科学院等离子体物理研究所组成的中方联合体，在法国与国际热核聚变实验堆（ITER）组织正式签署边缘局域模电源系统（ELM-PS）现金合同。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-c",
+                "content_hash": "823f08ef06f5625e45f31445b90bfe2c871bc281579cca40a89f44c51f710f4c",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_4a41cfebe7eb3f"
+                ],
+                "span_ids": [
+                  "as_b58f4e66032007"
+                ],
+                "subject_entity_id": "ae_4cc2be1ba141fc"
+              }
+            ],
+            "audit": {
+              "source_id": "fusion-industry-media",
+              "source_article_id": "iter-e22517f4-40e7-4a8b-b4a7-a7d7ae991716",
+              "prompt_version": "aggregate-semantic-v27-loop-r2-c",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r2-c|minimax/MiniMax-M3",
+              "entity_count": 27,
+              "eligible_entity_count": 3,
+              "action_span_count": 2,
+              "candidate_count": 7,
+              "batch_count": 3,
+              "document_type": "single_company_flash",
+              "document_route_reason": "default_single_article",
+              "document_family": "single_company_flash",
+              "processing_mode": "single_unit",
+              "route_gate_confidence": "low",
+              "route_llm_gate_required": true,
+              "route_gate_signals": [],
+              "document_unit_ids": [
+                "u_ec82609a0196"
+              ],
+              "accepted_claim_ids": [
+                "ac_4a41cfebe7eb3f",
+                "ac_5c1f4b05a27d36",
+                "ac_e4dcb02a0a1c86"
+              ],
+              "rejected_claim_ids": [
+                "ac_155786b0e4f4db",
+                "ac_23d8752f0d06e7",
+                "ac_86a9bb71679477",
+                "ac_fb95cd7090640c"
+              ],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted",
+                "accepted",
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_4a41cfebe7eb3f\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_4cc2be1ba141fc\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_5c1f4b05a27d36\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_a2055670130719\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_e4dcb02a0a1c86\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_14bdaac1399a3d\",\"event_type\":\"major_order\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"nuclear_energy\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_155786b0e4f4db\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_23d8752f0d06e7\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_86a9bb71679477\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_fb95cd7090640c\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+              ],
+              "repair_responses": [
+                "",
+                "",
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {
+                "unsupported_company_action": 4
+              },
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 3,
+              "ledger_sha256": "c5a43470fd443d622d1358d7f14d59f4f3777812",
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 1177,
+                "semantic_chars": 1177,
+                "prefix_action_count": 10,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "shenzhen-semiconductor-association:2474",
+            "position": 2,
+            "events": [
+              {
+                "source_id": "shenzhen-semiconductor-association",
+                "source_article_id": "2474",
+                "canonical_url": "https://www.szsia.com/?p=2474",
+                "company_mentions": [
+                  "华大九天"
+                ],
+                "canonical_company": "华大九天",
+                "event_type": "technical_milestone",
+                "event_date": "2022-11-16",
+                "industry_tags": [
+                  "eda",
+                  "semiconductor"
+                ],
+                "funding_round": "",
+                "funding_amount": "",
+                "cumulative_funding_amount": "",
+                "investors": [],
+                "event_summary": "深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。",
+                "evidence_quotes": [
+                  "深圳市国产EDA产品推介会作为本届深圳高交会的重要组成部分，重点推介了国产EDA系列产品，华大九天还发布了两款2022年度EDA重点产品与方案，展现出了深圳市在EDA领域多年规划布局的成果，让产业链上下游更加深入了解国产EDA技术水平，提升了国产EDA知名度和美誉度。",
+                  "公司不断加大研发投入，快速推出新品，目前已形成模拟电路设计全流程EDA工具系统、数字电路设计EDA工具、平板显示电路设计全流程EDA工具系统和晶圆制造EDA工具四大主干产品线二十多款产品。"
+                ],
+                "ambiguities": [],
+                "confidence": "high",
+                "processor": "minimax",
+                "prompt_version": "aggregate-semantic-v27-loop-r2-c",
+                "content_hash": "6b6b7e7733fd564b2df89d1dd231f68b402371de294dd4b0a58c63d05d5a9e73",
+                "phase": "build_organize",
+                "event_status": "completed",
+                "claim_ids": [
+                  "ac_9a3817d3183883",
+                  "ac_f13c8e2bc4cd47"
+                ],
+                "span_ids": [
+                  "as_3e1402b21a0735",
+                  "as_f053840c13a42b"
+                ],
+                "subject_entity_id": "ae_7dacddb0f4d5b4"
+              }
+            ],
+            "audit": {
+              "source_id": "shenzhen-semiconductor-association",
+              "source_article_id": "2474",
+              "prompt_version": "aggregate-semantic-v27-loop-r2-c",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r2-c|minimax/MiniMax-M3",
+              "entity_count": 10,
+              "eligible_entity_count": 1,
+              "action_span_count": 5,
+              "candidate_count": 8,
+              "batch_count": 3,
+              "document_type": "roadmap",
+              "document_route_reason": "future_action_density",
+              "document_family": "long_feature",
+              "processing_mode": "future_action_review",
+              "route_gate_confidence": "high",
+              "route_llm_gate_required": false,
+              "route_gate_signals": [],
+              "document_unit_ids": [
+                "u_8ee51836914e"
+              ],
+              "accepted_claim_ids": [
+                "ac_9a3817d3183883",
+                "ac_f13c8e2bc4cd47"
+              ],
+              "rejected_claim_ids": [
+                "ac_099666b5a34162",
+                "ac_153ad6c1f4015c",
+                "ac_8718fa0fea5351",
+                "ac_911f23ff5907a5",
+                "ac_a3119d369feb26",
+                "ac_bb2934f80277e4"
+              ],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [
+                "accepted",
+                "accepted",
+                "accepted"
+              ],
+              "first_responses": [
+                "{\"decisions\":[{\"claim_id\":\"ac_153ad6c1f4015c\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_8718fa0fea5351\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_911f23ff5907a5\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_bb2934f80277e4\",\"decision\":\"reject\",\"reason_code\":\"historical_or_background\"},{\"claim_id\":\"ac_f13c8e2bc4cd47\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_7dacddb0f4d5b4\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"eda\",\"semiconductor\"],\"confidence\":\"high\"},{\"claim_id\":\"ac_9a3817d3183883\",\"decision\":\"accept\",\"subject_entity_id\":\"ae_7dacddb0f4d5b4\",\"event_type\":\"technical_milestone\",\"event_status\":\"completed\",\"funding_round\":\"\",\"funding_amount\":\"\",\"cumulative_funding_amount\":\"\",\"investors\":[],\"industry_tags\":[\"eda\",\"semiconductor\"],\"confidence\":\"high\"}]}",
+                "{\"decisions\":[{\"claim_id\":\"ac_a3119d369feb26\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"},{\"claim_id\":\"ac_099666b5a34162\",\"decision\":\"reject\",\"reason_code\":\"unsupported_company_action\"}]}"
+              ],
+              "repair_responses": [
+                "",
+                "",
+                ""
+              ],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {
+                "unsupported_company_action": 5,
+                "historical_or_background": 1
+              },
+              "status": "accepted",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 1,
+              "ledger_sha256": "2e4fcfd2e2fd87c93db623a28795fa06fb70243e",
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 888,
+                "semantic_chars": 888,
+                "prefix_action_count": 6,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          },
+          {
+            "key": "jazzyear-research:165",
+            "position": 3,
+            "events": [],
+            "audit": {
+              "source_id": "jazzyear-research",
+              "source_article_id": "165",
+              "prompt_version": "aggregate-semantic-v27-loop-r2-c",
+              "claim_contract_version": "v5-open-action-ledger",
+              "model_identity": "minimax/MiniMax-M3",
+              "cache_key": "aggregate-semantic-v27-loop-r2-c|minimax/MiniMax-M3",
+              "entity_count": 13,
+              "eligible_entity_count": 0,
+              "action_span_count": 0,
+              "candidate_count": 0,
+              "batch_count": 0,
+              "document_type": "long_feature",
+              "document_route_reason": "adapter_document_type",
+              "document_family": "long_feature",
+              "processing_mode": "prefix_2000_if_event_else_skip",
+              "route_gate_confidence": "medium",
+              "route_llm_gate_required": true,
+              "route_gate_signals": [],
+              "document_unit_ids": [
+                "u_02e7d010d917"
+              ],
+              "accepted_claim_ids": [],
+              "rejected_claim_ids": [],
+              "failed_claim_ids": [],
+              "host_fallback_claim_ids": [],
+              "batch_statuses": [],
+              "first_responses": [],
+              "repair_responses": [],
+              "validation_issues": [],
+              "infrastructure_errors": [],
+              "skipped_claim_ids_due_to_infrastructure": [],
+              "rejection_reason_counts": {},
+              "status": "no_claims",
+              "strict_claim_contract_ready": true,
+              "final_event_count": 0,
+              "semantic_window": {
+                "mode": "full_short",
+                "reason": "under_window_limit",
+                "original_chars": 1162,
+                "semantic_chars": 1162,
+                "prefix_action_count": 2,
+                "tail_action_count": 0,
+                "prefix_has_concrete_event": true,
+                "interview_cue_count": 0
+              }
+            }
+          }
+        ],
+        "summary": {
+          "article_count": 3,
+          "event_count": 4,
+          "claim_count": 15,
+          "accepted_claim_count": 5,
+          "rejected_claim_count": 10,
+          "failed_claim_count": 0,
+          "strict_ready_article_count": 3,
+          "partial_article_count": 0
+        }
+      },
+      "evaluation": {
+        "schema_version": 1,
+        "dataset_version": "semantic-v27-development-v2",
+        "purpose": "opened-development-prompt-loop-training-only",
+        "overall": {
+          "gold_event_count": 4,
+          "predicted_event_count": 4,
+          "exact_match_count": 4,
+          "exact_precision": 1.0,
+          "exact_recall": 1.0,
+          "unsupported_predicted_event_count": 0,
+          "event_support_precision": 1.0,
+          "event_support_recall": 1.0,
+          "strong_gold_count": 4,
+          "strong_current_recall": 1.0,
+          "status_comparable_count": 4,
+          "status_accuracy": 1.0,
+          "subject_match_count": 4,
+          "company_subject_precision": 1.0
+        },
+        "by_document_type": {
+          "long_feature": {
+            "gold_event_count": 0,
+            "predicted_event_count": 0,
+            "exact_match_count": 0,
+            "exact_precision": null,
+            "exact_recall": null,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": null,
+            "event_support_recall": null,
+            "strong_gold_count": 0,
+            "strong_current_recall": null,
+            "status_comparable_count": 0,
+            "status_accuracy": null,
+            "subject_match_count": 0,
+            "company_subject_precision": null
+          },
+          "roadmap": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          },
+          "single_company_flash": {
+            "gold_event_count": 3,
+            "predicted_event_count": 3,
+            "exact_match_count": 3,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 3,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 3,
+            "status_accuracy": 1.0,
+            "subject_match_count": 3,
+            "company_subject_precision": 1.0
+          }
+        },
+        "by_event_type": {
+          "major_order": {
+            "gold_event_count": 3,
+            "predicted_event_count": 3,
+            "exact_match_count": 3,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 3,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 3,
+            "status_accuracy": 1.0,
+            "subject_match_count": 3,
+            "company_subject_precision": 1.0
+          },
+          "technical_milestone": {
+            "gold_event_count": 1,
+            "predicted_event_count": 1,
+            "exact_match_count": 1,
+            "exact_precision": 1.0,
+            "exact_recall": 1.0,
+            "unsupported_predicted_event_count": 0,
+            "event_support_precision": 1.0,
+            "event_support_recall": 1.0,
+            "strong_gold_count": 1,
+            "strong_current_recall": 1.0,
+            "status_comparable_count": 1,
+            "status_accuracy": 1.0,
+            "subject_match_count": 1,
+            "company_subject_precision": 1.0
+          }
+        },
+        "claim_contract": {
+          "article_count": 3,
+          "event_count": 4,
+          "claim_count": 15,
+          "accepted_claim_count": 5,
+          "rejected_claim_count": 10,
+          "failed_claim_count": 0,
+          "host_fallback_claim_count": 0,
+          "strict_ready_article_count": 3
+        },
+        "host_contract": {
+          "uncited_event_count": 0,
+          "ungrounded_evidence_event_count": 0,
+          "missing_host_id_event_count": 0
+        },
+        "legacy_candidate_dispositions": {
+          "status": "not_applicable",
+          "reason": "V27 Action Claim IDs replace V1 candidate IDs"
+        },
+        "gates": {
+          "prediction_complete": true,
+          "all_articles_strict_ready": true,
+          "all_claims_terminal": true,
+          "no_failed_claims": true,
+          "no_uncited_events": true,
+          "no_ungrounded_evidence": true,
+          "no_missing_host_ids": true,
+          "no_unsupported_predicted_events": true,
+          "company_subject_precision_at_least_98pct": true,
+          "strong_current_recall_at_least_90pct": true,
+          "status_accuracy_at_least_90pct": true
+        },
+        "passed": true
+      }
+    }
+  ]
+}

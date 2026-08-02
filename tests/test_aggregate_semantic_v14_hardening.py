@@ -119,7 +119,7 @@ def test_model_event_requires_subject_in_primary_quote():
     events = processor.process(channel, article, [])
 
     assert events == []
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["status"] == "partial"
 
 
 def test_historical_date_flows_through_followup_financing_sentence():

@@ -1,0 +1,72 @@
+{
+  "artifact_id": "job_c364fb82bcd4bdb5",
+  "source_platform": "linkedin-public",
+  "source_job_id": "4436676216",
+  "requested_url": "https://cn.linkedin.com/jobs/view/ed-vp-medical-science-strategy-oncology-at-thermo-fisher-scientific-4436676216",
+  "final_url": "https://cn.linkedin.com/jobs/view/ed-vp-medical-science-strategy-oncology-at-thermo-fisher-scientific-4436676216",
+  "captured_at": "2026-08-01T11:30:44.587000+00:00",
+  "http_status": 200,
+  "mime_type": "text/html",
+  "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_c364fb82bcd4bdb5/raw-browser-capture.json",
+  "raw_artifact_sha256": "c606c3dccdcc9d2d27e665cb4034151251eec1f677ba44131b14a1823e585d15",
+  "normalized_text_path": "evaluation/training-v3/job-artifacts/job_c364fb82bcd4bdb5/normalized.txt",
+  "normalized_text_sha256": "e8f13f1cb94f92bfc806b76e5bc374735e98c519822c60ad542afcdc8959d379",
+  "extractor_version": "browser-public-job-v1",
+  "company": "赛默飞世尔（中国）",
+  "canonical_company_id": "co_d8a1571c486c4daf",
+  "corporate_family_id": "fam_d8a1571c486c4daf",
+  "employer_display": "赛默飞世尔科技",
+  "employer_match_basis": "unverified_alias",
+  "exact_title": "ED/VP Medical Science & Strategy - Oncology",
+  "title": "ED/VP Medical Science & Strategy - Oncology",
+  "raw_publication_text": "3 周前",
+  "publication_basis": "relative_date_interval",
+  "publication_interval_start": "2026-07-04",
+  "publication_interval_end_exclusive": "2026-07-12",
+  "date_parser_version": "relative-publication-v1",
+  "timezone": "Asia/Shanghai",
+  "source_job_id_span": {
+    "text": "4436676216",
+    "char_start": 14,
+    "char_end": 24
+  },
+  "title_span": {
+    "text": "ED/VP Medical Science & Strategy - Oncology",
+    "char_start": 31,
+    "char_end": 74
+  },
+  "employer_span": {
+    "text": "赛默飞世尔科技",
+    "char_start": 84,
+    "char_end": 91
+  },
+  "publication_span": {
+    "text": "3 周前",
+    "char_start": 104,
+    "char_end": 108
+  },
+  "scope_spans": [
+    {
+      "text": "The position requires proven abilities to drive both strategic and measurable business outcomes. The incumbent’s Oncology track record expertise is required to be extensive and ensure recognition as peer of their Pharmaceutical Industry equivalents. This position is playing a key part in the future success of the PPD clinical research business of Thermo Fisher Scientific, as it seeks to continue its track record of successful growth and expand Industry leading position in Oncology. Medical Science & Strategy physicians are subject matter experts who support sales for proposals and bid defenses, engaging clients senior medical / scientific leadership in discussions and training internal staff on medical and therapeutic requirements of the proposals.",
+      "char_start": 1313,
+      "char_end": 2071
+    },
+    {
+      "text": "Thirdly, the incumbent will be responsible for providing therapeutic and developmental expertise to internal teams, including:",
+      "char_start": 3203,
+      "char_end": 3329
+    },
+    {
+      "text": "Mentor and supervise clinical scientists",
+      "char_start": 3662,
+      "char_end": 3702
+    }
+  ],
+  "seniority_label": "director_plus",
+  "seniority_rule_version": "director-plus-artifact-v1",
+  "evaluation_eligible": true,
+  "exclusion_reason": "",
+  "reviewer": "pending",
+  "reviewed_at": "2026-08-01T11:30:44.587000+00:00",
+  "review_status": "pending_human_review"
+}

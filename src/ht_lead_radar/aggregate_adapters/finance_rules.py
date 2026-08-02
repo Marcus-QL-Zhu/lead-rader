@@ -134,6 +134,14 @@ def extract_funding_events(
             ]
             assertions.sort(key=lambda item: item[0])
             for _, status, assertion in assertions:
+                if status == "started" and re.search(
+                    r"即将|计划|拟|预计|将",
+                    sentence[max(0, assertion.start() - 48) : assertion.start()],
+                ):
+                    # A future marker turns a syntactic "started financing"
+                    # match into a planned/target event (for example,
+                    # "即将启动新一轮融资").  Keep "已提前开始" as started.
+                    status = "target"
                 if _is_historical_assertion(
                     sentence,
                     assertion,

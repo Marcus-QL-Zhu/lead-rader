@@ -1,0 +1,72 @@
+{
+  "artifact_id": "job_861a7d0abb1e8ac8",
+  "source_platform": "linkedin-public",
+  "source_job_id": "4444050640",
+  "requested_url": "https://cn.linkedin.com/jobs/view/investment-vp-at-%E7%BE%8E%E6%95%A6%E5%8A%9B-4444050640",
+  "final_url": "https://cn.linkedin.com/jobs/view/investment-vp-at-%E7%BE%8E%E6%95%A6%E5%8A%9B-4444050640",
+  "captured_at": "2026-08-01T11:27:41.086000+00:00",
+  "http_status": 200,
+  "mime_type": "text/html",
+  "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_861a7d0abb1e8ac8/raw-browser-capture.json",
+  "raw_artifact_sha256": "0d2a98b85d8a897b705bfba44ee7ff027bc6453e60070c126e7b5b1f4e60fdb9",
+  "normalized_text_path": "evaluation/training-v3/job-artifacts/job_861a7d0abb1e8ac8/normalized.txt",
+  "normalized_text_sha256": "b27de1941de265f900f9af61d0eff9f87497d02da992e0566f2538a574324a00",
+  "extractor_version": "browser-public-job-v1",
+  "company": "美敦力（中国）",
+  "canonical_company_id": "co_98c103b9f3aca013",
+  "corporate_family_id": "fam_98c103b9f3aca013",
+  "employer_display": "美敦力",
+  "employer_match_basis": "unverified_alias",
+  "exact_title": "Investment VP",
+  "title": "Investment VP",
+  "raw_publication_text": "1 周前",
+  "publication_basis": "relative_date_interval",
+  "publication_interval_start": "2026-07-18",
+  "publication_interval_end_exclusive": "2026-07-26",
+  "date_parser_version": "relative-publication-v1",
+  "timezone": "Asia/Shanghai",
+  "source_job_id_span": {
+    "text": "4444050640",
+    "char_start": 14,
+    "char_end": 24
+  },
+  "title_span": {
+    "text": "Investment VP",
+    "char_start": 31,
+    "char_end": 44
+  },
+  "employer_span": {
+    "text": "美敦力",
+    "char_start": 54,
+    "char_end": 57
+  },
+  "publication_span": {
+    "text": "1 周前",
+    "char_start": 70,
+    "char_end": 74
+  },
+  "scope_spans": [
+    {
+      "text": "Lead and execute end-to-end investment process for preferably one or multiple designated portfolio (e.g. CV / NS / MS), covering the full lifecycle from deal sourcing / screening, diligence, negotiation, to closing, portfolio management and exit",
+      "char_start": 665,
+      "char_end": 910
+    },
+    {
+      "text": "Help drive business collaborations related to venture deals in alignment with corporate strategy in collaboration with global and local stakeholders Independently manage deals, including deal execution, IC (investment committee) presentation, and follow-through",
+      "char_start": 1095,
+      "char_end": 1356
+    },
+    {
+      "text": "Enable global–local integration by bridging stakeholders and informing global strategy with China insights.",
+      "char_start": 1761,
+      "char_end": 1868
+    }
+  ],
+  "seniority_label": "director_plus",
+  "seniority_rule_version": "director-plus-artifact-v1",
+  "evaluation_eligible": true,
+  "exclusion_reason": "",
+  "reviewer": "pending",
+  "reviewed_at": "2026-08-01T11:27:41.086000+00:00",
+  "review_status": "pending_human_review"
+}
