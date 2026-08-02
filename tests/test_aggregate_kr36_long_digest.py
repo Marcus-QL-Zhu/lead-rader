@@ -1,6 +1,8 @@
 from datetime import datetime, timezone
 from pathlib import Path
 
+import pytest
+
 from ht_lead_radar.aggregate_adapters.base import AdapterContext
 from ht_lead_radar.aggregate_adapters.body_scope import classify_long_article
 from ht_lead_radar.aggregate_adapters.document_router import route_document
@@ -17,6 +19,10 @@ ARCHIVE = (
 
 
 def _real_article(tmp_path):
+    listing = ARCHIVE / "listing.html"
+    detail = ARCHIVE / "detail-3916547493965442.html"
+    if not listing.is_file() or not detail.is_file():
+        pytest.skip("local 36Kr long-digest acceptance fixture is not checked in")
     adapter = Kr36Adapter()
     channel = adapter.channel_for("36kr-financing-flash")
     context = AdapterContext.create(
@@ -24,12 +30,12 @@ def _real_article(tmp_path):
         fetch=lambda _url: b"",
         now=datetime(2026, 8, 2, tzinfo=timezone.utc),
     )
-    indexes = adapter.parse_listing(channel, (ARCHIVE / "listing.html").read_bytes(), context)
+    indexes = adapter.parse_listing(channel, listing.read_bytes(), context)
     index = next(item for item in indexes if item.source_article_id == "3916547493965442")
     return adapter.parse_detail(
         channel,
         index,
-        (ARCHIVE / "detail-3916547493965442.html").read_bytes(),
+        detail.read_bytes(),
         context,
     )
 

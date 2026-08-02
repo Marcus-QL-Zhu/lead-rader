@@ -8,8 +8,8 @@ Status: ready for the server/GitHub release gate (2026-08-03).
   claim-centric pipeline with MiniMax-M3 and strict mode enabled. Every article
   was `strict_ready=true`, had zero failed claims, and had zero partial articles.
   The final replay artifacts are `lieyun...-r7`, `pedaily-vcpe...-r13`,
-  `36kr...-r7`, and the seven companion samples at `...-r10` (CLS, ????
-  ?????????????????VBData???). These supersede all
+  `36kr...-r7`, and seven companion samples ending in `...-r10` (CLS,
+  Cyzone, Jazzyear, Pedaily-Investment, STCN, VBData, and ZHIDX). These supersede all
   earlier local reruns.
 - The ten artifacts are the release-candidate files named
   `.tmp-adapter-acceptance-release-*.json` in the local acceptance workspace.
