@@ -1,4 +1,5 @@
 import json
+from datetime import date
 from pathlib import Path
 
 import pytest
@@ -89,7 +90,7 @@ def test_every_source_has_provenance_signal_tags_adapter_and_verification_state(
         assert source.signal_types
         assert source.industry_tags
         assert source.adapter
-        assert source.verified_on == "2026-07-25"
+        assert date.fromisoformat(source.verified_on) >= date(2026, 7, 25)
         assert source.status
         assert source.verification_note
         if source.enabled:

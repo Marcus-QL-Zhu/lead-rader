@@ -25,7 +25,7 @@ from .models import (
     SourceChannel,
 )
 from .registry import DedicatedAdapterRegistry
-from .semantic import MiniMaxSemanticProcessor, PROMPT_VERSION, PromptRunner
+from .semantic import MiniMaxSemanticProcessor, PromptRunner
 from .storage import AggregateStateStore
 
 
@@ -80,9 +80,9 @@ class PublicHttpFetcher:
         self.timeout = timeout
         self.max_bytes = max_bytes
         self.user_agent = user_agent
-        self.urlopen = urlopen or urllib.request.build_opener(
-            _SameHostRedirectHandler()
-        ).open
+        self.urlopen = (
+            urlopen or urllib.request.build_opener(_SameHostRedirectHandler()).open
+        )
         self.minimum_interval_seconds = max(0.0, minimum_interval_seconds)
         self._last_fetch_at = 0.0
         self.shared_get_urls = frozenset(shared_get_urls)
@@ -164,15 +164,35 @@ class DedicatedAggregateCoordinator:
         now: datetime | None = None,
         acceptance_dir: str | Path | None = None,
         semantic_workers: int | None = None,
+        strict_claim_contract: bool | None = None,
+        claim_centric_v27: bool | None = None,
+        capture_full_visible_window: bool = False,
     ) -> None:
         self.state_db = Path(state_db)
         self.registry = registry or DedicatedAdapterRegistry.defaults()
         self.fetch = fetch or PublicHttpFetcher()
-        self.processor = MiniMaxSemanticProcessor(llm_runner)
+        if strict_claim_contract is None:
+            strict_claim_contract = os.environ.get(
+                "LEAD_RADAR_AGGREGATE_STRICT_CLAIMS",
+                "0",
+            ).strip().lower() in {"1", "true", "yes", "on"}
+        self.strict_claim_contract = strict_claim_contract
+        if claim_centric_v27 is None:
+            claim_centric_v27 = os.environ.get(
+                "LEAD_RADAR_AGGREGATE_CLAIM_CENTRIC_V27",
+                "0",
+            ).strip().lower() in {"1", "true", "yes", "on"}
+        self.claim_centric_v27 = claim_centric_v27
+        self.processor = MiniMaxSemanticProcessor(
+            llm_runner,
+            strict_claim_contract=strict_claim_contract,
+            claim_centric_v27=claim_centric_v27,
+        )
         self._llm_runner = llm_runner
         self.semantic_workers = self._worker_count(semantic_workers, llm_runner)
         self.now = now or datetime.now(timezone.utc)
         self.acceptance_dir = Path(acceptance_dir) if acceptance_dir else None
+        self.capture_full_visible_window = capture_full_visible_window
 
     def collect_source(
         self,
@@ -192,6 +212,11 @@ class DedicatedAggregateCoordinator:
             post_json=self._post_adapter_json(source_id),
             record_decision=self._record_adapter_decision(source_id),
             now=self.now,
+            decision_state={
+                "capture_full_visible_window": {
+                    "enabled": self.capture_full_visible_window,
+                }
+            },
         )
         listing_count = incremental_count = detail_success_count = 0
         detail_failure_count = rule_event_count = minimax_event_count = 0
@@ -234,8 +259,11 @@ class DedicatedAggregateCoordinator:
                         and store.article_is_current(index, now=self.now)
                         and store.semantic_is_current(
                             index,
-                            prompt_version=PROMPT_VERSION,
+                            prompt_version=self.processor.semantic_prompt_version,
                             model_identity=self.processor.model_identity,
+                            claim_centric_v27=self.processor.claim_centric_v27
+                            and self.processor.runner is not None,
+                            strict_claim_contract=self.strict_claim_contract,
                         )
                         and not store.has_open_dead_letter(
                             source_id=source_id,
@@ -308,12 +336,17 @@ class DedicatedAggregateCoordinator:
                         )
                         semantic_still_current = store.semantic_is_current(
                             index,
-                            prompt_version=PROMPT_VERSION,
+                            prompt_version=self.processor.semantic_prompt_version,
                             model_identity=self.processor.model_identity,
+                            claim_centric_v27=self.processor.claim_centric_v27
+                            and self.processor.runner is not None,
+                            strict_claim_contract=self.strict_claim_contract,
                         )
                         store.store_article(article)
                         if article.fetch_status in {
-                            "ok", "structured_complete", "listing_complete"
+                            "ok",
+                            "structured_complete",
+                            "listing_complete",
                         }:
                             detail_success_count += 1
                             store.resolve_dead_letter(
@@ -395,16 +428,33 @@ class DedicatedAggregateCoordinator:
                             semantic_audit.get("omissions_detected") or 0
                         )
                         store.store_semantic_audit(semantic_audit)
-                        if semantic_audit.get("status") == "fallback_to_rules":
+                        store.sync_semantic_claim_dead_letters(
+                            source_id=source_id,
+                            source_article_id=index.source_article_id,
+                            canonical_url=index.canonical_url,
+                            failed_claim_ids=list(
+                                (
+                                    semantic_audit.get("model_unadjudicated_claim_ids")
+                                    if self.strict_claim_contract
+                                    else semantic_audit.get("unmapped_candidate_ids")
+                                )
+                                or semantic_audit.get("failed_claim_ids")
+                                or []
+                            ),
+                            error=str(semantic_audit.get("error") or ""),
+                        )
+                        if semantic_audit.get("status") in {
+                            "fallback_to_rules",
+                            "partial",
+                            "repaired_partial",
+                        }:
                             semantic_failure_count += 1
                             store.record_dead_letter(
                                 source_id=source_id,
                                 source_article_id=index.source_article_id,
                                 canonical_url=index.canonical_url,
                                 stage="semantic_validation",
-                                error=str(semantic_audit.get("error") or "")[
-                                    :2000
-                                ],
+                                error=str(semantic_audit.get("error") or "")[:2000],
                             )
                         else:
                             store.resolve_dead_letter(
@@ -413,8 +463,7 @@ class DedicatedAggregateCoordinator:
                                 stage="semantic_validation",
                             )
                         minimax_event_count += sum(
-                            event.processor == "minimax"
-                            for event in semantic_events
+                            event.processor == "minimax" for event in semantic_events
                         )
                         store.store_events(
                             source_id,
@@ -505,11 +554,11 @@ class DedicatedAggregateCoordinator:
         if runner is None:
             return 1
         if value is None:
-            raw = os.environ.get("LEAD_RADAR_AGGREGATE_LLM_WORKERS", "6")
+            raw = os.environ.get("LEAD_RADAR_AGGREGATE_LLM_WORKERS", "4")
             try:
                 value = int(raw)
             except ValueError:
-                value = 6
+                value = 4
         return max(1, min(value, 8))
 
     def _process_semantic(
@@ -518,7 +567,11 @@ class DedicatedAggregateCoordinator:
         article: CleanArticle,
         rule_events: list[SemanticEvent],
     ) -> tuple[list[SemanticEvent], dict[str, Any]]:
-        processor = MiniMaxSemanticProcessor(self._llm_runner)
+        processor = MiniMaxSemanticProcessor(
+            self._llm_runner,
+            strict_claim_contract=self.strict_claim_contract,
+            claim_centric_v27=self.claim_centric_v27,
+        )
         events = processor.process(channel, article, rule_events)
         return events, dict(processor.last_audit)
 
@@ -624,9 +677,7 @@ class DedicatedAggregateCoordinator:
         def fetch(url: str, payload: dict[str, Any]) -> bytes:
             body = post_json(url, payload)
             request_key = json.dumps(payload, ensure_ascii=False, sort_keys=True)
-            digest = sha256(
-                f"{url}|{request_key}".encode("utf-8")
-            ).hexdigest()[:16]
+            digest = sha256(f"{url}|{request_key}".encode("utf-8")).hexdigest()[:16]
             self._write_raw(source_id, f"adapter-post-{digest}", body)
             return body
 

@@ -189,10 +189,29 @@ def _default_transport(
 
 
 def _message_text(payload: Mapping[str, Any]) -> str:
+    base_response = payload.get("base_resp")
+    if isinstance(base_response, Mapping):
+        try:
+            provider_status = int(base_response.get("status_code") or 0)
+        except (TypeError, ValueError):
+            provider_status = -1
+        if provider_status != 0:
+            provider_message = str(base_response.get("status_msg") or "").strip()
+            raise DirectLLMError(
+                "LLM provider reported application error "
+                f"{provider_status}: {provider_message or '<no message>'}"
+            )
     choices = payload.get("choices")
     if not isinstance(choices, list) or not choices:
         raise DirectLLMError("LLM provider response has no choices")
     choice = choices[0]
+    finish_reason = (
+        str(choice.get("finish_reason") or "").strip()
+        if isinstance(choice, Mapping)
+        else ""
+    )
+    if finish_reason == "length":
+        raise DirectLLMError("LLM provider response was truncated at token limit")
     message = choice.get("message") if isinstance(choice, Mapping) else None
     content = message.get("content") if isinstance(message, Mapping) else None
     if isinstance(content, str) and content.strip():
@@ -218,11 +237,22 @@ class OpenClawConfiguredLLMRunner:
         config: OpenClawLLMConfig | None = None,
         timeout_seconds: float = 240,
         max_completion_tokens: int = 16384,
+        thinking_mode: str | None = None,
         transport: Transport | None = None,
     ) -> None:
+        if thinking_mode not in {None, "disabled", "adaptive"}:
+            raise ValueError("thinking_mode must be disabled, adaptive, or None")
         self.config = config or load_openclaw_llm_config()
+        if thinking_mode is not None and not (
+            self.config.provider.casefold() == "minimax"
+            and self.config.model.casefold() == "minimax-m3"
+        ):
+            raise LLMConfigurationError(
+                "thinking_mode is supported only for minimax/MiniMax-M3"
+            )
         self.timeout_seconds = timeout_seconds
         self.max_completion_tokens = max_completion_tokens
+        self.thinking_mode = thinking_mode
         self.transport = transport or _default_transport
 
     def run(
@@ -238,7 +268,11 @@ class OpenClawConfiguredLLMRunner:
             messages.append({"role": "system", "content": system_prompt.strip()})
         messages.append({"role": "user", "content": prompt})
         last_error: DirectLLMError | None = None
-        for attempt in range(2):
+        # reasoning_split only changes how reasoning is represented. It is
+        # useful as a one-shot recovery for adaptive thinking, but retrying it
+        # cannot repair an empty response when M3 thinking is already disabled.
+        attempt_count = 1 if self.thinking_mode == "disabled" else 2
+        for attempt in range(attempt_count):
             body = {
                 "model": self.config.model,
                 "messages": messages,
@@ -252,6 +286,8 @@ class OpenClawConfiguredLLMRunner:
                 # observable and can still pass deterministic validation.
                 "reasoning_split": attempt == 0,
             }
+            if self.thinking_mode is not None:
+                body["thinking"] = {"type": self.thinking_mode}
             request = urllib.request.Request(
                 f"{self.config.base_url}/chat/completions",
                 data=json.dumps(body, ensure_ascii=False).encode("utf-8"),

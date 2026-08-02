@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "purpose": "private-round-label-mapping",
+  "mapping": {
+    "candidate-beta": {
+      "variant": "a",
+      "prompt_version": "aggregate-semantic-v27-loop-r2-a",
+      "prompt_config_sha256": "8351dc53f2440b6e18511fbdb28013720666bd840962c9ced22ed96ba7d8c39c"
+    },
+    "candidate-gamma": {
+      "variant": "b",
+      "prompt_version": "aggregate-semantic-v27-loop-r2-b",
+      "prompt_config_sha256": "e38779c3a0deabd680e44032e920e4bf83e89f025c95406e8a4839506d1315db"
+    },
+    "candidate-alpha": {
+      "variant": "c",
+      "prompt_version": "aggregate-semantic-v27-loop-r2-c",
+      "prompt_config_sha256": "431bb72efa200760b579b741ac83fc0c480f7a3c3bd6ae4e6faa6402b0f03afc"
+    }
+  }
+}

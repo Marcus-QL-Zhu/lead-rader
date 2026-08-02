@@ -1,0 +1,86 @@
+{
+  "status": "max_rounds_reached_without_acceptance",
+  "model": "minimax/MiniMax-M3",
+  "evaluator_model": "gpt-5.6-terra",
+  "evaluator_reasoning": "medium",
+  "completed_rounds": 5,
+  "training_articles_seen": 15,
+  "rounds": [
+    {
+      "round": 1,
+      "selected_parent": "full_article_plus_strong_candidates_single_call",
+      "best_hard_pass_counts": {
+        "facts": 2,
+        "coverage": 2,
+        "engineering": 3
+      },
+      "main_learning": "A small one-call contract beat clustering and a two-stage locator/normalizer."
+    },
+    {
+      "round": 2,
+      "selected_parent": "article_and_candidates_first_boundary_example_near_schema",
+      "best_hard_pass_counts": {
+        "facts": 2,
+        "coverage": 2,
+        "engineering": 3
+      },
+      "main_learning": "Information order helped, but same-year company formation and verbatim evidence remained unstable."
+    },
+    {
+      "round": 3,
+      "selected_parent": "field_fact_and_verbatim_quote_lock",
+      "best_hard_pass_counts": {
+        "facts": 3,
+        "coverage": 3,
+        "engineering": 3
+      },
+      "main_learning": "Field-level grounding produced the only unanimous clean training round."
+    },
+    {
+      "round": 4,
+      "selected_parent": "single_call_action_and_current_event_rules",
+      "best_hard_pass_counts": {
+        "facts": 1,
+        "coverage": 0,
+        "engineering": 2
+      },
+      "main_learning": "Paragraph structuring did not improve recall; two-stage processing was slower and lost candidate coverage."
+    },
+    {
+      "round": 5,
+      "selected_parent": null,
+      "best_candidates": [
+        "title_guard",
+        "atomic_mixed_status_split"
+      ],
+      "best_hard_pass_counts": {
+        "facts": 2,
+        "coverage": 2,
+        "engineering": 3
+      },
+      "main_learning": "Title salience and atomic status splitting solved different cases, but neither met all hard gates."
+    }
+  ],
+  "holdout": {
+    "attempted_before_round_4": 1,
+    "consecutive_passes": 0,
+    "failed_article": "pedaily-vcpe-events:566923",
+    "failure_reasons": [
+      "completed executive move was marked started",
+      "a strong current event was missed"
+    ],
+    "action": "The failed article was moved to Round 4 training and replaced with an unseen article.",
+    "final_three_article_acceptance_run": false,
+    "reason": "No Round 5 variant cleared the training convergence gate."
+  },
+  "acceptance_gate": {
+    "required": "three consecutive unseen holdout hard passes",
+    "met": false
+  },
+  "next_recommended_experiment": [
+    "Combine the Round 5 title guard and atomic mixed-status rules as a new post-cap variant.",
+    "Move quote exactness from prompt compliance to deterministic source-span restoration.",
+    "Calibrate a written gold policy for same-year facts used only as career or company-history context.",
+    "Use a fresh disjoint training batch before reopening holdout acceptance."
+  ]
+}

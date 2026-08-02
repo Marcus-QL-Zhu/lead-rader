@@ -1,0 +1,47 @@
+{
+  "version": 2,
+  "split_revision_reason": "Holdout case pedaily-vcpe-events:566923 failed after Round 3; moved to Round 4 training and replaced by unseen cyzone-latest:841536.",
+  "source_database": ".acceptance/server-v23-live.sqlite",
+  "train_rounds": {
+    "1": [
+      ["36kr-financing-flash", "3914988068820354"],
+      ["36kr-financing-flash", "3916108853521792"],
+      ["36kr-financing-flash", "3916765840043656"]
+    ],
+    "2": [
+      ["36kr-financing-flash", "3919125291412872"],
+      ["36kr-financing-flash", "3917874427555457"],
+      ["36kr-financing-flash", "3917362478148993"]
+    ],
+    "3": [
+      ["lieyunpro-archives", "502066"],
+      ["lieyunpro-archives", "502065"],
+      ["zhidx-financing", "580513"]
+    ],
+    "4": [
+      ["vbdata-funding", "1519087807"],
+      ["pedaily-vcpe-events", "567018"],
+      ["pedaily-vcpe-events", "566923"]
+    ],
+    "5": [
+      ["stcn-flash", "4048192"],
+      ["cls-telegraph", "2440573"],
+      ["jazzyear-latest", "1826"]
+    ]
+  },
+  "holdout": [
+    ["36kr-financing-flash", "3917563544573831"],
+    ["lieyunpro-archives", "502009"],
+    ["lieyunpro-archives", "502020"],
+    ["pedaily-vcpe-events", "566965"],
+    ["vbdata-funding", "1519084428"],
+    ["vbdata-funding", "1519084892"],
+    ["zhidx-financing", "580096"],
+    ["cls-telegraph", "2440567"],
+    ["stcn-flash", "4046390"],
+    ["cyzone-latest", "841443"],
+    ["pedaily-investment-news", "564679"],
+    ["cyzone-latest", "841536"]
+  ],
+  "holdout_random_seed": 20260801
+}

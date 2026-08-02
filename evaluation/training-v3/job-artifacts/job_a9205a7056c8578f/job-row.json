@@ -1,0 +1,72 @@
+{
+  "artifact_id": "job_a9205a7056c8578f",
+  "source_platform": "linkedin-public",
+  "source_job_id": "4414566181",
+  "requested_url": "https://cn.linkedin.com/jobs/view/general-manager-minimed-greater-china-at-medtronic-4414566181",
+  "final_url": "https://cn.linkedin.com/jobs/view/general-manager-minimed-greater-china-at-medtronic-4414566181",
+  "captured_at": "2026-08-01T11:37:22.419000+00:00",
+  "http_status": 200,
+  "mime_type": "text/html",
+  "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_a9205a7056c8578f/raw-browser-capture.json",
+  "raw_artifact_sha256": "6de7ead646edaaa3c5beabe5d3cfa14203598773e1ef44b32bba04c54c9d9914",
+  "normalized_text_path": "evaluation/training-v3/job-artifacts/job_a9205a7056c8578f/normalized.txt",
+  "normalized_text_sha256": "6dd024b13f605a154f67a0c965e6c04c96bac5c1ec936d73d0a3b70415936928",
+  "extractor_version": "browser-public-job-v1",
+  "company": "美敦力（中国）",
+  "canonical_company_id": "co_98c103b9f3aca013",
+  "corporate_family_id": "fam_98c103b9f3aca013",
+  "employer_display": "美敦力",
+  "employer_match_basis": "unverified_alias",
+  "exact_title": "General Manager, MiniMed Greater China",
+  "title": "General Manager, MiniMed Greater China",
+  "raw_publication_text": "2 个月前",
+  "publication_basis": "relative_date_interval",
+  "publication_interval_start": "2026-05-01",
+  "publication_interval_end_exclusive": "2026-06-02",
+  "date_parser_version": "relative-publication-v1",
+  "timezone": "Asia/Shanghai",
+  "source_job_id_span": {
+    "text": "4414566181",
+    "char_start": 14,
+    "char_end": 24
+  },
+  "title_span": {
+    "text": "General Manager, MiniMed Greater China",
+    "char_start": 31,
+    "char_end": 69
+  },
+  "employer_span": {
+    "text": "美敦力",
+    "char_start": 79,
+    "char_end": 82
+  },
+  "publication_span": {
+    "text": "2 个月前",
+    "char_start": 95,
+    "char_end": 100
+  },
+  "scope_spans": [
+    {
+      "text": "The General Manager (GM), MiniMed Greater China, is fully accountable for the end-to-end performance of the MiniMed business across Greater China, with complete ownership of strategy, P&L, commercial execution, and all enabling functions.",
+      "char_start": 490,
+      "char_end": 728
+    },
+    {
+      "text": "This role leads all commercial teams (Sales, Marketing, Market Access, Channel, Customer Support) and all functions (Finance, HR, IT, Regulatory Affairs, Quality, Supply Chain, Legal, and other shared services), ensuring integrated execution, compliance, and sustainable growth.",
+      "char_start": 730,
+      "char_end": 1008
+    },
+    {
+      "text": "Build, develop, and retain a high-performing leadership team with strong succession planning.",
+      "char_start": 3425,
+      "char_end": 3518
+    }
+  ],
+  "seniority_label": "director_plus",
+  "seniority_rule_version": "director-plus-artifact-v1",
+  "evaluation_eligible": true,
+  "exclusion_reason": "",
+  "reviewer": "pending",
+  "reviewed_at": "2026-08-01T11:37:22.419000+00:00",
+  "review_status": "pending_human_review"
+}

@@ -79,6 +79,9 @@ class SemanticEvent:
     content_hash: str = ""
     phase: str = "build_organize"
     event_status: str = "completed"
+    claim_ids: tuple[str, ...] = ()
+    span_ids: tuple[str, ...] = ()
+    subject_entity_id: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

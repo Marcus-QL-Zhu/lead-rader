@@ -234,16 +234,32 @@ class Kr36Adapter(AggregateAdapter):
             maximum_count=2,
         )
         body = ""
+        item_boundaries: list[dict[str, int]] = []
+        item_subjects: list[dict[str, int | str]] = []
+        bulletin_structure = False
         if selected.elements:
-            body = max(
-                (
-                    self.clean_text(
-                        element.get_all_text(separator=" ", strip=True)
-                    )
-                    for element in selected.elements
+            element = max(
+                selected.elements,
+                key=lambda candidate: len(
+                    candidate.get_all_text(separator=" ", strip=True)
                 ),
-                key=len,
             )
+            body, item_boundaries, bulletin_structure = self._structured_body(
+                element
+            )
+            item_subjects = [
+                {
+                    "char_start": int(boundary["char_start"]),
+                    "char_end": int(boundary["char_end"]),
+                    "subject": subject,
+                }
+                for boundary in item_boundaries
+                if (subject := self._item_subject(str(boundary.get("text") or "")))
+            ]
+            if not body:
+                body = self.clean_text(
+                    element.get_all_text(separator=" ", strip=True)
+                )
         if is_flash:
             descriptions = adaptive.selector.css('meta[name="description"]')
             if descriptions:
@@ -252,7 +268,10 @@ class Kr36Adapter(AggregateAdapter):
                 )
                 if len(meta_body) >= 40:
                     body = meta_body
-        body = self._remove_share_noise(body)
+        body = self._remove_share_noise(
+            body,
+            preserve_lines=bool(item_boundaries),
+        )
         captcha_page = b"TTGCaptcha" in html or b"verify_center" in html
         fetch_status = "ok"
         failure_reason = ""
@@ -309,6 +328,15 @@ class Kr36Adapter(AggregateAdapter):
         author = self._extract_author(adaptive, is_flash)
         structured = dict(index.structured_data)
         structured["detail_kind"] = "newsflash" if is_flash else "article"
+        if item_boundaries:
+            structured["document_type"] = (
+                "multi_company_bulletin"
+                if bulletin_structure
+                else "long_feature"
+            )
+            structured["item_boundaries"] = item_boundaries
+            structured["item_subjects"] = item_subjects
+            structured["body_structure"] = "dom_heading_blocks"
         digest = sha256(
             f"{index.title}\n{body}".encode("utf-8")
         ).hexdigest()
@@ -926,14 +954,150 @@ class Kr36Adapter(AggregateAdapter):
             return (local_now - timedelta(days=2)).date().isoformat()
         return ""
 
+    @classmethod
+    def _structured_body(
+        cls,
+        element: object,
+    ) -> tuple[str, list[dict[str, int]], bool]:
+        """Render 36Kr article DOM blocks without flattening item boundaries."""
+
+        nodes = tuple(element.xpath(".//h2 | .//p"))
+        if not nodes:
+            return "", [], False
+        blocks: list[list[str]] = []
+        current: list[str] = []
+        section = ""
+        has_section_heading = False
+        for node in nodes:
+            tag = str(getattr(node, "tag", "")).lower()
+            text = cls.clean_text(node.get_all_text(separator=" ", strip=True))
+            if not text:
+                continue
+            if tag == "h2":
+                if current:
+                    blocks.append(current)
+                    current = []
+                section = text
+                has_section_heading = True
+                continue
+            if tuple(node.css("strong")):
+                if current:
+                    blocks.append(current)
+                    current = []
+                if section:
+                    current.append(section)
+                    section = ""
+                current.append(text)
+                continue
+            if current:
+                current.append(text)
+            elif section:
+                current = [section, text]
+                section = ""
+            else:
+                current = [text]
+        if current:
+            blocks.append(current)
+        if section:
+            blocks.append([section])
+        rendered = ["\n".join(part for part in block if part) for block in blocks]
+        rendered = [block for block in rendered if block]
+        body = "\n\n".join(rendered)
+        boundaries: list[dict[str, int]] = []
+        cursor = 0
+        for block in rendered:
+            start = body.find(block, cursor)
+            if start < 0:
+                return body, [], False
+            end = start + len(block)
+            boundaries.append(
+                {
+                    "char_start": start,
+                    "char_end": end,
+                    "text": block,
+                }
+            )
+            cursor = end
+        return body, boundaries, has_section_heading and len(boundaries) >= 2
+
+
     @staticmethod
-    def _remove_share_noise(value: str) -> str:
+    def _item_subject(block: str) -> str:
+        """Extract a bounded company surface from a DOM-rendered item headline."""
+
+        lines = [line.strip() for line in block.splitlines() if line.strip()]
+        if not lines:
+            return ""
+
+        def clean(value: str) -> str:
+            value = value.strip()
+            if re.match(
+                r"^(?:\u9488\u5bf9|\u5916\u4ea4\u90e8|\u5546\u52a1\u90e8|\u82f1\u56fd\u592e\u884c)",
+                value,
+            ) or re.search(r"(?:\u90e8|\u5385|\u5c40|\u592e\u884c|\u94f6\u884c)$", value):
+                return ""
+            return value
+
+        headline = (
+            lines[1]
+            if lines[0].endswith(("\uFF1A", ":")) and len(lines) > 1
+            else lines[0]
+        )
+        quoted = re.match(
+            r"^[\u300c\u300e\u201c\"\u3010](.{2,30}?)[\u300d\u300f\u201d\"\u3011]",
+            headline,
+        )
+        if quoted:
+            return clean(quoted.group(1))
+        colon = re.match(r"^([^\s:\uFF1A]{2,32})\s*[:\uFF1A]", headline)
+        if colon:
+            return clean(colon.group(1))
+        # Many digest headlines attach a product/English token to a short
+        # Chinese company brand (for example ??AgentOne) and put the actual
+        # action after a quoted descriptor. Keep only the leading organization
+        # surface and require a nearby operational marker.
+        attached_prefix = re.match(
+            r"^([\u4e00-\u9fff]{2,8})"
+            r"(?:[A-Za-z][A-Za-z0-9.-]{1,24})"
+            r"[^\u3002\uff01\uff1f\n]{0,24}(?=(?:\u6b63\u5f0f\u4e0a\u5c97|\u9500\u552e\u589e\u957f|\u8ba1\u5212))",
+            headline,
+        )
+        if attached_prefix:
+            return clean(attached_prefix.group(1))
+        action_prefix = re.match(
+            r"^([\u4e00-\u9fff]{2,12})(?:\s+[A-Za-z][A-Za-z0-9.-]{1,24})?\s*"
+            r"(?=(?:\u5df2\u5b8c\u6210|\u5b8c\u6210|\u83b7\u5f97|\u5b98\u5ba3|\u5b98\u65b9|\u5ba3\u5e03|\u878d\u8d44|\u62df|\u4e8c\u5b63\u5ea6|\u4e0a\u534a\u5e74))",
+            headline,
+        )
+        if action_prefix:
+            return clean(action_prefix.group(1))
+        detail = lines[2] if len(lines) > 2 else ""
+        prefix = re.search(
+            r"([\u4e00-\u9fffA-Za-z0-9\u00b7]{2,20})(?=(?:\u81ea\u4e3b\u7814\u53d1|\u53d1\u5e03|\u63a8\u51fa|\u5b98\u5ba3|\u5ba3\u5e03|\u5b8c\u6210|\u5c06\u5728|\u8ba1\u5212|\u62df))",
+            detail,
+        )
+        return clean(prefix.group(1)) if prefix else ""
+
+    @staticmethod
+    def _remove_share_noise(
+        value: str,
+        *,
+        preserve_lines: bool = False,
+    ) -> str:
+        if preserve_lines and "\u5206\u4eab\u5230" not in value:
+            return value
         output = re.sub(
-            r"分享到\s*打开微信.*?分享按钮",
+            r"\u5206\u4eab\u5230\s*\u6253\u5f00\u5fae\u4fe1.*?\u5206\u4eab\u6309\u94ae",
             " ",
             value,
             flags=re.S,
         )
+        if preserve_lines:
+            return "\n".join(
+                re.sub(r"[ \t]+", " ", line).strip()
+                for line in output.splitlines()
+                if line.strip()
+            ).strip()
         return re.sub(r"\s+", " ", output).strip()
 
     @staticmethod

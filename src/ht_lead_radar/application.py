@@ -272,6 +272,7 @@ class LeadRadarApplication:
                     payload,
                     collection_topic,
                     as_of.year,
+                    env=env,
                 )
                 evidence.extend(
                     replace(item, direction=direction) for item in fixed_items
@@ -883,6 +884,8 @@ class LeadRadarApplication:
         payload: Mapping[str, Any],
         direction: str,
         year: int,
+        *,
+        env: Mapping[str, str],
     ) -> tuple[list[Evidence], dict[str, list[Any]]]:
         evidence: list[Evidence] = []
         summary: dict[str, list[Any]] = {"runs": [], "failures": []}
@@ -927,6 +930,7 @@ class LeadRadarApplication:
             with SourcePackCollector(
                 registry_path=payload["source_packs"],
                 state_db=payload["source_state_db"],
+                dedicated_llm_env=env,
             ) as pack_collector:
                 serialized = context.effect_once(
                     f"source-pack:{direction}",

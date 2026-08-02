@@ -1,4 +1,5 @@
 import json
+from datetime import date, timedelta
 
 import pytest
 
@@ -355,14 +356,17 @@ def test_theme_drafts_expire_seven_days_after_run_date():
     themes = build_talent_themes(report, parsed, target_count=1)
 
     seed = build_theme_draft_bundle(report, parsed, themes).drafts[0]
-    assert seed.expires_at == "2026-08-02"
+    expected_expiry = (
+        date.fromisoformat(seed.run_date) + timedelta(days=7)
+    ).isoformat()
+    assert seed.expires_at == expected_expiry
 
     generated = generate_direct_talent_bundle(
         report,
         target_count=1,
         runner=SequenceRunner(response, ad_response(seed)),
     )
-    assert generated.drafts[0].expires_at == "2026-08-02"
+    assert generated.drafts[0].expires_at == expected_expiry
 
 
 def test_one_invalid_theme_returns_partial_bundle_instead_of_losing_valid_drafts():

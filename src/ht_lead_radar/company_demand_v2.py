@@ -9,6 +9,7 @@ from datetime import date
 from typing import Any, Mapping
 from urllib.parse import urlsplit
 
+from .company_timeline import build_company_timeline
 from .talent_demand_analysis import (
     DemandAnalysisError,
     is_specific_director_title,
@@ -19,6 +20,9 @@ COMPANY_DEMAND_SYSTEM_PROMPT = """
 你是资深猎头研究员，负责根据企业公开事实判断未来 0–180 天内可能出现的
 Director+ 组织缺口。判断顺序是：企业阶段变化 → 新增业务责任 → 缺失组织能力
 → 可能承接该责任的岗位。融资、订单或合作本身不直接等于招聘岗位。
+事实包使用统一时间线：days_0_90 是截止日之前 0–90 天，days_91_180 是
+91–180 天；必须结合两个时间桶判断阶段变化，不得把超过截止日或 undated 的事实
+伪装成近期信号。timeline_sha256 用于回放审计，不是业务事实。
 
 阶段变化除融资、扩产、订单和产品里程碑外，还包括：高管更替、并购整合、
 合资或分拆、上市准备、新设区域总部/子公司/事业部、客户验证、渠道扩张、
@@ -170,6 +174,14 @@ def _select_diverse_evidence(
 def build_company_evidence_packets(
     report: Mapping[str, Any],
 ) -> tuple[dict[str, Any], ...]:
+    manifest = report.get("manifest")
+    as_of = (
+        str(manifest.get("as_of") or "").strip()
+        if isinstance(manifest, Mapping)
+        else ""
+    )
+    if not as_of:
+        raise ValueError("report manifest requires as_of for company timeline")
     packets: list[dict[str, Any]] = []
     for lead_index, lead in enumerate(report.get("leads") or (), start=1):
         if not isinstance(lead, Mapping):
@@ -179,24 +191,13 @@ def build_company_evidence_packets(
             for item in lead.get("evidence") or ()
             if isinstance(item, Mapping)
         ]
-        evidence = []
-        for item in _select_diverse_evidence(raw_evidence):
-            evidence.append(
-                {
-                    "evidence_id": _evidence_id(item),
-                    "date": _published_at(item),
-                    "event_type": item.get("event_type"),
-                    "phase": item.get("phase"),
-                    "source_grade": item.get("source_grade"),
-                    "title": item.get("title"),
-                    "fact": str(item.get("snippet") or "")[:800],
-                    "source_url": item.get("source_url"),
-                    "source_group": _source_group(item),
-                    "people": item.get("people") or [],
-                    "organizations": item.get("organizations") or [],
-                    "late_validation_only": item.get("event_type") == "job_ad",
-                }
-            )
+        timeline = build_company_timeline(
+            raw_evidence,
+            as_of=as_of,
+            limit=8,
+            allow_undated=True,
+        )
+        evidence = list(timeline["evidence"])
         research = lead.get("basic_research")
         packets.append(
             {
@@ -205,6 +206,11 @@ def build_company_evidence_packets(
                 "direction": str(lead.get("direction") or ""),
                 "lead_score_for_ordering_only": lead.get("score"),
                 "evidence": evidence,
+                "timeline": {
+                    key: value
+                    for key, value in timeline.items()
+                    if key not in {"evidence", "buckets"}
+                },
                 "known_context": dict(research) if isinstance(research, Mapping) else {},
             }
         )

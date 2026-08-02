@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "dataset_version": "semantic-v27-development-v2",
+  "purpose": "opened-development-prompt-loop-training-only",
+  "overall": {
+    "gold_event_count": 4,
+    "predicted_event_count": 4,
+    "exact_match_count": 4,
+    "exact_precision": 1.0,
+    "exact_recall": 1.0,
+    "unsupported_predicted_event_count": 0,
+    "event_support_precision": 1.0,
+    "event_support_recall": 1.0,
+    "strong_gold_count": 4,
+    "strong_current_recall": 1.0,
+    "status_comparable_count": 4,
+    "status_accuracy": 1.0,
+    "subject_match_count": 4,
+    "company_subject_precision": 1.0
+  },
+  "by_document_type": {
+    "long_feature": {
+      "gold_event_count": 0,
+      "predicted_event_count": 0,
+      "exact_match_count": 0,
+      "exact_precision": null,
+      "exact_recall": null,
+      "unsupported_predicted_event_count": 0,
+      "event_support_precision": null,
+      "event_support_recall": null,
+      "strong_gold_count": 0,
+      "strong_current_recall": null,
+      "status_comparable_count": 0,
+      "status_accuracy": null,
+      "subject_match_count": 0,
+      "company_subject_precision": null
+    },
+    "roadmap": {
+      "gold_event_count": 1,
+      "predicted_event_count": 1,
+      "exact_match_count": 1,
+      "exact_precision": 1.0,
+      "exact_recall": 1.0,
+      "unsupported_predicted_event_count": 0,
+      "event_support_precision": 1.0,
+      "event_support_recall": 1.0,
+      "strong_gold_count": 1,
+      "strong_current_recall": 1.0,
+      "status_comparable_count": 1,
+      "status_accuracy": 1.0,
+      "subject_match_count": 1,
+      "company_subject_precision": 1.0
+    },
+    "single_company_flash": {
+      "gold_event_count": 3,
+      "predicted_event_count": 3,
+      "exact_match_count": 3,
+      "exact_precision": 1.0,
+      "exact_recall": 1.0,
+      "unsupported_predicted_event_count": 0,
+      "event_support_precision": 1.0,
+      "event_support_recall": 1.0,
+      "strong_gold_count": 3,
+      "strong_current_recall": 1.0,
+      "status_comparable_count": 3,
+      "status_accuracy": 1.0,
+      "subject_match_count": 3,
+      "company_subject_precision": 1.0
+    }
+  },
+  "by_event_type": {
+    "major_order": {
+      "gold_event_count": 3,
+      "predicted_event_count": 3,
+      "exact_match_count": 3,
+      "exact_precision": 1.0,
+      "exact_recall": 1.0,
+      "unsupported_predicted_event_count": 0,
+      "event_support_precision": 1.0,
+      "event_support_recall": 1.0,
+      "strong_gold_count": 3,
+      "strong_current_recall": 1.0,
+      "status_comparable_count": 3,
+      "status_accuracy": 1.0,
+      "subject_match_count": 3,
+      "company_subject_precision": 1.0
+    },
+    "technical_milestone": {
+      "gold_event_count": 1,
+      "predicted_event_count": 1,
+      "exact_match_count": 1,
+      "exact_precision": 1.0,
+      "exact_recall": 1.0,
+      "unsupported_predicted_event_count": 0,
+      "event_support_precision": 1.0,
+      "event_support_recall": 1.0,
+      "strong_gold_count": 1,
+      "strong_current_recall": 1.0,
+      "status_comparable_count": 1,
+      "status_accuracy": 1.0,
+      "subject_match_count": 1,
+      "company_subject_precision": 1.0
+    }
+  },
+  "claim_contract": {
+    "article_count": 3,
+    "event_count": 4,
+    "claim_count": 15,
+    "accepted_claim_count": 4,
+    "rejected_claim_count": 11,
+    "failed_claim_count": 0,
+    "host_fallback_claim_count": 0,
+    "strict_ready_article_count": 3
+  },
+  "host_contract": {
+    "uncited_event_count": 0,
+    "ungrounded_evidence_event_count": 0,
+    "missing_host_id_event_count": 0
+  },
+  "legacy_candidate_dispositions": {
+    "status": "not_applicable",
+    "reason": "V27 Action Claim IDs replace V1 candidate IDs"
+  },
+  "gates": {
+    "prediction_complete": true,
+    "all_articles_strict_ready": true,
+    "all_claims_terminal": true,
+    "no_failed_claims": true,
+    "no_uncited_events": true,
+    "no_ungrounded_evidence": true,
+    "no_missing_host_ids": true,
+    "no_unsupported_predicted_events": true,
+    "company_subject_precision_at_least_98pct": true,
+    "strong_current_recall_at_least_90pct": true,
+    "status_accuracy_at_least_90pct": true
+  },
+  "passed": true
+}

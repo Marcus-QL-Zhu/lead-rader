@@ -788,6 +788,15 @@ def _utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat()
 
 
+def _env_flag(name: str, *, default: bool, overrides: Mapping[str, str]) -> bool:
+    raw = overrides.get(name)
+    if raw is None:
+        raw = os.environ.get(name)
+    if raw is None:
+        return default
+    return raw.strip().lower() in {"1", "true", "yes", "on"}
+
+
 def _scope_key(topic: str) -> str:
     return sha256(topic.strip().lower().encode("utf-8")).hexdigest()[:16]
 
@@ -810,6 +819,7 @@ class SourcePackCollector:
         max_bytes: int = 5_000_000,
         urlopen: Callable[..., Any] | None = None,
         dedicated_llm_runner: Any | None = None,
+        dedicated_llm_env: Mapping[str, str] | None = None,
     ) -> None:
         self.registry = registry or SourcePackRegistry.load(registry_path)
         self.state_db = state_db
@@ -819,6 +829,7 @@ class SourcePackCollector:
         self.max_bytes = max_bytes
         self._urlopen = urlopen or urllib.request.urlopen
         self._dedicated_llm_runner = dedicated_llm_runner
+        self._dedicated_llm_env = dict(dedicated_llm_env or {})
         if str(state_db) != ":memory:":
             Path(state_db).parent.mkdir(parents=True, exist_ok=True)
         self._connection = sqlite3.connect(str(state_db))
@@ -1495,9 +1506,33 @@ class SourcePackCollector:
                 not in {"0", "false", "False"}
             ):
                 try:
-                    from .openclaw_llm import OpenClawConfiguredLLMRunner
+                    from .openclaw_llm import (
+                        OpenClawConfiguredLLMRunner,
+                        load_openclaw_llm_config,
+                    )
 
-                    runner = OpenClawConfiguredLLMRunner()
+                    llm_env = dict(os.environ)
+                    llm_env.update(self._dedicated_llm_env)
+                    llm_config = load_openclaw_llm_config(env=llm_env)
+                    thinking_mode = (
+                        "disabled"
+                        if llm_config.provider.casefold() == "minimax"
+                        and llm_config.model.casefold() == "minimax-m3"
+                        else None
+                    )
+                    runner = OpenClawConfiguredLLMRunner(
+                        config=llm_config,
+                        max_completion_tokens=int(
+                            os.environ.get(
+                                "LEAD_RADAR_AGGREGATE_MAX_COMPLETION_TOKENS",
+                                "4096",
+                            )
+                        ),
+                        # Semantic extraction is bounded classification, not
+                        # long-horizon reasoning. MiniMax-M3 otherwise spends
+                        # the completion budget on thinking before JSON.
+                        thinking_mode=thinking_mode,
+                    )
                 except Exception as exc:
                     dedicated_semantic_error = f"{type(exc).__name__}: {exc}"
                     runner = None
@@ -1526,6 +1561,16 @@ class SourcePackCollector:
                 ),
                 llm_runner=runner if runner is not False else None,
                 acceptance_dir=os.environ.get("LEAD_RADAR_AGGREGATE_ACCEPTANCE_DIR"),
+                strict_claim_contract=_env_flag(
+                    "LEAD_RADAR_AGGREGATE_STRICT_CLAIMS",
+                    default=True,
+                    overrides=self._dedicated_llm_env,
+                ),
+                claim_centric_v27=_env_flag(
+                    "LEAD_RADAR_AGGREGATE_CLAIM_CENTRIC_V27",
+                    default=True,
+                    overrides=self._dedicated_llm_env,
+                ),
             )
 
         for source in selection.sources:

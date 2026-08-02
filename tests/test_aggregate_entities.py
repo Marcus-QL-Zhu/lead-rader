@@ -3,6 +3,7 @@ import pytest
 from ht_lead_radar.aggregate_adapters.entities import (
     canonical_company_name,
     company_alias_candidates,
+    is_company_like,
 )
 
 
@@ -43,3 +44,25 @@ def test_company_word_inside_real_legal_name_is_not_blindly_removed():
     company = "中小企业服务有限公司"
 
     assert canonical_company_name(company) == company
+
+
+@pytest.mark.parametrize(
+    "value",
+    (
+        "人工智能应用赛道紧扣AI从",
+        "在公开",
+        "天内",
+        "按需采购",
+        "换帅",
+        "通用操作大脑",
+        "由智元机器人临界点",
+        "西北核技术研究所",
+    ),
+)
+def test_sentence_fragments_products_and_research_bodies_are_not_companies(value):
+    assert not is_company_like(value)
+
+
+@pytest.mark.parametrize("value", ("白犀牛", "DeepSeek", "MiniMax", "月泉仿生"))
+def test_explicit_brand_shapes_remain_company_like(value):
+    assert is_company_like(value)

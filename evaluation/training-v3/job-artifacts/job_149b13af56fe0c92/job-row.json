@@ -1,0 +1,72 @@
+{
+  "artifact_id": "job_149b13af56fe0c92",
+  "source_platform": "linkedin-public",
+  "source_job_id": "4342727908",
+  "requested_url": "https://cn.linkedin.com/jobs/view/head-of-cs-china-duv-ys-at-asml-4342727908",
+  "final_url": "https://cn.linkedin.com/jobs/view/head-of-cs-china-duv-ys-at-asml-4342727908",
+  "captured_at": "2026-08-01T11:35:36.267000+00:00",
+  "http_status": 200,
+  "mime_type": "text/html",
+  "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_149b13af56fe0c92/raw-browser-capture.json",
+  "raw_artifact_sha256": "cce7ef6a7402b22294c1cefba09fb8bff1d5f7255df7199197c188af297b1c65",
+  "normalized_text_path": "evaluation/training-v3/job-artifacts/job_149b13af56fe0c92/normalized.txt",
+  "normalized_text_sha256": "efcd440b085a652dae103ee296ab16e2aab4fbebc50992836d9e316990a417b9",
+  "extractor_version": "browser-public-job-v1",
+  "company": "ASML（中国）",
+  "canonical_company_id": "co_8dd9b7280689b13f",
+  "corporate_family_id": "fam_8dd9b7280689b13f",
+  "employer_display": "ASML",
+  "employer_match_basis": "unverified_alias",
+  "exact_title": "Head of CS China DUV/YS",
+  "title": "Head of CS China DUV/YS",
+  "raw_publication_text": "3 个月前",
+  "publication_basis": "relative_date_interval",
+  "publication_interval_start": "2026-04-01",
+  "publication_interval_end_exclusive": "2026-05-02",
+  "date_parser_version": "relative-publication-v1",
+  "timezone": "Asia/Shanghai",
+  "source_job_id_span": {
+    "text": "4342727908",
+    "char_start": 14,
+    "char_end": 24
+  },
+  "title_span": {
+    "text": "Head of CS China DUV/YS",
+    "char_start": 31,
+    "char_end": 54
+  },
+  "employer_span": {
+    "text": "ASML",
+    "char_start": 64,
+    "char_end": 68
+  },
+  "publication_span": {
+    "text": "3 个月前",
+    "char_start": 81,
+    "char_end": 86
+  },
+  "scope_spans": [
+    {
+      "text": "This position is responsible for managing the {{b}}Customer Support team of DUV & Yieldstar {{/b}}product in the China region. Reporting to the Head of Customer Support, China, the role involves developing and executing long-term strategies and tactical goals for regional DUVYS organization. The incumbent will lead the organization to achieve sector strategies, objectives, and operations roadmaps. As a core member of the China Customer Support Management team, the role also involves driving business and people initiatives across the CS China organization.",
+      "char_start": 225,
+      "char_end": 786
+    },
+    {
+      "text": "Drives the maturity of the organization, via the execution of strategic and operational activities, annual budget planning, long-term capacity planning, and policy/process development and implementation.",
+      "char_start": 787,
+      "char_end": 990
+    },
+    {
+      "text": "Own talent management, develop pipelines, and identify future leaders.",
+      "char_start": 3947,
+      "char_end": 4017
+    }
+  ],
+  "seniority_label": "director_plus",
+  "seniority_rule_version": "director-plus-artifact-v1",
+  "evaluation_eligible": true,
+  "exclusion_reason": "",
+  "reviewer": "pending",
+  "reviewed_at": "2026-08-01T11:35:36.267000+00:00",
+  "review_status": "pending_human_review"
+}

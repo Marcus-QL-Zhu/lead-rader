@@ -1,0 +1,27 @@
+{
+  "generated_at": "2026-08-01",
+  "purpose": "Replay all five prompt-loop rounds through the exact Semantic v25 production projection without making new MiniMax calls.",
+  "input_outputs": 45,
+  "strict_v24_projection": {
+    "clean": 4,
+    "article_level_failure": 41,
+    "failure_classes": {
+      "unsupported_rejection": 24,
+      "unadjudicated_candidate_or_seed": 7,
+      "subject_or_type_grounding": 6,
+      "invalid_output_shape": 3,
+      "invalid_rejection_shape": 1
+    }
+  },
+  "v25_partial_projection": {
+    "clean": 4,
+    "partial_with_valid_events_and_unmapped_claims": 38,
+    "hard_projection_error": 3
+  },
+  "conclusion": "Per-item validation converts 38 article-level failures into auditable partial results without pretending they are clean passes. Three malformed top-level outputs still fail hard; only four outputs meet the clean gate.",
+  "interpretation": {
+    "raw_output_is_not_the_acceptance_target": true,
+    "production_projection_is_now_the_default_blind_evaluation_target": true,
+    "new_minimax_calls_used": 0
+  }
+}

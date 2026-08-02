@@ -1,4 +1,5 @@
 import json
+from datetime import date
 
 import pytest
 
@@ -55,7 +56,7 @@ def sample_report(leads=3):
     return {
         "manifest": {
             "run_id": "run-20260726",
-            "as_of": "2026-07-26",
+            "as_of": date.today().isoformat(),
             "direction": "具身智能",
         },
         "leads": items,
@@ -95,7 +96,7 @@ def test_no_lead_is_clear_and_does_not_reuse_stale_drafts():
     report = sample_report(leads=0)
     bundle = generate_draft_bundle(report)
     assert bundle.drafts == ()
-    assert bundle.run_date == "2026-07-26"
+    assert bundle.run_date == date.today().isoformat()
 
 
 def test_real_liepin_contract_fields_and_advertisement_shape():

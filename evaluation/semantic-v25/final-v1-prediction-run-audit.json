@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "dataset_version": "semantic-v25-final-v1",
+  "canonicalization": "earliest_started_resumable_process",
+  "status": "complete_with_runner_concurrency_incident",
+  "incident": {
+    "description": "The shell timeout detached the earliest resumable runner instead of terminating its Python child. A later resume briefly wrote an alternate completion before the earliest process completed and became the canonical final writer.",
+    "discarded_output_policy": "The later-started duplicate completion is discarded. The earliest-started process output is retained without rerunning or selecting results by quality.",
+    "affected_positions": "31-40 may have been computed by both processes; the retained file contains the earliest-started process results.",
+    "semantic_contract_changed": false,
+    "dataset_changed": false
+  },
+  "manifest_sha256": "c9fa968c2a0574b9200d3ad144670c2133bb98b46114e24bfa78067cadbbeeb6",
+  "source_bundle_sha256": "627727ee66551eafcbb88cde59ecf7a4ac93883360cd615d60859a09be7623bb",
+  "code_contract_sha256": "9250acc6ca941ad6632f8bc18f32763f23e256dadb295b99ef679489bee24fdb",
+  "canonical_prediction_sha256": "7caa2c6fd64d673729c1f9841812323bf2ef0a9929642891c368af5cd421691a",
+  "canonical_result_count": 40,
+  "positions_contiguous": true,
+  "keys_unique": true
+}

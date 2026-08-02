@@ -48,9 +48,7 @@ def test_invalid_subject_event_does_not_discard_later_valid_event():
             content_hash="index",
             discovery_method="exact",
         ),
-        clean_body=(
-            f"{wrong_company}是文章栏目标题。{correct_quote}"
-        ),
+        clean_body=(f"{wrong_company}是文章栏目标题。{correct_quote}"),
         content_hash="article",
     )
     base = {
@@ -100,5 +98,6 @@ def test_invalid_subject_event_does_not_discard_later_valid_event():
     events = processor.process(channel, article, [seed])
 
     assert runner.calls == 1
-    assert processor.last_audit["status"] == "accepted"
+    assert processor.last_audit["status"] == "partial"
+    assert processor.last_audit["validation_issue_count"] == 1
     assert [event.canonical_company for event in events] == [correct_company]

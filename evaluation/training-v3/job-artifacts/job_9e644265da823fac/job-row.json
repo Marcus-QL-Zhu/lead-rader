@@ -1,0 +1,72 @@
+{
+  "artifact_id": "job_9e644265da823fac",
+  "source_platform": "linkedin-public",
+  "source_job_id": "4414850643",
+  "requested_url": "https://cn.linkedin.com/jobs/view/commercial-director-mcs-at-%E8%B5%9B%E9%BB%98%E9%A3%9E%E4%B8%96%E5%B0%94%E7%A7%91%E6%8A%80-4414850643",
+  "final_url": "https://cn.linkedin.com/jobs/view/commercial-director-mcs-at-%E8%B5%9B%E9%BB%98%E9%A3%9E%E4%B8%96%E5%B0%94%E7%A7%91%E6%8A%80-4414850643",
+  "captured_at": "2026-08-01T11:29:08.468000+00:00",
+  "http_status": 200,
+  "mime_type": "text/html",
+  "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_9e644265da823fac/raw-browser-capture.json",
+  "raw_artifact_sha256": "42831869cb2d8d1bad6374ebc8d498fbc3b5dcdb4a581053857529c7e4d8901f",
+  "normalized_text_path": "evaluation/training-v3/job-artifacts/job_9e644265da823fac/normalized.txt",
+  "normalized_text_sha256": "af558d02330796f77ea2c3c89ffccded78c25138594d66f699c356042b33e1f6",
+  "extractor_version": "browser-public-job-v1",
+  "company": "赛默飞世尔（中国）",
+  "canonical_company_id": "co_d8a1571c486c4daf",
+  "corporate_family_id": "fam_d8a1571c486c4daf",
+  "employer_display": "赛默飞世尔科技",
+  "employer_match_basis": "unverified_alias",
+  "exact_title": "Commercial Director, MCS",
+  "title": "Commercial Director, MCS",
+  "raw_publication_text": "2 个月前",
+  "publication_basis": "relative_date_interval",
+  "publication_interval_start": "2026-05-01",
+  "publication_interval_end_exclusive": "2026-06-02",
+  "date_parser_version": "relative-publication-v1",
+  "timezone": "Asia/Shanghai",
+  "source_job_id_span": {
+    "text": "4414850643",
+    "char_start": 14,
+    "char_end": 24
+  },
+  "title_span": {
+    "text": "Commercial Director, MCS",
+    "char_start": 31,
+    "char_end": 55
+  },
+  "employer_span": {
+    "text": "赛默飞世尔科技",
+    "char_start": 65,
+    "char_end": 72
+  },
+  "publication_span": {
+    "text": "2 个月前",
+    "char_start": 85,
+    "char_end": 90
+  },
+  "scope_spans": [
+    {
+      "text": "This role is responsible for CAD MCS product lines’ business performance in China Market, leading a team including Sales and Application Engineers, working closely with global BU and China CAD marketing and other local functions to identify and complete high impact product category and deliver performance.",
+      "char_start": 858,
+      "char_end": 1165
+    },
+    {
+      "text": "Ensures achievement of sales, profit, and strategic objectives for the business unit by providing business direction, leadership, coaching and support to management and employees.",
+      "char_start": 2400,
+      "char_end": 2579
+    },
+    {
+      "text": "Builds a high performing commercial team through strong coaching and leadership. Ensures timely recognition and reward for top performers and deploy performance management actions when needed.",
+      "char_start": 3418,
+      "char_end": 3610
+    }
+  ],
+  "seniority_label": "director_plus",
+  "seniority_rule_version": "director-plus-artifact-v1",
+  "evaluation_eligible": true,
+  "exclusion_reason": "",
+  "reviewer": "pending",
+  "reviewed_at": "2026-08-01T11:29:08.468000+00:00",
+  "review_status": "pending_human_review"
+}

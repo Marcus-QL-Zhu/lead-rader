@@ -1,0 +1,725 @@
+{
+  "schema_version": 1,
+  "dataset_version": "semantic-v27-final-v2",
+  "status": "frozen_unlabelled",
+  "may_support_final_acceptance": true,
+  "selection_policy": {
+    "formal_per_document_type": 4,
+    "reserve_per_document_type": 0,
+    "maximum_per_source": 6,
+    "required_event_groups": {
+      "funding": [
+        "funding"
+      ],
+      "executive_change": [
+        "executive_change"
+      ],
+      "factory_or_capacity": [
+        "factory_or_capacity"
+      ],
+      "major_order": [
+        "major_order"
+      ],
+      "partnership": [
+        "partnership"
+      ],
+      "technical_milestone": [
+        "technical_milestone"
+      ],
+      "regulatory_or_clinical": [
+        "regulatory_or_clinical"
+      ],
+      "merger_or_listing": [
+        "ipo_or_listing",
+        "merger_acquisition"
+      ]
+    },
+    "strict_prior_article_company_and_near_duplicate_exclusion": true,
+    "excluded_frozen_bundles": [
+      "evaluation\\semantic-v25\\final-v1-bundle.jsonl",
+      "evaluation\\semantic-v27\\development-v2-bundle.jsonl"
+    ]
+  },
+  "availability": {
+    "eligible_cases": 169,
+    "by_document_type": {
+      "single_company_flash": 128,
+      "commentary": 19,
+      "roadmap": 12,
+      "multi_company_bulletin": 5,
+      "long_feature": 5
+    },
+    "by_source": {
+      "36kr-financing-flash": 15,
+      "ccid-report-commentary": 7,
+      "cena-industry-analysis": 3,
+      "cls-telegraph": 44,
+      "jazzyear-research": 4,
+      "nbd-vcpe-weekly": 4,
+      "pedaily-investment-news": 20,
+      "pedaily-vcpe-events": 18,
+      "stcn-flash": 33,
+      "vbdata-funding": 19,
+      "zhidx-financing": 2
+    },
+    "rejected": {
+      "prior_company_overlap": 10,
+      "exact_prior_overlap": 42,
+      "invalid_or_short": 278
+    }
+  },
+  "selected": {
+    "formal": 20,
+    "reserve": 0,
+    "formal_by_document_type": {
+      "long_feature": 4,
+      "multi_company_bulletin": 4,
+      "roadmap": 4,
+      "commentary": 4,
+      "single_company_flash": 4
+    },
+    "reserve_by_document_type": {},
+    "source_counts": {
+      "vbdata-funding": 5,
+      "nbd-vcpe-weekly": 3,
+      "pedaily-investment-news": 3,
+      "pedaily-vcpe-events": 1,
+      "36kr-financing-flash": 2,
+      "ccid-report-commentary": 1,
+      "jazzyear-research": 1,
+      "stcn-flash": 1,
+      "cls-telegraph": 1,
+      "zhidx-financing": 1,
+      "cena-industry-analysis": 1
+    },
+    "formal_event_types": [
+      "customer_validation",
+      "executive_change",
+      "factory_or_capacity",
+      "funding",
+      "ipo_or_listing",
+      "major_order",
+      "new_site_or_entity",
+      "partnership",
+      "policy_or_standard",
+      "regulatory_or_clinical",
+      "technical_milestone"
+    ],
+    "missing_event_groups": []
+  },
+  "bundle_path": "evaluation\\semantic-v27\\final-v2-bundle.jsonl",
+  "bundle_sha256": "16765628bc0ee96b93a61442e2e47cfea49f2df64b8b8e1de99b5cf804fdb070",
+  "cases": [
+    {
+      "key": "vbdata-funding:1519087619",
+      "split": "formal",
+      "source_id": "vbdata-funding",
+      "source_article_id": "1519087619",
+      "canonical_url": "https://www.vbdata.cn/1519087619",
+      "published_at": "2026-07-28",
+      "title": "【首发】迪英加科技完成数亿元C轮融资，DeepPathAI大模型加速构建数智病理新生态",
+      "body_sha256": "64525aedb9e1a0be831701d2ece0f551031b5fe9c2b61d568c5da2c830358f99",
+      "normalized_sha256": "9841fb13ea7d06a1a60275b579e77413b7bfdb3cb42d6e482d690d577993a69e",
+      "document_type": "long_feature",
+      "company_keys": [
+        "到如今",
+        "动脉网第一时间获悉,近日,数智病理领军企业杭州迪英加科技有限公司正式",
+        "数智病理领军企业杭州迪英加科技有限公司正式",
+        "迪英加"
+      ],
+      "candidate_ids": [
+        "ac_2ca0be1d52a0",
+        "ac_887b06c7899c",
+        "ac_b205ce7b76dc",
+        "ac_bbfc176952b4",
+        "ac_eaaf6250e9da",
+        "c_0421c5b07f",
+        "c_065077c507",
+        "c_1ba87ab181",
+        "c_425375f3f4",
+        "c_49570dff46",
+        "c_6871c669e0",
+        "c_72645af437",
+        "c_831f7e651e",
+        "c_9c4a3c56c8",
+        "c_9cbda58664",
+        "c_a92f5b1f48",
+        "c_b6261ce7e3",
+        "c_c0e127e44d",
+        "c_cc487df554",
+        "c_d9593f2bb9"
+      ],
+      "candidate_event_types": [
+        "customer_validation",
+        "funding",
+        "new_site_or_entity",
+        "partnership",
+        "regulatory_or_clinical",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "nbd-vcpe-weekly:4482544",
+      "split": "formal",
+      "source_id": "nbd-vcpe-weekly",
+      "source_article_id": "4482544",
+      "canonical_url": "https://www.nbd.com.cn/articles/2026-07-20/4482544.html",
+      "published_at": "2026-07-20T00:00:00+08:00",
+      "title": "VC/PE周报｜险资出手40亿设立新基金，美团领投灵巧手公司",
+      "body_sha256": "4edd52052a225c867d699c51e660636ae1f0cc0af3d2e2254a87603c522b45de",
+      "normalized_sha256": "f30d8d2b97af46f5fc306ee4f36537f07af4718e78708d83c35d4bf1e6a66d36",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [
+        "aitoken生产服务商趋境科技approaching.ai",
+        "ai潮玩品牌珞博智能robopoet正式",
+        "曦诺未来xynova",
+        "目前",
+        "逐际动力",
+        "逐际动力pre-",
+        "通用人形机器人公司逐际动力limxdynamics",
+        "险资出手40亿设立新基金近日,北京泰康投资管理"
+      ],
+      "candidate_ids": [
+        "ac_24676ecc2cb5",
+        "ac_2a43d42d16e5",
+        "ac_3970f4c6649d",
+        "ac_c246fe40ddcd",
+        "ac_e95b4f878d0b",
+        "ac_fa7243aa5ffe",
+        "c_0053fa68ba",
+        "c_1492ea39e0",
+        "c_37b33d640d",
+        "c_45254b00c3",
+        "c_5fbb1c6c5f",
+        "c_6e838e491b",
+        "c_76cb4d055c",
+        "c_9901f9caf9",
+        "c_a2d1f0c5e5",
+        "c_b488629361",
+        "c_cf23c2bdef",
+        "c_db7431ee82",
+        "c_fb3f1d0642"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "funding",
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "vbdata-funding:1519086238",
+      "split": "formal",
+      "source_id": "vbdata-funding",
+      "source_article_id": "1519086238",
+      "canonical_url": "https://www.vbdata.cn/1519086238",
+      "published_at": "2026-07-19",
+      "title": "全球医疗投融资半年吸金320亿美元，国内同比大涨214%！",
+      "body_sha256": "a150c9769384c72bcb92b52e5707fe54398d83c35130d8b8e4bf9310d0b78ce2",
+      "normalized_sha256": "70b34c2e25fdab5798d5959dfaba321f6a0a8fd9ed79183dfcc739737620a8e8",
+      "document_type": "long_feature",
+      "company_keys": [
+        "全球",
+        "更有3家企业在半年内"
+      ],
+      "candidate_ids": [
+        "ac_befbdb172178",
+        "ac_c737441f4d94",
+        "c_211ed10364",
+        "c_229015ad71",
+        "c_25a90c9e81",
+        "c_3500b0e4de",
+        "c_545a28bcc9",
+        "c_63f5e202b5",
+        "c_6e399e30b4",
+        "c_731b3f5d37",
+        "c_967e4865d5",
+        "c_dd0d452a3c"
+      ],
+      "candidate_event_types": [
+        "funding",
+        "ipo_or_listing"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "pedaily-investment-news:562976",
+      "split": "formal",
+      "source_id": "pedaily-investment-news",
+      "source_article_id": "562976",
+      "canonical_url": "https://news.pedaily.cn/202604/562976.shtml",
+      "published_at": "2026-04-21T15:54:00+08:00",
+      "title": "助力科技成果高效转化，服务湖南产业转型升级 ——奇安投资完成三期创投基金募集",
+      "body_sha256": "5e67ba4cb141c779f4ab564a6599ba40baba02bfa613ef1d0c8bb6c953f73d14",
+      "normalized_sha256": "74d385bf9fd665c6cdb24526026991407c23974f34a06d0c698229c482047414",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "pedaily-vcpe-events:566982",
+      "split": "formal",
+      "source_id": "pedaily-vcpe-events",
+      "source_article_id": "566982",
+      "canonical_url": "https://news.pedaily.cn/202607/566982.shtml",
+      "published_at": "2026-07-30T08:00:00+08:00",
+      "title": "中美瑞康完成超2亿元新一轮融资，专注于小核酸创新药研发",
+      "body_sha256": "b2596146d14bd45b1cf8bec9443f2787d124bcfd5656d70ac3e618e2084c72da",
+      "normalized_sha256": "286b61bcc52b6f29e76b24bf8417a362c4d1246084dae2de8c2e9c79f43e4855",
+      "document_type": "long_feature",
+      "company_keys": [
+        "凯乘资本本次很荣幸作为财务顾问陪伴公司"
+      ],
+      "candidate_ids": [
+        "ac_231716bab3dc",
+        "ac_2b1adecf367b",
+        "ac_31b375d0f6df",
+        "ac_4cfe74b96986",
+        "ac_574247520ca0",
+        "ac_94ed030d9cc8",
+        "ac_c9e0c28b5a0e",
+        "ac_cfdab2c6c066",
+        "c_21d925f644",
+        "c_282d61bb8d",
+        "c_3b719dfbd4",
+        "c_936f351f6c",
+        "c_980eb06fb8",
+        "c_9fd6b8ddfa",
+        "c_b770e70120"
+      ],
+      "candidate_event_types": [
+        "funding",
+        "new_site_or_entity",
+        "partnership",
+        "regulatory_or_clinical",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "nbd-vcpe-weekly:4517408",
+      "split": "formal",
+      "source_id": "nbd-vcpe-weekly",
+      "source_article_id": "4517408",
+      "canonical_url": "https://www.nbd.com.cn/articles/2026-07-27/4517408.html",
+      "published_at": "2026-07-27T00:00:00+08:00",
+      "title": "VC/PE周报｜数亿元级融资密集落地，两只硬科技基金宣布募资",
+      "body_sha256": "7394bf7e664c9cb2e573ec649b8a9c55034f74526b215b6e8270fdb89794705f",
+      "normalized_sha256": "3390fa8f49bf7e5daf4b586550fd31917b6e09476cd30411a3f4d40cd8ff949b",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [
+        "上海钧合原子科技",
+        "作者和影视、出海、商业营销、具身智能等行业企业提供aigc工具和定制化解决方案。",
+        "北京达奇月泉仿生科技有限公司以下简称月泉仿生",
+        "智象未来",
+        "智象未来近三个月内",
+        "月泉仿生",
+        "泉仿生融资数亿元近日,北京达奇月泉仿生科技有限公司以下简称月泉仿生",
+        "钧合原子融资数亿元近日,上海钧合原子科技",
+        "首形",
+        "首形科技、月泉仿生",
+        "首形科技、月泉仿生分别"
+      ],
+      "candidate_ids": [
+        "ac_0bb0a9fa573a",
+        "ac_ea9b12600faa",
+        "c_284f738a77",
+        "c_28701b612b",
+        "c_341d2c7431",
+        "c_36b8117138",
+        "c_38b1a8bc10",
+        "c_5c07f4361b",
+        "c_63fc437bb4",
+        "c_769f25ec01",
+        "c_785dd176d9",
+        "c_9db6298bb0",
+        "c_9f42f5032b",
+        "c_c2d1060325",
+        "c_ca0f7ba1cd",
+        "c_e7e79c4ec9"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "funding",
+        "new_site_or_entity"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "vbdata-funding:1519083790",
+      "split": "formal",
+      "source_id": "vbdata-funding",
+      "source_article_id": "1519083790",
+      "canonical_url": "https://www.vbdata.cn/1519083790",
+      "published_at": "2026-07-12",
+      "title": "单一技术叙事过气？融合脑机接口、AI、具身智能的新范式来了！",
+      "body_sha256": "c58d055eb87cca3039311c4b1dd0119fd53aa37876b2887e43c2209d7f9b391d",
+      "normalized_sha256": "8b2c26c2d8614acf056ed266f6e5dff0f2e9b0ffe90661b4a7aeb7ae6caadb0f",
+      "document_type": "long_feature",
+      "company_keys": [
+        "包括智元、宇树等头部企业的人形机器人已能够"
+      ],
+      "candidate_ids": [
+        "c_3e33f508c8",
+        "c_90e5d5179e"
+      ],
+      "candidate_event_types": [
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "nbd-vcpe-weekly:4455756",
+      "split": "formal",
+      "source_id": "nbd-vcpe-weekly",
+      "source_article_id": "4455756",
+      "canonical_url": "https://www.nbd.com.cn/articles/2026-07-06/4455756.html",
+      "published_at": "2026-07-06T00:00:00+08:00",
+      "title": "VC/PE周报｜中微公司出资做LP；茅台跨界押注机器人",
+      "body_sha256": "dd6639031b6d253d010eac48e43c026897978c709e6e185da7caa3ce029b92bf",
+      "normalized_sha256": "8baa3fb874c01f09814cff3192ea69c34a7ab8dd72941c7c49860e011af267a3",
+      "document_type": "multi_company_bulletin",
+      "company_keys": [
+        "投资端具身智能领域接连",
+        "星动纪元",
+        "智平方",
+        "机器人一体化关节模组解决方案提供商无锡泉智博科技有限公司以下简称泉智博",
+        "目前公司的产品已经在汽车、半导体、生物制造、公共服务、新零售等领域实现落地应用。"
+      ],
+      "candidate_ids": [
+        "ac_1791a0fdd911",
+        "ac_2f9f80f34bf8",
+        "ac_61a9079d2ced",
+        "ac_8865eb870a1e",
+        "c_175d710663",
+        "c_23207fe2a4",
+        "c_2e150e148c",
+        "c_3ce1a7ad55",
+        "c_4afcdc0263",
+        "c_572e524108",
+        "c_62ba5be080",
+        "c_91df807a1a",
+        "c_ae3c8c1b54",
+        "c_b20f729e3e",
+        "c_bbd1c98aaf",
+        "c_e2608ef76a"
+      ],
+      "candidate_event_types": [
+        "funding",
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "36kr-financing-flash:3919125291412872",
+      "split": "formal",
+      "source_id": "36kr-financing-flash",
+      "source_article_id": "3919125291412872",
+      "canonical_url": "https://36kr.com/p/3919125291412872",
+      "published_at": "2026-07-31",
+      "title": "璨辰科技获多轮融资，领跑 NAMs 虚拟器官黄金赛道",
+      "body_sha256": "8a40669ed7dcd8dfd81cdd9b090e70ded853db8c7324fd77ce02e055371348b5",
+      "normalized_sha256": "2aa3b71b3258c9b51e00bea64b4bd97640b351d0f8318f19cc15a6c97c1cd277",
+      "document_type": "roadmap",
+      "company_keys": [
+        "ai生命科技企业——璨辰科技canchentech正式官宣:已分阶段",
+        "璨辰"
+      ],
+      "candidate_ids": [
+        "ac_1df4657ac827",
+        "ac_61d869bc0d69",
+        "ac_b0c7a6a49136",
+        "ac_f75f61770801",
+        "c_6f8424e910",
+        "c_848fa77955",
+        "c_85fbdf4897",
+        "c_a42ce9ae16",
+        "c_a6ec061e61"
+      ],
+      "candidate_event_types": [
+        "customer_validation",
+        "funding",
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "pedaily-investment-news:563474",
+      "split": "formal",
+      "source_id": "pedaily-investment-news",
+      "source_article_id": "563474",
+      "canonical_url": "https://news.pedaily.cn/202605/563474.shtml",
+      "published_at": "2026-05-06T14:51:00+08:00",
+      "title": "视觉脑机接口领军企业「暖芯迦」完成新一轮融资，丰年资本超额追投",
+      "body_sha256": "cd538e93367f38cc8840b90c27d972b2de5a73592c2a0c239ecdc1c9c9556361",
+      "normalized_sha256": "944ced5b0eef731ca4708bade8cb96239971678d4ac653bc0e336c274dc9d32f",
+      "document_type": "roadmap",
+      "company_keys": [
+        "丰年资本已投企业杭州暖芯迦电子科技有限公司企业简称:暖芯迦",
+        "暖芯迦"
+      ],
+      "candidate_ids": [
+        "c_11d6e262ff",
+        "c_28e910c75b",
+        "c_4d297d5a30",
+        "c_8c2802ae74",
+        "c_ffff21e80f"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "funding",
+        "new_site_or_entity",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "vbdata-funding:1519086865",
+      "split": "formal",
+      "source_id": "vbdata-funding",
+      "source_article_id": "1519086865",
+      "canonical_url": "https://www.vbdata.cn/1519086865",
+      "published_at": "2026-07-24",
+      "title": "对话品善生物：刚完成近亿元融资，看生物制药耗材的全球验证之路",
+      "body_sha256": "251de6166491d3356935df5d2a9225ad791ac0daa9fee7e86a58449502252e69",
+      "normalized_sha256": "cd859dc84327ac6f6cee396dcab1f169aaf7334541f93cbae825cab3af03f354",
+      "document_type": "commentary",
+      "company_keys": [
+        "品善生物科技上海",
+        "品善生物科技上海有限公司以下简称品善生物"
+      ],
+      "candidate_ids": [
+        "c_1c46534f59",
+        "c_2574d5b89a",
+        "c_437171659b",
+        "c_7b17720e53",
+        "c_87348bf99a",
+        "c_a42b13a503",
+        "c_abf88cefb5",
+        "c_edb47f9247",
+        "c_f26d37e0a3"
+      ],
+      "candidate_event_types": [
+        "customer_validation",
+        "factory_or_capacity",
+        "funding",
+        "major_order",
+        "partnership"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "36kr-financing-flash:3915175290901889",
+      "split": "formal",
+      "source_id": "36kr-financing-flash",
+      "source_article_id": "3915175290901889",
+      "canonical_url": "https://36kr.com/p/3915175290901889",
+      "published_at": "2026-07-29",
+      "title": "柔性触觉感知企业获新一轮融资，预计2026年公司营收翻10倍｜硬氪首发",
+      "body_sha256": "505941f276e02d33bfb4bb983dc539bd54895afe36ff7c1f519fce0d7edcdf14",
+      "normalized_sha256": "b55d51f4e3d2f026dbe6f4fe762cfbf43e0974ee47b73bc0757f48238679c776",
+      "document_type": "roadmap",
+      "company_keys": [
+        "尧乐",
+        "柔性触觉感知企业「尧乐科技」近日"
+      ],
+      "candidate_ids": [
+        "ac_1139af0de22f",
+        "ac_23318b103ebf",
+        "ac_8083ede88956",
+        "c_267ead14a7",
+        "c_3a426e4b8c"
+      ],
+      "candidate_event_types": [
+        "factory_or_capacity",
+        "funding"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "vbdata-funding:1519084694",
+      "split": "formal",
+      "source_id": "vbdata-funding",
+      "source_article_id": "1519084694",
+      "canonical_url": "https://www.vbdata.cn/1519084694",
+      "published_at": "2026-07-14",
+      "title": "对话格式塔彭雷：别只用医疗器械定义脑机接口",
+      "body_sha256": "9b6560afb40c59e9162d18ec92f511fbcd5693c12cf05c1d66940317ad5e2814",
+      "normalized_sha256": "c26d62df309b68b53bf052eaa1385a69b032b94f06d015c474425aa857045eb7",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [
+        "ac_3be5685bb840",
+        "ac_64444753c720",
+        "c_67e72e9a0b",
+        "c_7f7eea5b7b",
+        "c_dcac2e3474"
+      ],
+      "candidate_event_types": [
+        "executive_change",
+        "funding",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "ccid-report-commentary:1120253",
+      "split": "formal",
+      "source_id": "ccid-report-commentary",
+      "source_article_id": "1120253",
+      "canonical_url": "https://www.ccidreport.com/zjgd2/1120253.jhtml",
+      "published_at": "2026-07-21T00:00:00+08:00",
+      "title": "《央视财经评论》丨 王昊：全球人工智能进入中国时间",
+      "body_sha256": "c1f3c9f8e8b50655ad65993ae86eef270996ed118d1f5f17f3df001bf5d48c1a",
+      "normalized_sha256": "9d47b8d05c241c1abf3153eebd51f7d273fa5276bfa76a6091be8db57e262402",
+      "document_type": "commentary",
+      "company_keys": [
+        "水杯机器人穿鞋带首发展品展现人工智能落地成果我们再把视角回到本次人工智能大会。"
+      ],
+      "candidate_ids": [
+        "ac_57dc086909e3",
+        "ac_73b0b9702b08",
+        "c_3018953506",
+        "c_3c4ae3a574",
+        "c_7a6d584083",
+        "c_a7e5cb3cb4",
+        "c_ae450198fa",
+        "c_d35771fc66",
+        "c_d7fd31dde3"
+      ],
+      "candidate_event_types": [
+        "new_site_or_entity",
+        "policy_or_standard",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "pedaily-investment-news:564315",
+      "split": "formal",
+      "source_id": "pedaily-investment-news",
+      "source_article_id": "564315",
+      "canonical_url": "https://news.pedaily.cn/202605/564315.shtml",
+      "published_at": "2026-05-25T10:58:00+08:00",
+      "title": "打造创投生态的超级枢纽， 2026投资界SuperLink大会定档6月",
+      "body_sha256": "a074585968854fae976be271c29f29c486f11da8e997e7accd12a2b3bb4cdfa7",
+      "normalized_sha256": "b2db899b697f522ae871765dc19ccc8de988fc99ac243d6bf3310fe871360590",
+      "document_type": "roadmap",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "jazzyear-research:161",
+      "split": "formal",
+      "source_id": "jazzyear-research",
+      "source_article_id": "161",
+      "canonical_url": "https://www.jazzyear.com/study_info.html?id=161",
+      "published_at": "2026-01-29T00:00:00+08:00",
+      "title": "2026年Agent领域十大趋势判断",
+      "body_sha256": "e0448134546f805efbdc0430a0d616d48b02eb7b1bfb6dbd50bd1aacc4dd97fe",
+      "normalized_sha256": "cdd8cfbf478ec07faeba1204af74099fe3de335773669a8dfe4add740086937e",
+      "document_type": "commentary",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "stcn-flash:4053701",
+      "split": "formal",
+      "source_id": "stcn-flash",
+      "source_article_id": "4053701",
+      "canonical_url": "https://www.stcn.com/article/detail/4053701.html",
+      "published_at": "2026-08-01T12:07:51+08:00",
+      "title": "《黄岩岛国家级自然保护区管理办法》发布",
+      "body_sha256": "d86ad7d84d7d1dc2454aa2ef34869907d2cd2a54ea3358485bc47633a08e2896",
+      "normalized_sha256": "2c18b6778168ae634359302635cc0d757d7ee673fa4ad8f44adbecbf567a7d51",
+      "document_type": "single_company_flash",
+      "company_keys": [],
+      "candidate_ids": [
+        "c_4432a875a0"
+      ],
+      "candidate_event_types": [
+        "policy_or_standard"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cls-telegraph:2443354",
+      "split": "formal",
+      "source_id": "cls-telegraph",
+      "source_article_id": "2443354",
+      "canonical_url": "https://www.cls.cn/detail/2443354",
+      "published_at": "2026-08-01T20:13:48+08:00",
+      "title": "8月1日周六《新闻联播》要闻26条",
+      "body_sha256": "2a9043757b84e2eeec246e7c21161e3ebeab77a96bc92089038e233652108303",
+      "normalized_sha256": "1481f7a25212d6c4a475c7a5c8839584ac3a97409212f2ee73e119a20deb5922",
+      "document_type": "single_company_flash",
+      "company_keys": [],
+      "candidate_ids": [],
+      "candidate_event_types": [],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "zhidx-financing:581336",
+      "split": "formal",
+      "source_id": "zhidx-financing",
+      "source_article_id": "581336",
+      "canonical_url": "https://zhidx.com/p/581336.html",
+      "published_at": "2026-07-31T11:12:00+08:00",
+      "title": "中科院系农业机器人公司，融资数亿，奇瑞也投了",
+      "body_sha256": "2ed5d9373c6a95b2923e931ba593199d1123b298a946044b4ab01e3ed0e7d7dc",
+      "normalized_sha256": "b961735756973ebc42a59613f6c3b92189cec5e7d410465263c337b67460f712",
+      "document_type": "single_company_flash",
+      "company_keys": [
+        "中科原动力",
+        "人前瞻7月31日报道,今天,北京中科原动力科技有限公司以下简称中科原动力",
+        "北京中科原动力科技有限公司以下简称中科原动力",
+        "源智能农机及具身智能农业机器人核心技术研发、产品规模化交付及加快海外市场拓展。"
+      ],
+      "candidate_ids": [
+        "c_82ebf41061",
+        "c_ba86902c12",
+        "c_bd0fba3474",
+        "c_fb13671f52",
+        "c_fecc58f6ca"
+      ],
+      "candidate_event_types": [
+        "funding",
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    },
+    {
+      "key": "cena-industry-analysis:17960",
+      "split": "formal",
+      "source_id": "cena-industry-analysis",
+      "source_article_id": "17960",
+      "canonical_url": "https://epaper.cena.com.cn/pc/content/202607/31/content_17960.html",
+      "published_at": "2026-07-31T00:00:00+08:00",
+      "title": "芯和半导体与诺瓦星云宣布战略合作",
+      "body_sha256": "c02c9f4c6e88a15ca4dc77100ab513e4f20cef932a1071a07a10ba5408b1eab1",
+      "normalized_sha256": "dc1f34951ee07aae6c2618ab0e28b76e6d97b6e106c114eefa380135b7c785c9",
+      "document_type": "single_company_flash",
+      "company_keys": [
+        "国产eda企业代表芯和半导体在现场联合诺瓦星云科技"
+      ],
+      "candidate_ids": [
+        "c_b3abe7a90d"
+      ],
+      "candidate_event_types": [
+        "technical_milestone"
+      ],
+      "gold_status": "unlabelled"
+    }
+  ]
+}

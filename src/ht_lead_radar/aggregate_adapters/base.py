@@ -45,6 +45,7 @@ class AdapterContext:
         post_json: Callable[[str, dict[str, Any]], bytes] | None = None,
         record_decision: Callable[[str, dict[str, Any]], None] | None = None,
         now: datetime | None = None,
+        decision_state: dict[str, dict[str, Any]] | None = None,
     ) -> "AdapterContext":
         state_path = Path(state_db)
         return cls(
@@ -56,6 +57,15 @@ class AdapterContext:
             fetch=fetch,
             post_json=post_json,
             record_decision=record_decision,
+            decision_state=dict(decision_state or {}),
+        )
+
+    @property
+    def capture_full_visible_window(self) -> bool:
+        return bool(
+            self.decision_state.get("capture_full_visible_window", {}).get(
+                "enabled"
+            )
         )
 
 

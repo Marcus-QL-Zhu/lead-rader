@@ -124,14 +124,10 @@ def test_model_correction_replaces_wrong_rule_subject_instead_of_unioning_it():
     quote = "Nexus Data Centers正洽谈融资，资金拟用于建设服务Anthropic的项目。"
     channel, article = _fixture(quote)
     wrong = _seed(article, "Anthropic", quote, status="completed")
-    response = _payload(
-        _funding("Nexus Data Centers", quote, status="started")
-    )
+    response = _payload(_funding("Nexus Data Centers", quote, status="started"))
 
     processor = MiniMaxSemanticProcessor(_SequenceRunner([response]))
-    events = processor.process(
-        channel, article, [wrong]
-    )
+    events = processor.process(channel, article, [wrong])
 
     assert [(event.canonical_company, event.event_status) for event in events] == [
         ("Nexus Data Centers", "started")
@@ -217,9 +213,7 @@ def test_funding_amount_is_not_confused_with_following_separate_valuation():
 def test_same_value_can_be_a_funding_amount_and_a_valuation():
     quote = "甲辰科技完成A轮融资10亿元，投后估值10亿元。"
     channel, article = _fixture(quote)
-    response = _payload(
-        _funding("甲辰科技", quote, round_name="A轮", amount="10亿元")
-    )
+    response = _payload(_funding("甲辰科技", quote, round_name="A轮", amount="10亿元"))
 
     events = MiniMaxSemanticProcessor(_SequenceRunner([response])).process(
         channel, article, []
@@ -297,11 +291,7 @@ class _ChunkRunner:
 
 
 def test_long_digest_is_chunked_and_global_events_are_merged():
-    body = (
-        "甲辰科技完成A轮融资。"
-        + "行业背景信息。" * 1800
-        + "乙巳机器人完成B轮融资。"
-    )
+    body = "甲辰科技完成A轮融资。" + "行业背景信息。" * 1800 + "乙巳机器人完成B轮融资。"
     channel, article = _fixture(body)
     runner = _ChunkRunner()
     processor = MiniMaxSemanticProcessor(runner)
@@ -330,9 +320,7 @@ def test_long_digest_rule_seed_is_injected_only_into_its_evidence_chunk():
             del session_id, system_prompt
             self.prompts.append(prompt)
             if quote in prompt:
-                return _payload(
-                    _funding("甲辰科技", quote, round_name="A轮")
-                )
+                return _payload(_funding("甲辰科技", quote, round_name="A轮"))
             return _payload()
 
     runner = _SeedIsolationRunner()
@@ -346,7 +334,7 @@ def test_long_digest_rule_seed_is_injected_only_into_its_evidence_chunk():
     assert processor.last_audit["status"] == "accepted"
 
 
-def test_partial_candidate_output_must_repair_before_it_can_be_accepted():
+def test_partial_candidate_output_retries_only_missing_claim_and_repairs_peer():
     first = "甲辰科技完成A轮融资。"
     second = "乙巳机器人完成B轮融资。"
     channel, article = _fixture(first + second)
@@ -367,9 +355,15 @@ def test_partial_candidate_output_must_repair_before_it_can_be_accepted():
         "乙巳机器人",
     }
     assert processor.last_audit["unmapped_candidate_count"] == 0
+    assert processor.last_audit["claim_retry_attempted"] is True
+    assert processor.last_audit["claim_retry_resolved_candidate_ids"]
+    assert processor.last_audit["candidate_disposition_complete"] is True
+    assert "adjudicate_failed_claims_only" in runner.prompts[1]
+    assert second in runner.prompts[1]
+    assert first not in runner.prompts[1]
 
 
-def test_partial_candidate_output_twice_falls_back_and_is_not_cache_healthy():
+def test_partial_candidate_output_is_preserved_and_is_not_cache_healthy():
     first = "甲辰科技完成A轮融资。"
     second = "乙巳机器人完成B轮融资。"
     channel, article = _fixture(first + second)
@@ -379,7 +373,7 @@ def test_partial_candidate_output_twice_falls_back_and_is_not_cache_healthy():
 
     events = processor.process(channel, article, [seed])
 
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["status"] == "partial"
     assert [event.canonical_company for event in events] == ["甲辰科技"]
     assert processor.last_audit["unmapped_candidate_count"] >= 1
 
@@ -391,16 +385,14 @@ def test_candidate_cannot_be_silently_rejected_by_an_ambiguity_string():
     response = json.dumps(
         {
             "events": [],
-            "ambiguities": [
-                f"candidate:{candidate['id']}:仅为媒体转述，正文未确认"
-            ],
+            "ambiguities": [f"candidate:{candidate['id']}:仅为媒体转述，正文未确认"],
         },
         ensure_ascii=False,
     )
     processor = MiniMaxSemanticProcessor(_SequenceRunner([response]))
 
     assert processor.process(channel, article, []) == []
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["status"] == "partial"
     assert processor.last_audit["unmapped_candidate_count"] == 1
 
 
@@ -413,9 +405,7 @@ def test_reason_coded_candidate_rejection_requires_deterministic_support():
         "quote": "本次募资将全部投入医疗级模组量产迭代。",
     }
     payload = {
-        "rejections": [
-            {"id": candidate["id"], "reason_code": "funding_use_or_plan"}
-        ]
+        "rejections": [{"id": candidate["id"], "reason_code": "funding_use_or_plan"}]
     }
 
     rejected_candidates, rejected_seeds = (
@@ -440,9 +430,7 @@ def test_free_text_cannot_reject_a_grounded_real_seed():
     response = json.dumps(
         {
             "events": [],
-            "rejections": [
-                {"id": seed_id, "reason_code": "generic_commentary"}
-            ],
+            "rejections": [{"id": seed_id, "reason_code": "generic_commentary"}],
             "ambiguities": [f"{seed_id}: 未证实转述"],
         },
         ensure_ascii=False,
@@ -452,7 +440,7 @@ def test_free_text_cannot_reject_a_grounded_real_seed():
     events = processor.process(channel, article, [seed])
 
     assert [event.canonical_company for event in events] == ["甲辰科技"]
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["status"] == "partial"
     assert processor.last_audit["rejected_seed_count"] == 0
 
 
@@ -471,7 +459,9 @@ def test_rejection_with_unknown_id_fails_closed():
     processor = MiniMaxSemanticProcessor(_SequenceRunner([response]))
 
     assert processor.process(channel, article, []) == []
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["status"] == "partial"
+    assert processor.last_audit["rejection_issue_count"] == 2
+    assert processor.last_audit["claim_retry_attempted"] is True
 
 
 def test_global_rejection_removes_rule_fallback_conflict_after_chunk_fan_in():
@@ -548,10 +538,7 @@ def test_rejection_conflict_removes_only_matching_evidence_not_same_key_event():
 
 
 def test_unmapped_candidate_fallback_does_not_restore_rejected_seed():
-    rejected_quote = (
-        "北部湾港集团与交通运输部天津水运工程科学研究院"
-        "签署战略合作协议。"
-    )
+    rejected_quote = "北部湾港集团与交通运输部天津水运工程科学研究院签署战略合作协议。"
     body = rejected_quote + "乙卯机器人完成B轮融资。"
     channel, article = _fixture(body)
     seed = SemanticEvent(
@@ -573,9 +560,7 @@ def test_unmapped_candidate_fallback_does_not_restore_rejected_seed():
     response = json.dumps(
         {
             "events": [],
-            "rejections": [
-                {"id": seed_id, "reason_code": "invalid_subject"}
-            ],
+            "rejections": [{"id": seed_id, "reason_code": "invalid_subject"}],
             "ambiguities": [],
         },
         ensure_ascii=False,
@@ -583,12 +568,12 @@ def test_unmapped_candidate_fallback_does_not_restore_rejected_seed():
     processor = MiniMaxSemanticProcessor(_SequenceRunner([response, response]))
 
     assert processor.process(channel, article, [seed]) == []
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["status"] == "partial"
     assert processor.last_audit["rejected_seed_count"] == 1
     assert processor.last_audit["rules_preserved_count"] == 0
 
 
-def test_rules_fallback_recomputes_model_only_and_corrected_audit_counts():
+def test_partial_projection_recomputes_model_only_and_corrected_audit_counts():
     first = "甲辰科技完成A轮融资。"
     second = "乙卯机器人完成B轮融资。"
     third = "丙午芯片完成C轮融资。"
@@ -599,11 +584,11 @@ def test_rules_fallback_recomputes_model_only_and_corrected_audit_counts():
 
     events = processor.process(channel, article, [seed])
 
-    assert [event.canonical_company for event in events] == ["甲辰科技"]
-    assert processor.last_audit["status"] == "fallback_to_rules"
-    assert processor.last_audit["model_only_count"] == 0
+    assert [event.canonical_company for event in events] == ["乙卯机器人"]
+    assert processor.last_audit["status"] == "partial"
+    assert processor.last_audit["model_only_count"] == 1
     assert processor.last_audit["corrected_seed_count"] == 0
-    assert processor.last_audit["rules_preserved_count"] == 1
+    assert processor.last_audit["rules_preserved_count"] == 0
 
 
 def test_candidate_ledger_covers_all_high_value_allowed_event_families():
@@ -620,8 +605,7 @@ def test_candidate_ledger_covers_all_high_value_allowed_event_families():
     )
 
     event_types = {
-        item["event_type"]
-        for item in MiniMaxSemanticProcessor._event_candidates(body)
+        item["event_type"] for item in MiniMaxSemanticProcessor._event_candidates(body)
     }
 
     assert {
@@ -653,10 +637,9 @@ def test_same_quote_two_rounds_cannot_be_covered_by_one_model_event():
 
     events = processor.process(channel, article, seeds)
 
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["status"] == "partial"
     assert {(event.funding_round, event.event_status) for event in events} == {
         ("F轮", "completed"),
-        ("Pre-IPO", "started"),
     }
 
 
@@ -668,18 +651,13 @@ def test_same_amount_two_companies_cannot_adjudicate_each_other():
         _seed(article, "甲辰科技", first, round_name="A轮", amount="10亿元"),
         _seed(article, "乙巳机器人", second, round_name="A轮", amount="10亿元"),
     ]
-    partial = _payload(
-        _funding("甲辰科技", first, round_name="A轮", amount="10亿元")
-    )
+    partial = _payload(_funding("甲辰科技", first, round_name="A轮", amount="10亿元"))
     processor = MiniMaxSemanticProcessor(_SequenceRunner([partial, partial]))
 
     events = processor.process(channel, article, seeds)
 
-    assert processor.last_audit["status"] == "fallback_to_rules"
-    assert {event.canonical_company for event in events} == {
-        "甲辰科技",
-        "乙巳机器人",
-    }
+    assert processor.last_audit["status"] == "partial"
+    assert {event.canonical_company for event in events} == {"甲辰科技"}
 
 
 def test_same_sentence_same_round_two_subjects_cannot_be_silently_merged():
@@ -688,8 +666,9 @@ def test_same_sentence_same_round_two_subjects_cannot_be_silently_merged():
     partial = _payload(_funding("甲辰科技", quote, round_name="A轮"))
     processor = MiniMaxSemanticProcessor(_SequenceRunner([partial, partial]))
 
-    assert processor.process(channel, article, []) == []
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    events = processor.process(channel, article, [])
+    assert {event.canonical_company for event in events} == {"甲辰科技"}
+    assert processor.last_audit["status"] == "partial"
     assert processor.last_audit["candidate_count"] == 2
     assert processor.last_audit["unmapped_candidate_count"] >= 1
 
@@ -700,8 +679,9 @@ def test_same_sentence_without_comma_two_subjects_are_separate_candidates():
     partial = _payload(_funding("甲辰科技", quote, round_name="A轮"))
     processor = MiniMaxSemanticProcessor(_SequenceRunner([partial, partial]))
 
-    assert processor.process(channel, article, []) == []
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    events = processor.process(channel, article, [])
+    assert {event.canonical_company for event in events} == {"甲辰科技"}
+    assert processor.last_audit["status"] == "partial"
     assert processor.last_audit["candidate_count"] == 2
     assert processor.last_audit["unmapped_candidate_count"] >= 1
 
@@ -712,8 +692,9 @@ def test_respectively_joined_subjects_are_both_required():
     partial = _payload(_funding("甲辰科技", quote, round_name="A轮"))
     processor = MiniMaxSemanticProcessor(_SequenceRunner([partial, partial]))
 
-    assert processor.process(channel, article, []) == []
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    events = processor.process(channel, article, [])
+    assert {event.canonical_company for event in events} == {"甲辰科技"}
+    assert processor.last_audit["status"] == "partial"
     assert processor.last_audit["unmapped_candidate_count"] >= 1
 
 
@@ -733,7 +714,7 @@ def test_long_unpunctuated_boundary_candidate_is_not_cacheable_when_missing():
     processor = MiniMaxSemanticProcessor(_SequenceRunner([empty, empty]))
 
     assert processor.process(channel, article, []) == []
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["status"] == "partial"
     assert processor.last_audit["unmapped_candidate_count"] >= 1
 
 
@@ -748,8 +729,9 @@ def test_single_sentence_multiple_event_families_all_require_coverage():
     partial = _payload(partnership)
     processor = MiniMaxSemanticProcessor(_SequenceRunner([partial, partial]))
 
-    assert processor.process(channel, article, []) == []
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    events = processor.process(channel, article, [])
+    assert [event.event_type for event in events] == ["partnership"]
+    assert processor.last_audit["status"] == "partial"
     assert processor.last_audit["unmapped_candidate_count"] >= 1
 
 
@@ -757,8 +739,7 @@ def test_reverse_technical_and_delivery_phrasing_enters_candidate_ledger():
     body = "集创北方芯片实现规模化量产。某机器人产品批量下线暨首批交付。"
 
     event_types = {
-        item["event_type"]
-        for item in MiniMaxSemanticProcessor._event_candidates(body)
+        item["event_type"] for item in MiniMaxSemanticProcessor._event_candidates(body)
     }
 
     assert "technical_milestone" in event_types

@@ -26,6 +26,7 @@ _LEGAL_COMPANY_SUFFIX = re.compile(
     re.I,
 )
 
+
 def normalize_company_alias(value: str) -> str:
     normalized = unicodedata.normalize("NFKC", str(value or "")).strip()
     return _COMPANY_PUNCTUATION.sub("", normalized).casefold()
@@ -248,6 +249,8 @@ class AggregateStateStore:
         *,
         prompt_version: str,
         model_identity: str,
+        claim_centric_v27: bool | None = None,
+        strict_claim_contract: bool | None = None,
     ) -> bool:
         row = self.connection.execute(
             """
@@ -263,12 +266,32 @@ class AggregateStateStore:
             audit = json.loads(str(row["audit_json"]))
         except json.JSONDecodeError:
             return False
-        return (
-            isinstance(audit, dict)
-            and audit.get("status") != "fallback_to_rules"
-            and audit.get("index_content_hash") == index.content_hash
-            and audit.get("model_identity") == model_identity
-        )
+        if not isinstance(audit, dict):
+            return False
+        if audit.get("status") not in {
+            "accepted",
+            "repaired",
+            "rules_only",
+            "no_rule_seed",
+            "prefiltered",
+            "no_claims",
+        }:
+            return False
+        if audit.get("index_content_hash") != index.content_hash:
+            return False
+        if audit.get("model_identity") != model_identity:
+            return False
+        if (
+            claim_centric_v27 is not None
+            and bool(audit.get("claim_centric_v27")) != claim_centric_v27
+        ):
+            return False
+        if (
+            strict_claim_contract is not None
+            and bool(audit.get("strict_claim_contract")) != strict_claim_contract
+        ):
+            return False
+        return True
 
     def store_article(self, article: CleanArticle) -> None:
         self.connection.execute(
@@ -374,9 +397,7 @@ class AggregateStateStore:
                             alias,
                             canonical_key,
                             event.canonical_company,
-                            event.evidence_quotes[0]
-                            if event.evidence_quotes
-                            else "",
+                            event.evidence_quotes[0] if event.evidence_quotes else "",
                             _now(),
                         ),
                     )
@@ -408,8 +429,7 @@ class AggregateStateStore:
                 names.setdefault(canonical_key, {}).get(canonical, 0) + 1
             )
             canonical_votes.setdefault(canonical_key, {})[canonical] = (
-                canonical_votes.setdefault(canonical_key, {}).get(canonical, 0)
-                + 1
+                canonical_votes.setdefault(canonical_key, {}).get(canonical, 0) + 1
             )
 
         output: dict[str, str] = {}
@@ -429,9 +449,7 @@ class AggregateStateStore:
             candidate_names = [
                 name
                 for key in component
-                for name in (
-                    canonical_votes.get(key) or names.get(key) or {}
-                )
+                for name in (canonical_votes.get(key) or names.get(key) or {})
             ]
             if not candidate_names:
                 continue
@@ -439,10 +457,7 @@ class AggregateStateStore:
                 candidate_names,
                 key=lambda name: (
                     int(_looks_legal_company(name)),
-                    sum(
-                        votes.get(name, 0)
-                        for votes in canonical_votes.values()
-                    ),
+                    sum(votes.get(name, 0) for votes in canonical_votes.values()),
                     len(name),
                     name,
                 ),
@@ -489,6 +504,8 @@ class AggregateStateStore:
             "investors",
             "evidence_quotes",
             "ambiguities",
+            "claim_ids",
+            "span_ids",
         ):
             raw[field] = tuple(raw.get(field) or ())
         return SemanticEvent(**raw)
@@ -623,6 +640,56 @@ class AggregateStateStore:
             (_now(), source_id, source_article_id, stage),
         )
         self.connection.commit()
+
+    def sync_semantic_claim_dead_letters(
+        self,
+        *,
+        source_id: str,
+        source_article_id: str,
+        canonical_url: str,
+        failed_claim_ids: list[str],
+        error: str,
+    ) -> None:
+        """Keep one recoverable dead-letter record per unresolved semantic claim."""
+
+        claim_ids = {
+            str(claim_id).strip()
+            for claim_id in failed_claim_ids
+            if str(claim_id).strip()
+        }
+        current_stages = {f"semantic_claim:{claim_id}" for claim_id in claim_ids}
+        rows = self.connection.execute(
+            """
+            SELECT DISTINCT stage
+            FROM aggregate_dead_letters
+            WHERE source_id = ? AND source_article_id = ?
+              AND stage LIKE 'semantic_claim:%' AND resolved_at = ''
+            """,
+            (source_id, source_article_id),
+        ).fetchall()
+        now = _now()
+        for row in rows:
+            stage = str(row["stage"])
+            if stage not in current_stages:
+                self.connection.execute(
+                    """
+                    UPDATE aggregate_dead_letters
+                    SET resolved_at = ?
+                    WHERE source_id = ? AND source_article_id = ? AND stage = ?
+                      AND resolved_at = ''
+                    """,
+                    (now, source_id, source_article_id, stage),
+                )
+        self.connection.commit()
+        for claim_id in sorted(claim_ids):
+            self.record_dead_letter(
+                source_id=source_id,
+                source_article_id=source_article_id,
+                canonical_url=canonical_url,
+                stage=f"semantic_claim:{claim_id}",
+                error=f"{claim_id}: {error}"[:2000],
+            )
+
     def store_semantic_audit(self, audit: dict[str, Any]) -> None:
         if not audit:
             return

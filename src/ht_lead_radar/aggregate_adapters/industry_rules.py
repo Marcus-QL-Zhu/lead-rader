@@ -15,7 +15,7 @@ _EVENT_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     (
         "executive_change",
         re.compile(
-            r"任命|获任|出任|履新|上任|换帅|接任|辞任|离任|"
+            r"任命|获任|委派|推荐.{0,20}任|免去|不再担任|出任|履新|上任|换帅|接任|辞任|离任|"
             r"新任.{0,12}(?:董事长|总裁|CEO|首席执行官|负责人)"
         ),
     ),

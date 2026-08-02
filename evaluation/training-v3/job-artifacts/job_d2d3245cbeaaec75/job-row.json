@@ -1,0 +1,72 @@
+{
+  "artifact_id": "job_d2d3245cbeaaec75",
+  "source_platform": "linkedin-public",
+  "source_job_id": "4431731114",
+  "requested_url": "https://cn.linkedin.com/jobs/view/global-head-of-operations-%E2%80%93-motion-drive-products-division-location-asia-us-europe-at-abb-4431731114",
+  "final_url": "https://cn.linkedin.com/jobs/view/global-head-of-operations-%E2%80%93-motion-drive-products-division-location-asia-us-europe-at-abb-4431731114",
+  "captured_at": "2026-08-01T11:34:29.239000+00:00",
+  "http_status": 200,
+  "mime_type": "text/html",
+  "raw_artifact_path": "evaluation/training-v3/job-artifacts/job_d2d3245cbeaaec75/raw-browser-capture.json",
+  "raw_artifact_sha256": "7aa6b3797270c3aa24795125ded74ee7ae7e5d4c65c21276778c98af722ce2b4",
+  "normalized_text_path": "evaluation/training-v3/job-artifacts/job_d2d3245cbeaaec75/normalized.txt",
+  "normalized_text_sha256": "287e926b3099c39b9b630e3a7769575ce74289122a424557b658ba15d8d9dd11",
+  "extractor_version": "browser-public-job-v1",
+  "company": "ABB（中国）",
+  "canonical_company_id": "co_6d4fe92e686b77f0",
+  "corporate_family_id": "fam_6d4fe92e686b77f0",
+  "employer_display": "阿西布朗勃法瑞公司（ABB）",
+  "employer_match_basis": "unverified_alias",
+  "exact_title": "Global Head of Operations – Motion Drive Products Division (Location: Asia, US, Europe)",
+  "title": "Global Head of Operations – Motion Drive Products Division (Location: Asia, US, Europe)",
+  "raw_publication_text": "1 个月前",
+  "publication_basis": "relative_date_interval",
+  "publication_interval_start": "2026-06-01",
+  "publication_interval_end_exclusive": "2026-07-02",
+  "date_parser_version": "relative-publication-v1",
+  "timezone": "Asia/Shanghai",
+  "source_job_id_span": {
+    "text": "4431731114",
+    "char_start": 14,
+    "char_end": 24
+  },
+  "title_span": {
+    "text": "Global Head of Operations – Motion Drive Products Division (Location: Asia, US, Europe)",
+    "char_start": 31,
+    "char_end": 118
+  },
+  "employer_span": {
+    "text": "阿西布朗勃法瑞公司（ABB）",
+    "char_start": 128,
+    "char_end": 142
+  },
+  "publication_span": {
+    "text": "1 个月前",
+    "char_start": 155,
+    "char_end": 160
+  },
+  "scope_spans": [
+    {
+      "text": "In this role, you will lead the Operations function for ABB’s Drive Products division in line with the division’s operating model. You will be accountable for the full value chain—from planning and procurement to production and logistics—while ensuring excellence in health, safety, and environment (HSE), as well as continuous development of processes and systems.",
+      "char_start": 1065,
+      "char_end": 1430
+    },
+    {
+      "text": "Define and execute the global Operations strategy in alignment with Division objectives, ensuring strong collaboration across local units",
+      "char_start": 2027,
+      "char_end": 2164
+    },
+    {
+      "text": "Oversee capital investment planning (CapEx) and operational budgets to ensure sustainable growth, resilience, and value creation across the global operations network",
+      "char_start": 2855,
+      "char_end": 3020
+    }
+  ],
+  "seniority_label": "director_plus",
+  "seniority_rule_version": "director-plus-artifact-v1",
+  "evaluation_eligible": true,
+  "exclusion_reason": "",
+  "reviewer": "pending",
+  "reviewed_at": "2026-08-01T11:34:29.239000+00:00",
+  "review_status": "pending_human_review"
+}

@@ -168,7 +168,7 @@ def test_salvage_does_not_bind_investor_from_another_company_round():
 
     events = processor.process(CHANNEL, article, seeds)
 
-    assert processor.last_audit["status"] == "fallback_to_rules"
+    assert processor.last_audit["status"] == "partial"
     target = next(item for item in events if item.canonical_company == company)
     assert wrong_investor not in target.investors
     assert other not in target.evidence_quotes
@@ -178,7 +178,9 @@ def test_salvage_rejects_conflicting_round_in_current_investor_sentence():
     company = "\u661f\u6cb3\u82af\u7247"
     investor = "\u56fd\u79d1\u521b\u6295"
     event_quote = f"{company}\u5b8c\u62101\u4ebf\u5143A\u8f6e\u878d\u8d44\u3002"
-    investor_quote = f"\u672c\u8f6eB\u8f6e\u878d\u8d44\u7531{investor}\u9886\u6295\u3002"
+    investor_quote = (
+        f"\u672c\u8f6eB\u8f6e\u878d\u8d44\u7531{investor}\u9886\u6295\u3002"
+    )
     seed = SemanticEvent(
         source_id=CHANNEL.source_id,
         source_article_id="round-conflict",

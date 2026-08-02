@@ -110,16 +110,9 @@ def test_job_ad_alone_cannot_create_early_role():
     report = sample_report(leads=1)
     report["leads"][0]["evidence"][0]["event_type"] = "job_ad"
     packet = build_company_evidence_packets(report)[0]
-    response = demand_response(
-        packet,
-        title="机器人运动控制工程化总监",
-    )
 
-    with pytest.raises(DemandAnalysisError, match="pre-ad upstream event"):
-        parse_single_company_demand(
-            json.dumps(response, ensure_ascii=False),
-            packet=packet,
-        )
+    assert packet["evidence"] == []
+    assert packet["timeline"]["selected_evidence_count"] == 0
 
 
 def _operational_packet():

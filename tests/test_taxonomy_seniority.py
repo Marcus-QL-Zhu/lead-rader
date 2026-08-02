@@ -14,6 +14,7 @@ def test_seniority_is_title_first_and_excludes_associate_director():
     assert classify_seniority("VP Assistant", "Supports sales")[1] is False
     assert classify_seniority("SVP, Operations", "Owns operations")[1] is True
     assert classify_seniority("EVP Technology", "Owns technology")[1] is True
+    assert classify_seniority("General Manager, Greater China", "Owns the business")[1] is True
     assert classify_seniority("发射技术中心主任", "全面负责中心团队")[1] is True
     assert classify_seniority("发射技术中心副主任", "协助管理中心团队")[1] is False
     assert classify_seniority("发射技术中心主任助理", "支持中心主任")[1] is False
