@@ -176,6 +176,7 @@ def test_cyzone_indexes_every_public_item_in_both_listing_fixtures(tmp_path):
         item.source_article_id for item in latest
     }.isdisjoint(item.source_article_id for item in financing)
     assert len(latest) + len(financing) == 20
+    assert not (tmp_path / "state-adaptive-selectors.sqlite3").exists()
 
 
 def test_cyzone_time_label_does_not_change_content_hash(tmp_path):

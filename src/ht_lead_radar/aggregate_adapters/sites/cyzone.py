@@ -11,7 +11,7 @@ from urllib.parse import urljoin, urlparse
 
 from scrapling import Selector
 
-from ..adaptive import AdaptiveSelector
+from ..adaptive import AdaptiveSelector, Selection
 from ..base import (
     AdapterContext,
     AggregateAdapter,
@@ -87,11 +87,6 @@ class CyzoneAdapter(AggregateAdapter):
         html: bytes,
         context: AdapterContext,
     ) -> list[SourceArticleIndex]:
-        adaptive = AdaptiveSelector(
-            html,
-            url=channel.url,
-            storage_path=context.adaptive_db,
-        )
         if channel.source_id in {"cyzone-financing", "cyzone-latest"}:
             selector = "div#pane-recommend div.article-item[data-id]"
             minimum_count = 20
@@ -99,12 +94,27 @@ class CyzoneAdapter(AggregateAdapter):
             raise ListingInvariantError(
                 f"unsupported Cyzone channel {channel.source_id}"
             )
-        selection = adaptive.css(
-            selector,
-            identifier=f"{channel.source_id}:listing-item",
-            minimum_count=minimum_count,
-            maximum_count=self.maximum_listing_count,
-        )
+        # Cyzone's current listing markup is stable and can contain roughly a
+        # hundred items.  Run the cheap exact CSS path first; constructing an
+        # adaptive Scrapling selector for every unchanged daily listing would
+        # write a per-URL SQLite cache and spend minutes in fuzzy matching.
+        # Keep adaptive recovery for genuine selector drift only.
+        exact_selector = Selector(html, url=channel.url, adaptive=False)
+        exact_elements = tuple(exact_selector.css(selector))
+        if minimum_count <= len(exact_elements) <= self.maximum_listing_count:
+            selection = Selection(exact_elements, "exact", None)
+        else:
+            adaptive = AdaptiveSelector(
+                html,
+                url=channel.url,
+                storage_path=context.adaptive_db,
+            )
+            selection = adaptive.css(
+                selector,
+                identifier=f"{channel.source_id}:listing-item",
+                minimum_count=minimum_count,
+                maximum_count=self.maximum_listing_count,
+            )
         if not selection.elements:
             raise ListingInvariantError(
                 f"{channel.source_id} article-item selector failed"
