@@ -346,6 +346,14 @@ class DedicatedAggregateCoordinator:
                             now=self.now,
                             overlap_hours=0,
                         )
+                        and not store.semantic_is_current(
+                            index,
+                            prompt_version=self.processor.semantic_prompt_version,
+                            model_identity=self.processor.model_identity,
+                            claim_centric_v27=self.processor.claim_centric_v27
+                            and self.processor.runner is not None,
+                            strict_claim_contract=self.strict_claim_contract,
+                        )
                         and store.has_prior_semantic_attempt(index)
                     ):
                         evidence.extend(
