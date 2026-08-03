@@ -198,6 +198,10 @@ class DedicatedAggregateCoordinator:
         self.now = now or datetime.now(timezone.utc)
         self.acceptance_dir = Path(acceptance_dir) if acceptance_dir else None
         self.capture_full_visible_window = capture_full_visible_window
+        self.reuse_stale_semantics = self._env_bool(
+            "LEAD_RADAR_AGGREGATE_REUSE_STALE_SEMANTICS",
+            default=True,
+        )
         if source_timeout_seconds is None:
             raw_source_timeout = os.environ.get(
                 "LEAD_RADAR_AGGREGATE_SOURCE_TIMEOUT_SECONDS",
@@ -312,6 +316,39 @@ class DedicatedAggregateCoordinator:
                                 store.events_for_article(
                                     source_id,
                                     index.source_article_id,
+                                ),
+                                channel.name,
+                                channel.source_grade,
+                                topic,
+                            )
+                        )
+                        continue
+                    # A prompt-version migration must not turn the daily
+                    # incremental job into a historical MiniMax backfill. If
+                    # the listing/article identity is unchanged and a prior
+                    # semantic attempt exists, retain its grounded events.
+                    # New or changed articles still use the current prompt;
+                    # --refresh remains the explicit escape hatch for a full
+                    # reprocessing run.
+                    if (
+                        self.reuse_stale_semantics
+                        and not force_reprocess
+                        and not store.has_open_dead_letter(
+                            source_id=source_id,
+                            source_article_id=index.source_article_id,
+                        )
+                        and store.article_is_current(index, now=self.now)
+                        and store.has_prior_semantic_attempt(index)
+                    ):
+                        evidence.extend(
+                            self._events_to_evidence(
+                                store.events_for_article(
+                                    source_id,
+                                    index.source_article_id,
+                                    content_hash=store.article_content_hash(
+                                        source_id,
+                                        index.source_article_id,
+                                    ),
                                 ),
                                 channel.name,
                                 channel.source_grade,
@@ -605,6 +642,13 @@ class DedicatedAggregateCoordinator:
             except ValueError:
                 value = 4
         return max(1, min(value, 8))
+
+    @staticmethod
+    def _env_bool(name: str, *, default: bool) -> bool:
+        raw = os.environ.get(name)
+        if raw is None:
+            return default
+        return raw.strip().lower() in {"1", "true", "yes", "on"}
 
     def _process_semantic(
         self,

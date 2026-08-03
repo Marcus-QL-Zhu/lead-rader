@@ -176,6 +176,43 @@ def test_semantic_cache_invalidates_on_model_or_index_change(tmp_path):
         )
 
 
+def test_prior_semantic_attempt_is_reusable_across_prompt_versions(tmp_path):
+    index = _index()
+    with AggregateStateStore(tmp_path / "state.sqlite3") as store:
+        store.store_semantic_audit(
+            {
+                "source_id": index.source_id,
+                "source_article_id": index.source_article_id,
+                "prompt_version": "aggregate-semantic-v23",
+                "model_identity": "minimax/MiniMax-M3",
+                "index_content_hash": index.content_hash,
+                "status": "accepted",
+            }
+        )
+        assert store.has_prior_semantic_attempt(index)
+        store.store_semantic_audit(
+            {
+                "source_id": index.source_id,
+                "source_article_id": index.source_article_id,
+                "prompt_version": "aggregate-semantic-v24",
+                "model_identity": "minimax/MiniMax-M3",
+                "index_content_hash": index.content_hash,
+                "status": "fallback_to_rules",
+            }
+        )
+        # A later failed attempt must not make an otherwise unchanged article
+        # permanently bypass the current prompt migration.
+        with store.connection:
+            store.connection.execute(
+                "DELETE FROM aggregate_semantic_attempts WHERE prompt_version = ?",
+                ("aggregate-semantic-v23",),
+            )
+        assert not store.has_prior_semantic_attempt(index)
+        assert not store.has_prior_semantic_attempt(
+            replace(index, content_hash="changed")
+        )
+
+
 def test_claim_dead_letters_are_independent_and_resolved_by_claim_id(tmp_path):
     index = _index()
     with AggregateStateStore(tmp_path / "state.sqlite3") as store:

@@ -293,6 +293,39 @@ class AggregateStateStore:
             return False
         return True
 
+    def has_prior_semantic_attempt(self, index: SourceArticleIndex) -> bool:
+        """Return whether this unchanged article has any semantic history."""
+
+        rows = self.connection.execute(
+            """
+            SELECT audit_json
+            FROM aggregate_semantic_attempts
+            WHERE source_id = ? AND source_article_id = ?
+            ORDER BY attempted_at DESC
+            """,
+            (index.source_id, index.source_article_id),
+        ).fetchall()
+        for row in rows:
+            try:
+                audit = json.loads(str(row["audit_json"]))
+            except (TypeError, json.JSONDecodeError):
+                continue
+            if (
+                isinstance(audit, dict)
+                and audit.get("index_content_hash") == index.content_hash
+                and audit.get("status")
+                in {
+                    "accepted",
+                    "repaired",
+                    "rules_only",
+                    "no_rule_seed",
+                    "prefiltered",
+                    "no_claims",
+                }
+            ):
+                return True
+        return False
+
     def store_article(self, article: CleanArticle) -> None:
         self.connection.execute(
             """
