@@ -514,6 +514,8 @@ def test_cyzone_api_detail_is_primary_and_api_date_is_authoritative(tmp_path):
     assert article.structured_data["published_at_provenance"] == "api:published_at"
     assert article.structured_data["date_ambiguity"] == "listing=2026-07-29;api=2026-07-30"
     assert body in article.clean_body
+    selector_db = tmp_path / "api-adaptive-selectors.sqlite3"
+    assert not selector_db.exists()
 
 
 def test_cyzone_html_missing_date_uses_listing_date_instead_of_dropping_article(tmp_path):

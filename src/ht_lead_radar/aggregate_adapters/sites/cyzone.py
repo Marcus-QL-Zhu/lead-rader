@@ -9,6 +9,8 @@ import json
 import re
 from urllib.parse import urljoin, urlparse
 
+from scrapling import Selector
+
 from ..adaptive import AdaptiveSelector
 from ..base import (
     AdapterContext,
@@ -392,13 +394,16 @@ class CyzoneAdapter(AggregateAdapter):
         content = str(data.get("content") or "").strip()
         if not content:
             return None
-        adaptive = AdaptiveSelector(
-            content,
-            url=index.canonical_url,
-            storage_path=context.adaptive_db,
-        )
+        # The structured API payload is already the canonical article body.
+        # Do not enable Scrapling's adaptive selector here: adaptive mode
+        # opens a per-URL SQLite selector cache and performs similarity work
+        # that is only needed for HTML-layout drift.  On a large latest-feed
+        # backfill that turns a cheap API parse into an unbounded CPU/FD
+        # hotspot.  The HTML fallback below still uses AdaptiveSelector for
+        # the layout-drift recovery it actually needs.
+        selector = Selector(content, url=index.canonical_url, adaptive=False)
         body = self.clean_text(
-            adaptive.selector.get_all_text(separator=" ", strip=True)
+            selector.get_all_text(separator=" ", strip=True)
         )
         body = self.clean_text(_DETAIL_CTA.sub("", body))
         if len(body) < 80:
