@@ -8,6 +8,7 @@ from datetime import datetime, timezone
 from hashlib import sha256
 import ipaddress
 import json
+import math
 import os
 from pathlib import Path
 import time
@@ -16,6 +17,7 @@ import urllib.parse
 import urllib.request
 
 from ..models import Evidence
+from ..http_runtime import read_response_body
 from .base import AdapterContext
 from .models import (
     AdapterRun,
@@ -144,9 +146,11 @@ class PublicHttpFetcher:
                 str(final_url),
                 expected_host=urllib.parse.urlparse(url).hostname or "",
             )
-            body = response.read(self.max_bytes + 1)
-            if len(body) > self.max_bytes:
-                raise ValueError(f"response exceeds {self.max_bytes} bytes")
+            body = read_response_body(
+                response,
+                max_bytes=self.max_bytes,
+                timeout=self.timeout,
+            )
             self._last_fetch_at = time.monotonic()
             if method == "GET" and url in self.shared_get_urls:
                 self._get_cache[url] = body
@@ -167,6 +171,7 @@ class DedicatedAggregateCoordinator:
         strict_claim_contract: bool | None = None,
         claim_centric_v27: bool | None = None,
         capture_full_visible_window: bool = False,
+        source_timeout_seconds: float | None = None,
     ) -> None:
         self.state_db = Path(state_db)
         self.registry = registry or DedicatedAdapterRegistry.defaults()
@@ -193,6 +198,18 @@ class DedicatedAggregateCoordinator:
         self.now = now or datetime.now(timezone.utc)
         self.acceptance_dir = Path(acceptance_dir) if acceptance_dir else None
         self.capture_full_visible_window = capture_full_visible_window
+        if source_timeout_seconds is None:
+            raw_source_timeout = os.environ.get(
+                "LEAD_RADAR_AGGREGATE_SOURCE_TIMEOUT_SECONDS",
+                "900",
+            )
+            try:
+                source_timeout_seconds = float(raw_source_timeout)
+            except (TypeError, ValueError):
+                source_timeout_seconds = 900.0
+        if not math.isfinite(source_timeout_seconds) or source_timeout_seconds <= 0:
+            raise ValueError("source_timeout_seconds must be positive")
+        self.source_timeout_seconds = source_timeout_seconds
 
     def collect_source(
         self,
@@ -228,6 +245,19 @@ class DedicatedAggregateCoordinator:
         semantic_work: list[_SemanticWork] = []
         status = "ok"
         error = ""
+        source_deadline = time.monotonic() + self.source_timeout_seconds
+
+        current_stage = "listing"
+
+        def check_source_deadline(stage: str) -> None:
+            nonlocal current_stage
+            current_stage = stage
+            if time.monotonic() > source_deadline:
+                raise TimeoutError(
+                    f"source {source_id} exceeded {self.source_timeout_seconds:g}s "
+                    f"watchdog during {stage}"
+                )
+
         with (
             ThreadPoolExecutor(
                 max_workers=self.semantic_workers,
@@ -236,14 +266,17 @@ class DedicatedAggregateCoordinator:
             AggregateStateStore(self.state_db) as store,
         ):
             try:
+                check_source_deadline("listing_fetch")
                 listing_html = self.fetch(channel.url)
+                check_source_deadline("listing_parse")
                 self._write_raw(source_id, "listing", listing_html)
                 indexes = adapter.parse_listing(channel, listing_html, context)
-                store.resolve_dead_letter(
-                    source_id=source_id,
-                    source_article_id="",
-                    stage="listing",
-                )
+                for resolved_stage in ("listing", "source_watchdog"):
+                    store.resolve_dead_letter(
+                        source_id=source_id,
+                        source_article_id="",
+                        stage=resolved_stage,
+                    )
                 listing_count = len(indexes)
                 listed_ids = {item.source_article_id for item in indexes}
                 recovery_indexes = [
@@ -253,6 +286,9 @@ class DedicatedAggregateCoordinator:
                 ]
                 processing_indexes = [*indexes, *recovery_indexes]
                 for index in processing_indexes:
+                    check_source_deadline(
+                        f"detail_fetch:{index.source_article_id}"
+                    )
                     changed = store.upsert_index(index)
                     if (
                         not changed
@@ -420,6 +456,9 @@ class DedicatedAggregateCoordinator:
                 # Persist on the main thread in listing order. SQLite never
                 # crosses worker boundaries, so the audit trail is deterministic.
                 for work in semantic_work:
+                    check_source_deadline(
+                        f"semantic_result:{work.index.source_article_id}"
+                    )
                     index = work.index
                     article = work.article
                     try:
@@ -512,11 +551,17 @@ class DedicatedAggregateCoordinator:
             except Exception as exc:
                 status = "error"
                 error = f"{type(exc).__name__}: {exc}"
+                dead_letter_stage = (
+                    "source_watchdog"
+                    if isinstance(exc, TimeoutError)
+                    and "watchdog" in str(exc).lower()
+                    else current_stage
+                )
                 store.record_dead_letter(
                     source_id=source_id,
                     source_article_id="",
                     canonical_url=channel.url,
-                    stage="listing",
+                    stage=dead_letter_stage,
                     error=error,
                 )
             run = AdapterRun(

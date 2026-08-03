@@ -247,6 +247,19 @@ class CyzoneAdapter(AggregateAdapter):
                 if context.record_decision is not None:
                     context.record_decision(index.source_article_id, decision)
                 return payload
+            except TimeoutError as exc:
+                # Do not immediately issue a second 20-second HTML request
+                # after the structured API has already breached its deadline.
+                # The coordinator records this article as a detail dead letter
+                # and can recover it on a later run without blocking the pack.
+                decision["outcome"] = "api_timeout"
+                decision["api_failure"] = f"{type(exc).__name__}: {exc}"
+                context.decision_state[index.source_article_id] = decision
+                if context.record_decision is not None:
+                    context.record_decision(index.source_article_id, decision)
+                raise DetailFetchError(
+                    f"Cyzone API detail timeout for {index.source_article_id}"
+                ) from exc
             except (OSError, ValueError, TypeError, UnicodeDecodeError) as exc:
                 decision["outcome"] = "html_fallback"
                 decision["api_failure"] = f"{type(exc).__name__}: {exc}"

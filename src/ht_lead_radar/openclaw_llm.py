@@ -12,6 +12,8 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
+from .http_runtime import read_response_body
+
 
 class LLMConfigurationError(ValueError):
     """Raised when OpenClaw's active model cannot be resolved safely."""
@@ -147,6 +149,18 @@ def load_openclaw_llm_config(
 Transport = Callable[[urllib.request.Request, float], Mapping[str, Any]]
 
 
+def _llm_max_response_bytes() -> int:
+    """Return a safe response cap even when the environment is malformed."""
+
+    default = 2_000_000
+    raw = os.environ.get("LEAD_RADAR_LLM_MAX_RESPONSE_BYTES", str(default))
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return default
+    return value if 1 <= value <= 20_000_000 else default
+
+
 def _default_transport(
     request: urllib.request.Request,
     timeout: float,
@@ -155,7 +169,13 @@ def _default_transport(
     for attempt in range(3):
         try:
             with urllib.request.urlopen(request, timeout=timeout) as response:
-                payload = json.loads(response.read().decode("utf-8"))
+                payload = json.loads(
+                    read_response_body(
+                        response,
+                        max_bytes=_llm_max_response_bytes(),
+                        timeout=timeout,
+                    ).decode("utf-8")
+                )
             if not isinstance(payload, Mapping):
                 raise DirectLLMError(
                     "LLM provider response must be a JSON object"

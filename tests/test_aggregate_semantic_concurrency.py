@@ -215,3 +215,24 @@ def test_semantic_worker_setting_is_bounded(monkeypatch, tmp_path):
     )
 
     assert coordinator.semantic_workers == 8
+
+
+def test_source_watchdog_records_error_after_slow_listing(tmp_path):
+    import time
+
+    def slow_fetch(_url):
+        time.sleep(0.02)
+        return b"listing"
+
+    coordinator = DedicatedAggregateCoordinator(
+        state_db=tmp_path / "watchdog.sqlite3",
+        registry=DedicatedAdapterRegistry((_ParallelAdapter(),)),
+        fetch=slow_fetch,
+        now=NOW,
+        source_timeout_seconds=0.001,
+    )
+
+    result = coordinator.collect_source("parallel-test", "hardtech")
+
+    assert result.run.status == "error"
+    assert "watchdog" in result.run.error
