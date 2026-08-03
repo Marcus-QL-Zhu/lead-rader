@@ -152,6 +152,13 @@ def test_jiqizhixin_listing_adapts_only_dom_location_then_revalidates(tmp_path):
         ADAPTER.parse_listing(CHANNEL, _listing(duplicate=True), context)
     with pytest.raises(ListingInvariantError, match="does not close"):
         ADAPTER.parse_listing(CHANNEL, _listing(close_window=False), context)
+    for blocked in (
+        "<html><title>\u673a\u5668\u4e4b\u5fc3\u00b7\u6570\u636e\u670d\u52a1</title></html>",
+        "<html><h1>\u673a\u5668\u4e4b\u5fc3\u6570\u636e\u670d\u52a1\u5df2\u4e0a\u7ebf</h1></html>",
+        "<html><h1>\u8fd8\u5728\u8d39\u52b2\u722c\u6570\u636e</h1></html>",
+    ):
+        with pytest.raises(ListingInvariantError, match="access control"):
+            ADAPTER.parse_listing(CHANNEL, blocked.encode(), context)
 
 
 def test_jiqizhixin_fetches_public_detail_api_and_parses_scoped_body(tmp_path):

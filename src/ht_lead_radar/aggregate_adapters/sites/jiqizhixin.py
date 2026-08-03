@@ -28,7 +28,10 @@ _OVERLAP = timedelta(days=1)
 _ARTICLE_PATH = re.compile(r"/articles/(?P<slug>20\d{2}-\d{2}-\d{2}(?:-\d+)?)")
 _ACCESS_CONTROL = re.compile(
     r"请完成(?:安全|人机)验证|访问过于频繁|请求过于频繁|"
-    r"Access Denied|Forbidden|Just a moment|challenge-platform",
+    r"Access Denied|Forbidden|Just a moment|challenge-platform|"
+    r"\u673a\u5668\u4e4b\u5fc3[\u00b7\u30fb]\u6570\u636e\u670d\u52a1|"
+    r"\u673a\u5668\u4e4b\u5fc3\u6570\u636e\u670d\u52a1\u5df2\u4e0a\u7ebf|"
+    r"\u8fd8\u5728\u8d39\u52b2\u722c\u6570\u636e",
     re.I,
 )
 _BLOCK_TAGS = frozenset(
