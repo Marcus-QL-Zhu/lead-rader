@@ -7,10 +7,33 @@ returned values with source-specific business invariants before accepting them.
 from __future__ import annotations
 
 from dataclasses import dataclass
+from functools import lru_cache
+import os
 from pathlib import Path
 from typing import Any
 
 from scrapling import Selector
+from scrapling.core.storage import SQLiteStorageSystem
+
+
+# Keep the opt-in adaptive fallback's SQLite working set bounded.  Production
+# daily runs disable this fallback in the launcher, so ordinary collection
+# never opens adaptive storage.
+_ADAPTIVE_STORAGE_CACHE_SIZE = 8
+
+
+def _adaptive_enabled() -> bool:
+    value = os.environ.get("LEAD_RADAR_ADAPTIVE_SELECTORS", "1")
+    return value.strip().lower() not in {"0", "false", "no", "off"}
+
+
+class _BoundedSQLiteStorageSystemBase(SQLiteStorageSystem.__wrapped__):
+    pass
+
+
+@lru_cache(maxsize=_ADAPTIVE_STORAGE_CACHE_SIZE, typed=True)
+class _BoundedSQLiteStorageSystem(_BoundedSQLiteStorageSystemBase):
+    pass
 
 
 @dataclass(frozen=True)
@@ -32,13 +55,21 @@ class AdaptiveSelector:
     ) -> None:
         storage_file = Path(storage_path)
         storage_file.parent.mkdir(parents=True, exist_ok=True)
-        self._selector = Selector(
-            html,
-            url=url,
-            encoding=encoding,
-            adaptive=True,
-            storage_args={"storage_file": str(storage_file), "url": url},
-        )
+        self._adaptive_enabled = _adaptive_enabled()
+        selector_kwargs = {
+            "url": url,
+            "encoding": encoding,
+            "adaptive": self._adaptive_enabled,
+        }
+        if self._adaptive_enabled:
+            selector_kwargs.update(
+                storage=_BoundedSQLiteStorageSystem,
+                storage_args={
+                    "storage_file": str(storage_file),
+                    "url": url,
+                },
+            )
+        self._selector = Selector(html, **selector_kwargs)
         self.minimum_similarity = minimum_similarity
 
     @property
@@ -62,6 +93,8 @@ class AdaptiveSelector:
         )
         if self._count_valid(exact, minimum_count, maximum_count):
             return Selection(exact, "exact", None)
+        if not self._adaptive_enabled:
+            return Selection((), "failed", self.minimum_similarity)
         adaptive = tuple(
             self._selector.css(
                 exact_selector,

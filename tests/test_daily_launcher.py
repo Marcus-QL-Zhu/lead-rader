@@ -17,6 +17,7 @@ def test_daily_launcher_pins_supported_server_python_and_checks_version():
     assert '--task-exit-code "$status"' in script
     assert '--fallback-env-file "$JOSINT_DIR/.env"' in script
     assert "data/feishu-notifications.sqlite" in script
+    assert 'LEAD_RADAR_ADAPTIVE_SELECTORS="${LEAD_RADAR_ADAPTIVE_SELECTORS:-0}"' in script
     assert 'exit "$notification_status"' in script
     assert script.index("scripts/openclaw_daily_report.py") < script.index(
         'exit "$status"'
