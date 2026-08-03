@@ -5,6 +5,7 @@ from dataclasses import replace
 from ht_lead_radar.aggregate_adapters.entity_ledger import (
     bind_candidate_subjects,
     build_article_entity_ledger,
+    _iter_english_context_entities,
 )
 from ht_lead_radar.aggregate_adapters.models import CleanArticle, SourceArticleIndex
 
@@ -720,3 +721,11 @@ def test_long_feature_rejects_model_and_example_companies_as_subjects() -> None:
     eligible_names = {entity.canonical_name for entity in ledger.eligible()}
     assert "K3" not in eligible_names
     assert "Anthropic" not in eligible_names
+
+def test_english_context_scanner_is_bounded_on_long_ascii_runs() -> None:
+    assert list(_iter_english_context_entities("OpenAI今天发布新模型")) == [
+        ("OpenAI", 0, 6)
+    ]
+    matches = list(_iter_english_context_entities("A" * 20000 + "发布融资"))
+    assert len(matches) <= 1
+    assert all(end - start <= 80 for _, start, end in matches)

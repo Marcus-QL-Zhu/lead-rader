@@ -127,14 +127,6 @@ _ORGANIZATION_ROLE = re.compile(
     r"[\u4e00-\u9fff][A-Za-z0-9\u4e00-\u9fff·.+*-]{1,31}?)"
     r"(?P<role>会长|董事长|高级副总裁|副总裁|总裁|CEO|首席执行官|创始人|联合创始人)"
 )
-_ENGLISH_CONTEXT_ENTITY = re.compile(
-    r"(?P<name>[A-Za-z][A-Za-z0-9]*(?:[ .&+-][A-Za-z0-9]+){0,4})"
-    r"(?=(?:\s*(?:在[^，,。！？；;\n]{1,24}(?:中|上))?\s*[，,:：]?\s*"
-    r"(?:今天|今日|已|正式|成功|累计|刚刚)?"
-    r"(?:完成|获得|获批|宣布|发布|推出|上线|开源|签署|签订|"
-    r"达成|投建|扩产|投产|量产|交付|发货|启动|中标|增资|收购|并购|"
-    r"融资|募资|投资|刷新)|以[^。！？；;\n]{1,24}刷新))"
-)
 _ENGLISH_GENERIC = re.compile(
     r"^(?:AI|API|GPT|LLM|CEO|VP|APP|Agent|Assistant|Model|Platform|System|"
     r"Lab|Labs|GPU|CPU|HBM|DRAM)$",
@@ -147,6 +139,96 @@ _COMPANY_REFERENCE = re.compile(
     r"(?=\s*(?:官方(?:微信公众号|账号|网站)?|方面|内部|旗下|"
     r"CEO|首席执行官|董事长|高级副总裁|副总裁|总裁|创始人|联合创始人))"
 )
+_ENGLISH_CONTEXT_ACTION = re.compile(
+    r"(?:\u5b8c\u6210|\u83b7\u5f97|\u83b7\u6279|\u5ba3\u5e03|\u53d1\u5e03|\u63a8\u51fa|\u4e0a\u7ebf|\u5f00\u6e90|\u7b7e\u7f72|\u7b7e\u8ba2|"
+    r"\u8fbe\u6210|\u6295\u5efa|\u6269\u4ea7|\u6295\u4ea7|\u91cf\u4ea7|\u4ea4\u4ed8|\u53d1\u8d27|\u542f\u52a8|\u4e2d\u6807|\u589e\u8d44|\u6536\u8d2d|\u5e76\u8d2d|"
+    r"\u878d\u8d44|\u52df\u8d44|\u6295\u8d44|\u5237\u65b0)"
+)
+_ENGLISH_CONTEXT_PREFIX = re.compile(
+    r"(?:\u4eca\u5929|\u4eca\u65e5|\u5df2|\u6b63\u5f0f|\u6210\u529f|\u7d2f\u8ba1|\u521a\u521a)?"
+)
+_ENGLISH_CONTEXT_LEAD = re.compile(
+    r"\s*(?:\u5728[^\uff0c,\u3002\uff01\uff1f\uff1b;\n]{1,24}(?:\u4e2d|\u4e0a))?\s*[\uff0c,:：]?\s*"
+)
+_ENGLISH_CONTEXT_REFRESH = re.compile(
+    r"\u4ee5[^\u3002\uff01\uff1f\uff1b;\n]{1,24}\u5237\u65b0"
+)
+_ASCII_NAME_SEPARATORS = frozenset(" .&+-")
+_ASCII_NAME_MAX_CHARS = 80
+
+
+def _iter_english_context_entities(
+    text: str,
+) -> Iterable[tuple[str, int, int]]:
+    """Yield Latin surfaces followed by a concrete operating action.
+
+    The legacy discovery expression above can backtrack quadratically on long
+    ASCII runs.  This scanner keeps the same bounded, discovery-only intent
+    while making work linear and failing closed on oversized tokens.
+    """
+
+    length = len(text)
+    cursor = 0
+    while cursor < length:
+        character = text[cursor]
+        if not ("A" <= character <= "Z" or "a" <= character <= "z"):
+            cursor += 1
+            continue
+        start = cursor
+        cursor += 1
+        while (
+            cursor < length
+            and cursor - start < _ASCII_NAME_MAX_CHARS
+            and (
+                "A" <= text[cursor] <= "Z"
+                or "a" <= text[cursor] <= "z"
+                or "0" <= text[cursor] <= "9"
+            )
+        ):
+            cursor += 1
+        for _ in range(4):
+            if cursor >= length or text[cursor] not in _ASCII_NAME_SEPARATORS:
+                break
+            segment_start = cursor + 1
+            if segment_start >= length or not (
+                "A" <= text[segment_start] <= "Z"
+                or "a" <= text[segment_start] <= "z"
+                or "0" <= text[segment_start] <= "9"
+            ):
+                break
+            cursor = segment_start + 1
+            while (
+                cursor < length
+                and cursor - start < _ASCII_NAME_MAX_CHARS
+                and (
+                    "A" <= text[cursor] <= "Z"
+                    or "a" <= text[cursor] <= "z"
+                    or "0" <= text[cursor] <= "9"
+                )
+            ):
+                cursor += 1
+        end = cursor
+        if end - start > _ASCII_NAME_MAX_CHARS:
+            cursor = start + 1
+            continue
+        context = text[end : min(length, end + 96)]
+        lead = _ENGLISH_CONTEXT_LEAD.match(context)
+        has_action = False
+        if lead:
+            remainder = context[lead.end() :]
+            prefix = _ENGLISH_CONTEXT_PREFIX.match(remainder)
+            if prefix:
+                has_action = bool(
+                    _ENGLISH_CONTEXT_ACTION.match(remainder[prefix.end() :])
+                )
+        if not has_action:
+            has_action = bool(_ENGLISH_CONTEXT_REFRESH.match(context))
+        if has_action:
+            yield text[start:end], start, end
+        # Preserve the permissive regex's ability to start inside a longer
+        # ASCII token, while ensuring each bounded scan advances.
+        cursor = max(start + 1, cursor)
+
 _INTERNAL_REFERENCE = re.compile(
     r"在(?P<name>[A-Za-z0-9\u4e00-\u9fff·.+*-]{2,16}?)(?=内部)"
 )
@@ -2677,8 +2759,8 @@ def build_article_entity_ledger(
                     records[organization_key]["aliases"].add(compact)
 
     for region, text in (("body", body), ("title", article.index.title)):
-        for match in _ENGLISH_CONTEXT_ENTITY.finditer(text):
-            name = _clean_subject(match.group("name"))
+        for name, name_start, name_end in _iter_english_context_entities(text):
+            name = _clean_subject(name)
             if (
                 _ENGLISH_GENERIC.fullmatch(name)
                 or re.search(r"\d", name)
@@ -2688,8 +2770,8 @@ def build_article_entity_ledger(
             add(
                 name,
                 "english_context",
-                start=match.start("name") if region == "body" else -1,
-                end=match.end("name") if region == "body" else -1,
+                start=name_start if region == "body" else -1,
+                end=name_end if region == "body" else -1,
                 region=region,
             )
 
