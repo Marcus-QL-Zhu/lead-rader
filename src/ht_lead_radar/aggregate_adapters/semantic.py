@@ -4390,6 +4390,33 @@ class MiniMaxSemanticProcessor:
             for candidate in company_alias_candidates(company)
         )
 
+    @staticmethod
+    def _is_auxiliary_subject_prefix(value: str) -> bool:
+        """Match neutral subject prefixes without a backtracking regex."""
+        tokens = (
+            "\u8be5\u516c\u53f8",
+            "\u672c\u516c\u53f8",
+            "\u6b63\u5728",
+            "\u516c\u53f8",
+            "\u6b63\u5f0f",
+            "\u6210\u529f",
+            "\u8ba1\u5212",
+            "\u5df2",
+            "\u5176",
+            "\u5c06",
+            "\u62df",
+            "\u6b63",
+        )
+        position = 0
+        while position < len(value):
+            for token in tokens:
+                if value.startswith(token, position):
+                    position += len(token)
+                    break
+            else:
+                return False
+        return True
+
     @classmethod
     def _company_event_subject_grounded(
         cls,
@@ -4481,11 +4508,6 @@ class MiniMaxSemanticProcessor:
                         event_match = re.search(predicate, next_segment)
                         if event_match:
                             subject_prefix = next_segment[: event_match.start()]
-                            auxiliary = (
-                                r"(?:\u5df2|\u516c\u53f8|\u5176|\u8be5\u516c\u53f8|"
-                                r"\u672c\u516c\u53f8|\u6b63\u5f0f|\u6210\u529f|"
-                                r"\u5c06|\u62df|\u8ba1\u5212|\u6b63|\u6b63\u5728)*"
-                            )
                             same_subject = any(
                                 subject_prefix.startswith(candidate)
                                 for candidate in company_alias_candidates(company)
@@ -4500,7 +4522,7 @@ class MiniMaxSemanticProcessor:
                                 )
                             )
                             if (
-                                re.fullmatch(auxiliary, subject_prefix)
+                                cls._is_auxiliary_subject_prefix(subject_prefix)
                                 or same_subject
                                 or pronominal_subject
                             ):

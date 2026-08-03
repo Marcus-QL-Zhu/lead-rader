@@ -802,3 +802,8 @@ def test_bounded_roundup_history_is_rejected_before_claim_retry() -> None:
     )
 
     assert rejected == failed
+
+
+def test_auxiliary_subject_prefix_scanner_avoids_backtracking() -> None:
+    assert MiniMaxSemanticProcessor._is_auxiliary_subject_prefix("公司" * 2_000)
+    assert not MiniMaxSemanticProcessor._is_auxiliary_subject_prefix("公司" * 2_000 + "X")
