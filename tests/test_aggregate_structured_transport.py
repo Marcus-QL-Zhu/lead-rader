@@ -163,3 +163,24 @@ def test_raw_capture_preserves_two_versions_of_same_request(tmp_path):
         b"version-two",
     }
     assert (target / "listing.html").read_bytes() == b"version-two"
+
+
+def test_public_fetcher_bounds_non_socket_response_read():
+    import time
+
+    class SlowResponse(_Response):
+        def read(self, _limit: int) -> bytes:
+            time.sleep(0.02)
+            return self.body
+
+    def slow_open(_request, *, timeout):
+        del timeout
+        return SlowResponse(b"slow", "https://example.com/slow")
+
+    fetcher = PublicHttpFetcher(
+        urlopen=slow_open,
+        minimum_interval_seconds=0,
+        timeout=0.001,
+    )
+    with pytest.raises(TimeoutError, match="response read exceeded deadline"):
+        fetcher("https://example.com/slow")

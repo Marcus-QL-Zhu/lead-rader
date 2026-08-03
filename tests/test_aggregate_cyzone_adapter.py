@@ -661,3 +661,23 @@ def test_cyzone_api_rejects_future_published_at(tmp_path):
     raw = ADAPTER.fetch_detail(LATEST, index, context)
     with pytest.raises(DetailFetchError, match="future dated"):
         ADAPTER.parse_detail(LATEST, index, raw, context)
+
+
+def test_cyzone_api_timeout_does_not_fallback_to_html(tmp_path):
+    title = "星河芯片完成1亿元A轮融资"
+    index = _index("910001", title, company="星河芯片")
+    decisions = []
+    context = AdapterContext.create(
+        state_db=tmp_path / "api-timeout.sqlite3",
+        fetch=lambda _url: (_ for _ in ()).throw(AssertionError("HTML fallback used")),
+        post_json=lambda _url, _request: (_ for _ in ()).throw(
+            TimeoutError("API deadline")
+        ),
+        record_decision=lambda label, payload: decisions.append((label, payload)),
+        now=NOW,
+    )
+
+    with pytest.raises(DetailFetchError, match="API detail timeout"):
+        ADAPTER.fetch_detail(LATEST, index, context)
+
+    assert decisions[-1][1]["outcome"] == "api_timeout"
