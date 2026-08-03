@@ -80,6 +80,9 @@ class SemanticOutputError(ValueError):
     pass
 
 
+MAX_SEMANTIC_RESPONSE_CHARS = 256_000
+MAX_SEMANTIC_REPAIR_CHARS = 16_000
+
 SYSTEM_PROMPT = (
     "\u4f60\u662f\u805a\u5408\u65b0\u95fb\u4e8b\u5b9e\u62bd"
     "\u53d6\u5668\u3002\u53ea\u6d88\u89e3\u8bed\u4e49\u548c"
@@ -3319,15 +3322,28 @@ class MiniMaxSemanticProcessor:
         *,
         allow_syntax_repair: bool = False,
     ) -> dict[str, Any]:
+        # Provider output should be a small JSON object. Bound the input before
+        # parsing so malformed/verbose replies cannot tie up a worker in regex
+        # backtracking or consume unbounded memory.
+        if len(value) > MAX_SEMANTIC_RESPONSE_CHARS:
+            raise SemanticOutputError(
+                "semantic output exceeds the maximum response size"
+            )
+
         candidate = value.strip()
-        fenced = re.search(
-            r"```(?:json)?\s*(\{.*\})\s*```",
-            candidate,
-            re.S,
-        )
-        if fenced:
-            candidate = fenced.group(1)
-        else:
+        fence_start = candidate.find("```")
+        if fence_start >= 0:
+            content_start = fence_start + 3
+            if candidate[content_start : content_start + 4].lower() == "json":
+                content_start += 4
+            while content_start < len(candidate) and candidate[content_start] in " \t\r\n":
+                content_start += 1
+            fence_end = candidate.find("```", content_start)
+            if fence_end >= 0:
+                fenced = candidate[content_start:fence_end].strip()
+                if fenced.startswith("{") and fenced.endswith("}"):
+                    candidate = fenced
+        if not candidate.startswith("{") or not candidate.endswith("}"):
             start = candidate.find("{")
             end = candidate.rfind("}")
             if start >= 0 and end > start:
@@ -3347,6 +3363,10 @@ class MiniMaxSemanticProcessor:
         except json.JSONDecodeError as error:
             if not allow_syntax_repair:
                 raise SemanticOutputError(f"invalid JSON: {error}") from error
+            if len(candidate) > MAX_SEMANTIC_REPAIR_CHARS:
+                raise SemanticOutputError(
+                    "semantic output exceeds the syntax repair size limit"
+                ) from error
             try:
                 payload = json.loads(repair_json(candidate))
             except (TypeError, ValueError, json.JSONDecodeError) as repair_error:
