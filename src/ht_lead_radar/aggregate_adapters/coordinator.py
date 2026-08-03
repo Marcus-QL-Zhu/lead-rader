@@ -337,7 +337,15 @@ class DedicatedAggregateCoordinator:
                             source_id=source_id,
                             source_article_id=index.source_article_id,
                         )
-                        and store.article_is_current(index, now=self.now)
+                        # Ignore the short freshness/recheck window here. The
+                        # listing content hash is unchanged, and a prior
+                        # successful semantic result means this detail page
+                        # does not belong in today's incremental work set.
+                        and store.article_is_current(
+                            index,
+                            now=self.now,
+                            overlap_hours=0,
+                        )
                         and store.has_prior_semantic_attempt(index)
                     ):
                         evidence.extend(
