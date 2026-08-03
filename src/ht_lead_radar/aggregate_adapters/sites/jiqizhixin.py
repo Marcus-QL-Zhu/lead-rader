@@ -10,7 +10,6 @@ import re
 from urllib.parse import urljoin, urlparse
 from zoneinfo import ZoneInfo
 
-from ..adaptive import AdaptiveSelector
 from ..base import (
     AdapterContext,
     AggregateAdapter,
@@ -20,6 +19,7 @@ from ..base import (
 from ..entities import canonical_company_name, is_company_like
 from ..industry_rules import IndustryRuleConfig, extract_media_events
 from ..models import CleanArticle, SemanticEvent, SourceArticleIndex, SourceChannel
+from scrapling import Selector
 
 
 _CHINA = ZoneInfo("Asia/Shanghai")
@@ -144,23 +144,25 @@ class JiqizhixinAdapter(AggregateAdapter):
         context: AdapterContext,
     ) -> list[SourceArticleIndex]:
         self._reject_access_control(channel.source_id, html, listing=True)
-        adaptive = AdaptiveSelector(
+        # The public listing occasionally becomes a bot/marketing page or a
+        # materially different DOM.  Do not invoke Scrapling's fuzzy
+        # relocation on this endpoint: a large page with a missing selector
+        # can make relocation scan the whole tree and monopolize the single
+        # server CPU.  An exact parse fails closed and lets the coordinator
+        # record a source-level error for the next run.
+        selector = Selector(
             html,
             url=channel.url,
-            storage_path=context.adaptive_db,
+            encoding="utf-8",
+            adaptive=False,
         )
-        selection = adaptive.css(
-            "div.u-block__body.js-u-item.is-active",
-            identifier=f"{channel.source_id}:listing-container",
-            minimum_count=1,
-            maximum_count=1,
-        )
-        if not selection.elements:
+        containers = tuple(selector.css("div.u-block__body.js-u-item.is-active"))
+        if len(containers) != 1:
             raise ListingInvariantError(
                 f"{channel.source_id} listing selector failed closed"
             )
         items = tuple(
-            selection.elements[0].css(
+            containers[0].css(
                 ":scope > article.article-item__container"
             )
         )
@@ -249,7 +251,7 @@ class JiqizhixinAdapter(AggregateAdapter):
                     content_hash=self.stable_hash(
                         "\n".join((canonical_url, title, summary, published_at, author))
                     ),
-                    discovery_method=selection.method,
+                    discovery_method="exact",
                     summary=summary,
                     structured_data=structured,
                 )

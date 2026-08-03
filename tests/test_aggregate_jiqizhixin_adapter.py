@@ -140,13 +140,14 @@ def test_jiqizhixin_audit_mode_captures_full_finite_first_page(tmp_path):
     assert indexes[-1].source_article_id == "2026-08-01-12"
 
 
-def test_jiqizhixin_listing_adapts_only_dom_location_then_revalidates(tmp_path):
+def test_jiqizhixin_listing_fails_closed_on_dom_drift(tmp_path):
     context = _context(tmp_path)
-    ADAPTER.parse_listing(CHANNEL, _listing(), context)
-    moved = ADAPTER.parse_listing(CHANNEL, _listing(drifted=True), context)
-
-    assert moved
-    assert all(item.discovery_method == "adaptive" for item in moved)
+    indexes = ADAPTER.parse_listing(CHANNEL, _listing(), context)
+    assert indexes
+    assert all(item.discovery_method == "exact" for item in indexes)
+    with pytest.raises(ListingInvariantError, match="selector failed closed"):
+        ADAPTER.parse_listing(CHANNEL, _listing(drifted=True), context)
+    assert not (tmp_path / "state-adaptive-selectors.sqlite3").exists()
 
     with pytest.raises(ListingInvariantError, match="duplicate"):
         ADAPTER.parse_listing(CHANNEL, _listing(duplicate=True), context)
