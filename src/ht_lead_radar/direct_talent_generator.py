@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import time
 import uuid
@@ -16,7 +17,10 @@ from .company_demand_v2 import (
     build_single_company_demand_prompt,
     parse_single_company_demand,
 )
-from .openclaw_llm import OpenClawConfiguredLLMRunner
+from .openclaw_llm import (
+    OpenClawConfiguredLLMRunner,
+    load_openclaw_llm_config,
+)
 from .talent_ad_repair import draft_response_issues
 from .talent_pool import (
     DraftBundle,
@@ -48,6 +52,67 @@ class PromptRunner(Protocol):
         session_id: str,
         system_prompt: str = "",
     ) -> str: ...
+
+
+def _bounded_direct_runner() -> OpenClawConfiguredLLMRunner:
+    """Build a bounded runner for the structured daily talent pass."""
+
+    def _bounded_float(
+        name: str,
+        default: float,
+        *,
+        minimum: float,
+        maximum: float,
+    ) -> float:
+        raw = os.environ.get(name, str(default))
+        try:
+            value = float(raw)
+        except (TypeError, ValueError):
+            value = default
+        return value if minimum <= value <= maximum else default
+
+    def _bounded_int(
+        name: str,
+        default: int,
+        *,
+        minimum: int,
+        maximum: int,
+    ) -> int:
+        raw = os.environ.get(name, str(default))
+        try:
+            value = int(raw)
+        except (TypeError, ValueError):
+            value = default
+        return value if minimum <= value <= maximum else default
+
+    config = load_openclaw_llm_config()
+    thinking_mode = os.environ.get(
+        "LEAD_RADAR_TALENT_LLM_THINKING_MODE",
+        "disabled",
+    ).strip().lower()
+    if thinking_mode not in {"disabled", "adaptive"}:
+        thinking_mode = "disabled"
+    if not (
+        config.provider.casefold() == "minimax"
+        and config.model.casefold() == "minimax-m3"
+    ):
+        thinking_mode = None
+    return OpenClawConfiguredLLMRunner(
+        config=config,
+        timeout_seconds=_bounded_float(
+            "LEAD_RADAR_TALENT_LLM_TIMEOUT_SECONDS",
+            90.0,
+            minimum=10.0,
+            maximum=300.0,
+        ),
+        max_completion_tokens=_bounded_int(
+            "LEAD_RADAR_TALENT_LLM_MAX_COMPLETION_TOKENS",
+            8192,
+            minimum=1024,
+            maximum=16384,
+        ),
+        thinking_mode=thinking_mode,
+    )
 
 
 def _json_objects(text: str) -> list[Any]:
@@ -230,7 +295,7 @@ def generate_direct_talent_bundle(
 ) -> DraftBundle:
     manifest = report.get("manifest") or {}
     source_run_id = str(manifest.get("run_id") or "")
-    active_runner = runner or OpenClawConfiguredLLMRunner()
+    active_runner = runner or _bounded_direct_runner()
     runner_config = getattr(active_runner, "config", None)
     generation_provider = str(getattr(runner_config, "provider", "") or "")
     generation_model_name = str(getattr(runner_config, "model", "") or "")

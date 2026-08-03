@@ -12,12 +12,40 @@ from ht_lead_radar.direct_talent_generator import (
     DirectTalentGenerationError,
     JOB_AD_SYSTEM_PROMPT,
     generate_direct_talent_bundle,
+    _bounded_direct_runner,
 )
 from ht_lead_radar.talent_themes import (
     build_talent_themes,
     build_theme_draft_bundle,
 )
 from test_talent_pool import sample_report
+
+
+def test_bounded_direct_runner_uses_structured_daily_limits(monkeypatch):
+    class Config:
+        provider = "minimax"
+        model = "MiniMax-M3"
+
+    captured = {}
+
+    class FakeRunner:
+        def __init__(self, **kwargs):
+            captured.update(kwargs)
+
+    monkeypatch.setattr(
+        "ht_lead_radar.direct_talent_generator.load_openclaw_llm_config",
+        lambda: Config(),
+    )
+    monkeypatch.setattr(
+        "ht_lead_radar.direct_talent_generator.OpenClawConfiguredLLMRunner",
+        FakeRunner,
+    )
+
+    _bounded_direct_runner()
+
+    assert captured["timeout_seconds"] == 90.0
+    assert captured["max_completion_tokens"] == 8192
+    assert captured["thinking_mode"] == "disabled"
 
 
 class SequenceRunner:
