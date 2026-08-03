@@ -139,19 +139,12 @@ _COMPANY_REFERENCE = re.compile(
     r"(?=\s*(?:官方(?:微信公众号|账号|网站)?|方面|内部|旗下|"
     r"CEO|首席执行官|董事长|高级副总裁|副总裁|总裁|创始人|联合创始人))"
 )
-_ENGLISH_CONTEXT_ACTION = re.compile(
+_ENGLISH_CONTEXT_TAIL = re.compile(
+    r"(?:\s*(?:\u5728[^\uff0c,\u3002\uff01\uff1f\uff1b;\n]{1,24}(?:\u4e2d|\u4e0a))?\s*[\uff0c,:：]?\s*"
+    r"(?:\u4eca\u5929|\u4eca\u65e5|\u5df2|\u6b63\u5f0f|\u6210\u529f|\u7d2f\u8ba1|\u521a\u521a)?"
     r"(?:\u5b8c\u6210|\u83b7\u5f97|\u83b7\u6279|\u5ba3\u5e03|\u53d1\u5e03|\u63a8\u51fa|\u4e0a\u7ebf|\u5f00\u6e90|\u7b7e\u7f72|\u7b7e\u8ba2|"
     r"\u8fbe\u6210|\u6295\u5efa|\u6269\u4ea7|\u6295\u4ea7|\u91cf\u4ea7|\u4ea4\u4ed8|\u53d1\u8d27|\u542f\u52a8|\u4e2d\u6807|\u589e\u8d44|\u6536\u8d2d|\u5e76\u8d2d|"
-    r"\u878d\u8d44|\u52df\u8d44|\u6295\u8d44|\u5237\u65b0)"
-)
-_ENGLISH_CONTEXT_PREFIX = re.compile(
-    r"(?:\u4eca\u5929|\u4eca\u65e5|\u5df2|\u6b63\u5f0f|\u6210\u529f|\u7d2f\u8ba1|\u521a\u521a)?"
-)
-_ENGLISH_CONTEXT_LEAD = re.compile(
-    r"\s*(?:\u5728[^\uff0c,\u3002\uff01\uff1f\uff1b;\n]{1,24}(?:\u4e2d|\u4e0a))?\s*[\uff0c,:：]?\s*"
-)
-_ENGLISH_CONTEXT_REFRESH = re.compile(
-    r"\u4ee5[^\u3002\uff01\uff1f\uff1b;\n]{1,24}\u5237\u65b0"
+    r"\u878d\u8d44|\u52df\u8d44|\u6295\u8d44|\u5237\u65b0)|\u4ee5[^\u3002\uff01\uff1f\uff1b;\n]{1,24}\u5237\u65b0)"
 )
 _ASCII_NAME_SEPARATORS = frozenset(" .&+-")
 _ASCII_NAME_MAX_CHARS = 80
@@ -212,18 +205,7 @@ def _iter_english_context_entities(
             cursor = start + 1
             continue
         context = text[end : min(length, end + 96)]
-        lead = _ENGLISH_CONTEXT_LEAD.match(context)
-        has_action = False
-        if lead:
-            remainder = context[lead.end() :]
-            prefix = _ENGLISH_CONTEXT_PREFIX.match(remainder)
-            if prefix:
-                has_action = bool(
-                    _ENGLISH_CONTEXT_ACTION.match(remainder[prefix.end() :])
-                )
-        if not has_action:
-            has_action = bool(_ENGLISH_CONTEXT_REFRESH.match(context))
-        if has_action:
+        if _ENGLISH_CONTEXT_TAIL.match(context):
             yield text[start:end], start, end
         # Preserve the permissive regex's ability to start inside a longer
         # ASCII token, while ensuring each bounded scan advances.

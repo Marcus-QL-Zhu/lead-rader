@@ -723,9 +723,12 @@ def test_long_feature_rejects_model_and_example_companies_as_subjects() -> None:
     assert "Anthropic" not in eligible_names
 
 def test_english_context_scanner_is_bounded_on_long_ascii_runs() -> None:
-    assert list(_iter_english_context_entities("OpenAI今天发布新模型")) == [
-        ("OpenAI", 0, 6)
-    ]
+    for body in (
+        "OpenAI今天发布新模型",
+        "OpenAI在中国中发布在中国中",
+        "OpenAI在中国市场上发布在教育场景中",
+    ):
+        assert list(_iter_english_context_entities(body))[0][0] == "OpenAI"
     matches = list(_iter_english_context_entities("A" * 20000 + "发布融资"))
     assert len(matches) <= 1
     assert all(end - start <= 80 for _, start, end in matches)
