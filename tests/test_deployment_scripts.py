@@ -39,7 +39,6 @@ def test_weekly_backup_uses_absolute_app_paths_for_every_project_database():
         "fixed-sources.sqlite",
         "facts.sqlite",
         "runtime.sqlite",
-        "relationships.sqlite",
         "search-budget.sqlite",
         "feishu-projection.sqlite",
         "audit.sqlite",
@@ -57,6 +56,9 @@ def test_weekly_backup_uses_absolute_app_paths_for_every_project_database():
     assert '--git-sha "$GIT_SHA"' in script
     assert 'DATA_DIR=$(readlink -f -- "$APP_DIR/data")' in script
     assert '--discover-data-dir "$DATA_DIR"' in script
+    # Deep-research state is lazy: discovery captures it when present, while an
+    # installation that has only run the daily workflow may omit it.
+    assert '"$APP_DIR/data/relationships.sqlite"' not in script
 
 
 def test_exact_sha_release_scripts_are_auditable_and_never_embed_credentials():
@@ -72,6 +74,12 @@ def test_exact_sha_release_scripts_are_auditable_and_never_embed_credentials():
     bootstrap = (
         PROJECT_ROOT / "deployment" / "bootstrap_legacy_exact_sha_release.sh"
     ).read_text(encoding="utf-8")
+
+    for script in (deploy, rollback, bootstrap):
+        assert '--discover-data-dir "$RUNTIME_DIR/data"' in script or (
+            '--discover-data-dir "$LIVE_PATH/data"' in script
+        )
+        assert "relationships.sqlite" not in script
 
     assert 'CANONICAL_REPO="https://github.com/Marcus-QL-Zhu/lead-rader.git"' in deploy
     assert 'fetch --depth=1 "$CANONICAL_REPO" "$SHA"' in deploy

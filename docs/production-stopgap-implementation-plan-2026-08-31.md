@@ -86,11 +86,13 @@ Checkpoint evidence:
    for GitHub Actions on the exact resulting SHA.
 4. Deploy only that exact green SHA with the Phase 1 deployment mechanism.
 5. Before activation, require the deploy command to create and independently
-   verify a private canonical backup manifest. Confirm all ten required SQLite
-   databases, any additional database discovered under `data/`, and the three
-   production source/config manifests are present. Missing production inputs,
-   hash mismatch, failed SQLite integrity, or failed temporary restore blocks
-   activation. The deploy and rollback scripts expose no backup bypass.
+   verify a private canonical backup manifest. Confirm all nine daily-workflow
+   SQLite databases, any additional database discovered under `data/`, and the
+   three production source/config manifests are present. The lazily created
+   `relationships.sqlite` may be absent, but must be discovered and backed up
+   whenever present. Missing required production inputs, hash mismatch, failed
+   SQLite integrity, or failed temporary restore blocks activation. The deploy
+   and rollback scripts expose no backup bypass.
    `--nonproduction-allow-missing` exists only on the standalone backup CLI for
    isolated tests and must never appear in a production command.
    The deploy command runs this gate automatically. Operators can independently

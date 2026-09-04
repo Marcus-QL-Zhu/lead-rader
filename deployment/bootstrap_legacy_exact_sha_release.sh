@@ -125,7 +125,6 @@ if [ ! -e "$ARCHIVE_ROOT" ]; then mkdir -- "$ARCHIVE_ROOT"; fi
     "$LIVE_PATH/data/fixed-sources.sqlite" \
     "$LIVE_PATH/data/facts.sqlite" \
     "$LIVE_PATH/data/runtime.sqlite" \
-    "$LIVE_PATH/data/relationships.sqlite" \
     "$LIVE_PATH/data/search-budget.sqlite" \
     "$LIVE_PATH/data/feishu-projection.sqlite" \
     "$LIVE_PATH/data/audit.sqlite" \

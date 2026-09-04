@@ -35,7 +35,6 @@ PRODUCTION_MATERIAL_DATABASES = (
     "data/fixed-sources.sqlite",
     "data/facts.sqlite",
     "data/runtime.sqlite",
-    "data/relationships.sqlite",
     "data/search-budget.sqlite",
     "data/feishu-projection.sqlite",
     "data/audit.sqlite",
@@ -43,6 +42,10 @@ PRODUCTION_MATERIAL_DATABASES = (
     "data/talent-pool.sqlite",
     "data/feishu-notifications.sqlite",
 )
+# Deep-research state is created lazily and is therefore legitimately absent
+# on an installation that has only run the daily workflow.  Discovery still
+# includes it (and every other SQLite file) whenever it exists.
+PRODUCTION_OPTIONAL_DATABASES = ("data/relationships.sqlite",)
 PRODUCTION_SOURCE_MANIFESTS = (
     "config/fixed-sources.json",
     "config/source-packs.json",

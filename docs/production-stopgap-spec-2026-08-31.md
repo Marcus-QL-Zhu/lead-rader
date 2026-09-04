@@ -78,11 +78,13 @@ from `feature/multimechanism-episode-redesign`.
   state, archives the remaining legacy source tree for recovery, and restores
   the legacy layout and selector metadata on every pre-commit failure/signal.
 - Every production activation is gated by a fresh verified backup set. The
-  default required set contains all ten operational SQLite databases (including
-  `talent-pool.sqlite` and `feishu-notifications.sqlite`), every additional
-  database discovered directly under `data/`, and the fixed-source,
-  source-pack, and OpenClaw cron configuration manifests. Missing required
-  inputs fail closed. Only isolated tests may use the explicitly named
+  default required set contains the nine daily-workflow SQLite databases
+  (including `talent-pool.sqlite` and `feishu-notifications.sqlite`). The
+  deep-research-only `relationships.sqlite` is created lazily and may be absent;
+  when it exists, direct `data/` discovery includes it in the verified backup,
+  together with every other additional database. The fixed-source, source-pack,
+  and OpenClaw cron configuration manifests are always required. Missing
+  required inputs fail closed. Only isolated tests may use the explicitly named
   non-production bypass.
 - A backup set is private (`0700` directories and `0600` files) and includes a
   canonical hash manifest recording the source and backup paths, byte sizes,

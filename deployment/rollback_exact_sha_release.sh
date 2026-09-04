@@ -119,7 +119,6 @@ if [ "$CURRENT" = "$TARGET" ]; then echo "already selected $SHA"; exit 0; fi
     "$RUNTIME_DIR/data/fixed-sources.sqlite" \
     "$RUNTIME_DIR/data/facts.sqlite" \
     "$RUNTIME_DIR/data/runtime.sqlite" \
-    "$RUNTIME_DIR/data/relationships.sqlite" \
     "$RUNTIME_DIR/data/search-budget.sqlite" \
     "$RUNTIME_DIR/data/feishu-projection.sqlite" \
     "$RUNTIME_DIR/data/audit.sqlite" \

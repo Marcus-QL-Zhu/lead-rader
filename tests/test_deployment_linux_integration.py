@@ -482,10 +482,23 @@ def test_successful_rollback_points_to_release_just_left(tmp_path):
         releases / first_sha / "config" / name
         for name in ("fixed-sources.json", "source-packs.json", "openclaw-report-cron.json")
     }
+    assert any(
+        Path(item["source_path"]).name == "relationships.sqlite"
+        for item in second_backup["items"]
+        if item["kind"] == "sqlite"
+    )
     before_rollback_backups = set((runtime / "backups").glob("*/manifest.json"))
     rolled_back = _run(_rollback_command(first_sha, releases=releases, live=live, runtime=runtime, env_file=env_file, josint_db=database, python=python_wrapper), env=environment, check=False)
     assert rolled_back.returncode == 0, rolled_back.stderr
-    assert len(set((runtime / "backups").glob("*/manifest.json"))) == len(before_rollback_backups) + 1
+    after_rollback_backups = set((runtime / "backups").glob("*/manifest.json"))
+    assert len(after_rollback_backups) == len(before_rollback_backups) + 1
+    rollback_manifest_path = next(iter(after_rollback_backups - before_rollback_backups))
+    rollback_manifest = json.loads(rollback_manifest_path.read_text(encoding="utf-8"))
+    assert any(
+        Path(item["source_path"]).name == "relationships.sqlite"
+        for item in rollback_manifest["items"]
+        if item["kind"] == "sqlite"
+    )
     assert live.resolve() == (releases / first_sha).resolve()
     assert (runtime / ".previous_release_target").read_text(encoding="utf-8") == f"{releases / second_sha}\n"
     pointer_before = (runtime / ".previous_release_target").read_bytes()
@@ -847,6 +860,14 @@ def test_bootstrap_migrates_legacy_state_and_retains_verified_archive(tmp_path):
     assert not (archives[0] / "data").exists()
     backup_manifests = list((runtime / "backups").glob("*/manifest.json"))
     assert len(backup_manifests) >= 2
+    assert all(
+        any(
+            Path(item["source_path"]).name == "relationships.sqlite"
+            for item in json.loads(path.read_text(encoding="utf-8"))["items"]
+            if item["kind"] == "sqlite"
+        )
+        for path in backup_manifests
+    )
     assert any(
         any(
             str(item["source_path"]).startswith(str(archives[0] / "config"))

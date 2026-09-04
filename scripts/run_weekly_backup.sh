@@ -33,7 +33,6 @@ DATA_DIR=$(readlink -f -- "$APP_DIR/data")
   "$APP_DIR/data/fixed-sources.sqlite" \
   "$APP_DIR/data/facts.sqlite" \
   "$APP_DIR/data/runtime.sqlite" \
-  "$APP_DIR/data/relationships.sqlite" \
   "$APP_DIR/data/search-budget.sqlite" \
   "$APP_DIR/data/feishu-projection.sqlite" \
   "$APP_DIR/data/audit.sqlite" \
