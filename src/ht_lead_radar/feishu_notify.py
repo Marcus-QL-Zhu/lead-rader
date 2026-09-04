@@ -6,6 +6,7 @@ import json
 import os
 import sqlite3
 import sys
+from time import monotonic
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
@@ -13,6 +14,13 @@ from datetime import date
 from pathlib import Path
 from typing import Any, Mapping
 from urllib.parse import urlencode
+
+from .http_runtime import call_with_wallclock, read_response_body
+from .sanitization import safe_error_class
+
+
+FEISHU_HTTP_WALLCLOCK_SECONDS = 30.0
+FEISHU_HTTP_MAX_BODY_BYTES = 1_048_576
 
 
 @dataclass(frozen=True)
@@ -37,11 +45,39 @@ class FeishuMessageClient:
             headers=headers,
             method="POST",
         )
+        deadline = monotonic() + FEISHU_HTTP_WALLCLOCK_SECONDS
+
+        def remaining() -> float:
+            value = deadline - monotonic()
+            if value <= 0:
+                raise TimeoutError("Feishu HTTP request exceeded wall-clock deadline")
+            return value
+
+        response: Any | None = None
         try:
-            with urllib.request.urlopen(request, timeout=30) as response:
-                result = json.loads(response.read().decode("utf-8"))
+            response = call_with_wallclock(
+                urllib.request.urlopen,
+                remaining(),
+                request,
+                timeout=remaining(),
+                timeout_message="Feishu HTTP connect exceeded wall-clock deadline",
+                worker_name="feishu-http-connect",
+            )
+            raw_body = read_response_body(
+                response,
+                max_bytes=FEISHU_HTTP_MAX_BODY_BYTES,
+                timeout=remaining(),
+            )
+            if monotonic() >= deadline:
+                raise TimeoutError("Feishu HTTP request exceeded wall-clock deadline")
+            result = json.loads(raw_body.decode("utf-8"))
         except urllib.error.HTTPError as error:
-            raw_body = error.read().decode("utf-8", errors="replace")
+            response = error
+            raw_body = read_response_body(
+                error,
+                max_bytes=FEISHU_HTTP_MAX_BODY_BYTES,
+                timeout=remaining(),
+            ).decode("utf-8", errors="replace")
             try:
                 body = json.loads(raw_body)
             except json.JSONDecodeError:
@@ -58,6 +94,23 @@ class FeishuMessageClient:
             raise RuntimeError(
                 f"Feishu HTTP {error.code} error {code}: {message}{suffix}"
             ) from error
+        finally:
+            close = getattr(response, "close", None)
+            if callable(close):
+                try:
+                    call_with_wallclock(
+                        close,
+                        remaining(),
+                        timeout_message=(
+                            "Feishu HTTP response close exceeded wall-clock deadline"
+                        ),
+                        worker_name="feishu-http-close",
+                    )
+                except (OSError, TimeoutError):
+                    # The response body result or primary transport error is
+                    # authoritative. Closing must never extend the request's
+                    # single wall-clock budget.
+                    pass
         if result.get("code", 0) != 0:
             raise RuntimeError(
                 f"Feishu API error {result.get('code')}: {result.get('msg')}"
@@ -547,7 +600,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--run-date", default=date.today().isoformat())
     parser.add_argument("--report-dir", default="reports-daily")
     parser.add_argument("--state-db", default="data/feishu-notifications.sqlite")
-    parser.add_argument("--env-file", required=True)
+    parser.add_argument(
+        "--env-file",
+        help="optional local dotenv; production injects a protected environment",
+    )
     parser.add_argument("--fallback-env-file")
     parser.add_argument("--talent-state-db", default="data/talent-pool.sqlite")
     parser.add_argument(
@@ -555,6 +611,18 @@ def build_parser() -> argparse.ArgumentParser:
         default="reports-daily/talent-pool",
     )
     parser.add_argument("--talent-draft-exit-code", type=int, default=0)
+    parser.add_argument(
+        "--record-fallback-failure",
+        metavar="ERROR_CLASS",
+        help="record a watchdog-killed fallback in the shared delivery ledger",
+    )
+    parser.add_argument(
+        "--talent-completion-ready",
+        type=int,
+        choices=(0, 1),
+        default=0,
+        help="whether this invocation has a current persisted completion snapshot",
+    )
     parser.add_argument("--force", action="store_true")
     return parser
 
@@ -569,9 +637,6 @@ def main(
         env = load_env_files(args.env_file, args.fallback_env_file)
         app_id = str(env.get("FEISHU_APP_ID") or "").strip()
         app_secret = str(env.get("FEISHU_APP_SECRET") or "").strip()
-        if not app_id or not app_secret:
-            raise ValueError("missing FEISHU_APP_ID or FEISHU_APP_SECRET")
-        recipient = resolve_recipient(env)
         report_path, report = find_report(
             args.report_dir,
             run_date=args.run_date,
@@ -586,13 +651,22 @@ def main(
         from .talent_pool_store import TalentPoolStore
 
         talent_store = TalentPoolStore(args.talent_state_db)
-        if args.talent_draft_exit_code not in {0, 72}:
+        if args.talent_draft_exit_code not in {0, 71, 72}:
             talent_bundle = None
         elif report and source_run_id:
             talent_bundle = talent_store.current_bundle(
                 args.run_date,
                 args.direction,
                 source_run_id=source_run_id,
+            )
+        elif args.talent_completion_ready:
+            # Analysis watchdogs intentionally have no report, but they do
+            # persist a current failure snapshot. Direct Feishu fallback must
+            # acknowledge that exact snapshot in the shared delivery ledger so
+            # OpenClaw reconciliation and cooldown observe the same truth.
+            talent_bundle = talent_store.current_bundle(
+                args.run_date,
+                args.direction,
             )
         else:
             talent_bundle = None
@@ -610,6 +684,31 @@ def main(
         talent_snapshot_id = str(
             (talent_bundle or {}).get("_snapshot_id") or ""
         ).strip()
+        if talent_snapshot_id and any(
+            str(item.get("status") or "") == "delivered"
+            for item in talent_store.delivery_records(talent_snapshot_id)
+        ):
+            print(
+                "Daily completion already delivered through the shared ledger; "
+                "skipping direct Feishu fallback."
+            )
+            return 0
+        if args.record_fallback_failure:
+            if not talent_snapshot_id:
+                raise ValueError(
+                    "cannot record fallback failure without a current completion snapshot"
+                )
+            talent_store.record_delivery(
+                talent_snapshot_id,
+                channel="feishu_fallback",
+                status="failed",
+                error=str(args.record_fallback_failure),
+            )
+            print("Feishu fallback failure recorded in the shared delivery ledger.")
+            return 0
+        if not app_id or not app_secret:
+            raise ValueError("missing FEISHU_APP_ID or FEISHU_APP_SECRET")
+        recipient = resolve_recipient(env)
         if args.talent_draft_exit_code != 0 and report:
             exit_detail = f"退出码 {args.talent_draft_exit_code}"
             talent_generation_error = "; ".join(
@@ -658,10 +757,30 @@ def main(
             print(f"Feishu daily summary sent ({sent_count} message(s)).")
         else:
             print("Feishu daily summary already sent; skipping duplicate.")
+        if talent_snapshot_id:
+            # Both direct Feishu fallback and the OpenClaw hook update the
+            # same delivery ledger, which is the sole cooldown authority.
+            talent_store.record_delivery(
+                talent_snapshot_id,
+                channel="feishu_fallback",
+                status="delivered",
+            )
         return 0
     except Exception as error:
+        if "talent_store" in locals() and locals().get("talent_snapshot_id"):
+            try:
+                talent_store.record_delivery(
+                    talent_snapshot_id,
+                    channel="feishu_fallback",
+                    status="failed",
+                    error=error,
+                )
+            except Exception:
+                # The class-only stderr below remains safe even when the
+                # notification ledger itself is unavailable.
+                pass
         print(
-            f"Feishu daily summary failed: {type(error).__name__}: {error}",
+            f"Feishu daily summary failed: {safe_error_class(error)}",
             file=sys.stderr,
         )
         return 70

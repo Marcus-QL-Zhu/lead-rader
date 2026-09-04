@@ -2,7 +2,43 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import sys
 from pathlib import Path
+from .josint_snapshot import readonly_sqlite_snapshot
+
+
+class _SnapshotConnection:
+    def __init__(self, db_path: str | Path):
+        self._snapshot = readonly_sqlite_snapshot(db_path)
+        path = self._snapshot.__enter__()
+        try:
+            self._connection = sqlite3.connect(f"{path.as_uri()}?mode=ro", uri=True)
+            self._connection.execute("PRAGMA query_only=ON")
+            self._connection.row_factory = sqlite3.Row
+        except BaseException:
+            self._snapshot.__exit__(*sys.exc_info())
+            raise
+
+    def __getattr__(self, name: str):
+        return getattr(self._connection, name)
+
+    def close(self) -> None:
+        if getattr(self, "_connection", None) is not None:
+            self._connection.close()
+            self._connection = None
+            self._snapshot.__exit__(None, None, None)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc, tb):
+        self.close()
+
+
+def open_readonly_josint(db_path: str | Path) -> _SnapshotConnection:
+    """Open JOSINT without create/write privileges and enforce query-only SQL."""
+
+    return _SnapshotConnection(db_path)
 
 
 def read_canonical_evidence(
@@ -12,9 +48,7 @@ def read_canonical_evidence(
     direction: str,
 ) -> list[dict] | None:
     """Read JOSINT v2 canonical targets; return None for a legacy-only database."""
-    connection = sqlite3.connect(Path(db_path))
-    connection.row_factory = sqlite3.Row
-    try:
+    with open_readonly_josint(db_path) as connection:
         exists = connection.execute(
             "SELECT 1 FROM sqlite_master WHERE type='table' AND name='canonical_jobs'"
         ).fetchone()
@@ -39,8 +73,6 @@ def read_canonical_evidence(
             ORDER BY last_seen_at DESC, title
             """
         ).fetchall()
-    finally:
-        connection.close()
 
     output: list[dict] = []
     seen: set[str] = set()

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from datetime import datetime, timezone
 import json
 from pathlib import Path
@@ -12,6 +12,11 @@ from typing import Any
 import unicodedata
 
 from .models import AdapterRun, CleanArticle, SemanticEvent, SourceArticleIndex
+from .diagnostics import redact_diagnostic, sanitize_semantic_audit
+from ..sanitization import sanitize_tree, sanitize_url
+
+
+_PERSISTENCE_SANITIZER_VERSION = "4"
 
 
 _COMPANY_PUNCTUATION = re.compile(
@@ -155,19 +160,174 @@ class AggregateStateStore:
             ON aggregate_semantic_events(source_id, source_article_id);
             CREATE INDEX IF NOT EXISTS idx_aggregate_dead_letters_open
             ON aggregate_dead_letters(source_id, resolved_at);
+            CREATE TABLE IF NOT EXISTS aggregate_metadata (
+                key TEXT PRIMARY KEY,
+                value TEXT NOT NULL
+            );
             """
         )
+        # Purge legacy raw model responses and recursively sanitize old audit
+        # rows once. Raw responses are not required for production operations.
+        sanitizer = self.connection.execute(
+            "SELECT value FROM aggregate_metadata WHERE key='audit_sanitizer_version'"
+        ).fetchone()
+        if not sanitizer or str(sanitizer["value"]) != _PERSISTENCE_SANITIZER_VERSION:
+            rows = self.connection.execute(
+                "SELECT rowid, validation_error, audit_json "
+                "FROM aggregate_semantic_attempts"
+            ).fetchall()
+            for row in rows:
+                try:
+                    audit = json.loads(str(row["audit_json"]))
+                except (TypeError, json.JSONDecodeError):
+                    audit = {}
+                safe_audit = sanitize_semantic_audit(
+                    audit if isinstance(audit, dict) else {}
+                )
+                self.connection.execute(
+                    """
+                    UPDATE aggregate_semantic_attempts
+                    SET validation_error=?, first_response='', repair_response='', audit_json=?
+                    WHERE rowid=?
+                    """,
+                    (
+                        redact_diagnostic(
+                            row["validation_error"]
+                            or (audit.get("error") if isinstance(audit, dict) else "")
+                        ),
+                        json.dumps(safe_audit, ensure_ascii=False, sort_keys=True),
+                        int(row["rowid"]),
+                    ),
+                )
+            dead_letters = self.connection.execute(
+                "SELECT id, canonical_url, error FROM aggregate_dead_letters"
+            ).fetchall()
+            for row in dead_letters:
+                self.connection.execute(
+                    "UPDATE aggregate_dead_letters SET canonical_url=?, error=? WHERE id=?",
+                    (
+                        sanitize_url(row["canonical_url"], limit=2000),
+                        redact_diagnostic(row["error"], limit=2000),
+                        int(row["id"]),
+                    ),
+                )
+            runs = self.connection.execute(
+                "SELECT id, run_json FROM aggregate_runs"
+            ).fetchall()
+            for row in runs:
+                try:
+                    run_payload = json.loads(str(row["run_json"]))
+                except (TypeError, json.JSONDecodeError):
+                    run_payload = {}
+                run_payload = sanitize_tree(run_payload, redact_pii=True)
+                self.connection.execute(
+                    "UPDATE aggregate_runs SET run_json=? WHERE id=?",
+                    (
+                        json.dumps(run_payload, ensure_ascii=False, sort_keys=True),
+                        int(row["id"]),
+                    ),
+                )
+            for row in self.connection.execute(
+                "SELECT rowid, evidence_quote FROM aggregate_company_aliases"
+            ).fetchall():
+                self.connection.execute(
+                    "UPDATE aggregate_company_aliases SET evidence_quote=? "
+                    "WHERE rowid=?",
+                    (
+                        sanitize_tree(row["evidence_quote"], redact_pii=True),
+                        int(row["rowid"]),
+                    ),
+                )
+            self.connection.execute(
+                """
+                INSERT INTO aggregate_metadata (key, value)
+                VALUES ('audit_sanitizer_version', ?)
+                ON CONFLICT(key) DO UPDATE SET value=excluded.value
+                """,
+                (_PERSISTENCE_SANITIZER_VERSION,),
+            )
+            self._sanitize_legacy_urls_and_json()
         self.connection.commit()
 
+    @staticmethod
+    def _safe_json(value: object, *, default: Any) -> str:
+        try:
+            parsed = json.loads(str(value))
+        except (TypeError, ValueError, json.JSONDecodeError):
+            parsed = default
+        return json.dumps(
+            sanitize_tree(parsed, redact_pii=True),
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+
+    def _sanitize_legacy_urls_and_json(self) -> None:
+        """Clean URL credentials and nested diagnostics in pre-v3 rows."""
+
+        for row in self.connection.execute(
+            "SELECT rowid, source_id, canonical_url, index_json "
+            "FROM aggregate_article_index"
+        ).fetchall():
+            payload = self._safe_json(row["index_json"], default={})
+            safe_url = sanitize_url(row["canonical_url"], limit=4000)
+            conflict = self.connection.execute(
+                "SELECT 1 FROM aggregate_article_index "
+                "WHERE source_id=? AND canonical_url=? AND rowid<>? LIMIT 1",
+                (row["source_id"], safe_url, int(row["rowid"])),
+            ).fetchone()
+            if conflict:
+                separator = "&" if "?" in safe_url else "?"
+                safe_url = (
+                    f"{safe_url}{separator}dedupe_article={int(row['rowid'])}"
+                )
+            try:
+                payload_value = json.loads(payload)
+            except json.JSONDecodeError:
+                payload_value = {}
+            if isinstance(payload_value, dict):
+                payload_value["canonical_url"] = safe_url
+                payload = json.dumps(
+                    payload_value,
+                    ensure_ascii=False,
+                    sort_keys=True,
+                )
+            self.connection.execute(
+                "UPDATE aggregate_article_index "
+                "SET canonical_url=?, index_json=? WHERE rowid=?",
+                (
+                    safe_url,
+                    payload,
+                    int(row["rowid"]),
+                ),
+            )
+        for table, json_column in (
+            ("aggregate_clean_articles", "article_json"),
+            ("aggregate_semantic_events", "event_json"),
+        ):
+            rows = self.connection.execute(
+                f"SELECT rowid, {json_column} FROM {table}"
+            ).fetchall()
+            for row in rows:
+                self.connection.execute(
+                    f"UPDATE {table} SET {json_column}=? WHERE rowid=?",
+                    (self._safe_json(row[json_column], default={}), int(row["rowid"])),
+                )
+
     def upsert_index(self, index: SourceArticleIndex) -> bool:
+        safe_index = replace(
+            index,
+            canonical_url=sanitize_url(index.canonical_url, limit=4000),
+            listing_page=sanitize_url(index.listing_page, limit=4000),
+            structured_data=sanitize_tree(index.structured_data, redact_pii=True),
+        )
         row = self.connection.execute(
             """
             SELECT content_hash FROM aggregate_article_index
             WHERE source_id = ? AND source_article_id = ?
             """,
-            (index.source_id, index.source_article_id),
+            (safe_index.source_id, safe_index.source_article_id),
         ).fetchone()
-        changed = row is None or str(row["content_hash"]) != index.content_hash
+        changed = row is None or str(row["content_hash"]) != safe_index.content_hash
         self.connection.execute(
             """
             INSERT INTO aggregate_article_index (
@@ -182,14 +342,17 @@ class AggregateStateStore:
                 index_json = excluded.index_json
             """,
             (
-                index.source_id,
-                index.source_article_id,
-                index.canonical_url,
-                index.published_at,
-                index.discovered_at,
+                safe_index.source_id,
+                safe_index.source_article_id,
+                safe_index.canonical_url,
+                safe_index.published_at,
+                safe_index.discovered_at,
                 _now(),
-                index.content_hash,
-                json.dumps(index.to_dict(), ensure_ascii=False),
+                safe_index.content_hash,
+                json.dumps(
+                    sanitize_tree(safe_index.to_dict(), redact_pii=True),
+                    ensure_ascii=False,
+                ),
             ),
         )
         self.connection.commit()
@@ -327,6 +490,25 @@ class AggregateStateStore:
         return False
 
     def store_article(self, article: CleanArticle) -> None:
+        safe_index = replace(
+            article.index,
+            canonical_url=sanitize_url(article.index.canonical_url, limit=4000),
+            listing_page=sanitize_url(article.index.listing_page, limit=4000),
+            structured_data=sanitize_tree(
+                article.index.structured_data,
+                redact_pii=True,
+            ),
+        )
+        safe_article = replace(
+            article,
+            index=safe_index,
+            structured_data=sanitize_tree(article.structured_data, redact_pii=True),
+            evidence_locators=sanitize_tree(
+                article.evidence_locators,
+                redact_pii=True,
+            ),
+            failure_reason=redact_diagnostic(article.failure_reason),
+        )
         self.connection.execute(
             """
             INSERT INTO aggregate_clean_articles (
@@ -338,11 +520,14 @@ class AggregateStateStore:
                 article_json = excluded.article_json
             """,
             (
-                article.index.source_id,
-                article.index.source_article_id,
-                article.content_hash,
+                safe_article.index.source_id,
+                safe_article.index.source_article_id,
+                safe_article.content_hash,
                 _now(),
-                json.dumps(article.to_dict(), ensure_ascii=False),
+                json.dumps(
+                    sanitize_tree(safe_article.to_dict(), redact_pii=True),
+                    ensure_ascii=False,
+                ),
             ),
         )
         self.connection.commit()
@@ -368,13 +553,24 @@ class AggregateStateStore:
             (source_id, source_article_id),
         )
         for event in events:
+            safe_event = replace(
+                event,
+                canonical_url=sanitize_url(event.canonical_url, limit=4000),
+                evidence_quotes=tuple(
+                    sanitize_tree(item, redact_pii=True)
+                    for item in event.evidence_quotes
+                ),
+                ambiguities=tuple(
+                    redact_diagnostic(item) for item in event.ambiguities
+                ),
+            )
             event_key = "|".join(
                 (
-                    event.canonical_company,
-                    event.event_type,
-                    event.event_date,
-                    event.funding_round,
-                    event.event_status,
+                    safe_event.canonical_company,
+                    safe_event.event_type,
+                    safe_event.event_date,
+                    safe_event.funding_round,
+                    safe_event.event_status,
                 )
             )
             self.connection.execute(
@@ -391,23 +587,26 @@ class AggregateStateStore:
                     event_json = excluded.event_json
                 """,
                 (
-                    event.source_id,
-                    event.source_article_id,
+                    safe_event.source_id,
+                    safe_event.source_article_id,
                     event_key,
-                    event.processor,
-                    event.prompt_version,
-                    event.content_hash,
+                    safe_event.processor,
+                    safe_event.prompt_version,
+                    safe_event.content_hash,
                     _now(),
-                    json.dumps(event.to_dict(), ensure_ascii=False),
+                    json.dumps(
+                        sanitize_tree(safe_event.to_dict(), redact_pii=True),
+                        ensure_ascii=False,
+                    ),
                 ),
             )
-            canonical_key = normalize_company_alias(event.canonical_company)
+            canonical_key = normalize_company_alias(safe_event.canonical_company)
             if canonical_key:
                 aliases = tuple(
                     dict.fromkeys(
                         (
-                            event.canonical_company,
-                            *event.company_mentions,
+                            safe_event.canonical_company,
+                            *safe_event.company_mentions,
                         )
                     )
                 )
@@ -429,8 +628,10 @@ class AggregateStateStore:
                             alias_key,
                             alias,
                             canonical_key,
-                            event.canonical_company,
-                            event.evidence_quotes[0] if event.evidence_quotes else "",
+                            safe_event.canonical_company,
+                            safe_event.evidence_quotes[0]
+                            if safe_event.evidence_quotes
+                            else "",
                             _now(),
                         ),
                     )
@@ -612,6 +813,10 @@ class AggregateStateStore:
         error: str,
     ) -> None:
         now = _now()
+        safe_error = redact_diagnostic(error, limit=2000) or (
+            "operation failed without a diagnostic"
+        )
+        safe_url = sanitize_url(canonical_url, limit=2000)
         existing = self.connection.execute(
             """
             SELECT id, retry_count
@@ -632,7 +837,7 @@ class AggregateStateStore:
                 (
                     int(existing["retry_count"]) + 1,
                     now,
-                    error[:2000],
+                    safe_error,
                     int(existing["id"]),
                 ),
             )
@@ -647,9 +852,9 @@ class AggregateStateStore:
                 (
                     source_id,
                     source_article_id,
-                    canonical_url,
+                    safe_url,
                     stage,
-                    error[:2000],
+                    safe_error,
                     now,
                     now,
                 ),
@@ -726,6 +931,7 @@ class AggregateStateStore:
     def store_semantic_audit(self, audit: dict[str, Any]) -> None:
         if not audit:
             return
+        safe_audit = sanitize_semantic_audit(audit)
         self.connection.execute(
             """
             INSERT INTO aggregate_semantic_attempts (
@@ -742,15 +948,15 @@ class AggregateStateStore:
                 audit_json = excluded.audit_json
             """,
             (
-                str(audit.get("source_id") or ""),
-                str(audit.get("source_article_id") or ""),
-                str(audit.get("prompt_version") or ""),
+                str(safe_audit.get("source_id") or ""),
+                str(safe_audit.get("source_article_id") or ""),
+                str(safe_audit.get("prompt_version") or ""),
                 _now(),
-                str(audit.get("status") or ""),
-                str(audit.get("error") or "")[:4000],
-                str(audit.get("first_response") or ""),
-                str(audit.get("repair_response") or ""),
-                json.dumps(audit, ensure_ascii=False),
+                str(safe_audit.get("status") or ""),
+                redact_diagnostic(safe_audit.get("error"), limit=4000),
+                "",
+                "",
+                json.dumps(safe_audit, ensure_ascii=False, sort_keys=True),
             ),
         )
         self.connection.commit()
@@ -780,6 +986,8 @@ class AggregateStateStore:
         self.connection.commit()
 
     def record_run(self, run: AdapterRun) -> None:
+        payload = sanitize_tree(asdict(run), redact_pii=True)
+        payload["error"] = redact_diagnostic(payload.get("error"), limit=2000)
         self.connection.execute(
             """
             INSERT INTO aggregate_runs (
@@ -792,7 +1000,7 @@ class AggregateStateStore:
                 run.started_at,
                 run.finished_at,
                 run.status,
-                json.dumps(asdict(run), ensure_ascii=False),
+                json.dumps(payload, ensure_ascii=False),
             ),
         )
         self.connection.commit()

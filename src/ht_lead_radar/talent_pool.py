@@ -627,11 +627,12 @@ def draft_expiry_date(run_date: str) -> str:
     return (date.fromisoformat(run_date) + timedelta(days=7)).isoformat()
 
 
-def write_draft_bundle(bundle: DraftBundle, output: str | Path) -> Path:
+def write_draft_bundle(bundle: DraftBundle | Mapping[str, Any], output: str | Path) -> Path:
     path = Path(output)
     path.parent.mkdir(parents=True, exist_ok=True)
+    payload = bundle.to_dict() if isinstance(bundle, DraftBundle) else dict(bundle)
     path.write_text(
-        json.dumps(bundle.to_dict(), ensure_ascii=False, indent=2),
+        json.dumps(payload, ensure_ascii=False, indent=2),
         encoding="utf-8",
     )
     return path

@@ -1,6 +1,10 @@
 import importlib.util
 import json
+import os
+import sqlite3
 import subprocess
+import sys
+import time
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -39,6 +43,179 @@ def test_report_receipt_is_pending_claimable_and_idempotent(tmp_path):
     store.save_bundle(bundle.to_dict())
     assert store.pending_openclaw_report() is None
     assert store.latest_openclaw_context()["snapshot_id"] == claimed["snapshot_id"]
+
+
+def test_zero_draft_failure_snapshot_remains_openclaw_readable(tmp_path):
+    store, bundle = _store(tmp_path)
+    failed = bundle.to_dict()
+    failed["drafts"] = []
+    failed["generation_error"] = "DemandAnalysisError: bounded failure"
+    failed["completion_status"] = {
+        "analysis_status": "completed",
+        "draft_generation_status": "failed",
+        "notification_status": "pending",
+        "source_health_status": "critical",
+    }
+    store.save_bundle(failed)
+
+    row = store.pending_openclaw_report()
+    assert row is not None
+    rendered = bridge.render_context(row)
+    assert rendered["draft_count"] == 0
+    assert rendered["completion_status"]["draft_generation_status"] == "failed"
+    assert rendered["completion_status"]["source_health_requires_attention"] is True
+    assert rendered["generation_status"] == "failed"
+
+
+def test_critical_health_issue_is_rendered_before_draft_discussion(tmp_path):
+    store, bundle = _store(tmp_path)
+    failed = bundle.to_dict()
+    failed["completion_status"] = {
+        "analysis_status": "partial",
+        "draft_generation_status": "complete",
+        "notification_status": "pending",
+        "source_health_status": "critical",
+        "critical_health_issues": [
+            {
+                "source_id": "36kr-finance",
+                "status": "critical",
+                "error_class": "AdapterError",
+                "detail": "listing failed",
+            }
+        ],
+    }
+    store.save_bundle(failed)
+
+    rendered = bridge.render_context(store.pending_openclaw_report())
+
+    assert rendered["completion_status"]["analysis_status"] == "partial"
+    assert rendered["completion_status"]["source_health_requires_attention"] is True
+    assert rendered["completion_status"]["critical_health_issues"][0][
+        "source_id"
+    ] == "36kr-finance"
+    assert "before discussing drafts" in " ".join(rendered["reporting_rules"])
+
+
+@pytest.mark.parametrize("operation", ["reported", "failed"])
+def test_openclaw_status_and_delivery_ledger_commit_atomically(tmp_path, operation):
+    database = tmp_path / operation / "talent.sqlite"
+    store = TalentPoolStore(database)
+    store.save_bundle(generate_draft_bundle(sample_report()).to_dict())
+    pending = store.pending_openclaw_report()
+    assert pending is not None
+    with sqlite3.connect(database) as connection:
+        connection.execute(
+            """
+            CREATE TRIGGER reject_delivery_insert
+            BEFORE INSERT ON talent_pool_delivery_ledger
+            BEGIN
+                SELECT RAISE(ABORT, 'forced delivery failure');
+            END;
+            """
+        )
+
+    with pytest.raises(sqlite3.IntegrityError, match="forced delivery failure"):
+        if operation == "reported":
+            store.mark_openclaw_reported(pending["snapshot_id"])
+        else:
+            store.mark_openclaw_report_failed(
+                pending["snapshot_id"],
+                "ProviderError: token=must-not-be-committed",
+            )
+
+    current = store.latest_openclaw_context()
+    assert current is not None
+    assert current["status"] == "pending"
+    assert current["deliveries"] == []
+
+
+def test_hook_failure_followed_by_fallback_is_visible_as_delivered(tmp_path):
+    store, _ = _store(tmp_path)
+    row = store.pending_openclaw_report(claim=True)
+    assert row is not None
+    assert store.mark_openclaw_report_failed(row["snapshot_id"], "token=not-persisted")
+    store.record_delivery(row["snapshot_id"], channel="feishu_fallback", status="delivered")
+
+    current = store.latest_openclaw_context()
+    assert current is not None
+    rendered = bridge.render_context(current)
+    assert rendered["completion_status"]["notification_status"] == "hook_failed_fallback_sent"
+    delivery = rendered["completion_status"]["delivery_records"]
+    hook = next(item for item in delivery if item["delivery_channel"] == "openclaw_hook")
+    assert hook["error_detail"] == "token=[redacted]"
+
+
+def test_hook_failure_preserves_exception_class_without_secret(tmp_path):
+    store, _ = _store(tmp_path)
+    row = store.pending_openclaw_report(claim=True)
+    assert row is not None
+    assert store.mark_openclaw_report_failed(
+        row["snapshot_id"], RuntimeError("api key sk-supersecret123456")
+    )
+    delivery = store.delivery_records(row["snapshot_id"])[0]
+    assert delivery["error_class"] == "RuntimeError"
+    assert "supersecret" not in delivery["error_detail"]
+
+
+def test_hook_binary_preflight_failure_is_written_to_shared_delivery_ledger(tmp_path):
+    store, _ = _store(tmp_path)
+
+    result = bridge.record_hook_preflight_failure(
+        store,
+        session_key="agent:main:main",
+        error_class="OpenClawBinaryUnavailable",
+    )
+
+    assert result["status"] == "hook_failed"
+    current = store.latest_openclaw_context()
+    assert current is not None
+    assert current["status"] == "failed"
+    assert current["deliveries"] == [
+        {
+            "delivery_channel": "openclaw_hook",
+            "status": "failed",
+            "delivered_at": None,
+            "error_class": "OpenClawBinaryUnavailable",
+            "error_detail": "OpenClawBinaryUnavailable",
+        }
+    ]
+
+
+def test_completion_status_rejects_unknown_notification_enum(tmp_path):
+    store, bundle = _store(tmp_path)
+    invalid = bundle.to_dict()
+    invalid["source_run_id"] = "invalid-notification-enum"
+    invalid["completion_status"] = {"notification_status": "success-ish"}
+
+    with pytest.raises(ValueError, match="unsupported notification_status"):
+        store.save_bundle(invalid)
+
+
+def test_confirmed_delivery_cannot_be_downgraded_by_a_later_retry_failure(tmp_path):
+    store, _ = _store(tmp_path)
+    row = store.pending_openclaw_report()
+    assert row is not None
+    store.record_delivery(
+        row["snapshot_id"], channel="openclaw_hook", status="delivered"
+    )
+    store.record_delivery(
+        row["snapshot_id"],
+        channel="openclaw_hook",
+        status="failed",
+        error="ProviderError: token=must-not-survive",
+    )
+
+    assert store.delivery_records(row["snapshot_id"]) == [
+        {
+            "delivery_channel": "openclaw_hook",
+            "status": "delivered",
+            "delivered_at": store.delivery_records(row["snapshot_id"])[0][
+                "delivered_at"
+            ],
+            "error_class": "",
+            "error_detail": "",
+        }
+    ]
 
 
 def test_new_snapshot_invalidates_old_displayed_approval_context(tmp_path):
@@ -364,6 +541,154 @@ def test_wake_does_not_mark_reported_when_agent_skips_pending_read(tmp_path):
     assert store.latest_openclaw_context()["status"] == "failed"
 
 
+def test_wake_outer_timeout_records_hook_failure_and_leaves_fallback_possible(
+    tmp_path,
+):
+    store, _ = _store(tmp_path)
+    sessions = tmp_path / "sessions.json"
+    sessions.write_text(
+        json.dumps(
+            {
+                "agent:main:main": {
+                    "sessionId": "session-123",
+                    "deliveryContext": {
+                        "channel": "feishu",
+                        "to": "user:test-open-id",
+                        "accountId": "feishubot",
+                    },
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    def hanging_runner(command, **kwargs):
+        assert kwargs["timeout"] == bridge.OPENCLAW_PROCESS_TIMEOUT_SECONDS
+        raise subprocess.TimeoutExpired(command, kwargs["timeout"])
+
+    with pytest.raises(TimeoutError, match="outer wall-clock deadline"):
+        bridge.wake(
+            store,
+            session_key="agent:main:main",
+            source="test",
+            openclaw_bin="openclaw",
+            sessions_file=sessions,
+            runner=hanging_runner,
+        )
+
+    current = store.latest_openclaw_context()
+    assert current is not None and current["status"] == "failed"
+    assert store.pending_openclaw_report()["snapshot_id"] == current["snapshot_id"]
+    assert current["deliveries"][-1]["delivery_channel"] == "openclaw_hook"
+    assert current["deliveries"][-1]["status"] == "failed"
+
+
+def test_default_openclaw_runner_terminates_then_kills_bounded_process_tree(
+    monkeypatch,
+):
+    captured = {}
+    signals = []
+
+    class Stream:
+        def close(self):
+            return None
+
+    class Process:
+        pid = 4321
+        returncode = -9
+        stdout = Stream()
+        stderr = Stream()
+
+        def __init__(self):
+            self.communicate_calls = 0
+
+        def communicate(self, timeout):
+            self.communicate_calls += 1
+            if self.communicate_calls < 3:
+                raise subprocess.TimeoutExpired(["openclaw"], timeout)
+            return "", ""
+
+        def poll(self):
+            return None
+
+    process = Process()
+
+    def popen(command, **kwargs):
+        captured["command"] = command
+        captured["kwargs"] = kwargs
+        return process
+
+    monkeypatch.setattr(bridge.subprocess, "Popen", popen)
+    monkeypatch.setattr(
+        bridge,
+        "_signal_process_tree",
+        lambda active, sig, **_kwargs: signals.append((active.pid, sig)),
+    )
+
+    with pytest.raises(subprocess.TimeoutExpired):
+        bridge._run_openclaw_process(
+            ["openclaw", "agent"],
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=0.01,
+        )
+
+    assert signals == [
+        (process.pid, bridge.signal.SIGTERM),
+        (process.pid, bridge.OPENCLAW_KILL_SIGNAL),
+    ]
+    if bridge.os.name == "posix":
+        assert captured["kwargs"]["start_new_session"] is True
+    else:
+        assert captured["kwargs"]["creationflags"]
+
+
+@pytest.mark.skipif(os.name != "posix", reason="POSIX process-group probe")
+def test_process_group_signal_survives_exited_group_leader(monkeypatch):
+    calls = []
+
+    class ExitedLeader:
+        pid = 4321
+
+        @staticmethod
+        def poll():
+            return 0
+
+    monkeypatch.setattr(
+        bridge.os,
+        "killpg",
+        lambda group_id, sig: calls.append((group_id, sig)),
+    )
+
+    bridge._signal_process_tree(
+        ExitedLeader(),
+        bridge.OPENCLAW_KILL_SIGNAL,
+        process_group_id=9876,
+    )
+
+    assert calls == [(9876, bridge.OPENCLAW_KILL_SIGNAL)]
+
+
+@pytest.mark.skipif(os.name != "posix", reason="POSIX process-group probe")
+def test_real_openclaw_runner_timeout_terminates_descendant_pipe_holders():
+    child_code = (
+        "import subprocess,sys,time; "
+        "subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)']); "
+        "time.sleep(30)"
+    )
+    started = time.monotonic()
+    with pytest.raises(subprocess.TimeoutExpired):
+        bridge._run_openclaw_process(
+            [sys.executable, "-c", child_code],
+            text=True,
+            capture_output=True,
+            check=False,
+            timeout=0.05,
+        )
+    assert time.monotonic() - started < 1.0
+
+
 def test_delivery_failure_after_exact_read_remains_retriable(tmp_path):
     store, _ = _store(tmp_path)
     sessions = tmp_path / "sessions.json"
@@ -391,7 +716,7 @@ def test_delivery_failure_after_exact_read_remains_retriable(tmp_path):
             command, 1, stdout="", stderr="delivery failed"
         )
 
-    with pytest.raises(RuntimeError, match="delivery failed"):
+    with pytest.raises(RuntimeError, match="exit code 1"):
         bridge.wake(
             store,
             session_key="agent:main:main",
@@ -484,6 +809,27 @@ def test_event_prompt_never_requests_approval_for_blocked_payloads():
     assert "If approval_blocked is true" in prompt
     assert "do not ask for approval" in prompt
     assert "Only when approval_blocked is false" in prompt
+
+
+def test_wake_require_report_fails_when_completion_snapshot_is_missing(tmp_path):
+    completed = subprocess.run(
+        [
+            "python",
+            str(SCRIPT),
+            "--state-db",
+            str(tmp_path / "empty.sqlite"),
+            "wake",
+            "--require-report",
+        ],
+        text=True,
+        encoding="utf-8",
+        capture_output=True,
+        check=False,
+    )
+
+    assert completed.returncode == 73
+    assert "LookupError" in completed.stderr
+    assert "required completion snapshot is missing" not in completed.stderr
 
 
 def test_demand_summary_uses_current_horizon_and_evidence_keys():

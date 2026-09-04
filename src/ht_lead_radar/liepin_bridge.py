@@ -16,6 +16,7 @@ from typing import Any, Mapping, Protocol, Sequence
 
 from .talent_pool import validate_liepin_payload
 from .talent_pool_store import TalentPoolStore
+from .sanitization import sanitize_text
 
 
 BLOCKING_ERROR_CODES = frozenset(
@@ -332,7 +333,7 @@ def _publish_with_lease(
                     "draft_id": draft_id,
                     "status": "blocked",
                     "error_code": "ambiguous_result",
-                    "message": str(error),
+                    "message": sanitize_text(error, limit=800),
                 }
             )
             break
@@ -342,7 +343,7 @@ def _publish_with_lease(
                     "draft_id": draft_id,
                     "status": "failed",
                     "error_code": "preflight_failed",
-                    "message": str(error),
+                    "message": sanitize_text(error, limit=800),
                 }
             )
             continue
@@ -372,7 +373,7 @@ def _publish_with_lease(
                     "job_id": result.job_id,
                     "job_url": result.job_url,
                     "warning_code": result.error_code,
-                    "message": result.error_message,
+                    "message": sanitize_text(result.error_message, limit=800),
                 }
             )
             if result.blocking:
@@ -395,7 +396,7 @@ def _publish_with_lease(
                 "draft_id": draft_id,
                 "status": "blocked" if result.blocking else "failed",
                 "error_code": result.error_code,
-                "message": result.error_message,
+                "message": sanitize_text(result.error_message, limit=800),
             }
         )
         if result.blocking or result.error_code in BLOCKING_ERROR_CODES:
@@ -411,7 +412,7 @@ def _record_job_id(record: Mapping[str, Any]) -> str:
 
 def _tail(text: str, limit: int = 800) -> str:
     compact = " ".join(text.split())
-    return compact[-limit:]
+    return sanitize_text(compact[-limit:], limit=limit)
 
 
 __all__ = [

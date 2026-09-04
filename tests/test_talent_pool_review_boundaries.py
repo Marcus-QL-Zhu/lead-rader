@@ -13,6 +13,7 @@ from ht_lead_radar.liepin_bridge import (
 )
 from ht_lead_radar.talent_pool import generate_draft_bundle
 from ht_lead_radar.talent_pool_store import TalentPoolStore
+from ht_lead_radar.talent_pool import canonical_payload_hash
 from test_talent_pool import sample_report
 
 
@@ -295,3 +296,125 @@ def test_snapshot_normalizes_payload_hash_before_commit(tmp_path):
     assert committed is not None
     assert committed["drafts"][0]["payload_hash"] == rows[0]["payload_hash"]
     assert committed["drafts"][0]["payload_hash"] != "stale"
+
+
+def test_talent_store_sanitizes_diagnostics_and_urls_but_not_job_payload(tmp_path):
+    database = tmp_path / "safe-talent.sqlite"
+    store = TalentPoolStore(database)
+    bundle = generate_draft_bundle(sample_report(leads=1)).to_dict()
+    public_payload = json.loads(
+        json.dumps(bundle["drafts"][0]["public_payload"], ensure_ascii=False)
+    )
+    public_hash = canonical_payload_hash(public_payload)
+    bundle["drafts"][0]["source_leads"][0]["evidence_urls"] = [
+        "https://user:pass@example.test/a?access_token=url-secret&page=2#fragment"
+    ]
+    bundle["drafts"][0]["raw_completion"] = {
+        "Authorization": "Bearer completion-secret"
+    }
+    bundle["completion_status"] = {
+        "analysis_status": "completed",
+        "draft_generation_status": "complete",
+        "notification_status": "pending",
+        "source_health_status": "healthy",
+        "diagnostic": "call +1 415 555 2671 token=diagnostic-secret",
+    }
+
+    store.save_bundle(bundle)
+    current = store.current_bundle(bundle["run_date"], bundle["direction"])
+
+    assert current is not None
+    draft = current["drafts"][0]
+    assert current["source_run_id"] == bundle["source_run_id"]
+    assert draft["draft_id"] == bundle["drafts"][0]["draft_id"]
+    context = store.latest_openclaw_context()
+    assert context is not None
+    assert context["snapshot_id"] != "[redacted-token]"
+    assert draft["public_payload"] == public_payload
+    assert draft["payload_hash"] == public_hash
+    assert draft["raw_completion"] == "[redacted]"
+    assert draft["source_leads"][0]["evidence_urls"] == [
+        "https://example.test/a?page=2"
+    ]
+    with sqlite3.connect(database) as connection:
+        dump = "\n".join(connection.iterdump())
+        stored_link_payload = json.loads(
+            connection.execute(
+                "SELECT liepin_payload_json FROM talent_pool_opportunity_links LIMIT 1"
+            ).fetchone()[0]
+        )
+    for secret in (
+        "user:pass",
+        "url-secret",
+        "fragment",
+        "completion-secret",
+        "diagnostic-secret",
+        "415 555 2671",
+    ):
+        assert secret not in dump
+    assert stored_link_payload == public_payload
+    assert canonical_payload_hash(stored_link_payload) == public_hash
+
+
+def test_talent_store_migration_cleans_legacy_operational_fields_only(tmp_path):
+    database = tmp_path / "legacy-safe-talent.sqlite"
+    store, bundle = _store(tmp_path)
+    database = store.database
+    original_payload = bundle.drafts[0].public_payload
+    original_hash = canonical_payload_hash(original_payload)
+    with sqlite3.connect(database) as connection:
+        draft_id, raw_draft = connection.execute(
+            "SELECT draft_id, draft_json FROM talent_pool_drafts LIMIT 1"
+        ).fetchone()
+        draft = json.loads(raw_draft)
+        draft["raw_completion"] = "Bearer legacy-completion-secret"
+        draft["source_leads"][0]["evidence_urls"] = [
+            "https://user:pass@legacy.test/a?access_token=legacy-url-secret&page=2"
+        ]
+        connection.execute(
+            "UPDATE talent_pool_drafts SET draft_json=?, last_error_message=?, "
+            "liepin_job_url=? WHERE draft_id=?",
+            (
+                json.dumps(draft, ensure_ascii=False),
+                "call 010-87654321 token=legacy-error-secret",
+                "https://user:pass@jobs.test/a?token=legacy-job-secret&page=3",
+                draft_id,
+            ),
+        )
+        snapshot_id, raw_bundle = connection.execute(
+            "SELECT snapshot_id, bundle_json FROM talent_pool_bundle_snapshots LIMIT 1"
+        ).fetchone()
+        legacy_bundle = json.loads(raw_bundle)
+        legacy_bundle["diagnostic"] = (
+            "contact +44 20 7946 0958 token=legacy-bundle-secret"
+        )
+        connection.execute(
+            "UPDATE talent_pool_bundle_snapshots SET bundle_json=? "
+            "WHERE snapshot_id=?",
+            (json.dumps(legacy_bundle, ensure_ascii=False), snapshot_id),
+        )
+        connection.execute(
+            "UPDATE talent_pool_metadata SET value='0' "
+            "WHERE key='persistence_sanitizer_version'"
+        )
+
+    migrated = TalentPoolStore(database)
+    current = migrated.current_bundle(bundle.run_date, bundle.direction)
+    assert current is not None
+    migrated_draft = next(
+        item for item in current["drafts"] if item["draft_id"] == draft_id
+    )
+    assert migrated_draft["public_payload"] == original_payload
+    assert migrated_draft["payload_hash"] == original_hash
+    with sqlite3.connect(database) as connection:
+        dump = "\n".join(connection.iterdump())
+    for secret in (
+        "legacy-completion-secret",
+        "legacy-url-secret",
+        "legacy-error-secret",
+        "legacy-job-secret",
+        "legacy-bundle-secret",
+        "87654321",
+        "7946 0958",
+    ):
+        assert secret not in dump

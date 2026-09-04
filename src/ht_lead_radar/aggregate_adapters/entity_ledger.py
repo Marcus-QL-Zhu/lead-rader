@@ -2840,6 +2840,10 @@ def build_article_entity_ledger(
     # later sentence uses only the short brand.  Merge an already discovered
     # short record into the canonical owner to keep lookup unambiguous.
     for owner, record in list(records.items()):
+        # Earlier snapshot entries can have been merged by this same pass.
+        # Never dereference a deleted owner from the snapshot.
+        if owner not in records:
+            continue
         canonical = record["canonical_name"]
         possible_aliases = list(company_alias_candidates(canonical)[1:])
         for known_name in (canonical, *tuple(record["aliases"])):

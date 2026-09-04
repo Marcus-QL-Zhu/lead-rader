@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
-from concurrent.futures import Future, ThreadPoolExecutor
+from concurrent.futures import Future
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from hashlib import sha256
+import inspect
 import ipaddress
 import json
 import math
@@ -16,9 +17,11 @@ from typing import Any, Callable, Iterable
 import urllib.parse
 import urllib.request
 
+from ..http_runtime import DaemonWorkerPool, read_response_body
 from ..models import Evidence
-from ..http_runtime import read_response_body
+from ..sanitization import sanitize_tree
 from .base import AdapterContext
+from .diagnostics import redact_diagnostic, sanitize_semantic_audit
 from .models import (
     AdapterRun,
     CleanArticle,
@@ -29,6 +32,34 @@ from .models import (
 from .registry import DedicatedAdapterRegistry
 from .semantic import MiniMaxSemanticProcessor, PromptRunner
 from .storage import AggregateStateStore
+
+
+def _bounded_dead_letter_error(
+    error: object = "",
+    *,
+    semantic_audit: dict[str, Any] | None = None,
+    limit: int = 2000,
+) -> str:
+    """Return a non-empty, bounded, secret-safe operational diagnostic."""
+
+    detail = str(error or "").strip()
+    if not detail and semantic_audit:
+        fragments: list[str] = []
+        validation_issues = semantic_audit.get("validation_issues")
+        if isinstance(validation_issues, list):
+            cleaned = [str(item).strip() for item in validation_issues if str(item).strip()]
+            if cleaned:
+                fragments.append("validation_issues=" + "; ".join(cleaned[:12]))
+        rejection_counts = semantic_audit.get("rejection_reason_counts")
+        if isinstance(rejection_counts, dict) and rejection_counts:
+            fragments.append(
+                "rejection_reason_counts="
+                + json.dumps(rejection_counts, ensure_ascii=True, sort_keys=True)
+            )
+        detail = "; ".join(fragments)
+    if not detail:
+        detail = "operation failed without a diagnostic"
+    return redact_diagnostic(detail, limit=limit)
 
 
 @dataclass(frozen=True)
@@ -42,6 +73,66 @@ class _SemanticWork:
     index: SourceArticleIndex
     article: CleanArticle
     future: Future[tuple[list[SemanticEvent], dict[str, Any]]]
+
+
+@dataclass(frozen=True)
+class _RunnerIdentityConfig:
+    provider: str = ""
+    model: str = ""
+
+
+def _accepts_keyword(operation: Callable[..., Any], keyword: str) -> bool:
+    """Return whether a callable explicitly accepts a keyword or ``**kwargs``."""
+
+    try:
+        signature = inspect.signature(operation)
+    except (TypeError, ValueError):
+        return False
+    parameter = signature.parameters.get(keyword)
+    if parameter is not None and parameter.kind in {
+        inspect.Parameter.POSITIONAL_OR_KEYWORD,
+        inspect.Parameter.KEYWORD_ONLY,
+    }:
+        return True
+    return any(
+        item.kind == inspect.Parameter.VAR_KEYWORD
+        for item in signature.parameters.values()
+    )
+
+
+class _DeadlinePromptRunner:
+    """Forward every model request with the source's remaining wall-clock time."""
+
+    def __init__(self, runner: PromptRunner, deadline: float) -> None:
+        self._runner = runner
+        self._deadline = deadline
+        config = getattr(runner, "config", None)
+        if str(getattr(config, "provider", "") or "").strip() or str(
+            getattr(config, "model", "") or ""
+        ).strip():
+            self.config = config
+        else:
+            # MiniMaxSemanticProcessor includes runner identity in its cache
+            # key. A deadline proxy must remain transparent to that identity.
+            self.config = _RunnerIdentityConfig(model=type(runner).__name__)
+
+    def run(
+        self,
+        prompt: str,
+        *,
+        session_id: str,
+        system_prompt: str = "",
+    ) -> str:
+        remaining = self._deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError("aggregate semantic request exceeded source deadline")
+        keywords: dict[str, Any] = {
+            "session_id": session_id,
+            "system_prompt": system_prompt,
+        }
+        if _accepts_keyword(self._runner.run, "timeout_seconds"):
+            keywords["timeout_seconds"] = remaining
+        return self._runner.run(prompt, **keywords)
 
 
 def _validate_public_http_url(url: str, *, expected_host: str = "") -> None:
@@ -101,16 +192,23 @@ class PublicHttpFetcher:
 
         self._get_cache.clear()
 
-    def __call__(self, url: str) -> bytes:
-        return self._request(url)
+    def __call__(self, url: str, *, timeout: float | None = None) -> bytes:
+        return self._request(url, timeout=timeout)
 
-    def post_json(self, url: str, payload: dict[str, Any]) -> bytes:
+    def post_json(
+        self,
+        url: str,
+        payload: dict[str, Any],
+        *,
+        timeout: float | None = None,
+    ) -> bytes:
         return self._request(
             url,
             method="POST",
             body=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
             content_type="application/json",
             accept="application/json,text/plain,*/*",
+            timeout=timeout,
         )
 
     def _request(
@@ -121,8 +219,13 @@ class PublicHttpFetcher:
         body: bytes | None = None,
         content_type: str = "",
         accept: str = "text/html,application/xhtml+xml;q=0.9,*/*;q=0.5",
+        timeout: float | None = None,
     ) -> bytes:
         _validate_public_http_url(url)
+        request_timeout = min(self.timeout, timeout) if timeout is not None else self.timeout
+        if not math.isfinite(request_timeout) or request_timeout <= 0:
+            raise TimeoutError("aggregate HTTP request has no remaining deadline")
+        request_deadline = time.monotonic() + request_timeout
         if method == "GET" and body is None and url in self.shared_get_urls:
             cached = self._get_cache.get(url)
             if cached is not None:
@@ -130,7 +233,10 @@ class PublicHttpFetcher:
         now = time.monotonic()
         elapsed = now - self._last_fetch_at
         if self._last_fetch_at and elapsed < self.minimum_interval_seconds:
-            time.sleep(self.minimum_interval_seconds - elapsed)
+            delay = self.minimum_interval_seconds - elapsed
+            if delay >= request_deadline - time.monotonic():
+                raise TimeoutError("aggregate HTTP rate limit exceeded remaining deadline")
+            time.sleep(delay)
         headers = {"User-Agent": self.user_agent, "Accept": accept}
         if content_type:
             headers["Content-Type"] = content_type
@@ -140,21 +246,27 @@ class PublicHttpFetcher:
             headers=headers,
             method=method,
         )
-        with self.urlopen(request, timeout=self.timeout) as response:
+        remaining = request_deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError("aggregate HTTP request exceeded deadline before connect")
+        with self.urlopen(request, timeout=remaining) as response:
             final_url = response.geturl() if hasattr(response, "geturl") else url
             _validate_public_http_url(
                 str(final_url),
                 expected_host=urllib.parse.urlparse(url).hostname or "",
             )
-            body = read_response_body(
+            remaining = request_deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError("aggregate HTTP request exceeded deadline before body read")
+            response_body = read_response_body(
                 response,
                 max_bytes=self.max_bytes,
-                timeout=self.timeout,
+                timeout=remaining,
             )
             self._last_fetch_at = time.monotonic()
             if method == "GET" and url in self.shared_get_urls:
-                self._get_cache[url] = body
-            return body
+                self._get_cache[url] = response_body
+            return response_body
 
 
 class DedicatedAggregateCoordinator:
@@ -221,16 +333,33 @@ class DedicatedAggregateCoordinator:
         topic: str,
         *,
         force_reprocess: bool = False,
+        overall_deadline: float | None = None,
     ) -> DedicatedCollectionResult:
         adapter = self.registry.for_source(source_id)
         if adapter is None:
             raise KeyError(f"no dedicated adapter for {source_id}")
         channel = adapter.channel_for(source_id)
         started = self.now.replace(microsecond=0).isoformat()
+        source_deadline = time.monotonic() + self.source_timeout_seconds
+        if overall_deadline is not None:
+            source_deadline = min(source_deadline, overall_deadline)
+        transport_executor = DaemonWorkerPool(
+            max_workers=1,
+            name="aggregate-http",
+        )
         context = AdapterContext.create(
             state_db=self.state_db,
-            fetch=lambda url: self._fetch_adapter_page(source_id, url),
-            post_json=self._post_adapter_json(source_id),
+            fetch=lambda url: self._fetch_adapter_page(
+                source_id,
+                url,
+                source_deadline=source_deadline,
+                executor=transport_executor,
+            ),
+            post_json=self._post_adapter_json(
+                source_id,
+                source_deadline=source_deadline,
+                executor=transport_executor,
+            ),
             record_decision=self._record_adapter_decision(source_id),
             now=self.now,
             decision_state={
@@ -249,29 +378,33 @@ class DedicatedAggregateCoordinator:
         semantic_work: list[_SemanticWork] = []
         status = "ok"
         error = ""
-        source_deadline = time.monotonic() + self.source_timeout_seconds
 
         current_stage = "listing"
 
         def check_source_deadline(stage: str) -> None:
             nonlocal current_stage
             current_stage = stage
-            if time.monotonic() > source_deadline:
+            if time.monotonic() >= source_deadline:
                 raise TimeoutError(
                     f"source {source_id} exceeded {self.source_timeout_seconds:g}s "
                     f"watchdog during {stage}"
                 )
 
         with (
-            ThreadPoolExecutor(
+            DaemonWorkerPool(
                 max_workers=self.semantic_workers,
-                thread_name_prefix="aggregate-minimax",
+                name="aggregate-minimax",
             ) as executor,
+            transport_executor,
             AggregateStateStore(self.state_db) as store,
         ):
             try:
                 check_source_deadline("listing_fetch")
-                listing_html = self.fetch(channel.url)
+                listing_html = self._fetch_with_deadline(
+                    channel.url,
+                    source_deadline=source_deadline,
+                    executor=transport_executor,
+                )
                 check_source_deadline("listing_parse")
                 self._write_raw(source_id, "listing", listing_html)
                 indexes = adapter.parse_listing(channel, listing_html, context)
@@ -337,14 +470,14 @@ class DedicatedAggregateCoordinator:
                             source_id=source_id,
                             source_article_id=index.source_article_id,
                         )
-                        # Ignore the short freshness/recheck window here. The
-                        # listing content hash is unchanged, and a prior
-                        # successful semantic result means this detail page
-                        # does not belong in today's incremental work set.
+                        # Reuse stale semantics only while the detail itself
+                        # remains inside its normal freshness window. Once the
+                        # scheduled detail recheck is due, fetch it and compare
+                        # the body hash; an unchanged body still avoids another
+                        # model call in the branch below.
                         and store.article_is_current(
                             index,
                             now=self.now,
-                            overlap_hours=0,
                         )
                         and not store.semantic_is_current(
                             index,
@@ -494,17 +627,25 @@ class DedicatedAggregateCoordinator:
                                     channel,
                                     article,
                                     rule_events,
+                                    source_deadline,
                                 ),
                             )
                         )
                     except Exception as exc:
+                        if isinstance(exc, TimeoutError):
+                            raise TimeoutError(
+                                f"source {source_id} watchdog expired during "
+                                f"detail_fetch:{index.source_article_id}"
+                            ) from exc
                         detail_failure_count += 1
                         store.record_dead_letter(
                             source_id=source_id,
                             source_article_id=index.source_article_id,
                             canonical_url=index.canonical_url,
                             stage="detail_or_semantic",
-                            error=f"{type(exc).__name__}: {exc}",
+                            error=_bounded_dead_letter_error(
+                                f"{type(exc).__name__}: {exc}"
+                            ),
                         )
                 # Persist on the main thread in listing order. SQLite never
                 # crosses worker boundaries, so the audit trail is deterministic.
@@ -515,11 +656,20 @@ class DedicatedAggregateCoordinator:
                     index = work.index
                     article = work.article
                     try:
-                        semantic_events, semantic_audit = work.future.result()
+                        semantic_events, semantic_audit = work.future.result(
+                            timeout=self._remaining_timeout(
+                                source_deadline,
+                                f"semantic_result:{work.index.source_article_id}",
+                            )
+                        )
                         omissions_detected += int(
                             semantic_audit.get("omissions_detected") or 0
                         )
                         store.store_semantic_audit(semantic_audit)
+                        semantic_error = _bounded_dead_letter_error(
+                            semantic_audit.get("error"),
+                            semantic_audit=semantic_audit,
+                        )
                         store.sync_semantic_claim_dead_letters(
                             source_id=source_id,
                             source_article_id=index.source_article_id,
@@ -533,7 +683,7 @@ class DedicatedAggregateCoordinator:
                                 or semantic_audit.get("failed_claim_ids")
                                 or []
                             ),
-                            error=str(semantic_audit.get("error") or ""),
+                            error=semantic_error,
                         )
                         if semantic_audit.get("status") in {
                             "fallback_to_rules",
@@ -546,7 +696,7 @@ class DedicatedAggregateCoordinator:
                                 source_article_id=index.source_article_id,
                                 canonical_url=index.canonical_url,
                                 stage="semantic_validation",
-                                error=str(semantic_audit.get("error") or "")[:2000],
+                                error=semantic_error,
                             )
                         else:
                             store.resolve_dead_letter(
@@ -583,13 +733,20 @@ class DedicatedAggregateCoordinator:
                             semantic_audit,
                         )
                     except Exception as exc:
+                        if isinstance(exc, TimeoutError):
+                            raise TimeoutError(
+                                f"source {source_id} watchdog expired during "
+                                f"semantic_result:{index.source_article_id}"
+                            ) from exc
                         detail_failure_count += 1
                         store.record_dead_letter(
                             source_id=source_id,
                             source_article_id=index.source_article_id,
                             canonical_url=index.canonical_url,
                             stage="detail_or_semantic",
-                            error=f"{type(exc).__name__}: {exc}",
+                            error=_bounded_dead_letter_error(
+                                f"{type(exc).__name__}: {exc}"
+                            ),
                         )
                 listing_hash = sha256(listing_html).hexdigest()
                 cursor = indexes[0].cursor_value if indexes else ""
@@ -603,7 +760,7 @@ class DedicatedAggregateCoordinator:
                     status = "partial"
             except Exception as exc:
                 status = "error"
-                error = f"{type(exc).__name__}: {exc}"
+                error = _bounded_dead_letter_error(f"{type(exc).__name__}: {exc}")
                 dead_letter_stage = (
                     "source_watchdog"
                     if isinstance(exc, TimeoutError)
@@ -671,14 +828,50 @@ class DedicatedAggregateCoordinator:
         channel: SourceChannel,
         article: CleanArticle,
         rule_events: list[SemanticEvent],
+        source_deadline: float,
     ) -> tuple[list[SemanticEvent], dict[str, Any]]:
+        runner = (
+            _DeadlinePromptRunner(self._llm_runner, source_deadline)
+            if self._llm_runner is not None
+            else None
+        )
         processor = MiniMaxSemanticProcessor(
-            self._llm_runner,
+            runner,
             strict_claim_contract=self.strict_claim_contract,
             claim_centric_v27=self.claim_centric_v27,
         )
         events = processor.process(channel, article, rule_events)
         return events, dict(processor.last_audit)
+
+    @staticmethod
+    def _remaining_timeout(deadline: float, stage: str) -> float:
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError(f"source watchdog expired during {stage}")
+        return remaining
+
+    def _fetch_with_deadline(
+        self,
+        url: str,
+        *,
+        source_deadline: float,
+        executor: DaemonWorkerPool,
+    ) -> bytes:
+        remaining = self._remaining_timeout(source_deadline, "http_transport")
+        if _accepts_keyword(self.fetch, "timeout"):
+            future = executor.submit(self.fetch, url, timeout=remaining)
+        else:
+            future = executor.submit(self.fetch, url)
+        try:
+            payload = future.result(timeout=remaining)
+        except TimeoutError as error:
+            future.cancel()
+            raise TimeoutError(
+                f"source watchdog expired during HTTP transport for {url}"
+            ) from error
+        if not isinstance(payload, bytes):
+            raise TypeError("aggregate transport must return bytes")
+        return payload
 
     @staticmethod
     def _prefiltered_article(index: SourceArticleIndex) -> CleanArticle:
@@ -765,8 +958,19 @@ class DedicatedAggregateCoordinator:
             )
         return output
 
-    def _fetch_adapter_page(self, source_id: str, url: str) -> bytes:
-        payload = self.fetch(url)
+    def _fetch_adapter_page(
+        self,
+        source_id: str,
+        url: str,
+        *,
+        source_deadline: float,
+        executor: DaemonWorkerPool,
+    ) -> bytes:
+        payload = self._fetch_with_deadline(
+            url,
+            source_deadline=source_deadline,
+            executor=executor,
+        )
         digest = sha256(url.encode("utf-8")).hexdigest()[:16]
         self._write_raw(source_id, f"adapter-fetch-{digest}", payload)
         return payload
@@ -774,13 +978,47 @@ class DedicatedAggregateCoordinator:
     def _post_adapter_json(
         self,
         source_id: str,
+        *,
+        source_deadline: float | None = None,
+        executor: DaemonWorkerPool | None = None,
     ) -> Callable[[str, dict[str, Any]], bytes] | None:
         post_json = getattr(self.fetch, "post_json", None)
         if not callable(post_json):
             return None
+        deadline = source_deadline or (
+            time.monotonic() + self.source_timeout_seconds
+        )
 
         def fetch(url: str, payload: dict[str, Any]) -> bytes:
-            body = post_json(url, payload)
+            remaining = self._remaining_timeout(
+                deadline,
+                "http_post_transport",
+            )
+            active_executor = executor or DaemonWorkerPool(
+                max_workers=1,
+                name="aggregate-http-post",
+            )
+            if _accepts_keyword(post_json, "timeout"):
+                future = active_executor.submit(
+                    post_json,
+                    url,
+                    payload,
+                    timeout=remaining,
+                )
+            else:
+                future = active_executor.submit(post_json, url, payload)
+            try:
+                body = future.result(timeout=remaining)
+            except TimeoutError as error:
+                future.cancel()
+                raise TimeoutError(
+                    f"source watchdog expired during HTTP POST transport for {url}"
+                ) from error
+            finally:
+                if executor is None:
+                    active_executor.shutdown(cancel_futures=True)
+            if not isinstance(body, bytes):
+                raise TypeError("aggregate POST transport must return bytes")
             request_key = json.dumps(payload, ensure_ascii=False, sort_keys=True)
             digest = sha256(f"{url}|{request_key}".encode("utf-8")).hexdigest()[:16]
             self._write_raw(source_id, f"adapter-post-{digest}", body)
@@ -830,7 +1068,11 @@ class DedicatedAggregateCoordinator:
         target = self.acceptance_dir / source_id
         target.mkdir(parents=True, exist_ok=True)
         payload = json.dumps(
-            {"article": article, "events": events, "minimax_audit": minimax_audit},
+            {
+                "article": sanitize_tree(article, redact_pii=True),
+                "events": sanitize_tree(events, redact_pii=True),
+                "minimax_audit": sanitize_semantic_audit(minimax_audit),
+            },
             ensure_ascii=False,
             indent=2,
         )

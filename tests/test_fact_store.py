@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import sqlite3
 
 from ht_lead_radar.domain import (
@@ -100,6 +101,80 @@ def test_url_normalization_exact_hash_and_immutable_document_versions(tmp_path):
     assert created
     assert mirror.exact_duplicate_of_id == stored.id
     assert len(store.find_documents(content_hash=stored.content_hash)) == 2
+
+
+def test_fact_store_never_persists_url_userinfo_tokens_or_secret_metadata(tmp_path):
+    database = tmp_path / "safe-facts.sqlite"
+    store = FactStore(database)
+    document = SourceDocument.create(
+        source_name="测试",
+        source_url=(
+            "https://user:pass@example.com/a?access_token=url-secret&page=2#private"
+        ),
+        title="融资",
+        content="融资事实",
+        metadata={"headers": {"Authorization": "Bearer metadata-secret"}},
+    )
+
+    stored, _ = store.upsert_document(document)
+
+    assert stored.source_url == "https://example.com/a?page=2"
+    assert stored.normalized_url == "https://example.com/a?page=2"
+    assert stored.metadata["headers"] == "[redacted]"
+    with sqlite3.connect(database) as connection:
+        row = connection.execute(
+            "SELECT source_url, normalized_url, metadata_json FROM source_documents"
+        ).fetchone()
+    assert "url-secret" not in " ".join(row)
+    assert "metadata-secret" not in " ".join(row)
+
+
+def test_fact_store_v3_migration_recleans_legacy_urls_metadata_and_pii(tmp_path):
+    database = tmp_path / "legacy-facts.sqlite"
+    store = FactStore(database)
+    store.upsert_document(
+        SourceDocument.create(
+            source_name="测试",
+            source_url="https://example.test/a?page=2",
+            title="融资",
+            content="融资事实",
+        )
+    )
+    with sqlite3.connect(database) as connection:
+        connection.execute(
+            "UPDATE source_documents SET source_url=?, normalized_url=?, "
+            "metadata_json=?",
+            (
+                "https://user:pass@example.test/a?X-Amz-Credential=cred-secret"
+                "&X-Amz-Signature=signature-secret&page=2#private-fragment",
+                "https://user:pass@example.test/a?token=url-secret&page=2",
+                json.dumps(
+                    {
+                        "contact": "0086 / 21 / 61234567",
+                        "Config.FEISHU_APP_SECRET": "metadata-secret",
+                    }
+                ),
+            ),
+        )
+        connection.execute(
+            "UPDATE fact_store_metadata SET value='2' "
+            "WHERE key='persistence_sanitizer_version'"
+        )
+
+    FactStore(database)
+    with sqlite3.connect(database) as connection:
+        dump = "\n".join(connection.iterdump())
+
+    for unsafe in (
+        "user:pass",
+        "cred-secret",
+        "signature-secret",
+        "url-secret",
+        "private-fragment",
+        "61234567",
+        "metadata-secret",
+    ):
+        assert unsafe not in dump
 
 
 def test_schema_migration_is_idempotent(tmp_path):
@@ -287,7 +362,16 @@ def test_event_cluster_uses_company_type_time_and_identifying_slots(tmp_path):
     assert len(store.event_revisions(event_a.id)) == 2
 
 
-def test_lifecycle_developing_stale_disputed_retracted_and_manual(tmp_path):
+def test_lifecycle_developing_stale_disputed_retracted_and_manual(
+    tmp_path,
+    monkeypatch,
+):
+    # Keep the pre-stale assertions independent of the wall clock. The stale
+    # transition itself is exercised explicitly with ``as_of`` below.
+    monkeypatch.setattr(
+        "ht_lead_radar.fact_store.utcnow",
+        lambda: "2026-07-08T00:00:00Z",
+    )
     store = FactStore(tmp_path / "facts.sqlite", stale_after_days=30)
     company, _ = store.get_or_create_entity("company", "甲公司")
     event, _, _, _ = _claim(

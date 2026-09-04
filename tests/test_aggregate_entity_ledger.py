@@ -41,6 +41,19 @@ def test_ledger_binds_explicit_alias_to_legal_company() -> None:
     assert entity.operating_subject_eligible is True
 
 
+def test_continuous_alias_merges_do_not_dereference_deleted_snapshot_owner() -> None:
+    body = (
+        "北京甲辰科技有限公司（以下简称甲辰科技）与甲辰科技签署合作协议。"
+        "甲辰科技有限公司随后宣布启动新项目。"
+    )
+
+    ledger = build_article_entity_ledger(_article(body), [], [])
+
+    company = ledger.entity_for_name("甲辰科技")
+    assert company is not None
+    assert company.operating_subject_eligible is True
+
+
 def test_ledger_binds_enterprise_short_name_to_legal_company() -> None:
     body = (
         "杭州甲辰电子科技有限公司（企业简称：甲辰）完成战略融资。"

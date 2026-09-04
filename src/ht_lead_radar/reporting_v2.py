@@ -9,6 +9,7 @@ from typing import Any, Iterable, Mapping
 from .float_matching import FloatMatch
 from .models import CompanyLead
 from .reporting import render_markdown
+from .sanitization import sanitize_diagnostic_fields, sanitize_tree, sanitize_url
 
 
 def render_complete_markdown(
@@ -104,7 +105,11 @@ def render_complete_markdown(
                 "## 信源",
                 "",
                 "```json",
-                json.dumps(source_summary, ensure_ascii=False, indent=2),
+                json.dumps(
+                    sanitize_diagnostic_fields(source_summary),
+                    ensure_ascii=False,
+                    indent=2,
+                ),
                 "```",
             ])
         if integration_status:
@@ -113,7 +118,11 @@ def render_complete_markdown(
                 "## 外部集成",
                 "",
                 "```json",
-                json.dumps(integration_status, ensure_ascii=False, indent=2),
+                json.dumps(
+                    sanitize_diagnostic_fields(integration_status),
+                    ensure_ascii=False,
+                    indent=2,
+                ),
                 "```",
             ])
         sections.append("\n".join(lines))
@@ -131,12 +140,16 @@ def write_complete_outputs(
     late_opportunities: Iterable[Mapping[str, Any]] = (),
     float_matches: Iterable[FloatMatch | Mapping[str, Any]] = (),
     deep_research: Mapping[str, Mapping[str, Any]] | None = None,
+    opportunity_segments: Mapping[str, Any] | None = None,
 ) -> tuple[Path, Path]:
     target = Path(output_dir)
     target.mkdir(parents=True, exist_ok=True)
     markdown_path = target / f"{stem}.md"
     json_path = target / f"{stem}.json"
-    markdown_path.write_text(markdown, encoding="utf-8")
+    markdown_path.write_text(
+        sanitize_tree(markdown, redact_pii=True),
+        encoding="utf-8",
+    )
     float_payload = [
         item.to_dict() if isinstance(item, FloatMatch) else dict(item)
         for item in float_matches
@@ -148,9 +161,14 @@ def write_complete_outputs(
         "late_opportunities": [dict(item) for item in late_opportunities],
         "float_matches": float_payload,
         "deep_research": dict(deep_research or {}),
+        "daily_opportunity_segments": dict(opportunity_segments or {}),
     }
     json_path.write_text(
-        json.dumps(envelope, ensure_ascii=False, indent=2),
+        json.dumps(
+            sanitize_tree(envelope, redact_pii=True),
+            ensure_ascii=False,
+            indent=2,
+        ),
         encoding="utf-8",
     )
     return markdown_path, json_path
@@ -177,7 +195,8 @@ def _append_institutions(lines: list[str], institutions: Iterable[Mapping[str, A
         lines.append(
             f'  - {item.get("name", "未知机构")}（{role}，'
             f'置信度 {float(item.get("confidence", 0)):.2f}）：'
-            f'[{item.get("evidence_url", "来源")}]({item.get("evidence_url", "")})'
+            f'[{sanitize_url(item.get("evidence_url", "来源"))}]'
+            f'({sanitize_url(item.get("evidence_url", ""))})'
         )
 
 
@@ -193,7 +212,7 @@ def _append_people(
         return
     for item in items:
         inference = "推断" if item.get("inferred") else "公开事实"
-        url = item.get("evidence_url", "")
+        url = sanitize_url(item.get("evidence_url", ""))
         lines.append(
             f'  - {item.get("name", "未知")}｜{item.get("title", "职位未知")}｜'
             f'{item.get("organization", "机构未知")}｜{inference}｜'

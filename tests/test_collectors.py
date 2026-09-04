@@ -1,6 +1,9 @@
 import sqlite3
 import json
 from io import BytesIO
+import time
+
+import pytest
 
 from ht_lead_radar.collectors import (
     _event_date_from_text,
@@ -14,6 +17,7 @@ from ht_lead_radar.collectors import (
     normalize_replayed_route,
     result_relevant_to_company,
     SearXNGCollector,
+    BingRSSCollector,
 )
 
 
@@ -115,6 +119,20 @@ def test_searxng_adapter_uses_existing_json_api(monkeypatch):
     result = SearXNGCollector().search("戴盟机器人 融资", limit=3)[0]
     assert result.title == "戴盟机器人完成融资"
     assert result.published_at == "2026-06-04"
+
+
+def test_search_collector_dns_connect_has_real_wall_clock_boundary(monkeypatch):
+    def stuck_open(*_args, **_kwargs):
+        time.sleep(0.5)
+        return BytesIO(b"<rss/>")
+
+    monkeypatch.setattr("urllib.request.urlopen", stuck_open)
+    collector = BingRSSCollector(timeout=0.02)
+
+    started = time.monotonic()
+    with pytest.raises(TimeoutError, match="connect"):
+        collector.search("hardtech", limit=1)
+    assert time.monotonic() - started < 0.15
 
 
 def test_replay_removes_generic_job_ads_and_bad_routes(tmp_path):

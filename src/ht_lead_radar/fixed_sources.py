@@ -4,6 +4,7 @@ import hashlib
 import json
 import re
 import sqlite3
+import time
 import urllib.parse
 import urllib.request
 from dataclasses import asdict
@@ -17,8 +18,23 @@ from .collectors import (
     extract_company_candidates,
     infer_event,
 )
+from .http_runtime import call_with_wallclock, read_response_body
 from .models import Evidence
+from .sanitization import safe_error
 from .taxonomy import profile_for
+
+
+def _safe_error_text(error: object) -> str:
+    if not error:
+        return ""
+    diagnostic = safe_error(error)
+    if diagnostic["detail"].startswith(f"{diagnostic['error_class']}:"):
+        return diagnostic["detail"]
+    return (
+        f"{diagnostic['error_class']}: {diagnostic['detail']}"
+        if diagnostic["detail"]
+        else diagnostic["error_class"]
+    )
 
 
 class AnchorParser(HTMLParser):
@@ -96,11 +112,25 @@ class FixedSourceCollector:
                 "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
             },
         )
-        with urllib.request.urlopen(request, timeout=self.timeout) as response:
+        deadline = time.monotonic() + self.timeout
+        response = call_with_wallclock(
+            urllib.request.urlopen,
+            self.timeout,
+            request,
+            timeout=self.timeout,
+            timeout_message="fixed-source HTTP connect exceeded deadline",
+            worker_name="fixed-source-connect",
+        )
+        with response:
             charset = response.headers.get_content_charset() or "utf-8"
-            payload = response.read(self.max_bytes + 1)
-        if len(payload) > self.max_bytes:
-            raise ValueError(f"response exceeds {self.max_bytes} bytes")
+            remaining = deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError("HTTP request exceeded deadline before body read")
+            payload = read_response_body(
+                response,
+                max_bytes=self.max_bytes,
+                timeout=remaining,
+            )
         try:
             return payload.decode(charset, errors="replace")
         except LookupError:
@@ -251,8 +281,9 @@ class FixedSourceCollector:
             )
 
     def _record_run(
-        self, source_id: str, status: str, count: int, error: str = ""
+        self, source_id: str, status: str, count: int, error: object = ""
     ) -> None:
+        diagnostic = _safe_error_text(error)
         with sqlite3.connect(self.state_db) as connection:
             connection.execute(
                 """
@@ -262,12 +293,14 @@ class FixedSourceCollector:
                     last_run=excluded.last_run, status=excluded.status,
                     item_count=excluded.item_count, error=excluded.error
             """,
-                (source_id, date.today().isoformat(), status, count, error[:500]),
+                (source_id, date.today().isoformat(), status, count, diagnostic[:500]),
             )
 
     def collect(
         self, direction: str, year: int = 0, limit_per_query: int = 10
     ) -> list[Evidence]:
+        # This is a per-invocation observation, not a lifetime accumulator.
+        self.last_run_summary = {"sources": {}, "errors": []}
         allowed_source_ids = tuple(
             str(source["id"])
             for source in self.registry.get("sources", [])
@@ -291,6 +324,7 @@ class FixedSourceCollector:
                 continue
             source_id = source["id"]
             count = 0
+            detail_errors: list[BaseException] = []
             try:
                 listing = self._fetch(source["list_url"])
                 for url, listing_title in self._candidate_links(source, listing):
@@ -298,7 +332,8 @@ class FixedSourceCollector:
                     if source.get("fetch_detail", True):
                         try:
                             body = _clean_html(self._fetch(url))
-                        except Exception:
+                        except Exception as exc:
+                            detail_errors.append(exc)
                             body = listing_title
                     if not self._relevant(source, direction, listing_title, body):
                         continue
@@ -307,11 +342,37 @@ class FixedSourceCollector:
                     ):
                         self._store(source_id, item)
                         count += 1
-                self._record_run(source_id, "ok", count)
-                self.last_run_summary["sources"][source_id] = count
+                run_status = "partial" if detail_errors else "ok"
+                first_detail_error = detail_errors[0] if detail_errors else None
+                self._record_run(source_id, run_status, count, first_detail_error)
+                self.last_run_summary["sources"][source_id] = {
+                    "status": run_status,
+                    "evidence_count": count,
+                    "detail_success_count": None,
+                    "detail_failure_count": len(detail_errors),
+                    "error": (
+                        _safe_error_text(first_detail_error)
+                        if first_detail_error is not None
+                        else ""
+                    ),
+                }
+                if first_detail_error is not None:
+                    self.last_run_summary["errors"].append(
+                        f"{source_id}: detail fetch partial: {_safe_error_text(first_detail_error)}"
+                    )
             except Exception as exc:
-                self._record_run(source_id, "error", 0, str(exc))
-                self.last_run_summary["errors"].append(f"{source_id}: {exc}")
+                diagnostic = _safe_error_text(exc)
+                self._record_run(source_id, "error", 0, exc)
+                self.last_run_summary["sources"][source_id] = {
+                    "status": "error",
+                    "evidence_count": 0,
+                    "detail_success_count": None,
+                    "detail_failure_count": None,
+                    "error": diagnostic,
+                }
+                self.last_run_summary["errors"].append(
+                    f"{source_id}: {diagnostic}"
+                )
         return self.load_recent(direction, source_ids=allowed_source_ids)
 
     def load_recent(

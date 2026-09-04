@@ -30,6 +30,14 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--run-date", default=date.today().isoformat())
     parser.add_argument("--output-dir", default="reports-daily")
     parser.add_argument("--target-count", type=int, default=20)
+    parser.add_argument(
+        "--candidate-count",
+        type=int,
+        default=60,
+        help="oversupply before delivery-cooldown selects the final Top 20",
+    )
+    parser.add_argument("--talent-state-db", default="data/talent-pool.sqlite")
+    parser.add_argument("--cooldown-days", type=int, default=7)
     parser.add_argument("--fixed-sources", default="config/fixed-sources.json")
     parser.add_argument("--source-packs", default="config/source-packs.json")
     parser.add_argument("--source-state-db", default="data/fixed-sources.sqlite")
@@ -40,7 +48,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--feishu-state-db", default="data/feishu-projection.sqlite")
     parser.add_argument("--audit-db", default="data/audit.sqlite")
     parser.add_argument("--ops-metrics-db", default="data/ops-metrics.sqlite")
-    parser.add_argument("--env-file", required=True)
+    parser.add_argument(
+        "--env-file",
+        help="optional local dotenv; production injects a protected environment",
+    )
     parser.add_argument("--josint-db", required=True)
     parser.add_argument("--suppressions")
     parser.add_argument(
@@ -66,6 +77,8 @@ def main(argv: list[str] | None = None) -> int:
     )
     if not topics:
         raise ValueError("--directions must contain at least one topic")
+    if args.candidate_count < args.target_count:
+        raise ValueError("--candidate-count must be at least --target-count")
 
     command = [
         sys.executable,
@@ -97,8 +110,6 @@ def main(argv: list[str] | None = None) -> int:
         args.audit_db,
         "--ops-metrics-db",
         args.ops_metrics_db,
-        "--env-file",
-        args.env_file,
         "--josint-db",
         args.josint_db,
         "--output-dir",
@@ -107,6 +118,13 @@ def main(argv: list[str] | None = None) -> int:
         "0",
         "--top",
         str(args.target_count),
+        "--candidate-pool-size",
+        str(args.candidate_count),
+        "--daily-cooldown",
+        "--cooldown-days",
+        str(args.cooldown_days),
+        "--talent-state-db",
+        args.talent_state_db,
         "--metaso-verify-limit",
         str(args.metaso_verify_limit),
         "--metaso-daily-point-budget",
@@ -114,6 +132,8 @@ def main(argv: list[str] | None = None) -> int:
         "--metaso-provider-daily-limit",
         str(args.metaso_provider_daily_limit),
     ]
+    if args.env_file:
+        command.extend(["--env-file", args.env_file])
     if args.suppressions:
         command.extend(["--suppressions", args.suppressions])
     if args.refresh:
@@ -134,16 +154,19 @@ def main(argv: list[str] | None = None) -> int:
     print(
         json.dumps(
             {
-                "status": ("completed" if completed.returncode == 0 else "partial"),
+                # Exit 2 is the application contract for a valid analysis with
+                # zero selected companies, not a degraded/failed run.
+                "status": "completed",
                 "portfolio_report": str(report_path),
                 "source_topics": list(topics),
                 "company_count": len(report.get("leads") or ()),
+                "candidate_pool_size": args.candidate_count,
                 "collection_strategy": "single_pass_multi_topic",
             },
             ensure_ascii=False,
         )
     )
-    return completed.returncode
+    return 0
 
 
 if __name__ == "__main__":

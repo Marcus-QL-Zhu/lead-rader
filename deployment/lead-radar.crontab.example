@@ -1,0 +1,12 @@
+# Install only after the protected env file and stable release symlink exist.
+# This file contains paths and variable names only; never place secret values here.
+CRON_TZ=Asia/Shanghai
+HT_LEAD_ENV_FILE=/home/admin/.openclaw/secrets/lead-radar.env
+
+0 5 * * * /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/run_daily_fixed_sources.sh >> /home/admin/.openclaw/workspace/skills/hardtech-lead-radar-state/logs/daily-cron.log 2>&1
+
+# The OpenClaw reconciliation schedule remains exactly 05:50 and 06:50 and is
+# managed by scripts/install_openclaw_report_cron.py, not duplicated here. The
+# installer canonicalizes either an exact-SHA release invocation or the live
+# symlink invocation to this stable project path. A local/legacy checkout must
+# be selected explicitly with --project-root when that behavior is intended.

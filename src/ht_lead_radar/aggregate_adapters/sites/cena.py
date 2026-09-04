@@ -47,6 +47,8 @@ _BODY_NOISE = re.compile(
 )
 _BYLINE_ONLY = re.compile(r"^(?:编辑|责任编辑|记者)[：:]\s*[^，。；]{1,30}$")
 _NON_ARTICLE_TITLE = re.compile(r"^公益广告$")
+_DECORATIVE_ANCHOR_TITLE = re.compile(r"^(?:导读|目录|更多|返回|上一篇|下一篇)$")
+_DECORATIVE_CLASS = re.compile(r"(?:^|\s)(?:decorative|navigation|nav|more|placeholder)(?:\s|$)", re.I)
 _EVENT_TYPES = (
     "funding",
     "executive_change",
@@ -97,6 +99,48 @@ class CenaAdapter(AggregateAdapter):
             _BYLINE_ONLY.fullmatch(index.title)
             or _NON_ARTICLE_TITLE.fullmatch(index.title)
         )
+
+    def validate_listing(
+        self,
+        channel: SourceChannel,
+        articles: list[SourceArticleIndex],
+    ) -> None:
+        """CENA permits concise editorial titles while retaining URL invariants."""
+
+        if not self.minimum_listing_count <= len(articles) <= self.maximum_listing_count:
+            raise ListingInvariantError(
+                f"{channel.source_id} listing count {len(articles)} outside "
+                f"{self.minimum_listing_count}..{self.maximum_listing_count}"
+            )
+        seen_ids: set[str] = set()
+        seen_urls: set[str] = set()
+        for article in articles:
+            if not article.source_article_id or article.source_article_id in seen_ids:
+                raise ListingInvariantError(
+                    f"{channel.source_id} duplicate/empty article id"
+                )
+            if article.canonical_url in seen_urls:
+                raise ListingInvariantError(
+                    f"{channel.source_id} duplicate canonical URL"
+                )
+            if not 1 <= len(article.title.strip()) <= 300:
+                raise ListingInvariantError(
+                    f"{channel.source_id} invalid title: {article.title!r}"
+                )
+            parsed = urlparse(article.canonical_url)
+            if parsed.scheme != "https" or parsed.hostname not in channel.allowed_hosts:
+                raise ListingInvariantError(
+                    f"{channel.source_id} rejected URL: {article.canonical_url}"
+                )
+            if channel.allowed_path_patterns and not any(
+                re.fullmatch(pattern, parsed.path)
+                for pattern in channel.allowed_path_patterns
+            ):
+                raise ListingInvariantError(
+                    f"{channel.source_id} rejected path: {parsed.path}"
+                )
+            seen_ids.add(article.source_article_id)
+            seen_urls.add(article.canonical_url)
 
     def parse_listing(
         self,
@@ -457,9 +501,67 @@ class CenaAdapter(AggregateAdapter):
                 f"{article_match.group(1)}.html"
             )
             article_id = self._article_id(canonical_url)
-            if not article_id or len(title) < 4:
+            if not article_id:
                 raise ListingInvariantError(
                     f"{channel.source_id} invalid section article {canonical_url}"
+                )
+            # Only structurally confirmed decoration is skipped. Short titles
+            # such as "AI" or "芯片" are valid editorial headlines.
+            link_class = str(link.attrib.get("class") or "")
+            structural_decoration = (
+                str(link.attrib.get("aria-hidden") or "").lower() == "true"
+                or str(link.attrib.get("role") or "").lower() in {"none", "presentation"}
+                or bool(_DECORATIVE_CLASS.search(link_class))
+            )
+            if structural_decoration and (
+                not title or _DECORATIVE_ANCHOR_TITLE.fullmatch(title)
+            ):
+                self._record(
+                    context,
+                    "listing_anchor_skipped",
+                    {
+                        "reason": "structural_decoration",
+                        "canonical_url": canonical_url,
+                        "page_position": page_position,
+                    },
+                )
+                continue
+            if not title:
+                detail_html = context.fetch(canonical_url)
+                self._reject_interstitial(channel.source_id, detail_html, listing=True)
+                detail = AdaptiveSelector(
+                    detail_html, url=canonical_url, storage_path=context.adaptive_db
+                )
+                recovered = detail.css(
+                    "div.detail-art h2#Title.art-title",
+                    identifier=f"{channel.source_id}:listing-title-recovery",
+                    minimum_count=1,
+                    maximum_count=1,
+                )
+                detail_date = detail.css(
+                    "div#paperdate.header-time",
+                    identifier=f"{channel.source_id}:listing-date-recovery",
+                    minimum_count=1,
+                    maximum_count=1,
+                )
+                if not recovered.elements or not detail_date.elements:
+                    raise ListingInvariantError(
+                        f"{channel.source_id} could not recover empty listing title"
+                    )
+                title = self.clean_text(
+                    recovered.elements[0].get_all_text(separator=" ", strip=True)
+                )
+                recovered_date = self._date_from_label(
+                    detail_date.elements[0].get_all_text(separator=" ", strip=True)
+                )
+                if not title or recovered_date != issue_date:
+                    raise ListingInvariantError(
+                        f"{channel.source_id} invalid recovered listing title/date"
+                    )
+                self._record(
+                    context,
+                    "listing_title_recovered",
+                    {"canonical_url": canonical_url, "page_position": page_position},
                 )
             published_at = datetime.combine(
                 issue_date,

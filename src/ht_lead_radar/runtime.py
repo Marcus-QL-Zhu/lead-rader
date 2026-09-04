@@ -21,6 +21,41 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping
 
+from .sanitization import safe_error, sanitize_tree
+
+
+_PERSISTENCE_SANITIZER_VERSION = "4"
+
+
+def _sanitize_runtime_value(value: Any) -> Any:
+    """Sanitize every runtime persistence boundary except approved job JSON.
+
+    ``sanitize_tree`` deliberately preserves ``public_payload``,
+    ``liepin_payload`` and their hashes byte-for-byte.  All other runtime
+    input/output is operational state, so PII and signed credentials are not
+    useful enough to justify persisting them.
+    """
+
+    return sanitize_tree(value, redact_pii=True)
+
+
+def _opaque_idempotency_key(run_id: str) -> str:
+    """Return a stable non-secret DB representation of an idempotency key."""
+
+    return f"run-ref:{run_id.removeprefix('run_')}"
+
+
+def _safe_error_text(error: object) -> str:
+    diagnostic = safe_error(error)
+    detail = diagnostic["detail"]
+    if detail.startswith(f"{diagnostic['error_class']}:"):
+        return detail
+    return (
+        f"{diagnostic['error_class']}: {detail}"
+        if detail
+        else diagnostic["error_class"]
+    )
+
 
 STAGES = (
     'collect',
@@ -80,7 +115,9 @@ class StageExecutionError(RuntimeError):
         self.run_id = run_id
         self.stage = stage
         self.cause = cause
-        super().__init__(f'run {run_id} failed at {stage}: {cause}')
+        super().__init__(
+            f'run {run_id} failed at {stage}: {_safe_error_text(cause)}'
+        )
 
 
 @dataclass(frozen=True)
@@ -193,12 +230,10 @@ class StageContext:
         token = self.effect_token(effect_key)
         self.store.start_effect(self.run_id, self.stage, effect_key, token)
         try:
-            result = operation(token)
+            result = _sanitize_runtime_value(operation(token))
             _canonical_json(result)
         except Exception as error:
-            self.store.fail_effect(
-                self.run_id, self.stage, effect_key, f'{type(error).__name__}: {error}'
-            )
+            self.store.fail_effect(self.run_id, self.stage, effect_key, error)
             raise
         self.store.complete_effect(self.run_id, self.stage, effect_key, result)
         return result
@@ -275,11 +310,95 @@ class RunStore:
                     PRIMARY KEY (run_id, stage, effect_key),
                     FOREIGN KEY (run_id) REFERENCES pipeline_runs(run_id)
                 );
+
+                CREATE TABLE IF NOT EXISTS pipeline_metadata (
+                    key TEXT PRIMARY KEY,
+                    value TEXT NOT NULL
+                );
                 '''
             )
+            self._migrate_persisted_payloads(connection)
+
+    @staticmethod
+    def _safe_json_blob(value: object) -> tuple[str, str]:
+        """Return canonical safe JSON plus its digest for a legacy blob."""
+
+        try:
+            parsed = json.loads(str(value))
+        except (TypeError, ValueError, json.JSONDecodeError):
+            parsed = str(value or "")
+        rendered = _canonical_json(_sanitize_runtime_value(parsed))
+        return rendered, hashlib.sha256(rendered.encode("utf-8")).hexdigest()
+
+    def _migrate_persisted_payloads(self, connection: sqlite3.Connection) -> None:
+        """One-time cleanup of credentials/PII left by earlier runtimes."""
+
+        row = connection.execute(
+            "SELECT value FROM pipeline_metadata "
+            "WHERE key='persistence_sanitizer_version'"
+        ).fetchone()
+        if row and str(row["value"]) == _PERSISTENCE_SANITIZER_VERSION:
+            return
+
+        for item in connection.execute(
+            "SELECT run_id, input_json, error FROM pipeline_runs"
+        ).fetchall():
+            safe_json, digest = self._safe_json_blob(item["input_json"])
+            connection.execute(
+                "UPDATE pipeline_runs SET idempotency_key=?, input_json=?, "
+                "input_hash=?, error=? "
+                "WHERE run_id=?",
+                (
+                    _opaque_idempotency_key(str(item["run_id"])),
+                    safe_json,
+                    digest,
+                    _safe_error_text(item["error"]) if item["error"] else None,
+                    item["run_id"],
+                ),
+            )
+        for item in connection.execute(
+            "SELECT rowid, output_json, error FROM pipeline_checkpoints"
+        ).fetchall():
+            safe_json: str | None = None
+            digest: str | None = None
+            if item["output_json"] is not None:
+                safe_json, digest = self._safe_json_blob(item["output_json"])
+            connection.execute(
+                "UPDATE pipeline_checkpoints SET output_json=?, output_hash=?, error=? "
+                "WHERE rowid=?",
+                (
+                    safe_json,
+                    digest,
+                    _safe_error_text(item["error"]) if item["error"] else None,
+                    int(item["rowid"]),
+                ),
+            )
+        for item in connection.execute(
+            "SELECT rowid, result_json, error FROM pipeline_effects"
+        ).fetchall():
+            safe_json = None
+            if item["result_json"] is not None:
+                safe_json, _ = self._safe_json_blob(item["result_json"])
+            connection.execute(
+                "UPDATE pipeline_effects SET result_json=?, error=? WHERE rowid=?",
+                (
+                    safe_json,
+                    _safe_error_text(item["error"]) if item["error"] else None,
+                    int(item["rowid"]),
+                ),
+            )
+        connection.execute(
+            """
+            INSERT INTO pipeline_metadata(key, value)
+            VALUES ('persistence_sanitizer_version', ?)
+            ON CONFLICT(key) DO UPDATE SET value=excluded.value
+            """,
+            (_PERSISTENCE_SANITIZER_VERSION,),
+        )
 
     def ensure_run(self, idempotency_key: str, payload: Any) -> RunRecord:
         run_id = make_run_id(idempotency_key)
+        payload = _sanitize_runtime_value(payload)
         input_json = _canonical_json(payload)
         input_hash = hashlib.sha256(input_json.encode('utf-8')).hexdigest()
         now = _iso(self.clock())
@@ -296,15 +415,21 @@ class RunStore:
                         current_stage, created_at, updated_at
                     ) VALUES (?, ?, ?, ?, 'pending', NULL, ?, ?)
                     ''',
-                    (run_id, idempotency_key.strip(), input_json, input_hash, now, now),
+                    (
+                        run_id,
+                        _opaque_idempotency_key(run_id),
+                        input_json,
+                        input_hash,
+                        now,
+                        now,
+                    ),
                 )
                 row = connection.execute(
                     'SELECT * FROM pipeline_runs WHERE run_id = ?', (run_id,)
                 ).fetchone()
             elif row['input_hash'] != input_hash:
                 raise IdempotencyConflict(
-                    f'idempotency key {idempotency_key!r} already belongs to '
-                    f'input hash {row["input_hash"]}'
+                    'idempotency key already belongs to a different input hash'
                 )
         return _run_from_row(row)
 
@@ -336,7 +461,7 @@ class RunStore:
         status: str,
         *,
         current_stage: str | None = None,
-        error: str | None = None,
+        error: object | None = None,
     ) -> None:
         now = _iso(self.clock())
         completed = now if status == 'completed' else None
@@ -348,7 +473,14 @@ class RunStore:
                     completed_at = ?, error = ?
                 WHERE run_id = ?
                 ''',
-                (status, current_stage, now, completed, error, run_id),
+                (
+                    status,
+                    current_stage,
+                    now,
+                    completed,
+                    _safe_error_text(error) if error else None,
+                    run_id,
+                ),
             )
         if result.rowcount == 0:
             raise UnknownRun(run_id)
@@ -447,6 +579,7 @@ class RunStore:
         attempt: int,
         output: Any,
     ) -> Checkpoint:
+        output = _sanitize_runtime_value(output)
         output_json = _canonical_json(output)
         output_hash = hashlib.sha256(output_json.encode('utf-8')).hexdigest()
         now = _iso(self.clock())
@@ -471,7 +604,7 @@ class RunStore:
         run_id: str,
         stage: str,
         attempt: int,
-        error: str,
+        error: object,
     ) -> None:
         now = _iso(self.clock())
         with self._connect() as connection:
@@ -481,7 +614,7 @@ class RunStore:
                 SET status = 'failed', completed_at = ?, error = ?
                 WHERE run_id = ? AND stage = ? AND attempt = ?
                 ''',
-                (now, error, run_id, stage, attempt),
+                (now, _safe_error_text(error), run_id, stage, attempt),
             )
 
     def get_effect(
@@ -544,7 +677,7 @@ class RunStore:
     def complete_effect(
         self, run_id: str, stage: str, effect_key: str, result: Any
     ) -> None:
-        result_json = _canonical_json(result)
+        result_json = _canonical_json(_sanitize_runtime_value(result))
         with self._connect() as connection:
             connection.execute(
                 '''
@@ -563,7 +696,7 @@ class RunStore:
             )
 
     def fail_effect(
-        self, run_id: str, stage: str, effect_key: str, error: str
+        self, run_id: str, stage: str, effect_key: str, error: object
     ) -> None:
         with self._connect() as connection:
             connection.execute(
@@ -572,7 +705,13 @@ class RunStore:
                 SET status = 'failed', error = ?, updated_at = ?
                 WHERE run_id = ? AND stage = ? AND effect_key = ?
                 ''',
-                (error, _iso(self.clock()), run_id, stage, effect_key),
+                (
+                    _safe_error_text(error),
+                    _iso(self.clock()),
+                    run_id,
+                    stage,
+                    effect_key,
+                ),
             )
 
     def status(self, run_id: str) -> dict[str, Any]:
@@ -742,20 +881,20 @@ class StagedRuntime:
                     store=self.store,
                 )
                 try:
-                    value = self.handlers[stage](context)
+                    value = _sanitize_runtime_value(self.handlers[stage](context))
                     _canonical_json(value)
                 except Exception as error:
-                    message = f'{type(error).__name__}: {error}'
-                    self.store.fail_checkpoint(
-                        run_id, stage, attempt, message
-                    )
+                    self.store.fail_checkpoint(run_id, stage, attempt, error)
                     self.store.set_run_state(
                         run_id,
                         'failed',
                         current_stage=stage,
-                        error=message,
+                        error=error,
                     )
-                    raise StageExecutionError(run_id, stage, error) from error
+                    # Keep the original exception available only through the
+                    # in-memory ``cause`` attribute. An uncaught chained
+                    # traceback must not print provider credentials.
+                    raise StageExecutionError(run_id, stage, error) from None
                 self.store.complete_checkpoint(run_id, stage, attempt, value)
                 outputs[stage] = value
                 executed.append(stage)

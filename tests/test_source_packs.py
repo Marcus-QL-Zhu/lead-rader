@@ -81,6 +81,21 @@ def test_disabled_dynamic_or_blocked_sources_are_visible_but_not_scheduled_by_de
     )
 
 
+def test_unreachable_caict_source_is_visible_as_disabled_not_silently_collected():
+    registry = load_source_packs()
+    default = registry.select("芯片")
+    audit = registry.select("芯片", include_disabled=True)
+
+    default_ids = {source.id for source in default.sources}
+    disabled = {source.id: source for source in default.disabled_sources}
+    audit_ids = {source.id for source in audit.sources}
+    assert "caict-mobile-market-analysis" not in default_ids
+    assert "caict-mobile-market-analysis" in audit_ids
+    assert disabled["caict-mobile-market-analysis"].status == "disabled_unreachable_host"
+    assert disabled["caict-mobile-market-analysis"].disabled_at == "2026-08-18"
+    assert "unreachable" in disabled["caict-mobile-market-analysis"].disabled_reason
+
+
 def test_every_source_has_provenance_signal_tags_adapter_and_verification_state():
     registry = load_source_packs()
 

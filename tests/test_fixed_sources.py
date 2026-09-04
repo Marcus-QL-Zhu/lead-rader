@@ -1,5 +1,6 @@
 import json
 import sqlite3
+import time
 
 from ht_lead_radar.fixed_sources import FixedSourceCollector
 from ht_lead_radar.models import Evidence
@@ -39,7 +40,9 @@ def test_fixed_sources_persist_dedupe_and_isolate_failures(tmp_path, monkeypatch
 
     def fake_fetch(url):
         if url == "https://broken.example/":
-            raise RuntimeError("temporary failure")
+            raise RuntimeError(
+                "temporary failure Authorization: Bearer fixed-source-secret"
+            )
         return detail if url.endswith("297.html") else listing
 
     monkeypatch.setattr(collector, "_fetch", fake_fetch)
@@ -50,12 +53,19 @@ def test_fixed_sources_persist_dedupe_and_isolate_failures(tmp_path, monkeypatch
     assert first[0].company == "\u56e0\u65f6\u673a\u5668\u4eba"
     assert first[0].event_type == "factory_or_capacity"
     assert collector.last_run_summary["errors"]
+    assert collector.last_run_summary["sources"]["good"]["status"] == "ok"
+    assert collector.last_run_summary["sources"]["broken"]["status"] == "error"
+    assert collector.last_run_summary["sources"]["good"]["evidence_count"] == 1
+    assert "fixed-source-secret" not in json.dumps(
+        collector.last_run_summary, ensure_ascii=False
+    )
     with sqlite3.connect(state_db) as connection:
         assert (
             connection.execute("SELECT COUNT(*) FROM fixed_evidence").fetchone()[0] == 1
         )
         statuses = dict(connection.execute("SELECT source_id, status FROM source_runs"))
     assert statuses == {"good": "ok", "broken": "error"}
+    assert b"fixed-source-secret" not in state_db.read_bytes()
 
 
 def test_media_source_extracts_quoted_financing_company(tmp_path):
@@ -147,6 +157,28 @@ def test_fixed_source_fetch_rejects_oversized_response(tmp_path, monkeypatch):
         assert "response exceeds 4 bytes" in str(error)
     else:
         raise AssertionError("oversized response was accepted")
+
+
+def test_fixed_source_dns_connect_has_real_wall_clock_boundary(tmp_path, monkeypatch):
+    def stuck_open(*_args, **_kwargs):
+        time.sleep(0.5)
+        raise OSError("late resolver failure")
+
+    collector = FixedSourceCollector(
+        _write_registry(tmp_path),
+        tmp_path / "connect-timeout.sqlite",
+        timeout=0.02,
+    )
+    monkeypatch.setattr("urllib.request.urlopen", stuck_open)
+
+    started = time.monotonic()
+    try:
+        collector._fetch("https://example.com/never-resolves")
+    except TimeoutError as error:
+        assert "connect" in str(error)
+    else:
+        raise AssertionError("non-cooperative DNS/connect escaped its deadline")
+    assert time.monotonic() - started < 0.15
 
 
 def test_company_specific_fixed_source_is_never_fetched(tmp_path, monkeypatch):

@@ -26,6 +26,8 @@ from datetime import date, datetime, timezone
 from enum import Enum
 from typing import Any, Mapping
 
+from .sanitization import sanitize_tree, sanitize_url
+
 
 TRACKING_QUERY_KEYS = frozenset(
     {
@@ -102,7 +104,7 @@ def normalize_url(url: str) -> str:
     some public registries still serve different resources on the two schemes.
     """
 
-    value = (url or "").strip()
+    value = sanitize_url(url)
     if not value:
         return ""
     parsed = urllib.parse.urlsplit(value)
@@ -117,12 +119,6 @@ def normalize_url(url: str) -> str:
         netloc = f"{hostname}:{port}"
     else:
         netloc = hostname
-    if parsed.username:
-        credentials = urllib.parse.quote(parsed.username, safe="")
-        if parsed.password:
-            credentials += ":" + urllib.parse.quote(parsed.password, safe="")
-        netloc = f"{credentials}@{netloc}"
-
     path = re.sub(r"/{2,}", "/", parsed.path or "/")
     trailing_slash = path.endswith("/")
     path = posixpath.normpath(path)
@@ -253,7 +249,8 @@ class SourceDocument:
         independent_source_key: str = "",
         metadata: Mapping[str, Any] | None = None,
     ) -> "SourceDocument":
-        canonical_url = normalize_url(source_url)
+        safe_source_url = sanitize_url(source_url)
+        canonical_url = normalize_url(safe_source_url)
         url_hash = sha256_text(canonical_url)
         content_hash = sha256_text(content)
         document_id = stable_id("doc", source_name.casefold(), canonical_url, content_hash)
@@ -262,7 +259,7 @@ class SourceDocument:
         return cls(
             id=document_id,
             source_name=source_name,
-            source_url=source_url,
+            source_url=safe_source_url,
             normalized_url=canonical_url,
             url_hash=url_hash,
             content_hash=content_hash,
@@ -274,7 +271,7 @@ class SourceDocument:
             observed_at=normalize_timestamp(observed_at) or utcnow(),
             language=language,
             independent_source_key=independent_source_key.casefold().strip(),
-            metadata=dict(metadata or {}),
+            metadata=sanitize_tree(dict(metadata or {}), redact_pii=True),
         )
 
 

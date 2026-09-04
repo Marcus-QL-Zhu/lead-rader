@@ -1,9 +1,14 @@
 from datetime import datetime, timezone
 from hashlib import sha256
 import json
+import os
+from pathlib import Path
+import subprocess
+import sys
 from types import SimpleNamespace
 import sqlite3
 import threading
+import time
 
 from ht_lead_radar.aggregate_adapters.base import (
     AdapterContext,
@@ -236,3 +241,127 @@ def test_source_watchdog_records_error_after_slow_listing(tmp_path):
 
     assert result.run.status == "error"
     assert "watchdog" in result.run.error
+
+
+def test_source_watchdog_is_wall_clock_and_forwards_remaining_transport_timeout(
+    tmp_path,
+):
+    observed_timeouts = []
+    calls = []
+
+    def slow_fetch(url, *, timeout):
+        calls.append(url)
+        observed_timeouts.append(timeout)
+        time.sleep(0.5)
+        return b"listing"
+
+    coordinator = DedicatedAggregateCoordinator(
+        state_db=tmp_path / "wall-clock.sqlite3",
+        registry=DedicatedAdapterRegistry((_ParallelAdapter(),)),
+        fetch=slow_fetch,
+        now=NOW,
+        source_timeout_seconds=0.1,
+    )
+
+    started = time.monotonic()
+    result = coordinator.collect_source("parallel-test", "hardtech")
+    elapsed = time.monotonic() - started
+
+    assert elapsed < 0.3
+    assert result.run.status == "error"
+    assert "watchdog" in result.run.error
+    # On a heavily loaded CI worker the real deadline may expire just before
+    # the daemon starts. Both zero and one started transports are valid; no
+    # work may be started after that boundary.
+    assert calls in ([], ["https://example.com/list"])
+    if observed_timeouts:
+        assert len(observed_timeouts) == 1
+        assert 0 < observed_timeouts[0] <= 0.1
+
+
+def test_watchdog_cancels_queued_semantic_work_without_waiting_for_worker(tmp_path):
+    class SlowRunner:
+        config = SimpleNamespace(provider="minimax", model="MiniMax-M3")
+
+        def __init__(self):
+            self.calls = 0
+            self.lock = threading.Lock()
+
+        def run(self, *_args, **_kwargs):
+            with self.lock:
+                self.calls += 1
+            time.sleep(0.5)
+            return '{"events":[],"ambiguities":[]}'
+
+    runner = SlowRunner()
+    routes = {
+        "https://example.com/list": b"listing",
+        **{
+            f"https://example.com/article/{position}": (
+                f"Company {position} completed a funding round."
+            ).encode()
+            for position in range(1, 4)
+        },
+    }
+    coordinator = DedicatedAggregateCoordinator(
+        state_db=tmp_path / "semantic-wall-clock.sqlite3",
+        registry=DedicatedAdapterRegistry((_ParallelAdapter(),)),
+        fetch=lambda url: routes[url],
+        llm_runner=runner,
+        now=NOW,
+        semantic_workers=1,
+        source_timeout_seconds=0.1,
+    )
+
+    started = time.monotonic()
+    result = coordinator.collect_source("parallel-test", "hardtech")
+    elapsed = time.monotonic() - started
+
+    assert elapsed < 0.3
+    assert result.run.status == "error"
+    assert "watchdog" in result.run.error
+    time.sleep(0.55)
+    assert runner.calls in {0, 1}
+    observed_after_drain = runner.calls
+    time.sleep(0.05)
+    assert runner.calls == observed_after_drain
+
+
+def test_ignored_transport_timeout_cannot_hold_interpreter_at_exit(tmp_path):
+    script = """
+import time
+from ht_lead_radar.aggregate_adapters.coordinator import DedicatedAggregateCoordinator
+from ht_lead_radar.aggregate_adapters.registry import DedicatedAdapterRegistry
+
+registry = DedicatedAdapterRegistry.defaults()
+source_id = sorted(registry.source_ids)[0]
+
+def stuck_fetch(_url, **_kwargs):
+    time.sleep(30)
+    return b''
+
+coordinator = DedicatedAggregateCoordinator(
+    state_db=r'%s',
+    registry=registry,
+    fetch=stuck_fetch,
+    source_timeout_seconds=0.02,
+)
+result = coordinator.collect_source(source_id, 'hardtech')
+assert result.run.status == 'error'
+""" % str(tmp_path / "child.sqlite3").replace("\\", "\\\\")
+    environment = dict(os.environ)
+    source_root = str(Path(__file__).resolve().parents[1] / "src")
+    environment["PYTHONPATH"] = os.pathsep.join(
+        filter(None, (source_root, environment.get("PYTHONPATH", "")))
+    )
+
+    completed = subprocess.run(
+        [sys.executable, "-c", script],
+        env=environment,
+        capture_output=True,
+        text=True,
+        timeout=1.5,
+        check=False,
+    )
+
+    assert completed.returncode == 0, completed.stderr

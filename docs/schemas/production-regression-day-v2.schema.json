@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lead Radar sanitized production regression day",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "capture_date", "capture_version", "legacy",
+    "safe_report_manifest", "source_report", "operational_status",
+    "candidate_gates", "selected_leads", "cooldown", "source_health"
+  ],
+  "properties": {
+    "schema_version": { "const": 2 },
+    "capture_date": { "type": "string", "pattern": "^2026-08-(1[89]|2[0-9]|3[01])$" },
+    "capture_version": { "const": "pre-hotfix" },
+    "legacy": { "type": "null" },
+    "safe_report_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["direction", "run_id", "as_of"],
+      "properties": {
+        "direction": { "type": ["string", "null"], "maxLength": 300 },
+        "run_id": { "type": ["string", "null"], "maxLength": 300 },
+        "as_of": { "type": ["string", "null"], "format": "date" }
+      }
+    },
+    "source_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["byte_count", "sha256"],
+      "properties": {
+        "byte_count": { "type": "integer", "minimum": 0 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "operational_status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "analysis_status", "draft_generation_status", "notification_status",
+        "source_health_status", "draft_count", "draft_error_class",
+        "notification_channel"
+      ],
+      "properties": {
+        "analysis_status": { "enum": ["completed", "partial", "failed", "not_run", null] },
+        "draft_generation_status": { "enum": ["complete", "partial", "failed", "not_run", null] },
+        "notification_status": { "enum": ["pending", "hook_reported", "hook_failed", "hook_failed_fallback_sent", "fallback_sent", "fallback_failed", "not_attempted", null] },
+        "source_health_status": { "enum": ["healthy", "warning", "critical", "unavailable", null] },
+        "draft_count": { "type": ["integer", "null"], "minimum": 0 },
+        "draft_error_class": { "type": ["string", "null"], "maxLength": 300 },
+        "notification_channel": { "enum": ["openclaw", "direct_feishu", "feishu", "hook", null] }
+      }
+    },
+    "candidate_gates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["total_candidates", "by_gate"],
+      "properties": {
+        "total_candidates": { "type": "integer", "minimum": 0 },
+        "by_gate": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["gate", "pass_count", "fail_count"],
+            "properties": {
+              "gate": { "type": "string", "minLength": 1 },
+              "pass_count": { "type": "integer", "minimum": 0 },
+              "fail_count": { "type": "integer", "minimum": 0 }
+            }
+          }
+        }
+      }
+    },
+    "selected_leads": { "type": "array", "items": { "$ref": "#/$defs/lead" } },
+    "cooldown": { "$ref": "#/$defs/cooldown" },
+    "source_health": { "$ref": "#/$defs/sourceHealth" }
+  },
+  "$defs": {
+    "nullableCount": { "type": ["integer", "null"], "minimum": 0 },
+    "stringArray": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 300 }, "uniqueItems": true },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_type", "event_date", "source", "evidence_url_sha256"],
+      "properties": {
+        "event_type": { "type": ["string", "null"], "maxLength": 300 },
+        "event_date": { "type": ["string", "null"], "format": "date" },
+        "source": { "type": ["string", "null"], "maxLength": 160 },
+        "evidence_url_sha256": { "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "lead": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rank", "company", "score", "confidence_grade", "target_roles", "gates", "evidence"],
+      "properties": {
+        "rank": { "type": "integer", "minimum": 1 },
+        "company": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "score": { "type": "number" },
+        "confidence_grade": { "type": ["string", "null"], "maxLength": 300 },
+        "target_roles": { "$ref": "#/$defs/stringArray" },
+        "gates": { "type": "object", "additionalProperties": { "type": "boolean" } },
+        "evidence": { "type": "array", "items": { "$ref": "#/$defs/evidence" } }
+      }
+    },
+    "cooldownCompanies": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["input", "eligible", "selected", "suppressed", "new_evidence", "returning"],
+      "properties": {
+        "input": { "$ref": "#/$defs/stringArray" },
+        "eligible": { "$ref": "#/$defs/stringArray" },
+        "selected": { "$ref": "#/$defs/stringArray" },
+        "suppressed": { "$ref": "#/$defs/stringArray" },
+        "new_evidence": { "$ref": "#/$defs/stringArray" },
+        "returning": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "cooldown": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observed", "input_count", "eligible_count", "selected_count", "suppressed_count", "new_evidence_count", "returning_count", "companies"],
+      "properties": {
+        "observed": { "enum": [true, null] },
+        "input_count": { "$ref": "#/$defs/nullableCount" },
+        "eligible_count": { "$ref": "#/$defs/nullableCount" },
+        "selected_count": { "$ref": "#/$defs/nullableCount" },
+        "suppressed_count": { "$ref": "#/$defs/nullableCount" },
+        "new_evidence_count": { "$ref": "#/$defs/nullableCount" },
+        "returning_count": { "$ref": "#/$defs/nullableCount" },
+        "companies": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/cooldownCompanies" }] }
+      }
+    },
+    "adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_id", "status", "error_class", "listing_count", "discovered_count", "incremental_count", "detail_success_count", "detail_failure_count", "semantic_attempt_count", "semantic_accepted_count", "semantic_prefiltered_count", "semantic_failure_count", "rule_event_count", "minimax_event_count", "evidence_count", "open_dead_letter_count"],
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1, "maxLength": 160 },
+        "status": { "enum": ["ok", "not_modified", "partial", "error", "disabled", "unsupported_adapter", null] },
+        "error_class": { "type": ["string", "null"], "maxLength": 300 },
+        "listing_count": { "$ref": "#/$defs/nullableCount" },
+        "discovered_count": { "$ref": "#/$defs/nullableCount" },
+        "incremental_count": { "$ref": "#/$defs/nullableCount" },
+        "detail_success_count": { "$ref": "#/$defs/nullableCount" },
+        "detail_failure_count": { "$ref": "#/$defs/nullableCount" },
+        "semantic_attempt_count": { "$ref": "#/$defs/nullableCount" },
+        "semantic_accepted_count": { "$ref": "#/$defs/nullableCount" },
+        "semantic_prefiltered_count": { "$ref": "#/$defs/nullableCount" },
+        "semantic_failure_count": { "$ref": "#/$defs/nullableCount" },
+        "rule_event_count": { "$ref": "#/$defs/nullableCount" },
+        "minimax_event_count": { "$ref": "#/$defs/nullableCount" },
+        "evidence_count": { "$ref": "#/$defs/nullableCount" },
+        "open_dead_letter_count": { "$ref": "#/$defs/nullableCount" }
+      }
+    },
+    "dedicatedAggregate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_count", "healthy_count", "failed_count", "open_dead_letter_count"],
+      "properties": {
+        "source_count": { "$ref": "#/$defs/nullableCount" },
+        "healthy_count": { "$ref": "#/$defs/nullableCount" },
+        "failed_count": { "$ref": "#/$defs/nullableCount" },
+        "open_dead_letter_count": { "$ref": "#/$defs/nullableCount" }
+      }
+    },
+    "sourceHealth": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["observed", "adapters", "dedicated_aggregate"],
+      "properties": {
+        "observed": { "enum": [true, null] },
+        "adapters": { "type": "array", "items": { "$ref": "#/$defs/adapter" } },
+        "dedicated_aggregate": {
+          "oneOf": [
+            { "type": "null" },
+            { "$ref": "#/$defs/dedicatedAggregate" }
+          ]
+        }
+      }
+    }
+  }
+}

@@ -20,24 +20,25 @@ Use the deterministic shared backend. Do not replace it with an ad-hoc web summa
 From this skill directory:
 
 ```bash
-python3 scripts/run_lead_radar_v2.py ask \
+/home/admin/.pyenv/versions/3.11.14/bin/python3 scripts/run_lead_radar_v2.py ask \
   --question "最近脑机接口行业有哪些公司可能要招总监以上职位？" \
   --provider auto \
-  --env-file /home/admin/.openclaw/workspace/skills/web-ad-radar/.env
+  --env-file /home/admin/.openclaw/secrets/lead-radar.env
 ```
 
 ```bash
-python3 scripts/run_lead_radar_v2.py float \
+/home/admin/.pyenv/versions/3.11.14/bin/python3 scripts/run_lead_radar_v2.py float \
   --candidate "数据采集总监，负责多源采集体系和团队搭建" \
   --direction 具身智能 \
   --provider auto \
-  --env-file /home/admin/.openclaw/workspace/skills/web-ad-radar/.env
+  --env-file /home/admin/.openclaw/secrets/lead-radar.env
 ```
 
 ```bash
-python3 scripts/run_lead_radar_v2.py deep-research \
+/home/admin/.pyenv/versions/3.11.14/bin/python3 scripts/run_lead_radar_v2.py deep-research \
   --company 公司名 \
-  --direction 赛道
+  --direction 赛道 \
+  --env-file /home/admin/.openclaw/secrets/lead-radar.env
 ```
 
 Use `run --direction ...` for the legacy direction entry point. Use `--demo --direction 灵巧手 --metaso-verify-limit 0` for a deterministic smoke test.
@@ -45,7 +46,7 @@ Before a Candidate Float, query persisted market opportunities so prior daily
 analysis is not lost:
 
 ```bash
-python3 scripts/query_talent_opportunities.py \
+/home/admin/.pyenv/versions/3.11.14/bin/python3 scripts/query_talent_opportunities.py \
   --term "<candidate capability or role>" \
   --direction "<direction when known>" \
   --state-db data/talent-pool.sqlite
@@ -114,7 +115,7 @@ and pass the original user message only as audit text. For viewing one or more
 persisted payloads, run:
 
 ```bash
-python3 scripts/talent_pool_control.py \
+/home/admin/.pyenv/versions/3.11.14/bin/python3 scripts/talent_pool_control.py \
   --action view \
   --indexes "<OpenClaw-resolved displayed indexes, e.g. 1,2>" \
   --user-message "<original inbound user text>" \
@@ -129,7 +130,7 @@ For publication, use the same structured interface and add the guarded real
 publisher arguments in that same call:
 
 ```bash
-python3 scripts/talent_pool_control.py \
+/home/admin/.pyenv/versions/3.11.14/bin/python3 scripts/talent_pool_control.py \
   --action publish \
   --indexes "<OpenClaw-resolved displayed indexes>" \
   --user-message "<original inbound user approval text>" \
@@ -171,4 +172,3 @@ Return the generated Markdown/JSON paths and summarize:
 - whether a relevant ad is already live;
 - public investor/internal-decision-maker findings when deep research ran;
 - uncertainties, source failures, Metaso budget state and blocked integrations.
-

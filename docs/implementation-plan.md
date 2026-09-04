@@ -242,6 +242,10 @@ python3 scripts/run_lead_radar_v2.py monitor
 python3 scripts/run_lead_radar_v2.py backup --backup-dir backups
 ```
 
+手动备份省略 `--git-sha` 时只会从当前 Git checkout 解析真实 `HEAD`；不在
+Git checkout 中会直接失败。生产部署和定时备份应继续显式传入已经核验的
+40 位 commit SHA。
+
 Float 失败后跨进程不能 resume，这是有意的数据治理结果：候选人画像不持久化；用户应重新发起 Float。
 
 ## 6. 上下文恢复步骤

@@ -141,6 +141,65 @@ def test_indexes_every_article_in_analysis_sections_and_skips_news(tmp_path):
     assert ADAPTER.should_fetch_detail(CHANNEL, indexes[1]) is False
 
 
+def test_short_decorative_anchor_is_skipped_but_invalid_article_id_still_fails_closed(
+    tmp_path,
+):
+    pages = _pages()
+    pages[POLICY_URL] = pages[POLICY_URL].replace(
+        b'<a href="../../../content/202607/31/content_17940.html">',
+        b'<a class="decorative" aria-hidden="true" '
+        b'href="../../../content/202607/31/content_17940.html">',
+    ).replace(
+        "人工智能赋能制造业政策释放新动能".encode(), "导读".encode()
+    )
+    decisions = []
+    indexes = ADAPTER.parse_listing(
+        CHANNEL,
+        _issue_home(),
+        _context(tmp_path, pages=pages, decisions=decisions),
+    )
+
+    assert len(indexes) == 3
+    assert any(
+        item[1].get("reason") == "structural_decoration"
+        for item in decisions
+    )
+
+    pages[POLICY_URL] = pages[POLICY_URL].replace(
+        b"content_17940.html", b"content_invalid.html"
+    )
+    with pytest.raises(ListingInvariantError, match="rejected section article"):
+        ADAPTER.parse_listing(CHANNEL, _issue_home(), _context(tmp_path, pages=pages))
+
+
+def test_legitimate_short_editorial_title_is_not_dropped(tmp_path):
+    pages = _pages()
+    pages[POLICY_URL] = pages[POLICY_URL].replace(
+        "人工智能赋能制造业政策释放新动能".encode(), "AI".encode()
+    )
+
+    indexes = ADAPTER.parse_listing(
+        CHANNEL,
+        _issue_home(),
+        _context(tmp_path, pages=pages),
+    )
+
+    assert any(item.title == "AI" for item in indexes)
+
+
+def test_empty_non_decorative_article_title_recovers_from_detail(tmp_path):
+    pages = _pages()
+    pages[POLICY_URL] = pages[POLICY_URL].replace(
+        "人工智能赋能制造业政策释放新动能".encode(), b""
+    )
+    pages["https://epaper.cena.com.cn/pc/content/202607/31/content_17940.html"] = _detail(
+        "人工智能赋能制造业政策释放新动能"
+    )
+
+    indexes = ADAPTER.parse_listing(CHANNEL, _issue_home(), _context(tmp_path, pages=pages))
+    assert any(item.title == "人工智能赋能制造业政策释放新动能" for item in indexes)
+
+
 def test_listing_router_prefilters_exact_public_service_advertisement() -> None:
     index = SourceArticleIndex(
         source_id=CHANNEL.source_id,
