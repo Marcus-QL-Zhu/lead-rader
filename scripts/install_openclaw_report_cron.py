@@ -13,6 +13,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+sys.dont_write_bytecode = True
+
 SOURCE_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(SOURCE_ROOT / "src"))
 
@@ -72,6 +74,7 @@ def reconcile_message(*, project_root: str | Path | None = None) -> str:
         shlex.quote(os.fspath(part))
         for part in (
             SERVER_PYTHON,
+            "-B",
             root / "scripts" / "openclaw_daily_report.py",
             "--state-db",
             root / "data" / "talent-pool.sqlite",
