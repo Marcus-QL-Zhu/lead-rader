@@ -715,6 +715,7 @@ def test_exact_sha_activation_rejects_drift_and_rolls_back_post_smoke(tmp_path):
     assert (
         "runtime state child must not be a symlink" in symlinked_state.stderr
         or "runtime release symlink target is invalid" in symlinked_state.stderr
+        or "runtime data must be a real directory" in symlinked_state.stderr
     )
     assert live.resolve() == (releases / first_sha).resolve()
 
@@ -956,6 +957,8 @@ def test_bootstrap_refuses_competing_release_or_legacy_daily_lock(tmp_path):
         assert "release transaction is active" in blocked.stderr
 
     daily_lock = live / "data" / "daily-task.lock"
+    daily_lock.touch(mode=0o600)
+    daily_lock.chmod(0o600)
     with daily_lock.open("r+") as stream:
         fcntl.flock(stream.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         blocked = _run(command, env=environment, check=False)

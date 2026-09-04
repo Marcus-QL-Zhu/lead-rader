@@ -75,6 +75,29 @@ raise SystemExit(int(os.environ.get(codes.get(name, ""), "0")))
     return app, python_wrapper, log
 
 
+def _split_control_and_business_calls(
+    calls: list[dict[str, object]],
+) -> tuple[list[dict[str, object]], list[dict[str, object]]]:
+    """Separate the launcher's Python preflight from business commands.
+
+    The production launcher deliberately invokes ``python -c`` before any
+    business script.  Keep that security/runtime gate observable instead of
+    making the timeout tests accidentally depend on it being absent.
+    """
+
+    control_calls = [call for call in calls if call["name"] == "-c"]
+    business_calls = [call for call in calls if call["name"] != "-c"]
+    return control_calls, business_calls
+
+
+def _assert_python_version_preflight(control_calls: list[dict[str, object]]) -> None:
+    assert len(control_calls) == 1
+    args = control_calls[0]["args"]
+    assert isinstance(args, list)
+    assert args[0] == "-c"
+    assert "sys.version_info >= (3, 10)" in args[1]
+
+
 @pytest.mark.parametrize(
     (
         "analysis_exit",
@@ -217,14 +240,16 @@ def test_portfolio_wall_clock_timeout_persists_completion_and_runs_hook(tmp_path
     calls = [
         json.loads(line) for line in log.read_text(encoding="utf-8").splitlines()
     ]
-    names = [call["name"] for call in calls]
+    control_calls, business_calls = _split_control_and_business_calls(calls)
+    _assert_python_version_preflight(control_calls)
+    names = [call["name"] for call in business_calls]
     assert names == [
         "run_daily_hardtech_portfolio.py",
         "run_lead_radar_v2.py",
         "generate_talent_pool_drafts.py",
         "openclaw_daily_report.py",
     ]
-    failure_call = calls[2]["args"]
+    failure_call = business_calls[2]["args"]
     assert "--record-analysis-failure" in failure_call
     assert "PortfolioWallClockTimeout" in failure_call
 
@@ -270,7 +295,9 @@ def test_draft_wall_clock_timeout_persists_failed_draft_completion(tmp_path):
     calls = [
         json.loads(line) for line in log.read_text(encoding="utf-8").splitlines()
     ]
-    names = [call["name"] for call in calls]
+    control_calls, business_calls = _split_control_and_business_calls(calls)
+    _assert_python_version_preflight(control_calls)
+    names = [call["name"] for call in business_calls]
     assert names == [
         "run_daily_hardtech_portfolio.py",
         "run_lead_radar_v2.py",
@@ -278,7 +305,7 @@ def test_draft_wall_clock_timeout_persists_failed_draft_completion(tmp_path):
         "generate_talent_pool_drafts.py",
         "openclaw_daily_report.py",
     ]
-    recovery_call = calls[3]["args"]
+    recovery_call = business_calls[3]["args"]
     assert "--record-draft-failure" in recovery_call
     assert "DraftGenerationWallClockTimeout" in recovery_call
 
