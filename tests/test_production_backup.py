@@ -6,6 +6,7 @@ import subprocess
 
 from ht_lead_radar.cli_v2 import (
     PRODUCTION_MATERIAL_DATABASES,
+    PRODUCTION_OPTIONAL_DATABASES,
     PRODUCTION_SOURCE_MANIFESTS,
     main,
 )
@@ -96,6 +97,31 @@ def test_production_backup_fails_closed_on_missing_required_database(
     monkeypatch.chdir(tmp_path)
     assert main(["backup", "--backup-dir", "backups", "--git-sha", GIT_SHA]) == 1
     assert not list((tmp_path / "backups").glob("production-predeploy-*"))
+
+
+def test_production_backup_accepts_absent_lazy_database_and_discovers_it_when_present(
+    tmp_path, monkeypatch, capsys
+):
+    _production_inputs(tmp_path)
+    monkeypatch.chdir(tmp_path)
+
+    assert main(["backup", "--backup-dir", "backups", "--git-sha", GIT_SHA]) == 0
+    without_optional = json.loads(capsys.readouterr().out)
+    first_manifest = json.loads(
+        Path(without_optional["backup_manifest"]).read_text(encoding="utf-8")
+    )
+    first_names = {Path(item["source_path"]).name for item in first_manifest["items"]}
+    assert "relationships.sqlite" not in first_names
+
+    optional = tmp_path / PRODUCTION_OPTIONAL_DATABASES[0]
+    _sqlite(optional, "deep-research-state")
+    assert main(["backup", "--backup-dir", "backups", "--git-sha", GIT_SHA]) == 0
+    with_optional = json.loads(capsys.readouterr().out)
+    second_manifest = json.loads(
+        Path(with_optional["backup_manifest"]).read_text(encoding="utf-8")
+    )
+    second_names = {Path(item["source_path"]).name for item in second_manifest["items"]}
+    assert "relationships.sqlite" in second_names
 
 
 def test_missing_inputs_need_explicit_nonproduction_override(tmp_path, monkeypatch):

@@ -11,8 +11,10 @@ not the normal upgrade path. Normal upgrades use
   in the canonical GitHub repository.
 - The protected runtime env passes `deployment/validate_runtime_env.py`.
 - The legacy live path is a real directory, not a symlink.
-- The legacy `data/` directory contains all material SQLite databases and the
-  legacy `config/` directory contains all three source/config manifests.
+- The legacy `data/` directory contains every required daily-workflow SQLite
+  database and the legacy `config/` directory contains all three source/config
+  manifests. Lazily created deep-research state such as `relationships.sqlite`
+  may be absent; database discovery backs it up whenever it exists.
 - No manual daily task or release operation is running. The script also checks
   both locks and fails with exit 75 if either is active.
 
