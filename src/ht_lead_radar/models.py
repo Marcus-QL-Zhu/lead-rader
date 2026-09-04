@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass, field
 from typing import Any
 
+from .sanitization import sanitize_url
+
 
 @dataclass(frozen=True)
 class Evidence:
@@ -35,6 +37,9 @@ class Evidence:
     industry_tags: tuple[str, ...] = ()
     is_recruiting_input: bool = False
 
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "source_url", sanitize_url(self.source_url))
+
 
 @dataclass(frozen=True)
 class OutreachRoute:
@@ -45,6 +50,9 @@ class OutreachRoute:
     grade: str
     note: str
 
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "evidence_url", sanitize_url(self.evidence_url))
+
 
 @dataclass(frozen=True)
 class ScoreComponent:
@@ -53,6 +61,13 @@ class ScoreComponent:
     points: float
     reason: str
     evidence_urls: tuple[str, ...] = ()
+
+    def __post_init__(self) -> None:
+        object.__setattr__(
+            self,
+            "evidence_urls",
+            tuple(sanitize_url(item) for item in self.evidence_urls),
+        )
 
 
 @dataclass

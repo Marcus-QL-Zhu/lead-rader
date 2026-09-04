@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from .models import CompanyLead
+from .sanitization import sanitize_diagnostic_fields, sanitize_tree, sanitize_url
 
 
 def render_markdown(
@@ -28,7 +29,7 @@ def render_markdown(
         '',
     ]
     if request_summary:
-        lines.extend(['## 请求解释', '', '```json', json.dumps(request_summary, ensure_ascii=False, indent=2), '```', ''])
+        lines.extend(['## 请求解释', '', '```json', json.dumps(sanitize_diagnostic_fields(request_summary), ensure_ascii=False, indent=2), '```', ''])
     if industry_map:
         lines.extend(['## 行业地图', ''])
         for key, label in (
@@ -67,14 +68,14 @@ def render_markdown(
             sign = '+' if component.points >= 0 else ''
             lines.append(f'- **{component.label}：{sign}{component.points:.1f}** — {component.reason}')
             if component.evidence_urls:
-                lines.append('  - 依据：' + '、'.join(f'[来源{i + 1}]({url})' for i, url in enumerate(component.evidence_urls)))
+                lines.append('  - 依据：' + '、'.join(f'[来源{i + 1}]({sanitize_url(url)})' for i, url in enumerate(component.evidence_urls)))
         lines.extend(['', '### 证据', ''])
         for item in lead.evidence:
             event_date = item.event_date or '日期未知'
             event_ref = f'；Event {item.event_id}' if item.event_id else ''
             lines.append(
                 f'- **{event_date}｜{item.event_type}｜{item.source_grade}级{event_ref}**：'
-                f'[{item.title}]({item.source_url})'
+                f'[{item.title}]({sanitize_url(item.source_url)})'
             )
             lines.append(f'  - {item.snippet}')
 
@@ -93,7 +94,8 @@ def render_markdown(
                 lines.append(
                     f'- **{route.kind}｜{route.target}｜{route.grade}级**：{route.note}'
                 )
-                lines.append(f'  - 来源：[{route.evidence_url}]({route.evidence_url})')
+                safe_route_url = sanitize_url(route.evidence_url)
+                lines.append(f'  - 来源：[{safe_route_url}]({safe_route_url})')
         else:
             lines.append('- 基础研究未发现可复核的公开关系线索；主动深研或 Float 时可继续研究投资人、Hiring Manager、HR 和创始团队。')
         if lead.risk_notes:
@@ -106,7 +108,7 @@ def render_markdown(
         lines.append('以下企业只有公开招聘广告，没有招聘前上游信号，因此不参与主 Top 20：')
         lines.append('')
         for item in late:
-            links = '、'.join(f'[广告{i + 1}]({url})' for i, url in enumerate(item.get('ads', [])))
+            links = '、'.join(f'[广告{i + 1}]({sanitize_url(url)})' for i, url in enumerate(item.get('ads', [])))
             lines.append(f'- **{item["company"]}**：{item["reason"]} {links}')
     else:
         lines.append('- 本次没有需要单列的招聘广告-only公司。')
@@ -125,9 +127,16 @@ def write_outputs(output_dir: Path, stem: str, markdown: str, leads: list[Compan
     output_dir.mkdir(parents=True, exist_ok=True)
     markdown_path = output_dir / f'{stem}.md'
     json_path = output_dir / f'{stem}.json'
-    markdown_path.write_text(markdown, encoding='utf-8')
+    markdown_path.write_text(
+        sanitize_tree(markdown, redact_pii=True),
+        encoding='utf-8',
+    )
     json_path.write_text(
-        json.dumps([lead.to_dict() for lead in leads], ensure_ascii=False, indent=2),
+        json.dumps(
+            sanitize_tree([lead.to_dict() for lead in leads], redact_pii=True),
+            ensure_ascii=False,
+            indent=2,
+        ),
         encoding='utf-8',
     )
     return markdown_path, json_path

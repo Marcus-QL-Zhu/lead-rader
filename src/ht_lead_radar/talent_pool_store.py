@@ -17,6 +17,104 @@ from .talent_pool import (
     draft_expiry_date,
     validate_liepin_payload,
 )
+from .sanitization import (
+    safe_error,
+    sanitize_diagnostic_fields,
+    sanitize_text,
+    sanitize_tree,
+    sanitize_url,
+)
+
+
+_PERSISTENCE_SANITIZER_VERSION = "2"
+_PROTECTED_JOB_KEYS = frozenset(
+    {"public_payload", "liepin_payload", "liepin_payload_json", "payload_hash"}
+)
+_STRUCTURED_OPERATIONAL_FIELDS = frozenset(
+    {
+        "error_class",
+        "model_identity",
+        "generation_model",
+        "provider",
+        "processor",
+        "source_id",
+        "source_article_id",
+        "adapter_id",
+        "delivery_channel",
+        "event_type",
+        "phase",
+        "mode",
+        "reason_code",
+        "code",
+        "status",
+    }
+)
+_DIAGNOSTIC_FIELD = re.compile(
+    r"(?i)(?:^|[_-])(?:error|errors|exception|exceptions|trace|traces|"
+    r"diagnostic|diagnostics|failure|failures)(?:$|[_-])"
+)
+_RAW_DIAGNOSTIC_FIELD = re.compile(
+    r"(?i)^(?:raw_(?:completion|response|output|prompt)|"
+    r"(?:first|repair|model|llm|provider)_(?:completion|response|output)|"
+    r"request_payload|response_payload)$"
+)
+_OPAQUE_TALENT_FIELD = re.compile(
+    r"(?i)(?:^|_)(?:id|ids|hash|sha(?:1|256|512)?|digest|fingerprint|"
+    r"version|date|timestamp|time|at|count|status)(?:$|_)"
+)
+
+
+def _sanitize_talent_tree(value: Any, *, field: str = "") -> Any:
+    """Sanitize operational state while keeping approved job JSON byte-stable."""
+
+    if field in _PROTECTED_JOB_KEYS:
+        return value
+    if _RAW_DIAGNOSTIC_FIELD.fullmatch(field):
+        return "[redacted]"
+    # Primary/foreign keys and content-addressed identities must remain stable.
+    # Without field context, a 16+ character identifier looks like a bearer
+    # token to the scalar sanitizer and collapses distinct drafts into the same
+    # ``[redacted-token]`` key.
+    if _OPAQUE_TALENT_FIELD.search(field) and isinstance(
+        value,
+        (str, int, float, bool, type(None)),
+    ):
+        return value
+    if field.casefold() in _STRUCTURED_OPERATIONAL_FIELDS and isinstance(value, str):
+        return sanitize_tree({field: value}, redact_pii=True)[field]
+    if _DIAGNOSTIC_FIELD.search(field):
+        return sanitize_tree(value, string_limit=4000, redact_pii=True)
+    probe = sanitize_diagnostic_fields({field: None}).get(field) if field else None
+    if probe == "[redacted]":
+        return "[redacted]"
+    if isinstance(value, Mapping):
+        return {
+            str(key): _sanitize_talent_tree(item, field=str(key))
+            for key, item in value.items()
+        }
+    if isinstance(value, (list, tuple)):
+        return [_sanitize_talent_tree(item, field=field) for item in value]
+    if isinstance(value, str):
+        if "url" in field.casefold() or value.lstrip().casefold().startswith(
+            ("http://", "https://")
+        ):
+            return sanitize_url(value)
+        return sanitize_tree(value, redact_pii=True)
+    return value
+
+
+def _safe_json_list_urls(value: object) -> str:
+    try:
+        parsed = json.loads(str(value or "[]"))
+    except (TypeError, ValueError, json.JSONDecodeError):
+        parsed = []
+    if not isinstance(parsed, list):
+        parsed = []
+    return json.dumps(
+        [sanitize_url(item) for item in parsed if str(item).strip()],
+        ensure_ascii=False,
+        sort_keys=True,
+    )
 
 
 VALID_STATUSES = frozenset(
@@ -31,6 +129,26 @@ VALID_STATUSES = frozenset(
         "expired",
     }
 )
+COMPLETION_STATUS_ENUMS = {
+    "analysis_status": frozenset({"completed", "partial", "failed", "not_run"}),
+    "draft_generation_status": frozenset(
+        {"complete", "partial", "failed", "not_run"}
+    ),
+    "notification_status": frozenset(
+        {
+            "pending",
+            "hook_reported",
+            "hook_failed",
+            "hook_failed_fallback_sent",
+            "fallback_sent",
+            "fallback_failed",
+            "not_attempted",
+        }
+    ),
+    "source_health_status": frozenset(
+        {"healthy", "warning", "critical", "unavailable"}
+    ),
+}
 
 
 @dataclass(frozen=True)
@@ -211,9 +329,46 @@ class TalentPoolStore:
                 );
                 CREATE INDEX IF NOT EXISTS idx_talent_pool_openclaw_pending
                 ON talent_pool_openclaw_reports(status, run_date, direction);
+                CREATE TABLE IF NOT EXISTS talent_pool_delivery_ledger (
+                    snapshot_id TEXT NOT NULL,
+                    delivery_channel TEXT NOT NULL,
+                    status TEXT NOT NULL,
+                    delivered_at TEXT,
+                    error_class TEXT NOT NULL DEFAULT '',
+                    error_detail TEXT NOT NULL DEFAULT '',
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    PRIMARY KEY(snapshot_id, delivery_channel),
+                    FOREIGN KEY(snapshot_id)
+                      REFERENCES talent_pool_bundle_snapshots(snapshot_id)
+                );
+                CREATE INDEX IF NOT EXISTS idx_talent_pool_delivery_delivered
+                ON talent_pool_delivery_ledger(status, delivered_at);
+                CREATE TABLE IF NOT EXISTS talent_pool_final_report_opportunities (
+                    snapshot_id TEXT NOT NULL,
+                    run_date TEXT NOT NULL,
+                    direction TEXT NOT NULL,
+                    source_run_id TEXT NOT NULL,
+                    ordinal INTEGER NOT NULL,
+                    company TEXT NOT NULL,
+                    score REAL NOT NULL,
+                    role_hypotheses_json TEXT NOT NULL,
+                    evidence_urls_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    PRIMARY KEY(snapshot_id, company),
+                    FOREIGN KEY(snapshot_id)
+                      REFERENCES talent_pool_bundle_snapshots(snapshot_id)
+                );
+                CREATE INDEX IF NOT EXISTS idx_talent_pool_final_report_history
+                ON talent_pool_final_report_opportunities(run_date, direction, company);
+                CREATE TABLE IF NOT EXISTS talent_pool_metadata (
+                    key TEXT PRIMARY KEY,
+                    value TEXT NOT NULL
+                );
                 """
             )
             self._migrate_legacy_state(connection)
+            self._sanitize_persisted_operational_state(connection)
 
     def _connect(self) -> sqlite3.Connection:
         connection = sqlite3.connect(self.database)
@@ -344,6 +499,205 @@ class TalentPoolStore:
                 created_at=row["updated_at"] or now,
             )
 
+        # Legacy OpenClaw reports are confirmed deliveries. Backfill once so
+        # the new ledger does not forget the existing seven-day history.
+        connection.execute(
+            """
+            INSERT OR IGNORE INTO talent_pool_delivery_ledger(
+                snapshot_id, delivery_channel, status, delivered_at,
+                error_class, error_detail, created_at, updated_at
+            )
+            SELECT r.snapshot_id, 'legacy_openclaw', 'delivered', r.reported_at,
+                   '', '', r.created_at, r.updated_at
+            FROM talent_pool_openclaw_reports r
+            WHERE r.status='reported' AND r.reported_at IS NOT NULL
+              AND NOT EXISTS (
+                SELECT 1 FROM talent_pool_delivery_ledger d
+                WHERE d.snapshot_id=r.snapshot_id AND d.status='delivered'
+              )
+            """
+        )
+        # Pre-hotfix snapshots only know companies through draft links. They
+        # remain usable for cooldown, while every new snapshot stores the full
+        # final report independently of whether a draft was generated.
+        legacy_rows = connection.execute(
+            """
+            SELECT o.snapshot_id, o.run_date, o.direction, o.source_run_id,
+                   o.company, o.created_at, o.evidence_urls_json, o.company_role
+            FROM talent_pool_opportunity_links o
+            LEFT JOIN talent_pool_final_report_opportunities f
+              ON f.snapshot_id=o.snapshot_id AND f.company=o.company
+            WHERE f.company IS NULL
+            ORDER BY o.run_date, o.snapshot_id, o.company, o.company_role
+            """
+        ).fetchall()
+        grouped_legacy: dict[tuple[str, str], dict[str, Any]] = {}
+        for row in legacy_rows:
+            key = (str(row["snapshot_id"]), str(row["company"]))
+            item = grouped_legacy.setdefault(
+                key,
+                {
+                    "snapshot_id": str(row["snapshot_id"]),
+                    "run_date": str(row["run_date"]),
+                    "direction": str(row["direction"]),
+                    "source_run_id": str(row["source_run_id"]),
+                    "company": str(row["company"]),
+                    "created_at": str(row["created_at"] or now),
+                    "roles": [],
+                    "urls": [],
+                },
+            )
+            role = str(row["company_role"] or "").strip()
+            if role and role not in item["roles"]:
+                item["roles"].append(role)
+            try:
+                urls = json.loads(str(row["evidence_urls_json"] or "[]"))
+            except json.JSONDecodeError:
+                urls = []
+            for url in urls if isinstance(urls, list) else []:
+                normalized_url = str(url).strip()
+                if normalized_url and normalized_url not in item["urls"]:
+                    item["urls"].append(normalized_url)
+        ordinals: dict[str, int] = {}
+        for item in grouped_legacy.values():
+            snapshot_id = item["snapshot_id"]
+            ordinals[snapshot_id] = ordinals.get(snapshot_id, 0) + 1
+            connection.execute(
+                """
+                INSERT OR IGNORE INTO talent_pool_final_report_opportunities(
+                    snapshot_id, run_date, direction, source_run_id, ordinal,
+                    company, score, role_hypotheses_json, evidence_urls_json,
+                    created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, ?)
+                """,
+                (
+                    snapshot_id,
+                    item["run_date"],
+                    item["direction"],
+                    item["source_run_id"],
+                    ordinals[snapshot_id],
+                    item["company"],
+                    json.dumps(item["roles"], ensure_ascii=False, sort_keys=True),
+                    json.dumps(item["urls"], ensure_ascii=False, sort_keys=True),
+                    item["created_at"] or now,
+                ),
+            )
+
+    def _sanitize_persisted_operational_state(
+        self, connection: sqlite3.Connection
+    ) -> None:
+        marker = connection.execute(
+            "SELECT value FROM talent_pool_metadata "
+            "WHERE key='persistence_sanitizer_version'"
+        ).fetchone()
+        if marker and str(marker["value"]) == _PERSISTENCE_SANITIZER_VERSION:
+            return
+
+        for row in connection.execute(
+            "SELECT draft_id, draft_json, liepin_job_url, last_error_code, "
+            "last_error_message FROM talent_pool_drafts"
+        ).fetchall():
+            try:
+                draft = json.loads(str(row["draft_json"]))
+            except (TypeError, ValueError, json.JSONDecodeError):
+                draft = {}
+            safe_draft = _sanitize_talent_tree(draft)
+            connection.execute(
+                "UPDATE talent_pool_drafts SET draft_json=?, liepin_job_url=?, "
+                "last_error_code=?, last_error_message=? WHERE draft_id=?",
+                (
+                    json.dumps(safe_draft, ensure_ascii=False, sort_keys=True),
+                    sanitize_url(row["liepin_job_url"]),
+                    sanitize_text(row["last_error_code"], limit=120),
+                    sanitize_text(row["last_error_message"], limit=1000),
+                    row["draft_id"],
+                ),
+            )
+        for row in connection.execute(
+            "SELECT snapshot_id, generation_error, bundle_json "
+            "FROM talent_pool_bundle_snapshots"
+        ).fetchall():
+            try:
+                bundle = json.loads(str(row["bundle_json"]))
+            except (TypeError, ValueError, json.JSONDecodeError):
+                bundle = {}
+            safe_bundle = _sanitize_talent_tree(bundle)
+            connection.execute(
+                "UPDATE talent_pool_bundle_snapshots SET generation_error=?, "
+                "bundle_json=? WHERE snapshot_id=?",
+                (
+                    sanitize_text(row["generation_error"], limit=1000),
+                    json.dumps(
+                        safe_bundle,
+                        ensure_ascii=False,
+                        sort_keys=True,
+                        separators=(",", ":"),
+                    ),
+                    row["snapshot_id"],
+                ),
+            )
+        for table in (
+            "talent_pool_opportunity_links",
+            "talent_pool_final_report_opportunities",
+        ):
+            rows = connection.execute(
+                f"SELECT rowid, evidence_urls_json FROM {table}"
+            ).fetchall()
+            for row in rows:
+                connection.execute(
+                    f"UPDATE {table} SET evidence_urls_json=? WHERE rowid=?",
+                    (_safe_json_list_urls(row["evidence_urls_json"]), int(row["rowid"])),
+                )
+        for row in connection.execute(
+            "SELECT id, error_code, error_message, job_url "
+            "FROM talent_pool_publish_attempts"
+        ).fetchall():
+            connection.execute(
+                "UPDATE talent_pool_publish_attempts SET error_code=?, "
+                "error_message=?, job_url=? WHERE id=?",
+                (
+                    sanitize_text(row["error_code"], limit=120),
+                    sanitize_text(row["error_message"], limit=1000),
+                    sanitize_url(row["job_url"]),
+                    int(row["id"]),
+                ),
+            )
+        for row in connection.execute(
+            "SELECT snapshot_id, last_error FROM talent_pool_openclaw_reports"
+        ).fetchall():
+            connection.execute(
+                "UPDATE talent_pool_openclaw_reports SET last_error=? "
+                "WHERE snapshot_id=?",
+                (
+                    sanitize_text(row["last_error"], limit=1000),
+                    row["snapshot_id"],
+                ),
+            )
+        for row in connection.execute(
+            "SELECT snapshot_id, delivery_channel, error_class, error_detail "
+            "FROM talent_pool_delivery_ledger"
+        ).fetchall():
+            connection.execute(
+                "UPDATE talent_pool_delivery_ledger SET error_class=?, "
+                "error_detail=? WHERE snapshot_id=? AND delivery_channel=?",
+                (
+                    safe_error(row["error_class"])["error_class"]
+                    if row["error_class"]
+                    else "",
+                    sanitize_text(row["error_detail"], limit=1000),
+                    row["snapshot_id"],
+                    row["delivery_channel"],
+                ),
+            )
+        connection.execute(
+            """
+            INSERT INTO talent_pool_metadata(key, value)
+            VALUES ('persistence_sanitizer_version', ?)
+            ON CONFLICT(key) DO UPDATE SET value=excluded.value
+            """,
+            (_PERSISTENCE_SANITIZER_VERSION,),
+        )
+
     @staticmethod
     def _insert_opportunity_links(
         connection: sqlite3.Connection,
@@ -372,7 +726,11 @@ class TalentPoolStore:
                 if str(item).strip()
             ] or [str(draft.get("recommended_title") or "").strip()]
             evidence_urls_json = json.dumps(
-                list(source.get("evidence_urls") or ()),
+                [
+                    sanitize_url(item)
+                    for item in source.get("evidence_urls") or ()
+                    if str(item).strip()
+                ],
                 ensure_ascii=False,
                 sort_keys=True,
             )
@@ -443,8 +801,32 @@ class TalentPoolStore:
                 raise ValueError("each draft expires_at must equal run_date plus 7 days")
             draft["expires_at"] = canonical_expiry
             draft["payload_hash"] = canonical_payload_hash(payload)
+        drafts = [dict(_sanitize_talent_tree(draft)) for draft in drafts]
         normalized_bundle = dict(bundle)
         normalized_bundle["drafts"] = drafts
+        generation_error = str(normalized_bundle.get("generation_error") or "")
+        if generation_error:
+            normalized_bundle["generation_error"] = (
+                f"{safe_error(generation_error)['error_class']}: "
+                "draft generation was incomplete"
+            )
+        raw_completion = normalized_bundle.get("completion_status") or {}
+        if not isinstance(raw_completion, Mapping):
+            raise ValueError("completion_status must be an object")
+        for field, allowed in COMPLETION_STATUS_ENUMS.items():
+            value = str(raw_completion.get(field) or "").strip()
+            if value and value not in allowed:
+                raise ValueError(f"unsupported {field}: {value}")
+        normalized_bundle["completion_status"] = _sanitize_talent_tree(
+            raw_completion,
+            field="completion_status",
+        )
+        normalized_bundle = dict(_sanitize_talent_tree(normalized_bundle))
+        drafts = [
+            dict(item)
+            for item in normalized_bundle.get("drafts") or ()
+            if isinstance(item, Mapping)
+        ]
         bundle_json = json.dumps(
             normalized_bundle,
             ensure_ascii=False,
@@ -495,13 +877,86 @@ class TalentPoolStore:
                     run_date,
                     direction,
                     source_run_id,
-                    str(bundle.get("generation_provider") or ""),
-                    str(bundle.get("generation_model") or ""),
-                    str(bundle.get("generation_error") or ""),
+                    str(normalized_bundle.get("generation_provider") or ""),
+                    str(normalized_bundle.get("generation_model") or ""),
+                    str(normalized_bundle.get("generation_error") or ""),
                     bundle_json,
                     now,
                 ),
             )
+            connection.execute(
+                "DELETE FROM talent_pool_final_report_opportunities WHERE snapshot_id=?",
+                (snapshot_id,),
+            )
+            report_opportunities = normalized_bundle.get("final_report_opportunities")
+            if report_opportunities is None:
+                legacy_by_company: dict[str, dict[str, Any]] = {}
+                for draft in drafts:
+                    for source in draft.get("source_leads") or []:
+                        if not isinstance(source, Mapping):
+                            continue
+                        company = str(source.get("company") or "").strip()
+                        if not company:
+                            continue
+                        item = legacy_by_company.setdefault(
+                            company,
+                            {
+                                "company": company,
+                                "score": float(source.get("score") or 0),
+                                "role_hypotheses": [],
+                                "evidence_urls": [],
+                            },
+                        )
+                        item["role_hypotheses"] = list(
+                            dict.fromkeys(
+                                [*item["role_hypotheses"], *(source.get("role_hypotheses") or [])]
+                            )
+                        )
+                        item["evidence_urls"] = list(
+                            dict.fromkeys(
+                                [*item["evidence_urls"], *(source.get("evidence_urls") or [])]
+                            )
+                        )
+                report_opportunities = list(legacy_by_company.values())
+            if not isinstance(report_opportunities, list):
+                raise ValueError("final_report_opportunities must be a list")
+            for ordinal, raw in enumerate(report_opportunities, start=1):
+                if not isinstance(raw, Mapping):
+                    raise ValueError("each final report opportunity must be an object")
+                company = str(raw.get("company") or "").strip()
+                if not company:
+                    raise ValueError("final report opportunity requires company")
+                roles = [
+                    str(item).strip()
+                    for item in raw.get("role_hypotheses") or []
+                    if str(item).strip()
+                ]
+                urls = [
+                    sanitize_url(item)
+                    for item in raw.get("evidence_urls") or []
+                    if str(item).strip()
+                ]
+                connection.execute(
+                    """
+                    INSERT INTO talent_pool_final_report_opportunities(
+                        snapshot_id, run_date, direction, source_run_id, ordinal,
+                        company, score, role_hypotheses_json,
+                        evidence_urls_json, created_at
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    """,
+                    (
+                        snapshot_id,
+                        run_date,
+                        direction,
+                        source_run_id,
+                        ordinal,
+                        company,
+                        float(raw.get("score") or 0),
+                        json.dumps(roles, ensure_ascii=False, sort_keys=True),
+                        json.dumps(urls, ensure_ascii=False, sort_keys=True),
+                        now,
+                    ),
+                )
             connection.execute(
                 """
                 UPDATE talent_pool_opportunity_links SET active=0
@@ -667,7 +1122,11 @@ class TalentPoolStore:
                         if str(item).strip()
                     ] or [str(draft.get("recommended_title") or "").strip()]
                     evidence_urls_json = json.dumps(
-                        list(source.get("evidence_urls") or ()),
+                        [
+                            sanitize_url(item)
+                            for item in source.get("evidence_urls") or ()
+                            if str(item).strip()
+                        ],
                         ensure_ascii=False,
                         sort_keys=True,
                     )
@@ -753,6 +1212,13 @@ class TalentPoolStore:
             selected = rows
             if selected is None or selected["status"] == "reported":
                 return None
+            delivered = connection.execute(
+                "SELECT 1 FROM talent_pool_delivery_ledger "
+                "WHERE snapshot_id=? AND status='delivered' LIMIT 1",
+                (selected["snapshot_id"],),
+            ).fetchone()
+            if delivered is not None and selected["last_error"] != "operator_requeue":
+                return None
             if selected["status"] in {"reporting", "read"}:
                 try:
                     updated_at = datetime.fromisoformat(
@@ -774,6 +1240,7 @@ class TalentPoolStore:
             result = dict(selected)
         result["bundle"] = json.loads(result.pop("bundle_json"))
         result["ordered_draft_ids"] = json.loads(result.pop("ordered_draft_ids_json"))
+        result["deliveries"] = self.delivery_records(result["snapshot_id"])
         return result
 
     def latest_openclaw_context(
@@ -803,6 +1270,7 @@ class TalentPoolStore:
         result = dict(row)
         result["bundle"] = json.loads(result.pop("bundle_json"))
         result["ordered_draft_ids"] = json.loads(result.pop("ordered_draft_ids_json"))
+        result["deliveries"] = self.delivery_records(result["snapshot_id"])
         return result
 
     def openclaw_context_by_snapshot(
@@ -833,7 +1301,20 @@ class TalentPoolStore:
         result = dict(row)
         result["bundle"] = json.loads(result.pop("bundle_json"))
         result["ordered_draft_ids"] = json.loads(result.pop("ordered_draft_ids_json"))
+        result["deliveries"] = self.delivery_records(result["snapshot_id"])
         return result
+
+    def delivery_records(self, snapshot_id: str) -> list[dict[str, Any]]:
+        with self._connect() as connection:
+            rows = connection.execute(
+                """
+                SELECT delivery_channel, status, delivered_at, error_class, error_detail
+                FROM talent_pool_delivery_ledger
+                WHERE snapshot_id=? ORDER BY delivery_channel
+                """,
+                (snapshot_id,),
+            ).fetchall()
+        return [dict(row) for row in rows]
 
     def mark_openclaw_read(self, snapshot_id: str) -> bool:
         """Record that the main Agent loaded the exact bridge-claimed snapshot."""
@@ -860,19 +1341,113 @@ class TalentPoolStore:
                 """,
                 (now, now, snapshot_id),
             )
+            if cursor.rowcount == 1:
+                self._record_delivery(
+                    connection,
+                    snapshot_id,
+                    channel="openclaw_hook",
+                    status="delivered",
+                )
         return cursor.rowcount == 1
 
-    def mark_openclaw_report_failed(self, snapshot_id: str, error: str) -> bool:
+    def mark_openclaw_report_failed(
+        self, snapshot_id: str, error: BaseException | str
+    ) -> bool:
         with self._connect() as connection:
+            diagnostic = safe_error(error)
             cursor = connection.execute(
                 """
                 UPDATE talent_pool_openclaw_reports
                 SET status='failed', updated_at=?, last_error=?
                 WHERE snapshot_id=? AND status<>'reported'
                 """,
-                (_utcnow(), str(error)[:1000], snapshot_id),
+                (_utcnow(), diagnostic["error_class"], snapshot_id),
             )
+            if cursor.rowcount == 1:
+                self._record_delivery(
+                    connection,
+                    snapshot_id,
+                    channel="openclaw_hook",
+                    status="failed",
+                    error=error,
+                )
         return cursor.rowcount == 1
+
+    def record_delivery(
+        self,
+        snapshot_id: str,
+        *,
+        channel: str,
+        status: str,
+        error: BaseException | str = "",
+    ) -> None:
+        """Persist delivery independently from generation and bridge status.
+
+        Only a successful human-visible delivery enters the cooldown history.  The
+        bounded error fields keep operational diagnostics useful without turning
+        raw provider responses or accidental secrets into durable state.
+        """
+
+        if status not in {"delivered", "failed"}:
+            raise ValueError("delivery status must be delivered or failed")
+        normalized_channel = re.sub(r"[^a-z0-9_.-]+", "_", channel.casefold()).strip("_")
+        if not normalized_channel:
+            raise ValueError("delivery channel must not be empty")
+        with self._connect() as connection:
+            self._record_delivery(
+                connection,
+                snapshot_id,
+                channel=normalized_channel,
+                status=status,
+                error=error,
+            )
+
+    @staticmethod
+    def _record_delivery(
+        connection: sqlite3.Connection,
+        snapshot_id: str,
+        *,
+        channel: str,
+        status: str,
+        error: object = "",
+    ) -> None:
+        now = _utcnow()
+        diagnostic = safe_error(error)
+        connection.execute(
+            """
+            INSERT INTO talent_pool_delivery_ledger(
+                snapshot_id, delivery_channel, status, delivered_at,
+                error_class, error_detail, created_at, updated_at
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(snapshot_id, delivery_channel) DO UPDATE SET
+                status=CASE
+                    WHEN talent_pool_delivery_ledger.status='delivered'
+                    THEN 'delivered' ELSE excluded.status END,
+                delivered_at=COALESCE(
+                    talent_pool_delivery_ledger.delivered_at,
+                    excluded.delivered_at
+                ),
+                error_class=CASE
+                    WHEN talent_pool_delivery_ledger.status='delivered'
+                    THEN talent_pool_delivery_ledger.error_class
+                    ELSE excluded.error_class END,
+                error_detail=CASE
+                    WHEN talent_pool_delivery_ledger.status='delivered'
+                    THEN talent_pool_delivery_ledger.error_detail
+                    ELSE excluded.error_detail END,
+                updated_at=excluded.updated_at
+            """,
+            (
+                snapshot_id,
+                channel,
+                status,
+                now if status == "delivered" else None,
+                diagnostic["error_class"] if status == "failed" else "",
+                diagnostic["detail"] if status == "failed" else "",
+                now,
+                now,
+            ),
+        )
 
     def requeue_openclaw_report(
         self,
@@ -886,7 +1461,7 @@ class TalentPoolStore:
             cursor = connection.execute(
                 """
                 UPDATE talent_pool_openclaw_reports
-                SET status='pending', reported_at=NULL, updated_at=?, last_error=''
+                SET status='pending', reported_at=NULL, updated_at=?, last_error='operator_requeue'
                 WHERE snapshot_id=? AND session_key=?
                   AND status IN ('reported', 'failed')
                   AND snapshot_id = (
@@ -925,6 +1500,25 @@ class TalentPoolStore:
                   AND (?='' OR c.source_run_id=?)
                 """,
                 (run_date, direction, source_run_id, source_run_id),
+            ).fetchone()
+        if row is None:
+            return None
+        payload = json.loads(row["bundle_json"])
+        payload["_snapshot_id"] = row["snapshot_id"]
+        return payload
+
+    def historical_bundle_for_source_run(
+        self, run_date: str, direction: str, source_run_id: str
+    ) -> dict[str, Any] | None:
+        """Return a prior immutable snapshot without changing the current pointer."""
+        with self._connect() as connection:
+            row = connection.execute(
+                """
+                SELECT snapshot_id, bundle_json FROM talent_pool_bundle_snapshots
+                WHERE run_date=? AND direction=? AND source_run_id=?
+                ORDER BY created_at DESC LIMIT 1
+                """,
+                (run_date, direction, source_run_id),
             ).fetchone()
         if row is None:
             return None
@@ -1347,10 +1941,10 @@ class TalentPoolStore:
                 (
                     now,
                     outcome,
-                    error_code,
-                    error_message[:1000],
+                    sanitize_text(error_code, limit=120),
+                    sanitize_text(error_message, limit=1000),
                     job_id,
-                    job_url,
+                    sanitize_url(job_url, limit=1000),
                     attempt_key,
                     draft_id,
                     attempt["payload_hash"],
@@ -1366,10 +1960,10 @@ class TalentPoolStore:
                 (
                     status,
                     job_id,
-                    job_url,
+                    sanitize_url(job_url, limit=1000),
                     now if outcome == "published" else None,
-                    error_code,
-                    error_message[:1000],
+                    sanitize_text(error_code, limit=120),
+                    sanitize_text(error_message, limit=1000),
                     now,
                     draft_id,
                     attempt["payload_hash"],
@@ -1398,6 +1992,7 @@ def _utcnow() -> str:
 
 __all__ = [
     "ApprovalCommand",
+    "COMPLETION_STATUS_ENUMS",
     "TalentPoolStore",
     "parse_approval_command",
 ]

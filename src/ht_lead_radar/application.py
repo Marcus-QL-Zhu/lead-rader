@@ -32,6 +32,10 @@ from .costs import (
     SearchBudgetLedger,
 )
 from .discovery import PlannedSearchCollector
+from .daily_opportunity_selection import (
+    DEFAULT_COOLDOWN_DAYS,
+    select_daily_opportunities,
+)
 from .fact_store import FactStore
 from .feishu import (
     FeishuBitableClient,
@@ -41,12 +45,15 @@ from .feishu import (
 from .fixed_sources import FixedSourceCollector
 from .float_matching import rank_candidate_float
 from .models import CompanyLead, Evidence
+from .josint_snapshot import JOSINTSnapshotUnstable
 from .ops import AuditLog, OpsMetricsStore, SuppressionRegistry
 from .pipeline import build_late_opportunities, build_leads
 from .relationships import DeepResearchEngine, RelationshipStore
 from .reporting_v2 import render_complete_markdown, write_complete_outputs
 from .requests import CandidateProfile
 from .role_inference import enrich_industry_roles
+from .sanitization import safe_error, safe_error_class, sanitize_tree
+from .talent_pool_store import TalentPoolStore
 from .runtime import (
     RunStore,
     RuntimeResult,
@@ -72,6 +79,10 @@ DEFAULTS = {
     "ops_metrics_db": "data/ops-metrics.sqlite",
     "output_dir": "reports",
     "top": 20,
+    "candidate_pool_size": 20,
+    "daily_cooldown": False,
+    "cooldown_days": DEFAULT_COOLDOWN_DAYS,
+    "talent_state_db": "data/talent-pool.sqlite",
     "minimum_score": 0.0,
     "limit_per_query": 8,
     "metaso_verify_limit": 3,
@@ -79,6 +90,93 @@ DEFAULTS = {
     "metaso_provider_daily_limit": 500,
     "metaso_points_per_search": 6,
 }
+
+
+def _safe_error_text(error: object) -> str:
+    diagnostic = safe_error(error)
+    if diagnostic["detail"].startswith(f"{diagnostic['error_class']}:"):
+        return diagnostic["detail"]
+    return (
+        f"{diagnostic['error_class']}: {diagnostic['detail']}"
+        if diagnostic["detail"]
+        else diagnostic["error_class"]
+    )
+
+
+def _collection_effect(
+    evidence: Iterable[Mapping[str, Any]],
+    *,
+    run_summary: Mapping[str, Any] | None = None,
+    health: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """Build the atomic, replay-safe result of a collection side effect."""
+
+    return {
+        "evidence": [dict(item) for item in evidence],
+        "run_summary": dict(run_summary or {}),
+        "health": dict(health or {}),
+    }
+
+
+def _read_collection_effect(
+    cached: Any,
+) -> tuple[list[dict[str, Any]], dict[str, Any], dict[str, Any], bool]:
+    """Read current envelopes and pre-hotfix list-only effect rows.
+
+    The final boolean identifies a list-only legacy row.  Those rows remain
+    usable for evidence, but their historical diagnostics are explicitly
+    unavailable rather than being reconstructed from a fresh collector.
+    """
+
+    if isinstance(cached, Mapping) and isinstance(cached.get("evidence"), list):
+        evidence = [dict(item) for item in cached["evidence"] if isinstance(item, Mapping)]
+        run_summary = (
+            dict(cached.get("run_summary") or {})
+            if isinstance(cached.get("run_summary"), Mapping)
+            else {}
+        )
+        health = (
+            dict(cached.get("health") or {})
+            if isinstance(cached.get("health"), Mapping)
+            else {}
+        )
+        return evidence, run_summary, health, False
+    if isinstance(cached, list):
+        return (
+            [dict(item) for item in cached if isinstance(item, Mapping)],
+            {"capture_version": "legacy-list-effect", "sources": {}},
+            {"status": "unavailable", "capture_version": "legacy-list-effect"},
+            True,
+        )
+    raise TypeError("collection effect must be an envelope or legacy list")
+
+
+def _failed_provider_run(provider: str, error: object) -> dict[str, Any]:
+    diagnostic = safe_error(error)
+    detail = _safe_error_text(error)
+    adapter = {
+        "status": "error",
+        "evidence_count": 0,
+        "error": detail,
+        "error_class": diagnostic["error_class"],
+    }
+    return {
+        "provider": provider,
+        "status": "error",
+        "evidence_count": 0,
+        "error": detail,
+        "error_class": diagnostic["error_class"],
+        "health": {
+            "status": "critical",
+            "failed_count": 1,
+            "error_class": diagnostic["error_class"],
+        },
+        "run_summary": {
+            "sources": {provider: adapter},
+            "failed_source_count": 1,
+            "errors": [f"{provider}: {detail}"],
+        },
+    }
 
 
 @dataclass(frozen=True)
@@ -112,7 +210,9 @@ class FallbackSearchProvider:
             try:
                 return provider.search(query, limit=limit)
             except Exception as error:
-                failures.append(f"{provider.provider_name}: {error}")
+                failures.append(
+                    f"{str(provider.provider_name)[:80]}: {_safe_error_text(error)}"
+                )
         raise RuntimeError(" | ".join(failures))
 
     def collect_routes(
@@ -281,57 +381,101 @@ class LeadRadarApplication:
                 metadata["source_failures"].extend(fixed_summary.get("failures", ()))
 
             distinct_companies = {item.company for item in evidence}
-            target_count = max(int(payload["top"]), 0)
+            target_count = max(_candidate_pool_size(payload), 0)
             if (
                 provider_mode in {"auto", "searxng", "bing"}
                 and len(distinct_companies) < target_count
             ):
-                search_provider = _search_provider(
-                    payload,
-                    env,
-                    force=provider_mode if provider_mode != "auto" else "",
+                public_provider_name = (
+                    provider_mode if provider_mode != "auto" else "public-search-fallback"
                 )
-                planner_queries = tuple(plan.get("discovery_queries") or ())
-                collector = PlannedSearchCollector(search_provider, planner_queries)
                 try:
-                    searched = context.effect_once(
-                        "public-search-discovery",
-                        lambda _token: [
+                    def collect_public_search(_token: str) -> dict[str, Any]:
+                        search_provider = _search_provider(
+                            payload,
+                            env,
+                            force=(provider_mode if provider_mode != "auto" else ""),
+                        )
+                        collector = PlannedSearchCollector(
+                            search_provider,
+                            tuple(plan.get("discovery_queries") or ()),
+                        )
+                        items = [
                             asdict(item)
                             for item in collector.collect(
                                 direction,
                                 year=as_of.year,
                                 limit_per_query=int(payload["limit_per_query"]),
                             )
-                        ],
+                        ]
+                        return _collection_effect(
+                            items,
+                            run_summary={"sources": {}},
+                            health={"status": "healthy", "failed_count": 0},
+                        ) | {"provider": search_provider.provider_name}
+
+                    cached_search = context.effect_once(
+                        "public-search-discovery",
+                        collect_public_search,
                     )
+                    searched, run_summary, health, legacy_effect = (
+                        _read_collection_effect(cached_search)
+                    )
+                    if isinstance(cached_search, Mapping):
+                        public_provider_name = str(
+                            cached_search.get("provider") or public_provider_name
+                        )
                     evidence.extend(evidence_from_dict(item) for item in searched)
                     metadata["source_runs"].append(
                         {
-                            "provider": search_provider.provider_name,
-                            "status": "ok",
+                            "provider": public_provider_name,
+                            "status": "ok" if not legacy_effect else "partial",
                             "evidence_count": len(searched),
+                            "health": health,
+                            "run_summary": run_summary,
                         }
                     )
                 except Exception as error:
+                    failed_run = _failed_provider_run(public_provider_name, error)
+                    metadata["source_runs"].append(failed_run)
                     metadata["source_failures"].append(
-                        f"public-search-discovery: {type(error).__name__}: {error}"
+                        f"public-search-discovery: {_safe_error_text(error)}"
                     )
-                    if provider_mode != "auto" and not evidence:
-                        raise
             mode = "fixed-sources-primary+bounded-public-fallback"
 
         josint_db = payload.get("josint_db")
         if josint_db and Path(str(josint_db)).exists():
-            evidence.extend(
-                replace(item, direction=direction)
-                for item in collect_josint(
-                    str(josint_db),
-                    direction,
-                    topics=source_topics,
+            try:
+                evidence.extend(
+                    replace(item, direction=direction)
+                    for item in collect_josint(
+                        str(josint_db),
+                        direction,
+                        topics=source_topics,
+                    )
                 )
-            )
-            mode += "+josint-late-validation"
+                mode += "+josint-late-validation"
+            except JOSINTSnapshotUnstable as error:
+                # JOSINT is late validation, not the primary discovery path.
+                # A continuously changing WAL family is therefore a bounded,
+                # visible warning rather than a reason to discard the fixed-
+                # source analysis that already completed.
+                metadata["source_runs"].append(
+                    {
+                        "provider": "JOSINT late validation",
+                        "status": "partial",
+                        "evidence_count": 0,
+                        "health": {"status": "warning", "failed_count": 1},
+                        "run_summary": {
+                            "warning_class": type(error).__name__,
+                            "retry_count": 3,
+                        },
+                    }
+                )
+                metadata["source_failures"].append(
+                    "josint-late-validation: JOSINTSnapshotUnstable"
+                )
+                mode += "+josint-warning"
 
         return {
             "payload": payload,
@@ -466,7 +610,7 @@ class LeadRadarApplication:
             value.get("metadata"),
             as_of=as_of,
             minimum_score=float(payload["minimum_score"]),
-            limit=int(payload["top"]),
+            limit=_candidate_pool_size(payload),
             source_topics=_source_topics(payload, value["direction"]),
         )
         enrich_industry_roles(
@@ -492,6 +636,29 @@ class LeadRadarApplication:
         is_offline = bool(payload.get("demo") or payload.get("replay_json"))
         research_provider = None if is_offline else _search_provider(payload, env)
 
+        selected_companies: set[str] | None = None
+        if payload.get("daily_cooldown"):
+            # Opening the store is the explicit preflight/migration boundary;
+            # cooldown must never silently ignore a legacy production DB.
+            TalentPoolStore(payload["talent_state_db"])
+            selected_report = select_daily_opportunities(
+                {
+                    "manifest": {
+                        "as_of": value["as_of"],
+                        "direction": value["direction"],
+                    },
+                    "leads": [lead.to_dict() for lead in leads],
+                },
+                history_database=payload["talent_state_db"],
+                cooldown_days=int(payload["cooldown_days"]),
+                target_count=int(payload["top"]),
+            )
+            leads = [lead_from_dict(item) for item in selected_report["leads"]]
+            selected_companies = {lead.company for lead in leads}
+            metadata["daily_opportunity_segments"] = selected_report[
+                "daily_opportunity_segments"
+            ]
+
         # One bounded public job-ad check per company.  Daily basic research
         # does not run investor/HM/HR/founder queries.
         if research_provider:
@@ -509,11 +676,14 @@ class LeadRadarApplication:
                         ],
                     )
                 except Exception as error:
+                    diagnostic = safe_error(error)
                     metadata["ad_checks"][lead.company] = {
                         "checked_at": value["as_of"],
                         "queries": [query],
                         "matching_results": 0,
-                        "status": f"error: {error}",
+                        "status": "error",
+                        "error_class": diagnostic["error_class"],
+                        "error_detail": diagnostic["detail"],
                     }
                     continue
                 matches = []
@@ -572,7 +742,7 @@ class LeadRadarApplication:
             metadata,
             as_of=date.fromisoformat(value["as_of"]),
             minimum_score=float(payload["minimum_score"]),
-            limit=int(payload["top"]),
+            limit=_candidate_pool_size(payload),
             source_topics=_source_topics(payload, value["direction"]),
         )
         enrich_industry_roles(
@@ -580,6 +750,9 @@ class LeadRadarApplication:
             value["direction"],
             source_topics=_source_topics(value["payload"], value["direction"]),
         )
+        if selected_companies is not None:
+            leads = [lead for lead in leads if lead.company in selected_companies]
+            leads.sort(key=lambda lead: (-lead.score, lead.company.casefold()))
 
         verification = self._metaso_verify(
             context,
@@ -596,7 +769,7 @@ class LeadRadarApplication:
                 metadata,
                 as_of=date.fromisoformat(value["as_of"]),
                 minimum_score=float(payload["minimum_score"]),
-                limit=int(payload["top"]),
+                limit=_candidate_pool_size(payload),
                 source_topics=_source_topics(payload, value["direction"]),
             )
             enrich_industry_roles(
@@ -604,6 +777,9 @@ class LeadRadarApplication:
                 value["direction"],
                 source_topics=_source_topics(value["payload"], value["direction"]),
             )
+            if selected_companies is not None:
+                leads = [lead for lead in leads if lead.company in selected_companies]
+                leads.sort(key=lambda lead: (-lead.score, lead.company.casefold()))
 
         value["metaso_points_this_run"] = sum(
             max(int(result.get("query_count", 0)), 0)
@@ -614,6 +790,12 @@ class LeadRadarApplication:
             for result in verification.values()
             if isinstance(result, Mapping)
         )
+
+        # candidate_pool_size controls the oversupplied scoring stage only.
+        # Every published path still honours the independent final ``top``
+        # contract, including manual runs where cooldown is disabled.
+        leads.sort(key=lambda lead: (-lead.score, lead.company.casefold()))
+        leads = leads[: max(int(payload["top"]), 0)]
 
         deep_reports: dict[str, dict[str, Any]] = {}
         float_payload: list[dict[str, Any]] = []
@@ -646,7 +828,7 @@ class LeadRadarApplication:
                         "hiring_managers": [],
                         "hr_people": [],
                         "founders": [],
-                        "caveats": [f"深度研究失败：{type(error).__name__}: {error}"],
+                        "caveats": [f"深度研究失败：{_safe_error_text(error)}"],
                     }
 
         if mode == "candidate_float":
@@ -762,9 +944,11 @@ class LeadRadarApplication:
                     ),
                 }
             except Exception as error:
+                diagnostic = safe_error(error)
                 integration_status["feishu"] = {
                     "mode": "error",
-                    "error": f"{type(error).__name__}: {error}",
+                    "error_class": diagnostic["error_class"],
+                    "error_detail": diagnostic["detail"],
                     "change_set": str(Path(dry_run_path).resolve()),
                 }
 
@@ -778,6 +962,9 @@ class LeadRadarApplication:
                 "adjacent_watchlist", []
             ),
             "metaso_budget": value.get("budget_status", {}),
+            "daily_opportunity_segments": (value.get("metadata") or {}).get(
+                "daily_opportunity_segments", {}
+            ),
         }
         float_matches = self._ephemeral_float_results.get(context.run_id, [])
         markdown = render_complete_markdown(
@@ -802,11 +989,17 @@ class LeadRadarApplication:
             "execution_parameters": _safe_parameters(payload),
             "fact_summary": value.get("fact_summary", {}),
             "source_summary": source_summary,
+            "daily_opportunity_segments": source_summary[
+                "daily_opportunity_segments"
+            ],
+            "daily_cooldown_applied": bool(payload.get("daily_cooldown")),
             "integration_status": integration_status,
             "policy": {
                 "director_plus_only": True,
                 "pre_job_upstream_signal_required": True,
                 "target_count": int(payload["top"]),
+                "candidate_pool_size": _candidate_pool_size(payload),
+                "daily_cooldown_applied": bool(payload.get("daily_cooldown")),
                 "soft_score_threshold": float(payload["minimum_score"]),
                 "outreach_generation": False,
                 "outreach_sending": False,
@@ -822,6 +1015,7 @@ class LeadRadarApplication:
             late_opportunities=value.get("late_opportunities") or [],
             float_matches=float_matches,
             deep_research=value.get("deep_research") or {},
+            opportunity_segments=source_summary["daily_opportunity_segments"],
         )
         try:
             metrics = OpsMetricsStore(payload["ops_metrics_db"])
@@ -845,10 +1039,51 @@ class LeadRadarApplication:
                     source_id,
                     recorded_at=datetime.now(timezone.utc),
                     ok=source_run.get("status") == "ok",
-                    yield_count=max(int(source_run.get("evidence_count", 0)), 0),
+                    yield_count=source_run.get("evidence_count"),
+                    status=str(source_run.get("status") or "error"),
+                    **_adapter_metric_counts(source_run),
                 )
-        except Exception:
-            pass
+                run_summary = source_run.get("run_summary") or {}
+                detailed = (
+                    (run_summary.get("dedicated_aggregate") or {}).get("sources")
+                    or {}
+                )
+                adapter_sources = dict(run_summary.get("sources") or {})
+                adapter_sources.update(detailed)
+                for adapter_id, adapter_run in adapter_sources.items():
+                    if not isinstance(adapter_run, Mapping):
+                        continue
+                    raw_error = str(adapter_run.get("error") or "")
+                    metrics.record_source(
+                        context.run_id,
+                        str(adapter_id),
+                        recorded_at=datetime.now(timezone.utc),
+                        ok=str(adapter_run.get("status") or "") in {"ok", "not_modified"},
+                        yield_count=adapter_run.get("evidence_count"),
+                        status=str(adapter_run.get("status") or "error"),
+                        **_adapter_metric_counts(adapter_run),
+                        error_class=(safe_error_class(raw_error) if raw_error else ""),
+                    )
+                aggregate_health = run_summary.get("dedicated_aggregate") or {}
+                if aggregate_health:
+                    aggregate_failed = int(
+                        aggregate_health.get("failed_count") or 0
+                    )
+                    metrics.record_source(
+                        context.run_id,
+                        "dedicated-aggregate-health",
+                        recorded_at=datetime.now(timezone.utc),
+                        ok=aggregate_failed == 0,
+                        yield_count=None,
+                        status="ok" if aggregate_failed == 0 else "partial",
+                        open_dead_letter_count=aggregate_health.get(
+                            "open_dead_letter_count"
+                        ),
+                    )
+        except Exception as error:
+            raise RuntimeError(
+                f"ops metrics persistence failed: {safe_error_class(error)}"
+            ) from error
         try:
             AuditLog(payload["audit_db"]).record(
                 actor=str(payload.get("actor") or "openclaw"),
@@ -891,34 +1126,106 @@ class LeadRadarApplication:
         summary: dict[str, list[Any]] = {"runs": [], "failures": []}
         registry_path = Path(str(payload["fixed_sources"]))
         if registry_path.exists():
-            collector = FixedSourceCollector(
-                registry_path=registry_path,
-                state_db=payload["source_state_db"],
-            )
+            legacy_provider = "fixed-source-registry"
             try:
-                serialized = context.effect_once(
-                    "legacy-fixed-sources",
-                    lambda _token: [
+                def collect_legacy(_token: str) -> dict[str, Any]:
+                    collector = FixedSourceCollector(
+                        registry_path=registry_path,
+                        state_db=payload["source_state_db"],
+                    )
+                    items = [
                         asdict(item)
                         for item in collector.collect(
                             direction,
                             year=year,
                             limit_per_query=int(payload["limit_per_query"]),
                         )
-                    ],
+                    ]
+                    run_summary = dict(collector.last_run_summary)
+                    statuses = {
+                        str(item.get("status") or "error")
+                        for item in (run_summary.get("sources") or {}).values()
+                        if isinstance(item, Mapping)
+                    }
+                    health_status = (
+                        "critical"
+                        if statuses and statuses <= {"error"}
+                        else "warning"
+                        if statuses & {"partial", "error"}
+                        else "healthy"
+                    )
+                    return _collection_effect(
+                        items,
+                        run_summary=run_summary,
+                        health={
+                            "status": health_status,
+                            "failed_count": sum(status == "error" for status in statuses),
+                        },
+                    ) | {"provider": collector.provider_name}
+
+                cached_legacy = context.effect_once(
+                    "legacy-fixed-sources",
+                    collect_legacy,
                 )
+                serialized, legacy_run_summary, legacy_health, legacy_effect = (
+                    _read_collection_effect(cached_legacy)
+                )
+                if isinstance(cached_legacy, Mapping):
+                    legacy_provider = str(
+                        cached_legacy.get("provider") or legacy_provider
+                    )
                 evidence.extend(evidence_from_dict(item) for item in serialized)
+                legacy_errors = list(legacy_run_summary.get("errors", []))
+                legacy_source_runs = {
+                    str(source_id): dict(source_run)
+                    for source_id, source_run in (
+                        legacy_run_summary.get("sources", {}) or {}
+                    ).items()
+                    if isinstance(source_run, Mapping)
+                }
+                legacy_statuses = {
+                    str(source_run.get("status") or "error")
+                    for source_run in legacy_source_runs.values()
+                }
+                legacy_skipped = str(
+                    legacy_run_summary.get("skipped") or ""
+                )
+                if legacy_effect:
+                    legacy_status = "partial"
+                elif legacy_skipped:
+                    legacy_status = "disabled"
+                elif "error" in legacy_statuses:
+                    legacy_status = (
+                        "partial"
+                        if legacy_statuses - {"error", "disabled", "unsupported_adapter"}
+                        else "error"
+                    )
+                elif "partial" in legacy_statuses:
+                    legacy_status = "partial"
+                else:
+                    legacy_status = "ok"
                 summary["runs"].append(
                     {
-                        "provider": collector.provider_name,
-                        "status": "ok",
+                        "provider": legacy_provider,
+                        "status": legacy_status,
                         "evidence_count": len(serialized),
+                        "health": legacy_health,
+                        "run_summary": {
+                            "sources": legacy_source_runs,
+                            "skipped": legacy_skipped,
+                            **(
+                                {"capture_version": "legacy-list-effect"}
+                                if legacy_effect
+                                else {}
+                            ),
+                        },
                     }
                 )
-                summary["failures"].extend(collector.last_run_summary.get("errors", []))
+                summary["failures"].extend(legacy_errors)
             except Exception as error:
+                summary["runs"].append(_failed_provider_run(legacy_provider, error))
                 summary["failures"].append(
-                    f"legacy-fixed-sources: {type(error).__name__}: {error}"
+                    f"legacy-fixed-sources: {_safe_error_text(error)}"
                 )
 
         # The reusable source-pack collector is an optional module during
@@ -927,41 +1234,73 @@ class LeadRadarApplication:
         try:
             from .source_pack_collector import SourcePackCollector
 
-            with SourcePackCollector(
-                registry_path=payload["source_packs"],
-                state_db=payload["source_state_db"],
-                dedicated_llm_env=env,
-            ) as pack_collector:
-                serialized = context.effect_once(
-                    f"source-pack:{direction}",
-                    lambda _token: [
+            def collect_source_pack(_token: str) -> dict[str, Any]:
+                with SourcePackCollector(
+                    registry_path=payload["source_packs"],
+                    state_db=payload["source_state_db"],
+                    dedicated_llm_env=env,
+                ) as pack_collector:
+                    items = [
                         asdict(item)
                         for item in pack_collector.collect(
                             direction,
                             year=year,
                             limit_per_query=int(payload["limit_per_query"]),
                         )
-                    ],
-                )
-                pack_health = pack_collector.source_health_summary()
-                pack_run_summary = dict(pack_collector.last_run_summary)
+                    ]
+                    return _collection_effect(
+                        items,
+                        run_summary=pack_collector.last_run_summary,
+                        health=pack_collector.source_health_summary(),
+                    )
+
+            cached_pack = context.effect_once(
+                f"source-pack:{direction}",
+                collect_source_pack,
+            )
+            serialized, pack_run_summary, pack_health, legacy_effect = (
+                _read_collection_effect(cached_pack)
+            )
+            inner_statuses = [
+                str(item.get("status") or "error")
+                for item in (pack_run_summary.get("sources") or {}).values()
+                if isinstance(item, Mapping)
+                and str(item.get("status") or "")
+                not in {"disabled", "unsupported_adapter"}
+            ]
+            if legacy_effect:
+                pack_status = "partial"
+            elif any(status == "error" for status in inner_statuses):
+                pack_status = "partial" if serialized else "error"
+            elif any(status == "partial" for status in inner_statuses):
+                pack_status = "partial"
+            else:
+                pack_status = "ok"
             evidence.extend(evidence_from_dict(item) for item in serialized)
             summary["runs"].append(
                 {
                     "provider": "reusable-source-packs",
-                    "status": "ok",
+                    "status": pack_status,
                     "evidence_count": len(serialized),
                     "health": pack_health,
                     "run_summary": pack_run_summary,
                 }
             )
-        except ImportError:
+        except ImportError as error:
+            summary["runs"].append(
+                _failed_provider_run("reusable-source-packs", error)
+            )
             summary["failures"].append(
                 "source-pack collector module unavailable; legacy fixed sources used"
             )
         except Exception as error:
-            summary["failures"].append(f"source-pack:{type(error).__name__}: {error}")
-        return evidence, summary
+            summary["runs"].append(
+                _failed_provider_run("reusable-source-packs", error)
+            )
+            summary["failures"].append(
+                f"source-pack: {_safe_error_text(error)}"
+            )
+        return evidence, sanitize_tree(summary, string_limit=1000)
 
     def _metaso_verify(
         self,
@@ -1009,11 +1348,14 @@ class LeadRadarApplication:
                 try:
                     results = verifier.search(query, limit=5)
                 except Exception as error:
+                    diagnostic = safe_error(error)
                     return {
                         "provider": "metaso",
                         "query_count": 1,
                         "matching_results": 0,
-                        "status": f"error: {type(error).__name__}: {error}",
+                        "status": "error",
+                        "error_class": diagnostic["error_class"],
+                        "error_detail": diagnostic["detail"],
                     }
                 matched = [
                     item
@@ -1054,10 +1396,43 @@ def apply_defaults(payload: Mapping[str, Any]) -> dict[str, Any]:
         "feishu_state_db",
         "audit_db",
         "ops_metrics_db",
+        "talent_state_db",
         "output_dir",
     ):
         output[key] = str(output[key])
     return output
+
+
+def _candidate_pool_size(payload: Mapping[str, Any]) -> int:
+    final_count = max(int(payload.get("top") or 0), 0)
+    configured = max(int(payload.get("candidate_pool_size") or final_count), 0)
+    return max(final_count, configured)
+
+
+def _adapter_metric_counts(adapter_run: Mapping[str, Any]) -> dict[str, Any]:
+    """Copy only genuinely observed counters; never infer one stage from another."""
+
+    fields = (
+        "discovered_count",
+        "observation_count",
+        "detail_error_count",
+        "detail_failure_count",
+        "incremental_count",
+        "detail_success_count",
+        "semantic_attempt_count",
+        "semantic_accepted_count",
+        "semantic_prefiltered_count",
+        "semantic_failure_count",
+        "open_dead_letter_count",
+        "listing_count",
+        "evidence_count",
+        "rule_event_count",
+        "minimax_event_count",
+        "prefiltered_count",
+        "adaptive_used_count",
+        "omissions_detected",
+    )
+    return {field: adapter_run.get(field) for field in fields}
 
 
 def default_idempotency_key(
@@ -1070,6 +1445,14 @@ def default_idempotency_key(
             "direction": payload.get("direction"),
             "request_plan": payload.get("request_plan"),
             "provider": payload.get("provider", "auto"),
+            "top": int(payload.get("top", DEFAULTS["top"])),
+            "candidate_pool_size": int(
+                payload.get("candidate_pool_size", DEFAULTS["candidate_pool_size"])
+            ),
+            "daily_cooldown": bool(payload.get("daily_cooldown")),
+            "cooldown_days": int(
+                payload.get("cooldown_days", DEFAULTS["cooldown_days"])
+            ),
             "source_topics": list(
                 _source_topics(payload, str(payload.get("direction") or ""))
             ),
@@ -1239,6 +1622,9 @@ def _safe_parameters(payload: Mapping[str, Any]) -> dict[str, Any]:
     )
     output = {}
     for key, value in payload.items():
+        if key == "candidate_pool_size":
+            output[key] = value
+            continue
         if any(fragment in key.casefold() for fragment in secret_fragments):
             continue
         if key == "request_plan":
@@ -1260,6 +1646,8 @@ def _drop_candidate_fields(payload: dict[str, Any]) -> None:
     )
     for key in tuple(payload):
         normalized = str(key).casefold()
+        if normalized == "candidate_pool_size":
+            continue
         if any(fragment in normalized for fragment in sensitive_fragments):
             payload.pop(key, None)
 

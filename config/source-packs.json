@@ -1017,9 +1017,11 @@
         "generic",
         "semiconductor"
       ],
-      "enabled": true,
+      "enabled": false,
       "verified_on": "2026-07-25",
-      "status": "verified_public_listing",
+      "status": "disabled_unreachable_host",
+      "disabled_at": "2026-08-18",
+      "disabled_reason": "Production host repeatedly unreachable; disabled pending an independently verified public endpoint.",
       "verification_note": "2026-08-01复核：中国信通院官方公共服务子域公开列出国内手机市场运行分析系列；专用适配器固定枚举最新6篇并交叉验证标题、年月、作者及报告完成单位。"
     },
     {

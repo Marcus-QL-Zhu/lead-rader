@@ -43,9 +43,11 @@ from .domain import (
     stable_id,
     utcnow,
 )
+from .sanitization import sanitize_tree, sanitize_url
 
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
+_PERSISTENCE_SANITIZER_VERSION = "3"
 
 
 MIGRATIONS: tuple[str, ...] = (
@@ -222,6 +224,12 @@ MIGRATIONS: tuple[str, ...] = (
         ON event_link_decisions(left_event_id, right_event_id, link_type)
         WHERE revoked_at IS NULL;
     """,
+    """
+    CREATE TABLE IF NOT EXISTS fact_store_metadata (
+        key TEXT PRIMARY KEY,
+        value TEXT NOT NULL
+    );
+    """,
 )
 
 
@@ -295,7 +303,62 @@ class FactStore:
                     "INSERT OR IGNORE INTO schema_migrations(version, applied_at) VALUES (?, ?)",
                     (version, utcnow()),
                 )
+            self._sanitize_persisted_source_urls(connection)
             connection.execute(f"PRAGMA user_version = {SCHEMA_VERSION}")
+
+    def _sanitize_persisted_source_urls(
+        self, connection: sqlite3.Connection
+    ) -> None:
+        marker = connection.execute(
+            "SELECT value FROM fact_store_metadata "
+            "WHERE key='persistence_sanitizer_version'"
+        ).fetchone()
+        if marker and str(marker["value"]) == _PERSISTENCE_SANITIZER_VERSION:
+            return
+        rows = connection.execute(
+            "SELECT id, source_url, normalized_url, content_hash, metadata_json "
+            "FROM source_documents ORDER BY observed_at, id"
+        ).fetchall()
+        occupied = {
+            (str(row["normalized_url"]), str(row["content_hash"])): str(row["id"])
+            for row in rows
+        }
+        for row in rows:
+            safe_url = sanitize_url(row["source_url"])
+            normalized = normalize_url(safe_url)
+            identity = (normalized, str(row["content_hash"]))
+            other_id = occupied.get(identity)
+            if other_id and other_id != str(row["id"]):
+                separator = "&" if "?" in safe_url else "?"
+                safe_url = (
+                    f"{safe_url}{separator}dedupe_record="
+                    f"{sha256_text(str(row['id']))[:12]}"
+                )
+                normalized = normalize_url(safe_url)
+            try:
+                metadata = json.loads(str(row["metadata_json"] or "{}"))
+            except (TypeError, ValueError, json.JSONDecodeError):
+                metadata = {}
+            connection.execute(
+                "UPDATE source_documents SET source_url=?, normalized_url=?, "
+                "url_hash=?, metadata_json=? WHERE id=?",
+                (
+                    safe_url,
+                    normalized,
+                    sha256_text(normalized),
+                    canonical_json(sanitize_tree(metadata, redact_pii=True)),
+                    row["id"],
+                ),
+            )
+            occupied[(normalized, str(row["content_hash"]))] = str(row["id"])
+        connection.execute(
+            """
+            INSERT INTO fact_store_metadata(key, value)
+            VALUES ('persistence_sanitizer_version', ?)
+            ON CONFLICT(key) DO UPDATE SET value=excluded.value
+            """,
+            (_PERSISTENCE_SANITIZER_VERSION,),
+        )
 
     @staticmethod
     def _table_exists(connection: sqlite3.Connection, table: str) -> bool:
@@ -310,19 +373,24 @@ class FactStore:
     def upsert_document(self, document: SourceDocument) -> tuple[SourceDocument, bool]:
         """Insert an immutable source snapshot, returning ``(row, created)``."""
 
-        canonical_url = normalize_url(document.source_url)
+        safe_source_url = sanitize_url(document.source_url)
+        canonical_url = normalize_url(safe_source_url)
         content_hash = sha256_text(document.content)
         if (
-            canonical_url != document.normalized_url
+            safe_source_url != document.source_url
+            or canonical_url != document.normalized_url
             or content_hash != document.content_hash
             or document.url_hash != sha256_text(canonical_url)
+            or document.metadata != sanitize_tree(document.metadata, redact_pii=True)
         ):
             document = replace(
                 document,
                 id=stable_id("doc", document.source_name.casefold(), canonical_url, content_hash),
+                source_url=safe_source_url,
                 normalized_url=canonical_url,
                 url_hash=sha256_text(canonical_url),
                 content_hash=content_hash,
+                metadata=sanitize_tree(document.metadata, redact_pii=True),
             )
         with self._connect() as connection:
             existing = connection.execute(

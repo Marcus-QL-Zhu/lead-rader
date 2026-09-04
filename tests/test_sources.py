@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import time
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -28,6 +29,7 @@ def _source(
     maximum=86400,
     threshold=3,
     jitter=0.0,
+    timeout=20.0,
 ):
     adapter_configs = {
         'direct_http': {'url': 'https://example.com/news'},
@@ -62,6 +64,7 @@ def _source(
                         'max_interval_seconds': maximum,
                         'failure_threshold': threshold,
                         'jitter_ratio': jitter,
+                        'timeout_seconds': timeout,
                     },
                     'content_policy': {
                         'retention': 'snippet',
@@ -289,6 +292,23 @@ def test_adapter_failure_is_returned_not_raised():
     assert 'offline' in result.error
 
 
+def test_injected_source_transport_cannot_ignore_wall_clock_timeout():
+    class HangingTransport:
+        @staticmethod
+        def request(_url, **_kwargs):
+            time.sleep(0.5)
+            return _response("late")
+
+    source = _source(timeout=0.02)
+    started = time.monotonic()
+    result = adapter_client('direct_http', HangingTransport()).fetch(source)
+
+    assert time.monotonic() - started < 0.15
+    assert result.ok is False
+    assert result.status_code is None
+    assert "TimeoutError" in str(result.error)
+
+
 @pytest.mark.parametrize('kind', ['miniflux', 'changedetection'])
 def test_json_adapters_preserve_http_status_for_non_json_error(kind):
     source = _source(adapter=kind)
@@ -400,6 +420,31 @@ def test_exponential_backoff_circuit_breaker_and_success_reset(tmp_path):
     assert recovered.consecutive_failures == 0
     assert recovered.circuit_open_until is None
     assert recovered.last_error is None
+
+
+def test_source_health_never_persists_http_credentials(tmp_path):
+    now = datetime(2026, 7, 25, tzinfo=timezone.utc)
+    source = _source()
+    database = tmp_path / "health-secrets.sqlite"
+    scheduler = AdaptiveSourceScheduler(
+        SourceHealthStore(database),
+        clock=lambda: now,
+        jitter=lambda *_: 0,
+    )
+
+    health = scheduler.record_failure(
+        source,
+        error=(
+            "Authorization: Basic c291cmNlOnNlY3JldA==\n"
+            "Cookie: session=source-cookie-secret"
+        ),
+    )
+
+    assert "c291cmNlOnNlY3JldA==" not in str(health.last_error)
+    assert "source-cookie-secret" not in str(health.last_error)
+    persisted = database.read_bytes()
+    assert b"c291cmNlOnNlY3JldA==" not in persisted
+    assert b"source-cookie-secret" not in persisted
 
 
 def test_jitter_is_deterministic_and_never_exceeds_schedule_bounds(tmp_path):

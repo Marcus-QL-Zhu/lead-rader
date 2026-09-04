@@ -46,12 +46,14 @@ def test_public_fetcher_posts_json_with_explicit_headers():
     result = fetcher.post_json("https://api.example/detail", {"content_id": 7})
 
     assert json.loads(result) == {"data": {}}
+    timeout = captured.pop("timeout")
+    assert 0 < timeout <= 7
+    assert timeout == pytest.approx(7, abs=0.1)
     assert captured == {
         "method": "POST",
         "body": b'{"content_id": 7}',
         "content_type": "application/json",
         "accept": "application/json,text/plain,*/*",
-        "timeout": 7,
     }
 
 

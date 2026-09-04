@@ -51,14 +51,23 @@ def test_feishu_summary_surfaces_generation_failure_without_stale_drafts(tmp_pat
 
 
 def test_daily_launcher_generates_before_openclaw_hook_with_feishu_fallback():
-    script = (
+    outer = (
         Path(__file__).parents[1] / "scripts" / "run_daily_fixed_sources.sh"
     ).read_text(encoding="utf-8")
+    inner = (
+        Path(__file__).parents[1]
+        / "scripts"
+        / "run_daily_fixed_sources_inner.sh"
+    ).read_text(encoding="utf-8")
+    script = outer + inner
     generator = script.index("scripts/generate_talent_pool_drafts.py")
     hook = script.index("scripts/openclaw_daily_report.py")
     notifier = script.index("scripts/send_daily_feishu_summary.py")
     assert generator < hook < notifier
-    assert script.count("scripts/send_daily_feishu_summary.py") == 1
+    # One bounded network attempt plus one bounded ledger-only recovery after
+    # the outer watchdog kills a non-cooperative notifier.
+    assert script.count("scripts/send_daily_feishu_summary.py") == 2
+    assert "--record-fallback-failure FeishuFallbackWallClockTimeout" in script
     assert "wake --source completion-hook" in script
     assert "openclaw_hook_status" in script
     assert "--talent-state-db data/talent-pool.sqlite" in script

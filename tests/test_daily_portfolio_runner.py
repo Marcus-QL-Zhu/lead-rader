@@ -1,4 +1,5 @@
 import importlib.util
+import json
 from datetime import date
 from pathlib import Path
 
@@ -106,3 +107,25 @@ def test_daily_refresh_is_forwarded_to_the_single_run(tmp_path, monkeypatch):
         == 0
     )
     assert "--refresh" in commands[0]
+
+
+def test_valid_zero_company_exit_two_is_normalized_to_completed(tmp_path, monkeypatch, capsys):
+    class Completed:
+        returncode = 2
+
+    report = _report("硬科技组合")
+    report["leads"] = []
+    monkeypatch.setattr(runner.subprocess, "run", lambda command, check: Completed())
+    monkeypatch.setattr(
+        runner,
+        "find_report",
+        lambda *_args, **_kwargs: (tmp_path / "report.json", report),
+    )
+    assert runner.main([
+        "--run-date", date.today().isoformat(),
+        "--output-dir", str(tmp_path),
+        "--josint-db", str(tmp_path / "josint.sqlite"),
+    ]) == 0
+    output = json.loads(capsys.readouterr().out)
+    assert output["status"] == "completed"
+    assert output["company_count"] == 0

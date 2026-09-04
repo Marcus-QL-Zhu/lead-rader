@@ -23,6 +23,8 @@ from pathlib import Path
 from typing import Any, Callable, Iterable, Mapping
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
+from .sanitization import safe_error
+
 
 UTC = timezone.utc
 AUDIT_ACTIONS = frozenset({"run", "view", "export", "modify"})
@@ -697,7 +699,27 @@ class SourceMetric:
     source_id: str
     recorded_at: str
     ok: bool
-    yield_count: int
+    yield_count: int | None
+    status: str = "ok"
+    discovered_count: int | None = None
+    observation_count: int | None = None
+    detail_error_count: int | None = None
+    detail_failure_count: int | None = None
+    incremental_count: int | None = None
+    detail_success_count: int | None = None
+    semantic_attempt_count: int | None = None
+    semantic_accepted_count: int | None = None
+    semantic_prefiltered_count: int | None = None
+    semantic_failure_count: int | None = None
+    open_dead_letter_count: int | None = None
+    listing_count: int | None = None
+    evidence_count: int | None = None
+    rule_event_count: int | None = None
+    minimax_event_count: int | None = None
+    prefiltered_count: int | None = None
+    adaptive_used_count: int | None = None
+    omissions_detected: int | None = None
+    error_class: str = ""
 
 
 class OpsMetricsStore:
@@ -721,8 +743,9 @@ class OpsMetricsStore:
                     run_id TEXT NOT NULL,
                     source_id TEXT NOT NULL,
                     recorded_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
                     ok INTEGER NOT NULL,
-                    yield_count INTEGER NOT NULL,
+                    yield_count INTEGER,
                     PRIMARY KEY (run_id, source_id)
                 );
                 CREATE INDEX IF NOT EXISTS ops_run_metrics_time
@@ -731,6 +754,82 @@ class OpsMetricsStore:
                     ON ops_source_metrics(source_id, recorded_at DESC);
                 """
             )
+            table_info = connection.execute(
+                "PRAGMA table_info(ops_source_metrics)"
+            ).fetchall()
+            yield_info = next(
+                (row for row in table_info if str(row[1]) == "yield_count"), None
+            )
+            if yield_info is not None and int(yield_info[3]) == 1:
+                connection.executescript(
+                    """
+                    ALTER TABLE ops_source_metrics RENAME TO ops_source_metrics_legacy;
+                    CREATE TABLE ops_source_metrics (
+                        run_id TEXT NOT NULL,
+                        source_id TEXT NOT NULL,
+                        recorded_at TEXT NOT NULL,
+                        ok INTEGER NOT NULL,
+                        yield_count INTEGER,
+                        PRIMARY KEY (run_id, source_id)
+                    );
+                    INSERT INTO ops_source_metrics(
+                        run_id, source_id, recorded_at, ok, yield_count
+                    )
+                    SELECT run_id, source_id, recorded_at, ok, yield_count
+                    FROM ops_source_metrics_legacy;
+                    DROP TABLE ops_source_metrics_legacy;
+                    CREATE INDEX IF NOT EXISTS ops_source_metrics_source_time
+                        ON ops_source_metrics(source_id, recorded_at DESC);
+                    """
+                )
+            columns = {
+                str(row[1]) for row in connection.execute("PRAGMA table_info(ops_source_metrics)")
+            }
+            status_was_missing = "status" not in columns
+            migrations = {
+                "status": "TEXT NOT NULL DEFAULT 'ok'",
+                "discovered_count": "INTEGER",
+                "observation_count": "INTEGER",
+                "detail_error_count": "INTEGER",
+                "error_class": "TEXT NOT NULL DEFAULT ''",
+                "incremental_count": "INTEGER",
+                "detail_success_count": "INTEGER",
+                "detail_failure_count": "INTEGER",
+                "semantic_attempt_count": "INTEGER",
+                "semantic_accepted_count": "INTEGER",
+                "semantic_prefiltered_count": "INTEGER",
+                "semantic_failure_count": "INTEGER",
+                "open_dead_letter_count": "INTEGER",
+                "listing_count": "INTEGER",
+                "evidence_count": "INTEGER",
+                "rule_event_count": "INTEGER",
+                "minimax_event_count": "INTEGER",
+                "prefiltered_count": "INTEGER",
+                "adaptive_used_count": "INTEGER",
+                "omissions_detected": "INTEGER",
+                "updated_at": "TEXT NOT NULL DEFAULT ''",
+            }
+            for name, definition in migrations.items():
+                if name not in columns:
+                    connection.execute(
+                        f"ALTER TABLE ops_source_metrics ADD COLUMN {name} {definition}"
+                    )
+            connection.execute(
+                "UPDATE ops_source_metrics SET updated_at=recorded_at "
+                "WHERE updated_at=''"
+            )
+            connection.execute(
+                "CREATE INDEX IF NOT EXISTS ops_source_metrics_source_updated "
+                "ON ops_source_metrics(source_id, updated_at DESC, recorded_at DESC)"
+            )
+            if status_was_missing:
+                # The legacy boolean is the only status observation those rows
+                # contain.  SQLite's column default would otherwise relabel
+                # every historical ``ok=0`` failure as an ``ok`` run.
+                connection.execute(
+                    "UPDATE ops_source_metrics "
+                    "SET status=CASE WHEN ok=1 THEN 'ok' ELSE 'error' END"
+                )
 
     def _connect(self) -> sqlite3.Connection:
         connection = sqlite3.connect(self.path, timeout=30)
@@ -786,36 +885,169 @@ class OpsMetricsStore:
         *,
         recorded_at: datetime,
         ok: bool,
-        yield_count: int,
+        yield_count: int | None,
+        status: str = "ok",
+        discovered_count: int | None = None,
+        observation_count: int | None = None,
+        detail_error_count: int | None = None,
+        detail_failure_count: int | None = None,
+        incremental_count: int | None = None,
+        detail_success_count: int | None = None,
+        semantic_attempt_count: int | None = None,
+        semantic_accepted_count: int | None = None,
+        semantic_prefiltered_count: int | None = None,
+        semantic_failure_count: int | None = None,
+        open_dead_letter_count: int | None = None,
+        listing_count: int | None = None,
+        evidence_count: int | None = None,
+        rule_event_count: int | None = None,
+        minimax_event_count: int | None = None,
+        prefiltered_count: int | None = None,
+        adaptive_used_count: int | None = None,
+        omissions_detected: int | None = None,
+        error_class: str = "",
     ) -> SourceMetric:
         if not run_id.strip() or not source_id.strip():
             raise ValueError("run_id and source_id are required")
-        if yield_count < 0:
-            raise ValueError("yield_count must be non-negative")
+        raw_counts = {
+            "yield_count": yield_count,
+            "discovered_count": discovered_count,
+            "observation_count": observation_count,
+            "detail_error_count": detail_error_count,
+            "detail_failure_count": detail_failure_count,
+            "incremental_count": incremental_count,
+            "detail_success_count": detail_success_count,
+            "semantic_attempt_count": semantic_attempt_count,
+            "semantic_accepted_count": semantic_accepted_count,
+            "semantic_prefiltered_count": semantic_prefiltered_count,
+            "semantic_failure_count": semantic_failure_count,
+            "open_dead_letter_count": open_dead_letter_count,
+            "listing_count": listing_count,
+            "evidence_count": evidence_count,
+            "rule_event_count": rule_event_count,
+            "minimax_event_count": minimax_event_count,
+            "prefiltered_count": prefiltered_count,
+            "adaptive_used_count": adaptive_used_count,
+            "omissions_detected": omissions_detected,
+        }
+        if any(value is not None and int(value) < 0 for value in raw_counts.values()):
+            raise ValueError("source metric counters must be non-negative")
+        if status not in {
+            "ok",
+            "partial",
+            "error",
+            "not_modified",
+            "disabled",
+            "unsupported_adapter",
+        }:
+            raise ValueError("unsupported source metric status")
+        counts = {
+            key: (int(value) if value is not None else None)
+            for key, value in raw_counts.items()
+        }
+        status_is_healthy = status in {"ok", "not_modified"}
         metric = SourceMetric(
             run_id=run_id,
             source_id=source_id,
             recorded_at=_iso(recorded_at),
-            ok=bool(ok),
-            yield_count=int(yield_count),
+            # The exact status is authoritative. Preserve the legacy ``ok``
+            # argument for API compatibility, but never let it label a
+            # partial/error adapter as healthy (or vice versa).
+            ok=status_is_healthy,
+            yield_count=counts["yield_count"],
+            status=status,
+            discovered_count=counts["discovered_count"],
+            observation_count=counts["observation_count"],
+            detail_error_count=counts["detail_error_count"],
+            detail_failure_count=counts["detail_failure_count"],
+            incremental_count=counts["incremental_count"],
+            detail_success_count=counts["detail_success_count"],
+            semantic_attempt_count=counts["semantic_attempt_count"],
+            semantic_accepted_count=counts["semantic_accepted_count"],
+            semantic_prefiltered_count=counts["semantic_prefiltered_count"],
+            semantic_failure_count=counts["semantic_failure_count"],
+            open_dead_letter_count=counts["open_dead_letter_count"],
+            listing_count=counts["listing_count"],
+            evidence_count=counts["evidence_count"],
+            rule_event_count=counts["rule_event_count"],
+            minimax_event_count=counts["minimax_event_count"],
+            prefiltered_count=counts["prefiltered_count"],
+            adaptive_used_count=counts["adaptive_used_count"],
+            omissions_detected=counts["omissions_detected"],
+            error_class=safe_error(error_class)["error_class"] if error_class else "",
         )
         with self._connect() as connection:
+            updated_at = _iso(_utc_now())
             connection.execute(
                 """
                 INSERT INTO ops_source_metrics (
-                    run_id, source_id, recorded_at, ok, yield_count
-                ) VALUES (?, ?, ?, ?, ?)
+                    run_id, source_id, recorded_at, updated_at,
+                    ok, yield_count, status,
+                    discovered_count, observation_count, detail_error_count,
+                    detail_failure_count, error_class
+                    , incremental_count, detail_success_count,
+                    semantic_attempt_count, semantic_accepted_count,
+                    semantic_prefiltered_count, semantic_failure_count,
+                    open_dead_letter_count, listing_count, evidence_count,
+                    rule_event_count, minimax_event_count, prefiltered_count,
+                    adaptive_used_count, omissions_detected
+                ) VALUES (
+                    ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
+                    ?, ?, ?, ?, ?, ?, ?, ?
+                )
                 ON CONFLICT(run_id, source_id) DO UPDATE SET
                     recorded_at=excluded.recorded_at,
+                    updated_at=excluded.updated_at,
                     ok=excluded.ok,
-                    yield_count=excluded.yield_count
+                    yield_count=excluded.yield_count,
+                    status=excluded.status,
+                    discovered_count=excluded.discovered_count,
+                    observation_count=excluded.observation_count,
+                    detail_error_count=excluded.detail_error_count,
+                    detail_failure_count=excluded.detail_failure_count,
+                    error_class=excluded.error_class,
+                    incremental_count=excluded.incremental_count,
+                    detail_success_count=excluded.detail_success_count,
+                    semantic_attempt_count=excluded.semantic_attempt_count,
+                    semantic_accepted_count=excluded.semantic_accepted_count,
+                    semantic_prefiltered_count=excluded.semantic_prefiltered_count,
+                    semantic_failure_count=excluded.semantic_failure_count,
+                    open_dead_letter_count=excluded.open_dead_letter_count,
+                    listing_count=excluded.listing_count,
+                    evidence_count=excluded.evidence_count,
+                    rule_event_count=excluded.rule_event_count,
+                    minimax_event_count=excluded.minimax_event_count,
+                    prefiltered_count=excluded.prefiltered_count,
+                    adaptive_used_count=excluded.adaptive_used_count,
+                    omissions_detected=excluded.omissions_detected
                 """,
                 (
                     metric.run_id,
                     metric.source_id,
                     metric.recorded_at,
+                    updated_at,
                     int(metric.ok),
                     metric.yield_count,
+                    metric.status,
+                    metric.discovered_count,
+                    metric.observation_count,
+                    metric.detail_error_count,
+                    metric.detail_failure_count,
+                    metric.error_class,
+                    metric.incremental_count,
+                    metric.detail_success_count,
+                    metric.semantic_attempt_count,
+                    metric.semantic_accepted_count,
+                    metric.semantic_prefiltered_count,
+                    metric.semantic_failure_count,
+                    metric.open_dead_letter_count,
+                    metric.listing_count,
+                    metric.evidence_count,
+                    metric.rule_event_count,
+                    metric.minimax_event_count,
+                    metric.prefiltered_count,
+                    metric.adaptive_used_count,
+                    metric.omissions_detected,
                 ),
             )
         return metric
@@ -1147,9 +1379,59 @@ def _append_source_health(
         )
         return
     try:
-        if not _table_exists(connection, "source_health") and _table_exists(
-            connection, "source_pack_source_runs"
-        ):
+        has_legacy = _table_exists(connection, "source_health")
+        has_source_runs = _table_exists(connection, "source_pack_source_runs")
+        if not has_legacy and not has_source_runs:
+            metrics["sources"] = {"available": False, "reason": "schema_missing"}
+            issues.append(
+                MonitorIssue(
+                    "source_health_schema_missing",
+                    "warning",
+                    "Source-health schema is missing.",
+                )
+            )
+            return
+
+        schemas = [
+            name
+            for name, present in (
+                ("source_health", has_legacy),
+                ("source_pack_source_runs", has_source_runs),
+            )
+            if present
+        ]
+        details: dict[str, dict[str, Any]] = {}
+        if has_legacy:
+            legacy_rows = connection.execute(
+                "SELECT * FROM source_health ORDER BY source_id"
+            ).fetchall()
+            for row in legacy_rows:
+                source_id = str(row["source_id"])
+                legacy_detail = {
+                    "source_id": source_id,
+                    "schema_sources": ["source_health"],
+                    "consecutive_failures": int(row["consecutive_failures"]),
+                    "parse_yield": int(row["parse_yield"]),
+                    "last_success": row["last_success"],
+                    "last_new_item": row["last_new_item"],
+                    "legacy_latest_zero_output": bool(
+                        int(row["parse_yield"]) == 0
+                        and row["last_success"] is not None
+                    ),
+                    "legacy_health": {
+                        "consecutive_failures": int(
+                            row["consecutive_failures"]
+                        ),
+                        "parse_yield": int(row["parse_yield"]),
+                        "last_success": row["last_success"],
+                        "last_new_item": row["last_new_item"],
+                    },
+                }
+                if row["last_error"]:
+                    legacy_detail.update(safe_error(row["last_error"]))
+                details[source_id] = legacy_detail
+
+        if has_source_runs:
             rows = connection.execute(
                 """
                 SELECT *
@@ -1161,12 +1443,6 @@ def _append_source_health(
             for row in rows:
                 history.setdefault(str(row["source_id"]), []).append(row)
             latest_rows = [items[0] for items in history.values() if items]
-            metrics["sources"] = {
-                "available": True,
-                "schema": "source_pack_source_runs",
-                "count": len(latest_rows),
-                "unhealthy": [],
-            }
             for row in latest_rows:
                 source_id = str(row["source_id"])
                 source_history = history[source_id]
@@ -1200,66 +1476,57 @@ def _append_source_health(
                     ),
                     None,
                 )
-                detail = {
+                prior = details.get(source_id, {})
+                raw_error = str(row["error"] or "").strip()
+                error_diagnostic = (
+                    safe_error(raw_error)
+                    if raw_error
+                    else {"error_class": "", "detail": ""}
+                )
+                detail: dict[str, Any] = {
+                    **prior,
                     "source_id": source_id,
+                    "schema_sources": list(
+                        dict.fromkeys(
+                            [
+                                *prior.get("schema_sources", []),
+                                "source_pack_source_runs",
+                            ]
+                        )
+                    ),
                     "topic": str(row["topic"]),
                     "status": str(row["status"]),
-                    "consecutive_failures": consecutive_failures,
+                    # Preserve either history: the event log can have a shorter
+                    # retention window than the legacy state table.
+                    "consecutive_failures": max(
+                        consecutive_failures,
+                        int(prior.get("consecutive_failures") or 0),
+                    ),
+                    "source_pack_consecutive_failures": consecutive_failures,
                     "discovered_count": int(row["discovered_count"]),
                     "consecutive_empty_discoveries": consecutive_empty_discoveries,
                     "parse_yield": int(row["observation_count"]),
                     "evidence_yield": int(row["evidence_count"]),
-                    "last_success": last_success,
-                    "last_new_item": last_new_item,
-                    "error": str(row["error"]),
+                    "last_success": last_success or prior.get("last_success"),
+                    "last_new_item": last_new_item or prior.get("last_new_item"),
+                    **error_diagnostic,
                 }
-                if consecutive_failures >= config.source_failure_threshold:
-                    metrics["sources"]["unhealthy"].append(detail)
-                    issues.append(
-                        MonitorIssue(
-                            "source_consecutive_failures",
-                            "critical",
-                            "A source exceeded the consecutive-failure threshold.",
-                            detail,
-                        )
-                    )
-                elif consecutive_empty_discoveries >= config.zero_yield_threshold:
-                    issues.append(
-                        MonitorIssue(
-                            "source_consecutive_empty_discovery",
-                            "warning",
-                            "A source repeatedly fetched successfully but discovered no list items.",
-                            detail,
-                        )
-                    )
-            return
-        if not _table_exists(connection, "source_health"):
-            metrics["sources"] = {"available": False, "reason": "schema_missing"}
-            issues.append(
-                MonitorIssue(
-                    "source_health_schema_missing",
-                    "warning",
-                    "Source-health schema is missing.",
-                )
-            )
-            return
-        rows = connection.execute(
-            "SELECT * FROM source_health ORDER BY source_id"
-        ).fetchall()
+                details[source_id] = detail
+
         metrics["sources"] = {
             "available": True,
-            "count": len(rows),
+            "schema": "mixed" if len(schemas) > 1 else schemas[0],
+            "schemas": schemas,
+            "count": len(details),
             "unhealthy": [],
+            "adapters": [],
         }
-        for row in rows:
-            detail = {
-                "source_id": row["source_id"],
-                "consecutive_failures": row["consecutive_failures"],
-                "parse_yield": row["parse_yield"],
-                "last_success": row["last_success"],
-                "last_new_item": row["last_new_item"],
-            }
-            if row["consecutive_failures"] >= config.source_failure_threshold:
+        for source_id in sorted(details):
+            detail = details[source_id]
+            metrics["sources"]["adapters"].append(detail)
+            if int(detail.get("consecutive_failures") or 0) >= (
+                config.source_failure_threshold
+            ):
                 metrics["sources"]["unhealthy"].append(detail)
                 issues.append(
                     MonitorIssue(
@@ -1269,12 +1536,36 @@ def _append_source_health(
                         detail,
                     )
                 )
-            elif row["parse_yield"] == 0 and row["last_success"] is not None:
+            elif int(detail.get("consecutive_empty_discoveries") or 0) >= (
+                config.zero_yield_threshold
+            ):
+                issues.append(
+                    MonitorIssue(
+                        "source_consecutive_empty_discovery",
+                        "warning",
+                        "A source repeatedly fetched successfully but discovered no list items.",
+                        detail,
+                    )
+                )
+            elif detail.get("legacy_latest_zero_output"):
                 issues.append(
                     MonitorIssue(
                         "source_latest_zero_output",
                         "warning",
                         "A successful source fetch produced no parsable items.",
+                        detail,
+                    )
+                )
+            if str(detail.get("status") or "") in {"error", "partial"}:
+                issues.append(
+                    MonitorIssue(
+                        "source_latest_nonhealthy",
+                        (
+                            "critical"
+                            if detail.get("status") == "error"
+                            else "warning"
+                        ),
+                        "A source adapter's latest run was not fully healthy.",
                         detail,
                     )
                 )
@@ -1406,6 +1697,18 @@ def _append_metrics_health(
             )
 
         if _table_exists(connection, "ops_source_metrics"):
+            source_metric_columns = {
+                str(row["name"])
+                for row in connection.execute(
+                    "PRAGMA table_info(ops_source_metrics)"
+                ).fetchall()
+            }
+            has_updated_at = "updated_at" in source_metric_columns
+            observation_recency = (
+                "COALESCE(NULLIF(updated_at, ''), recorded_at)"
+                if has_updated_at
+                else "recorded_at"
+            )
             sources = connection.execute(
                 "SELECT DISTINCT source_id FROM ops_source_metrics"
             ).fetchall()
@@ -1413,15 +1716,22 @@ def _append_metrics_health(
             for source in sources:
                 observations = connection.execute(
                     """
-                    SELECT ok, yield_count FROM ops_source_metrics
+                    SELECT ok, yield_count, status, discovered_count,
+                           observation_count, detail_error_count, error_class
+                    FROM ops_source_metrics
                     WHERE source_id = ?
-                    ORDER BY recorded_at DESC LIMIT ?
-                    """,
+                    ORDER BY {observation_recency} DESC,
+                             recorded_at DESC, run_id DESC
+                    LIMIT ?
+                    """.format(observation_recency=observation_recency),
                     (source["source_id"], config.zero_yield_threshold),
                 ).fetchall()
                 streak = 0
                 for observation in observations:
-                    if observation["ok"] and observation["yield_count"] == 0:
+                    if (
+                        observation["status"] in {"ok", "not_modified"}
+                        and observation["yield_count"] == 0
+                    ):
                         streak += 1
                     else:
                         break
@@ -1439,6 +1749,74 @@ def _append_metrics_health(
                         )
                     )
             metrics["source_zero_yield_streaks"] = zero_streaks
+            current_recency = (
+                "COALESCE(NULLIF(current.updated_at, ''), current.recorded_at)"
+                if has_updated_at
+                else "current.recorded_at"
+            )
+            newer_recency = (
+                "COALESCE(NULLIF(newer.updated_at, ''), newer.recorded_at)"
+                if has_updated_at
+                else "newer.recorded_at"
+            )
+            latest_adapter_rows = connection.execute(
+                f"""
+                SELECT source_id, ok, status, discovered_count, observation_count,
+                       yield_count, detail_error_count, detail_failure_count,
+                       incremental_count,
+                       detail_success_count, semantic_attempt_count,
+                       semantic_accepted_count, semantic_prefiltered_count,
+                       semantic_failure_count, open_dead_letter_count,
+                       listing_count, evidence_count, rule_event_count,
+                       minimax_event_count, prefiltered_count,
+                       adaptive_used_count, omissions_detected,
+                       error_class
+                FROM ops_source_metrics AS current
+                WHERE NOT EXISTS (
+                    SELECT 1
+                    FROM ops_source_metrics AS newer
+                    WHERE newer.source_id=current.source_id
+                      AND (
+                        {newer_recency} > {current_recency}
+                        OR (
+                          {newer_recency} = {current_recency}
+                          AND newer.recorded_at > current.recorded_at
+                        )
+                        OR (
+                          {newer_recency} = {current_recency}
+                          AND newer.recorded_at = current.recorded_at
+                          AND newer.run_id > current.run_id
+                        )
+                      )
+                )
+                ORDER BY source_id
+                """
+            ).fetchall()
+            metrics["adapter_health"] = [dict(row) for row in latest_adapter_rows]
+            for row in latest_adapter_rows:
+                if str(row["status"]) in {"error", "partial"}:
+                    issues.append(
+                        MonitorIssue(
+                            "adapter_latest_nonhealthy",
+                            "critical" if row["status"] == "error" else "warning",
+                            "An adapter's latest collection run was not fully healthy.",
+                            dict(row),
+                        )
+                    )
+                if int(row["open_dead_letter_count"] or 0) > 0:
+                    issues.append(
+                        MonitorIssue(
+                            "adapter_open_dead_letters",
+                            "warning",
+                            "An adapter has unresolved dead letters.",
+                            {
+                                "source_id": row["source_id"],
+                                "open_dead_letter_count": row[
+                                    "open_dead_letter_count"
+                                ],
+                            },
+                        )
+                    )
     finally:
         connection.close()
 

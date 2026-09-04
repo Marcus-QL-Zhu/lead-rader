@@ -1,5 +1,7 @@
 from email.message import Message
 import json
+from threading import Event
+import time
 import urllib.error
 
 from ht_lead_radar.models import Evidence
@@ -234,16 +236,118 @@ def test_ambiguous_company_is_kept_as_observation_but_not_evidence(tmp_path):
     assert observations[0].source_id == "generic-funding"
 
 
+def test_tokenized_detail_url_is_used_for_fetch_but_sanitized_before_persistence(
+    tmp_path,
+):
+    source = _source(
+        "tokenized-funding",
+        "https://media.example/list",
+        grade="B",
+        signals=("funding",),
+    )
+    detail_url = (
+        "https://user:pass@media.example/story?access_token=url-secret&page=2#private"
+    )
+    request_url = detail_url.rsplit("#", 1)[0]
+    opener = StubOpener(
+        {
+            source.url: FakeResponse(
+                source.url,
+                f'<a href="{detail_url}">2025年7月20日 示例机器人有限公司完成融资</a>',
+            ),
+            request_url: FakeResponse(
+                detail_url,
+                "<p>示例机器人有限公司完成融资，将投入具身智能研发。</p>",
+            ),
+        }
+    )
+    database = tmp_path / "state.sqlite3"
+    collector = SourcePackCollector(
+        registry=_registry([source]),
+        state_db=database,
+        urlopen=opener,
+    )
+
+    evidence = collector.collect("具身智能", year=2025)
+
+    assert any(call.full_url == request_url for call in opener.calls)
+    assert evidence[0].source_url == "https://media.example/story?page=2"
+    dump = "\n".join(collector._connection.iterdump())
+    assert "user:pass" not in dump
+    assert "url-secret" not in dump
+    assert "#private" not in dump
+
+
+def test_source_pack_v2_migration_recleans_urls_errors_and_pii(tmp_path):
+    database = tmp_path / "legacy-source-pack.sqlite3"
+    registry = _registry([_source("legacy", "https://legacy.test/list")])
+    collector = SourcePackCollector(registry=registry, state_db=database)
+    legacy_url = (
+        "https://user:pass@legacy.test/a?api-key=url-secret&page=2#fragment"
+    )
+    collector._connection.execute(
+        "INSERT INTO source_pack_documents(source_id, source_url, topic, title, "
+        "published_at, first_seen_at, last_seen_at, content_hash, "
+        "company_candidates_json, event_type, observation_json) "
+        "VALUES ('legacy', ?, '具身智能', ?, '', 'now', 'now', 'hash', '[]', "
+        "'funding', ?)",
+        (
+            legacy_url,
+            "详情 010 / 87654321",
+            json.dumps(
+                {
+                    "source_url": legacy_url,
+                    "snippet": "marcus@example.com",
+                    "Config.MINIMAX_API_KEY": "json-secret",
+                }
+            ),
+        ),
+    )
+    collector._connection.execute(
+        "INSERT INTO source_pack_http_state(source_id, source_url, cache_scope, "
+        "checked_at, error) VALUES ('legacy', ?, 'scope', 'now', ?)",
+        (
+            legacy_url,
+            "Cookie: sid=cookie-secret; phone +44 / 20 / 79460958",
+        ),
+    )
+    collector._connection.execute(
+        "UPDATE source_pack_metadata SET value='1' "
+        "WHERE key='persistence_sanitizer_version'"
+    )
+    collector._connection.commit()
+    collector.close()
+
+    with SourcePackCollector(registry=registry, state_db=database) as migrated:
+        dump = "\n".join(migrated._connection.iterdump())
+
+    for unsafe in (
+        "user:pass",
+        "url-secret",
+        "fragment",
+        "87654321",
+        "marcus@example.com",
+        "json-secret",
+        "cookie-secret",
+        "79460958",
+    ):
+        assert unsafe not in dump
+
+
 def test_listing_and_detail_failures_are_isolated(tmp_path):
     broken = _source("broken", "https://broken.example/list")
     good = _source("good", "https://good.example/list")
     opener = StubOpener({
-        broken.url: RuntimeError("temporary source failure"),
+        broken.url: RuntimeError(
+            "temporary source failure Authorization: Bearer listing-secret"
+        ),
         good.url: FakeResponse(
             good.url,
             '<a href="/story">2025年7月20日 未来机器人有限公司完成具身智能融资</a>',
         ),
-        "https://good.example/story": RuntimeError("detail unavailable"),
+        "https://good.example/story": RuntimeError(
+            "detail unavailable token=detail-secret"
+        ),
     })
     collector = SourcePackCollector(
         registry=_registry([broken, good]),
@@ -256,8 +360,84 @@ def test_listing_and_detail_failures_are_isolated(tmp_path):
     assert [item.company for item in evidence] == ["未来机器人有限公司"]
     assert collector.last_run_summary["failed_source_count"] == 1
     assert collector.last_run_summary["sources"]["broken"]["status"] == "error"
-    assert collector.last_run_summary["sources"]["good"]["status"] == "ok"
+    assert collector.last_run_summary["sources"]["good"]["status"] == "partial"
     assert collector.last_run_summary["sources"]["good"]["detail_error_count"] == 1
+    summary_text = json.dumps(collector.last_run_summary, ensure_ascii=False)
+    database_bytes = (tmp_path / "state.sqlite3").read_bytes()
+    assert "listing-secret" not in summary_text
+    assert b"listing-secret" not in database_bytes
+    assert b"detail-secret" not in database_bytes
+
+
+def test_generic_fetch_passes_only_remaining_wall_clock_to_body_reader(
+    tmp_path, monkeypatch
+):
+    from ht_lead_radar import source_pack_collector
+
+    source = _source("deadline", "https://deadline.example/list")
+    response = FakeResponse(source.url, b"payload")
+    observed = {}
+
+    def delayed_open(_request, timeout):
+        assert timeout == 0.05
+        time.sleep(0.03)
+        return response
+
+    def capture_read(body_response, *, max_bytes, timeout):
+        observed["max_bytes"] = max_bytes
+        observed["timeout"] = timeout
+        return body_response.read()
+
+    monkeypatch.setattr(source_pack_collector, "read_response_body", capture_read)
+    collector = SourcePackCollector(
+        registry=_registry([source]),
+        state_db=tmp_path / "state.sqlite3",
+        urlopen=delayed_open,
+        timeout=0.05,
+    )
+
+    fetched = collector._fetch(source, source.url, "具身智能")
+
+    assert fetched.body == b"payload"
+    assert observed["max_bytes"] == collector.max_bytes
+    assert 0 < observed["timeout"] < 0.04
+
+
+def test_collect_deadline_does_not_start_pending_sources(tmp_path):
+    first = _source("first-timeout", "https://first.example/list")
+    second = _source("must-not-start", "https://second.example/list")
+    calls = []
+    release = Event()
+    finished = Event()
+
+    def non_cooperative_open(request, timeout):
+        del timeout
+        calls.append(request.full_url)
+        release.wait(timeout=2.0)
+        finished.set()
+        return FakeResponse(request.full_url, b"")
+
+    collector = SourcePackCollector(
+        registry=_registry([first, second]),
+        state_db=tmp_path / "state.sqlite3",
+        urlopen=non_cooperative_open,
+        collect_timeout_seconds=0.03,
+    )
+
+    try:
+        assert collector.collect("具身智能") == []
+
+        # A started transport remains blocked when collect returns, proving the
+        # deadline did not wait for a non-cooperative request. Scheduler jitter
+        # may consume the tiny budget before it starts, which is also valid.
+        if calls:
+            assert calls == [first.url]
+            assert not finished.is_set()
+        assert second.url not in calls
+        assert collector.last_run_summary["sources"][first.id]["status"] == "error"
+        assert collector.last_run_summary["sources"][second.id]["status"] == "error"
+    finally:
+        release.set()
 
 
 def test_etag_and_last_modified_are_sent_and_304_reuses_stored_evidence(tmp_path):

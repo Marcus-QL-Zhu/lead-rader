@@ -19,6 +19,9 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urljoin
 from urllib.request import Request, urlopen
 
+from .http_runtime import call_with_wallclock, read_response_body
+from .sanitization import sanitize_text
+
 
 ADAPTER_KINDS = frozenset(
     {'direct_http', 'miniflux', 'rsshub', 'changedetection'}
@@ -396,9 +399,27 @@ class UrllibTransport:
     ) -> HTTPResponse:
         request = Request(url, method=method, headers=dict(headers or {}))
         started = time.monotonic()
+        deadline = started + timeout
         try:
-            with urlopen(request, timeout=timeout) as response:
-                body = response.read()
+            response = call_with_wallclock(
+                urlopen,
+                timeout,
+                request,
+                timeout=timeout,
+                timeout_message='HTTP connect exceeded deadline',
+                worker_name='source-connect',
+            )
+            with response:
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise TimeoutError(
+                        'HTTP request exceeded deadline before body read'
+                    )
+                body = read_response_body(
+                    response,
+                    max_bytes=5_000_000,
+                    timeout=remaining,
+                )
                 response_headers = {
                     key.lower(): value for key, value in response.headers.items()
                 }
@@ -410,7 +431,16 @@ class UrllibTransport:
                     url=response.geturl(),
                 )
         except HTTPError as error:
-            body = error.read()
+            remaining = deadline - time.monotonic()
+            body = (
+                read_response_body(
+                    error,
+                    max_bytes=1_000_000,
+                    timeout=remaining,
+                )
+                if remaining > 0
+                else b''
+            )
             return HTTPResponse(
                 status_code=int(error.code),
                 body=body,
@@ -499,10 +529,15 @@ class AdapterClient:
                 source.config.get('api_token_header', 'X-Auth-Token')
             )
             headers[header_name] = token
-        return self.transport.request(
+        request_budget = float(source.schedule.timeout_seconds)
+        return call_with_wallclock(
+            self.transport.request,
+            request_budget,
             url,
             headers=headers,
-            timeout=source.schedule.timeout_seconds,
+            timeout=request_budget,
+            timeout_message='source transport exceeded wall-clock deadline',
+            worker_name='source-adapter-transport',
         )
 
     def _failed(
@@ -816,6 +851,8 @@ class SourceHealthStore:
 
     def upsert(self, health: SourceHealth) -> None:
         fields = health.to_dict()
+        if fields.get("last_error"):
+            fields["last_error"] = sanitize_text(fields["last_error"], limit=500)
         names = tuple(fields)
         placeholders = ', '.join('?' for _ in names)
         assignments = ', '.join(
@@ -973,7 +1010,7 @@ class AdaptiveSourceScheduler:
             if failures >= source.schedule.failure_threshold
             else None
         )
-        health.last_error = str(error)
+        health.last_error = sanitize_text(error, limit=500)
         health.updated_at = _iso(current)
         self.store.upsert(health)
         return health

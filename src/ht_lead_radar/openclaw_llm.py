@@ -12,7 +12,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
-from .http_runtime import read_response_body
+from .http_runtime import call_with_wallclock, read_response_body
 
 
 class LLMConfigurationError(ValueError):
@@ -165,28 +165,67 @@ def _default_transport(
     request: urllib.request.Request,
     timeout: float,
 ) -> Mapping[str, Any]:
+    if timeout <= 0:
+        raise DirectLLMError("LLM provider request has no remaining deadline")
+    deadline = time.monotonic() + timeout
     retryable_statuses = {429, 500, 502, 503, 504}
+
+    def remaining() -> float:
+        value = deadline - time.monotonic()
+        if value <= 0:
+            raise DirectLLMError("LLM provider request exceeded deadline")
+        return value
+
+    def backoff(delay: float) -> None:
+        budget = remaining()
+        if delay >= budget:
+            raise DirectLLMError("LLM provider request exceeded deadline")
+        time.sleep(delay)
+
     for attempt in range(3):
         try:
-            with urllib.request.urlopen(request, timeout=timeout) as response:
+            connect_budget = remaining()
+            response = call_with_wallclock(
+                urllib.request.urlopen,
+                connect_budget,
+                request,
+                timeout=connect_budget,
+                timeout_message="LLM provider connect exceeded deadline",
+                worker_name="llm-provider-connect",
+            )
+            with response:
                 payload = json.loads(
                     read_response_body(
                         response,
                         max_bytes=_llm_max_response_bytes(),
-                        timeout=timeout,
+                        timeout=remaining(),
                     ).decode("utf-8")
                 )
+            remaining()
             if not isinstance(payload, Mapping):
                 raise DirectLLMError(
                     "LLM provider response must be a JSON object"
                 )
             return payload
         except urllib.error.HTTPError as error:
-            detail = error.read(1000).decode("utf-8", errors="replace")
+            body_budget = min(remaining(), 1.0)
+            try:
+                detail = read_response_body(
+                    error,
+                    max_bytes=1000,
+                    timeout=body_budget,
+                    chunk_size=1001,
+                ).decode("utf-8", errors="replace")
+            except TimeoutError as read_error:
+                raise DirectLLMError(
+                    "LLM provider request exceeded deadline"
+                ) from read_error
+            except (TypeError, ValueError):
+                detail = "<unavailable>"
             if error.code in retryable_statuses and attempt < 2:
                 retry_after = str(error.headers.get("Retry-After") or "").strip()
                 delay = float(retry_after) if retry_after.isdigit() else 2**attempt
-                time.sleep(min(delay, 8.0))
+                backoff(min(delay, 8.0))
                 continue
             raise DirectLLMError(
                 f"LLM provider returned HTTP {error.code}: {detail}"
@@ -200,7 +239,7 @@ def _default_transport(
             ) from error
         except (OSError, UnicodeDecodeError, json.JSONDecodeError) as error:
             if isinstance(error, OSError) and attempt < 2:
-                time.sleep(2**attempt)
+                backoff(float(2**attempt))
                 continue
             raise DirectLLMError(
                 f"LLM provider request failed: {type(error).__name__}"
@@ -281,8 +320,17 @@ class OpenClawConfiguredLLMRunner:
         *,
         session_id: str,
         system_prompt: str = "",
+        timeout_seconds: float | None = None,
     ) -> str:
         del session_id  # Retained only to satisfy the shared PromptRunner contract.
+        request_budget = (
+            min(self.timeout_seconds, timeout_seconds)
+            if timeout_seconds is not None
+            else self.timeout_seconds
+        )
+        if request_budget <= 0:
+            raise TimeoutError("LLM request has no remaining deadline")
+        request_deadline = time.monotonic() + request_budget
         messages = []
         if system_prompt.strip():
             messages.append({"role": "system", "content": system_prompt.strip()})
@@ -317,7 +365,24 @@ class OpenClawConfiguredLLMRunner:
                 },
                 method="POST",
             )
-            payload = self.transport(request, self.timeout_seconds)
+            remaining = request_deadline - time.monotonic()
+            if remaining <= 0:
+                raise TimeoutError("LLM request exceeded deadline")
+            # The provider-owned transport and every injected test/extension
+            # transport sit behind the same real wall-clock boundary.  Passing
+            # ``remaining`` remains useful to cooperative transports, while
+            # this daemon guard prevents ignored socket/DNS timeouts from
+            # holding the article or daily run indefinitely.
+            payload = call_with_wallclock(
+                self.transport,
+                remaining,
+                request,
+                remaining,
+                timeout_message="LLM request exceeded deadline",
+                worker_name="llm-transport",
+            )
+            if time.monotonic() >= request_deadline:
+                raise TimeoutError("LLM request exceeded deadline")
             try:
                 return _message_text(payload)
             except DirectLLMError as error:

@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lead Radar sanitized production regression-set manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "capture_version", "date_range", "generator_git_sha",
+    "sanitizer_policy", "operational_database", "days", "overall_sha256"
+  ],
+  "properties": {
+    "schema_version": { "const": 2 },
+    "capture_version": { "const": "pre-hotfix" },
+    "date_range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start", "end"],
+      "properties": {
+        "start": { "const": "2026-08-18" },
+        "end": { "const": "2026-08-31" }
+      }
+    },
+    "generator_git_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "sanitizer_policy": { "const": "allowlist-v2-url-hash-strict-json" },
+    "operational_database": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["provided", "schema_sha256", "table_count"],
+          "properties": {
+            "provided": { "const": true },
+            "schema_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            "table_count": { "type": "integer", "minimum": 0 }
+          }
+        }
+      ]
+    },
+    "days": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["capture_date", "file", "byte_count", "sha256"],
+        "properties": {
+          "capture_date": { "type": "string", "format": "date" },
+          "file": { "type": "string", "pattern": "^2026-08-(1[89]|2[0-9]|3[01])\\.json$" },
+          "byte_count": { "type": "integer", "minimum": 0 },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "overall_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  }
+}

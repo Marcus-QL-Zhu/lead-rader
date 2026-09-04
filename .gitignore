@@ -28,12 +28,19 @@ delivery-validation/
 *.tar.gz
 logs/
 backups/
+.deployed_git_sha
+.release-manifest.json
 evaluation/training-*/dataset.json
 evaluation/training-*/model-report.json
 evaluation/training-*/backfill-tasks.json
 evaluation/training-*/metaso-job-candidates.json
 evaluation/training-*/historical-job-review-queue.json
 evaluation/training-*/artifacts/
+
+# The sanitized production regression set is an intentional 15-file fixture
+# (14 canonical days plus manifest.json) generated only after source commit A.
+!evaluation/production-regression-20260818-31/
+!evaluation/production-regression-20260818-31/*.json
 
 # Internal deployment notes
 docs/delivery-status-*.md

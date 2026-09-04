@@ -13,14 +13,56 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.10", "3.12"]
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
       - uses: actions/checkout@v4
+        with:
+          # The frozen-artifact gate must distinguish the intentionally
+          # artifact-free source commit A from a later accidental deletion.
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
       - run: python -m pip install --upgrade pip
-      - run: python -m pip install -e . pytest ruff
+      - run: python -m pip install -e . pytest ruff jsonschema
       - run: ruff check .
+      - name: Linux deployment and launcher integration gate
+        if: matrix.python-version == '3.11'
+        run: >-
+          pytest -q
+          tests/test_daily_launcher_linux_integration.py
+          tests/test_daily_secret_boundary_linux.py
+          tests/test_deployment_linux_integration.py
+          tests/test_install_openclaw_report_cron.py
+      - name: Frozen production regression artifact gate
+        if: matrix.python-version == '3.11'
+        shell: bash
+        run: |
+          set -euo pipefail
+          fixture="evaluation/production-regression-20260818-31"
+          if [[ -e "$fixture" || -L "$fixture" ]]; then
+            echo "Validating the committed frozen production regression artifact."
+            python scripts/export_production_regression_set.py \
+              --output-dir "$fixture" \
+              --validate-only
+            python -m jsonschema \
+              -i "$fixture/manifest.json" \
+              docs/schemas/production-regression-set-v2.schema.json
+            for daily in "$fixture"/20??-??-??.json; do
+              python -m jsonschema \
+                -i "$daily" \
+                docs/schemas/production-regression-day-v2.schema.json
+            done
+            echo "Frozen production regression artifact: validated." >> "$GITHUB_STEP_SUMMARY"
+          else
+            history_objects="$(git rev-list --all --objects -- "$fixture")"
+            if [[ -n "$history_objects" ]]; then
+              echo "::error title=Regression artifact gate::Committed frozen artifact was deleted."
+              exit 1
+            fi
+            message="Frozen production regression artifact is absent at source commit A; this commit is testable but explicitly not deployable. Artifact commit B is required for deployment."
+            echo "::notice title=Regression artifact gate::$message"
+            echo "$message" >> "$GITHUB_STEP_SUMMARY"
+          fi
       - run: pytest -q

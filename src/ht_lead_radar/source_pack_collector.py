@@ -12,10 +12,12 @@ from hashlib import sha256
 from html.parser import HTMLParser
 import html
 import json
+import math
 import os
 from pathlib import Path
 import re
 import sqlite3
+import time
 from typing import Any, Callable, Iterable, Mapping
 import urllib.error
 import urllib.parse
@@ -23,8 +25,28 @@ import urllib.request
 import xml.etree.ElementTree as ET
 
 from .collectors import _event_date_from_text, infer_event
+from .http_runtime import DaemonWorkerPool, read_response_body
 from .models import Evidence
+from .sanitization import (
+    safe_error,
+    sanitize_text,
+    sanitize_tree,
+    sanitize_url,
+)
 from .source_packs import DEFAULT_REGISTRY_PATH, SourceDefinition, SourcePackRegistry
+
+
+def _safe_error_text(error: object) -> str:
+    if not error:
+        return ""
+    diagnostic = safe_error(error)
+    if diagnostic["detail"].startswith(f"{diagnostic['error_class']}:"):
+        return diagnostic["detail"]
+    return (
+        f"{diagnostic['error_class']}: {diagnostic['detail']}"
+        if diagnostic["detail"]
+        else diagnostic["error_class"]
+    )
 
 
 DIRECT_ADAPTERS = frozenset(
@@ -36,6 +58,7 @@ DIRECT_ADAPTERS = frozenset(
         "json_feed",
     }
 )
+_PERSISTENCE_SANITIZER_VERSION = "2"
 
 _EVENT_TERMS = re.compile(
     r"融资|增资|投资|入股|募资|工厂|基地|产线|扩产|产能|量产|交付|"
@@ -820,6 +843,7 @@ class SourcePackCollector:
         urlopen: Callable[..., Any] | None = None,
         dedicated_llm_runner: Any | None = None,
         dedicated_llm_env: Mapping[str, str] | None = None,
+        collect_timeout_seconds: float | None = None,
     ) -> None:
         self.registry = registry or SourcePackRegistry.load(registry_path)
         self.state_db = state_db
@@ -830,6 +854,18 @@ class SourcePackCollector:
         self._urlopen = urlopen or urllib.request.urlopen
         self._dedicated_llm_runner = dedicated_llm_runner
         self._dedicated_llm_env = dict(dedicated_llm_env or {})
+        if collect_timeout_seconds is None:
+            raw_timeout = os.environ.get(
+                "LEAD_RADAR_SOURCE_PACK_COLLECT_TIMEOUT_SECONDS",
+                "1800",
+            )
+            try:
+                collect_timeout_seconds = float(raw_timeout)
+            except (TypeError, ValueError):
+                collect_timeout_seconds = 1800.0
+        if not math.isfinite(collect_timeout_seconds) or collect_timeout_seconds <= 0:
+            raise ValueError("collect_timeout_seconds must be positive")
+        self.collect_timeout_seconds = collect_timeout_seconds
         if str(state_db) != ":memory:":
             Path(state_db).parent.mkdir(parents=True, exist_ok=True)
         self._connection = sqlite3.connect(str(state_db))
@@ -908,10 +944,152 @@ class SourcePackCollector:
             ON source_pack_evidence(topic, last_seen_at);
             CREATE INDEX IF NOT EXISTS idx_source_pack_documents_topic
             ON source_pack_documents(topic, last_seen_at);
+            CREATE TABLE IF NOT EXISTS source_pack_metadata (
+                key TEXT PRIMARY KEY,
+                value TEXT NOT NULL
+            );
             """
         )
         self._migrate_source_pack_evidence_event_identity()
+        self._sanitize_persisted_state()
         self._connection.commit()
+
+    @staticmethod
+    def _safe_persistence_json(value: object) -> str:
+        try:
+            parsed = json.loads(str(value))
+        except (TypeError, ValueError, json.JSONDecodeError):
+            parsed = {}
+        return json.dumps(
+            sanitize_tree(parsed, redact_pii=True),
+            ensure_ascii=False,
+            sort_keys=True,
+        )
+
+    def _sanitize_persisted_state(self) -> None:
+        marker = self._connection.execute(
+            "SELECT value FROM source_pack_metadata "
+            "WHERE key='persistence_sanitizer_version'"
+        ).fetchone()
+        if marker and str(marker["value"]) == _PERSISTENCE_SANITIZER_VERSION:
+            return
+        for row in self._connection.execute(
+            "SELECT rowid, source_id, source_url, cache_scope, error "
+            "FROM source_pack_http_state"
+        ).fetchall():
+            safe_url = sanitize_url(row["source_url"], limit=4000)
+            conflict = self._connection.execute(
+                "SELECT 1 FROM source_pack_http_state WHERE source_id=? "
+                "AND source_url=? AND cache_scope=? AND rowid<>? LIMIT 1",
+                (
+                    row["source_id"],
+                    safe_url,
+                    row["cache_scope"],
+                    int(row["rowid"]),
+                ),
+            ).fetchone()
+            if conflict:
+                separator = "&" if "?" in safe_url else "?"
+                safe_url = f"{safe_url}{separator}dedupe_record={int(row['rowid'])}"
+            self._connection.execute(
+                "UPDATE source_pack_http_state "
+                "SET source_url=?, error=? WHERE rowid=?",
+                (
+                    safe_url,
+                    sanitize_text(row["error"], limit=1000),
+                    int(row["rowid"]),
+                ),
+            )
+        for table, json_column in (
+            ("source_pack_documents", "observation_json"),
+            ("source_pack_evidence", "evidence_json"),
+        ):
+            rows = self._connection.execute(
+                f"SELECT rowid AS _rowid, * FROM {table}"
+            ).fetchall()
+            for row in rows:
+                safe_url = sanitize_url(row["source_url"], limit=4000)
+                if table == "source_pack_documents":
+                    conflict = self._connection.execute(
+                        "SELECT 1 FROM source_pack_documents WHERE source_id=? "
+                        "AND source_url=? AND topic=? AND rowid<>? LIMIT 1",
+                        (
+                            row["source_id"],
+                            safe_url,
+                            row["topic"],
+                            int(row["_rowid"]),
+                        ),
+                    ).fetchone()
+                else:
+                    conflict = self._connection.execute(
+                        "SELECT 1 FROM source_pack_evidence WHERE source_id=? "
+                        "AND source_url=? AND topic=? AND company=? "
+                        "AND event_type=? AND event_id=? AND rowid<>? LIMIT 1",
+                        (
+                            row["source_id"],
+                            safe_url,
+                            row["topic"],
+                            row["company"],
+                            row["event_type"],
+                            row["event_id"],
+                            int(row["_rowid"]),
+                        ),
+                    ).fetchone()
+                if conflict:
+                    separator = "&" if "?" in safe_url else "?"
+                    safe_url = (
+                        f"{safe_url}{separator}dedupe_record={int(row['_rowid'])}"
+                    )
+                safe_payload = self._safe_persistence_json(row[json_column])
+                try:
+                    payload_value = json.loads(safe_payload)
+                except json.JSONDecodeError:
+                    payload_value = {}
+                if isinstance(payload_value, dict):
+                    payload_value["source_url"] = safe_url
+                    safe_payload = json.dumps(
+                        payload_value,
+                        ensure_ascii=False,
+                        sort_keys=True,
+                    )
+                if table == "source_pack_documents":
+                    self._connection.execute(
+                        "UPDATE source_pack_documents SET source_url=?, "
+                        "title=?, observation_json=? WHERE rowid=?",
+                        (
+                            safe_url,
+                            sanitize_tree(row["title"], redact_pii=True),
+                            safe_payload,
+                            int(row["_rowid"]),
+                        ),
+                    )
+                else:
+                    self._connection.execute(
+                        "UPDATE source_pack_evidence SET source_url=?, "
+                        "evidence_json=? WHERE rowid=?",
+                        (
+                            safe_url,
+                            safe_payload,
+                            int(row["_rowid"]),
+                        ),
+                    )
+        # Preserve useful bounded diagnostics rather than clearing them; the
+        # row-by-row pass avoids allowing an old header/token back into state.
+        for row in self._connection.execute(
+            "SELECT id, error FROM source_pack_source_runs"
+        ).fetchall():
+            self._connection.execute(
+                "UPDATE source_pack_source_runs SET error=? WHERE id=?",
+                (sanitize_text(row["error"], limit=1000), int(row["id"])),
+            )
+        self._connection.execute(
+            """
+            INSERT INTO source_pack_metadata(key, value)
+            VALUES ('persistence_sanitizer_version', ?)
+            ON CONFLICT(key) DO UPDATE SET value=excluded.value
+            """,
+            (_PERSISTENCE_SANITIZER_VERSION,),
+        )
 
     @staticmethod
     def _evidence_identity(payload: Mapping[str, Any]) -> str:
@@ -1033,13 +1211,14 @@ class SourcePackCollector:
     def _conditional_headers(
         self, source: SourceDefinition, url: str, scope: str
     ) -> dict[str, str]:
+        state_url = sanitize_url(url, limit=4000)
         row = self._connection.execute(
             """
             SELECT etag, last_modified
             FROM source_pack_http_state
             WHERE source_id = ? AND source_url = ? AND cache_scope = ?
             """,
-            (source.id, url, scope),
+            (source.id, state_url, scope),
         ).fetchone()
         headers = {
             "User-Agent": self.user_agent,
@@ -1061,10 +1240,12 @@ class SourcePackCollector:
         etag: str = "",
         last_modified: str = "",
         content_hash: str = "",
-        error: str = "",
+        error: object = "",
         success: bool = False,
     ) -> None:
         now = _utc_now()
+        diagnostic = _safe_error_text(error)
+        state_url = sanitize_url(url, limit=4000)
         self._connection.execute(
             """
             INSERT INTO source_pack_http_state (
@@ -1091,7 +1272,7 @@ class SourcePackCollector:
             """,
             (
                 source.id,
-                url,
+                state_url,
                 scope,
                 etag,
                 last_modified,
@@ -1099,30 +1280,62 @@ class SourcePackCollector:
                 now,
                 now if success else "",
                 status_code,
-                error[:1000],
+                diagnostic[:1000],
             ),
         )
         self._connection.commit()
 
-    def _fetch(self, source: SourceDefinition, url: str, topic: str) -> FetchResult:
+    def _fetch(
+        self,
+        source: SourceDefinition,
+        url: str,
+        topic: str,
+        *,
+        overall_deadline: float | None = None,
+    ) -> FetchResult:
         scope = _scope_key(topic)
         request = urllib.request.Request(
             url,
             headers=self._conditional_headers(source, url, scope),
             method="GET",
         )
+        deadline = time.monotonic() + self.timeout
+        if overall_deadline is not None:
+            deadline = min(deadline, overall_deadline)
         try:
-            with self._urlopen(request, timeout=self.timeout) as response:
+            connect_timeout = (
+                self.timeout
+                if overall_deadline is None
+                else min(self.timeout, deadline - time.monotonic())
+            )
+            if connect_timeout <= 0:
+                raise TimeoutError("source-pack collection deadline expired")
+            with DaemonWorkerPool(1, name="source-pack-connect") as workers:
+                future = workers.submit(
+                    self._urlopen,
+                    request,
+                    timeout=connect_timeout,
+                )
+                try:
+                    response = future.result(timeout=connect_timeout)
+                except TimeoutError as error:
+                    future.cancel()
+                    raise TimeoutError(
+                        "HTTP connect exceeded source-pack deadline"
+                    ) from error
+            with response:
                 status_value = getattr(response, "status", None)
                 status = int(
                     status_value if status_value is not None else response.getcode()
                 )
-                try:
-                    body = response.read(self.max_bytes + 1)
-                except TypeError:
-                    body = response.read()
-                if len(body) > self.max_bytes:
-                    raise ValueError(f"response exceeds {self.max_bytes} bytes")
+                remaining = deadline - time.monotonic()
+                if remaining <= 0:
+                    raise TimeoutError("HTTP request exceeded deadline before body read")
+                body = read_response_body(
+                    response,
+                    max_bytes=self.max_bytes,
+                    timeout=remaining,
+                )
                 headers = response.headers
                 etag = str(headers.get("ETag") or "")
                 modified = str(headers.get("Last-Modified") or "")
@@ -1173,7 +1386,7 @@ class SourcePackCollector:
                 url,
                 scope,
                 status_code=int(exc.code),
-                error=f"{type(exc).__name__}: {exc}",
+                error=exc,
             )
             raise
         except Exception as exc:
@@ -1182,7 +1395,7 @@ class SourcePackCollector:
                 url,
                 scope,
                 status_code=0,
-                error=f"{type(exc).__name__}: {exc}",
+                error=exc,
             )
             raise
 
@@ -1222,8 +1435,16 @@ class SourcePackCollector:
         return _compact_text(decoded)
 
     def _store_observation(self, observation: SourceDocumentObservation) -> None:
-        payload = json.dumps(observation.to_dict(), ensure_ascii=False)
-        now = observation.observed_at
+        safe_observation = replace(
+            observation,
+            source_url=sanitize_url(observation.source_url, limit=4000),
+            title=sanitize_tree(observation.title, redact_pii=True),
+        )
+        payload = json.dumps(
+            sanitize_tree(safe_observation.to_dict(), redact_pii=True),
+            ensure_ascii=False,
+        )
+        now = safe_observation.observed_at
         self._connection.execute(
             """
             INSERT INTO source_pack_documents (
@@ -1241,16 +1462,16 @@ class SourcePackCollector:
                 observation_json = excluded.observation_json
             """,
             (
-                observation.source_id,
-                observation.source_url,
-                observation.topic,
-                observation.title,
-                observation.published_at,
+                safe_observation.source_id,
+                safe_observation.source_url,
+                safe_observation.topic,
+                safe_observation.title,
+                safe_observation.published_at,
                 now,
                 now,
-                observation.content_hash,
-                json.dumps(observation.company_candidates, ensure_ascii=False),
-                observation.event_type,
+                safe_observation.content_hash,
+                json.dumps(safe_observation.company_candidates, ensure_ascii=False),
+                safe_observation.event_type,
                 payload,
             ),
         )
@@ -1265,7 +1486,14 @@ class SourcePackCollector:
         commit: bool = True,
     ) -> None:
         now = _utc_now()
-        payload = asdict(evidence)
+        safe_url = sanitize_url(evidence.source_url, limit=4000)
+        safe_evidence = replace(
+            evidence,
+            source_url=safe_url,
+            title=sanitize_tree(evidence.title, redact_pii=True),
+            snippet=sanitize_tree(evidence.snippet, redact_pii=True),
+        )
+        payload = sanitize_tree(asdict(safe_evidence), redact_pii=True)
         event_id = self._evidence_identity(payload)
         payload["event_id"] = event_id
         self._connection.execute(
@@ -1284,12 +1512,12 @@ class SourcePackCollector:
             """,
             (
                 source.id,
-                evidence.source_url,
+                safe_url,
                 topic,
-                evidence.company,
-                evidence.event_type,
+                safe_evidence.company,
+                safe_evidence.event_type,
                 event_id,
-                evidence.event_date,
+                safe_evidence.event_date,
                 now,
                 now,
                 json.dumps(payload, ensure_ascii=False),
@@ -1339,6 +1567,8 @@ class SourcePackCollector:
         topic: str,
         topic_terms: tuple[str, ...],
         generic_source_ids: frozenset[str],
+        *,
+        overall_deadline: float | None = None,
     ) -> tuple[bool, int, bool]:
         seed_text = _compact_text(f"{document.title} {document.summary}")
         seed_relevant = _document_relevant(
@@ -1356,10 +1586,26 @@ class SourcePackCollector:
         detail_error = False
         if self.detail_fetch and document.url != source.url:
             try:
-                detail = self._fetch(source, document.url, topic)
+                if (
+                    overall_deadline is not None
+                    and time.monotonic() >= overall_deadline
+                ):
+                    raise TimeoutError("source-pack collection deadline expired")
+                detail = self._fetch(
+                    source,
+                    document.url,
+                    topic,
+                    overall_deadline=overall_deadline,
+                )
                 if not detail.not_modified:
                     body = self._detail_text(detail) or body
-            except Exception:
+            except Exception as error:
+                if (
+                    isinstance(error, TimeoutError)
+                    and overall_deadline is not None
+                    and time.monotonic() >= overall_deadline
+                ):
+                    raise
                 detail_error = True
 
         text = _compact_text(f"{document.title} {body}")
@@ -1397,7 +1643,9 @@ class SourcePackCollector:
 
         evidence_count = 0
         document_id = sha256(f"{source.id}|{document.url}".encode("utf-8")).hexdigest()
-        source_group = urllib.parse.urlparse(document.url).netloc.lower()
+        source_group = urllib.parse.urlparse(
+            sanitize_url(document.url)
+        ).netloc.lower()
         for company in companies:
             event_id = sha256(
                 f"{document_id}|{company}|{event_type}".encode("utf-8")
@@ -1434,9 +1682,10 @@ class SourcePackCollector:
         observation_count: int = 0,
         evidence_count: int = 0,
         detail_error_count: int = 0,
-        error: str = "",
+        error: object = "",
     ) -> dict[str, Any]:
         finished_at = _utc_now()
+        diagnostic = _safe_error_text(error)
         self._connection.execute(
             """
             INSERT INTO source_pack_source_runs (
@@ -1455,7 +1704,7 @@ class SourcePackCollector:
                 observation_count,
                 evidence_count,
                 detail_error_count,
-                error[:1000],
+                diagnostic[:1000],
             ),
         )
         self._connection.commit()
@@ -1466,7 +1715,7 @@ class SourcePackCollector:
             "observation_count": observation_count,
             "evidence_count": evidence_count,
             "detail_error_count": detail_error_count,
-            "error": error[:1000],
+            "error": diagnostic[:1000],
             "started_at": started_at,
             "finished_at": finished_at,
         }
@@ -1480,6 +1729,7 @@ class SourcePackCollector:
         if limit_per_query < 1:
             raise ValueError("limit_per_query must be positive")
         selection = self.registry.select(topic)
+        collect_deadline = time.monotonic() + self.collect_timeout_seconds
         normalized_topic = selection.topic
         terms = _topic_terms(self.registry, normalized_topic)
         generic_ids = frozenset(self.registry.get_pack("generic-cn").source_ids)
@@ -1534,7 +1784,7 @@ class SourcePackCollector:
                         thinking_mode=thinking_mode,
                     )
                 except Exception as exc:
-                    dedicated_semantic_error = f"{type(exc).__name__}: {exc}"
+                    dedicated_semantic_error = _safe_error_text(exc)
                     runner = None
             if runner is not None and runner is not False:
                 dedicated_semantic_mode = "minimax"
@@ -1575,6 +1825,15 @@ class SourcePackCollector:
 
         for source in selection.sources:
             started_at = _utc_now()
+            if time.monotonic() >= collect_deadline:
+                health[source.id] = self._record_source_run(
+                    source.id,
+                    normalized_topic,
+                    started_at,
+                    status="error",
+                    error=TimeoutError("source-pack collection deadline expired"),
+                )
+                continue
             if (
                 dedicated_coordinator is not None
                 and source.id in dedicated_registry.source_ids
@@ -1582,6 +1841,7 @@ class SourcePackCollector:
                 result = dedicated_coordinator.collect_source(
                     source.id,
                     normalized_topic,
+                    overall_deadline=collect_deadline,
                 )
                 relevant_evidence = [
                     item
@@ -1643,7 +1903,12 @@ class SourcePackCollector:
             evidence_count = 0
             detail_error_count = 0
             try:
-                listing = self._fetch(source, source.url, normalized_topic)
+                listing = self._fetch(
+                    source,
+                    source.url,
+                    normalized_topic,
+                    overall_deadline=collect_deadline,
+                )
                 if listing.not_modified:
                     health[source.id] = self._record_source_run(
                         source.id,
@@ -1655,12 +1920,15 @@ class SourcePackCollector:
                 documents = self._discover(source, listing)
                 discovered_count = len(documents)
                 for document in documents:
+                    if time.monotonic() >= collect_deadline:
+                        raise TimeoutError("source-pack collection deadline expired")
                     observed, emitted, detail_error = self._process_document(
                         source,
                         document,
                         normalized_topic,
                         terms,
                         generic_ids,
+                        overall_deadline=collect_deadline,
                     )
                     observation_count += int(observed)
                     evidence_count += emitted
@@ -1671,7 +1939,7 @@ class SourcePackCollector:
                     source.id,
                     normalized_topic,
                     started_at,
-                    status="ok",
+                    status="partial" if detail_error_count else "ok",
                     discovered_count=discovered_count,
                     observation_count=observation_count,
                     evidence_count=evidence_count,
@@ -1687,7 +1955,7 @@ class SourcePackCollector:
                     observation_count=observation_count,
                     evidence_count=evidence_count,
                     detail_error_count=detail_error_count,
-                    error=f"{type(exc).__name__}: {exc}",
+                    error=exc,
                 )
 
         for source in selection.disabled_sources:

@@ -1,6 +1,9 @@
 import json
+import time
 
 import pytest
+
+from ht_lead_radar import openclaw_llm
 
 from ht_lead_radar.openclaw_llm import (
     DirectLLMError,
@@ -101,7 +104,7 @@ def test_direct_runner_calls_provider_without_openclaw_agent():
         "max_completion_tokens": 2048,
         "reasoning_split": True,
     }
-    assert captured["timeout"] == 12
+    assert 0 < captured["timeout"] <= 12
 
 
 def test_rejects_unsupported_provider_protocol(tmp_path):
@@ -323,3 +326,84 @@ def test_explicit_model_override_fails_closed_when_not_allowlisted(tmp_path):
             config_path=config_path,
             models_path=models_path,
         )
+
+
+def test_default_transport_retries_share_one_monotonic_deadline(monkeypatch):
+    clock = {"now": 100.0}
+    observed_timeouts = []
+
+    class Response:
+        def __init__(self):
+            self._body = json.dumps(
+                {"choices": [{"message": {"content": "ok"}}]}
+            ).encode()
+
+        def read(self, size=-1):
+            return self._body if size < 0 else self._body[:size]
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+    calls = {"count": 0}
+
+    def urlopen(_request, timeout):
+        observed_timeouts.append(timeout)
+        calls["count"] += 1
+        if calls["count"] < 3:
+            raise OSError("transient")
+        return Response()
+
+    monkeypatch.setattr(openclaw_llm.time, "monotonic", lambda: clock["now"])
+    monkeypatch.setattr(
+        openclaw_llm.time,
+        "sleep",
+        lambda seconds: clock.__setitem__("now", clock["now"] + seconds),
+    )
+    monkeypatch.setattr(openclaw_llm.urllib.request, "urlopen", urlopen)
+    request = openclaw_llm.urllib.request.Request("https://example.test")
+
+    payload = openclaw_llm._default_transport(request, 10.0)
+
+    assert payload["choices"][0]["message"]["content"] == "ok"
+    assert len(observed_timeouts) == 3
+    assert 0 < observed_timeouts[2] < observed_timeouts[1] < observed_timeouts[0] <= 10
+
+
+def test_retry_backoff_cannot_overrun_transport_deadline(monkeypatch):
+    def unavailable(_request, timeout):
+        del timeout
+        raise OSError("unavailable")
+
+    monkeypatch.setattr(openclaw_llm.urllib.request, "urlopen", unavailable)
+    request = openclaw_llm.urllib.request.Request("https://example.test")
+    started = openclaw_llm.time.monotonic()
+    with pytest.raises(DirectLLMError, match="deadline"):
+        openclaw_llm._default_transport(request, 0.02)
+    assert openclaw_llm.time.monotonic() - started < 0.12
+
+
+def test_injected_transport_cannot_ignore_runner_wall_clock_deadline():
+    def non_cooperative_transport(_request, _timeout):
+        time.sleep(0.5)
+        return {"choices": [{"message": {"content": "too late"}}]}
+
+    runner = OpenClawConfiguredLLMRunner(
+        config=OpenClawLLMConfig(
+            provider="minimax",
+            model="MiniMax-M3",
+            base_url="https://api.minimaxi.com/v1",
+            api_kind="openai-completions",
+            api_key="test-secret",
+        ),
+        timeout_seconds=0.02,
+        thinking_mode="disabled",
+        transport=non_cooperative_transport,
+    )
+
+    started = time.monotonic()
+    with pytest.raises(TimeoutError, match="deadline"):
+        runner.run("prompt", session_id="ignored")
+    assert time.monotonic() - started < 0.15

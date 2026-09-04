@@ -66,6 +66,8 @@ class SourceDefinition:
     verified_on: str
     status: str
     verification_note: str
+    disabled_at: str = ""
+    disabled_reason: str = ""
 
     def to_dict(self) -> dict[str, Any]:
         return _primitive(self)
@@ -153,6 +155,8 @@ def _source_from_raw(raw: Mapping[str, Any]) -> SourceDefinition:
         verified_on=_required_text(raw, "verified_on", source_id),
         status=status,
         verification_note=_required_text(raw, "verification_note", source_id),
+        disabled_at=str(raw.get("disabled_at") or "").strip(),
+        disabled_reason=str(raw.get("disabled_reason") or "").strip(),
     )
 
 

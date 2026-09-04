@@ -4,7 +4,7 @@ import html
 import json
 import os
 import re
-import sqlite3
+import time
 import urllib.parse
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -13,6 +13,7 @@ from datetime import date, datetime
 from pathlib import Path
 from typing import Iterable
 
+from .http_runtime import call_with_wallclock, read_response_body
 from .models import Evidence, OutreachRoute
 from .signals import SIGNALS, infer_signal
 from .taxonomy import classify_seniority, profile_for
@@ -24,6 +25,30 @@ class SearchResult:
     url: str
     snippet: str
     published_at: str = ""
+
+
+def _remaining_http_timeout(deadline: float) -> float:
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise TimeoutError("HTTP request exceeded deadline before body read")
+    return remaining
+
+
+def _urlopen_with_deadline(
+    request: urllib.request.Request,
+    deadline: float,
+):
+    """Include DNS and connect in the collector's wall-clock budget."""
+
+    remaining = _remaining_http_timeout(deadline)
+    return call_with_wallclock(
+        urllib.request.urlopen,
+        remaining,
+        request,
+        timeout=remaining,
+        timeout_message="HTTP connect exceeded deadline",
+        worker_name="collector-connect",
+    )
 
 
 # Kept as a compatibility view for callers that inspect the old constant.
@@ -261,8 +286,13 @@ class BingRSSCollector:
         request = urllib.request.Request(
             url, headers={"User-Agent": "HT-Lead-Radar/0.1"}
         )
-        with urllib.request.urlopen(request, timeout=self.timeout) as response:
-            payload = response.read()
+        deadline = time.monotonic() + self.timeout
+        with _urlopen_with_deadline(request, deadline) as response:
+            payload = read_response_body(
+                response,
+                max_bytes=5_000_000,
+                timeout=_remaining_http_timeout(deadline),
+            )
         root = ET.fromstring(payload)
         results: list[SearchResult] = []
         for item in root.findall(".//item")[:limit]:
@@ -397,8 +427,15 @@ class MetasoCollector(BingRSSCollector):
             },
             method="POST",
         )
-        with urllib.request.urlopen(request, timeout=self.timeout) as response:
-            body = json.loads(response.read().decode("utf-8"))
+        deadline = time.monotonic() + self.timeout
+        with _urlopen_with_deadline(request, deadline) as response:
+            body = json.loads(
+                read_response_body(
+                    response,
+                    max_bytes=5_000_000,
+                    timeout=_remaining_http_timeout(deadline),
+                ).decode("utf-8")
+            )
         if body.get("errCode"):
             error_code = body.get("errCode")
             error_message = body.get("errMsg", "request failed")
@@ -444,8 +481,15 @@ class SearXNGCollector(BingRSSCollector):
             },
             method="POST",
         )
-        with urllib.request.urlopen(request, timeout=self.timeout) as response:
-            body = json.loads(response.read().decode("utf-8"))
+        deadline = time.monotonic() + self.timeout
+        with _urlopen_with_deadline(request, deadline) as response:
+            body = json.loads(
+                read_response_body(
+                    response,
+                    max_bytes=5_000_000,
+                    timeout=_remaining_http_timeout(deadline),
+                ).decode("utf-8")
+            )
         return [
             SearchResult(
                 title=_clean_html(str(item.get("title") or "")),
@@ -674,15 +718,13 @@ def collect_josint(
             alias for topic in effective_topics for alias in profile_for(topic).aliases
         )
     )
-    from .josint_adapter import read_canonical_evidence
+    from .josint_adapter import open_readonly_josint, read_canonical_evidence
 
     canonical_rows = read_canonical_evidence(path, terms=terms, direction=direction)
     if canonical_rows is not None:
         return [Evidence(**row) for row in canonical_rows]
 
-    connection = sqlite3.connect(path)
-    connection.row_factory = sqlite3.Row
-    try:
+    with open_readonly_josint(path) as connection:
         columns = {
             row["name"]
             for row in connection.execute("PRAGMA table_info(jobs)").fetchall()
@@ -704,8 +746,6 @@ def collect_josint(
         ]
         field_sql = ", ".join(fields)
         rows = connection.execute(f"SELECT {field_sql} FROM jobs").fetchall()
-    finally:
-        connection.close()
     output: list[Evidence] = []
     for row in rows:
         text = " ".join(str(row[key] or "") for key in row.keys())
