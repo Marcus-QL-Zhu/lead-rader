@@ -1,5 +1,6 @@
 from email.message import Message
 import json
+from threading import Event
 import time
 import urllib.error
 
@@ -406,11 +407,14 @@ def test_collect_deadline_does_not_start_pending_sources(tmp_path):
     first = _source("first-timeout", "https://first.example/list")
     second = _source("must-not-start", "https://second.example/list")
     calls = []
+    release = Event()
+    finished = Event()
 
     def non_cooperative_open(request, timeout):
         del timeout
         calls.append(request.full_url)
-        time.sleep(0.5)
+        release.wait(timeout=2.0)
+        finished.set()
         return FakeResponse(request.full_url, b"")
 
     collector = SourcePackCollector(
@@ -420,18 +424,20 @@ def test_collect_deadline_does_not_start_pending_sources(tmp_path):
         collect_timeout_seconds=0.03,
     )
 
-    started = time.monotonic()
-    assert collector.collect("具身智能") == []
-    elapsed = time.monotonic() - started
+    try:
+        assert collector.collect("具身智能") == []
 
-    assert elapsed < 0.15
-    # Scheduler jitter can consume the tiny test budget before the first daemon
-    # starts. Zero or one started request is correct; the pending second source
-    # must never start after the deadline.
-    assert calls in ([], [first.url])
-    assert second.url not in calls
-    assert collector.last_run_summary["sources"][first.id]["status"] == "error"
-    assert collector.last_run_summary["sources"][second.id]["status"] == "error"
+        # A started transport remains blocked when collect returns, proving the
+        # deadline did not wait for a non-cooperative request. Scheduler jitter
+        # may consume the tiny budget before it starts, which is also valid.
+        if calls:
+            assert calls == [first.url]
+            assert not finished.is_set()
+        assert second.url not in calls
+        assert collector.last_run_summary["sources"][first.id]["status"] == "error"
+        assert collector.last_run_summary["sources"][second.id]["status"] == "error"
+    finally:
+        release.set()
 
 
 def test_etag_and_last_modified_are_sent_and_304_reuses_stored_evidence(tmp_path):
