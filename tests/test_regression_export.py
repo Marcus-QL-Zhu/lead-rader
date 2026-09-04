@@ -828,7 +828,10 @@ def test_validator_rejects_symlink_day_when_supported(tmp_path):
     except OSError:
         backing.rename(day)
         pytest.skip("symlink creation is unavailable")
-    with pytest.raises(RegressionExportError, match="non-link"):
+    with pytest.raises(
+        RegressionExportError,
+        match=r"must not traverse a link/reparse point",
+    ):
         validate_regression_set(output)
 
 

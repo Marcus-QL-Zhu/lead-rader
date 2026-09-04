@@ -29,6 +29,20 @@ def test_safe_error_redacts_space_separated_keys_credentials_and_bare_tokens():
     )
 
 
+def test_safe_error_preserves_bounded_operational_phrase_while_redacting_data():
+    diagnostic = safe_error(
+        TimeoutError(
+            "source watchdog exceeded during listing; "
+            "token=secret-value; contact marcus@example.com"
+        )
+    )
+
+    assert diagnostic["error_class"] == "TimeoutError"
+    assert "source watchdog exceeded during listing" in diagnostic["detail"]
+    assert "secret-value" not in diagnostic["detail"]
+    assert "marcus@example.com" not in diagnostic["detail"]
+
+
 def test_business_payload_newlines_and_hash_survive_recursive_sanitization():
     payload = {
         "position_name": "商业化总监",

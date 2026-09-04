@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from concurrent.futures import Future
+from concurrent.futures import Future, TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from hashlib import sha256
@@ -632,7 +632,7 @@ class DedicatedAggregateCoordinator:
                             )
                         )
                     except Exception as exc:
-                        if isinstance(exc, TimeoutError):
+                        if isinstance(exc, (TimeoutError, FuturesTimeoutError)):
                             raise TimeoutError(
                                 f"source {source_id} watchdog expired during "
                                 f"detail_fetch:{index.source_article_id}"
@@ -733,7 +733,7 @@ class DedicatedAggregateCoordinator:
                             semantic_audit,
                         )
                     except Exception as exc:
-                        if isinstance(exc, TimeoutError):
+                        if isinstance(exc, (TimeoutError, FuturesTimeoutError)):
                             raise TimeoutError(
                                 f"source {source_id} watchdog expired during "
                                 f"semantic_result:{index.source_article_id}"
@@ -763,7 +763,7 @@ class DedicatedAggregateCoordinator:
                 error = _bounded_dead_letter_error(f"{type(exc).__name__}: {exc}")
                 dead_letter_stage = (
                     "source_watchdog"
-                    if isinstance(exc, TimeoutError)
+                    if isinstance(exc, (TimeoutError, FuturesTimeoutError))
                     and "watchdog" in str(exc).lower()
                     else current_stage
                 )
@@ -864,7 +864,11 @@ class DedicatedAggregateCoordinator:
             future = executor.submit(self.fetch, url)
         try:
             payload = future.result(timeout=remaining)
-        except TimeoutError as error:
+        # On Python 3.10 ``concurrent.futures.TimeoutError`` is not yet the
+        # built-in ``TimeoutError`` alias.  Catch both so the otherwise-empty
+        # Future diagnostic is always translated into the bounded operational
+        # watchdog message below.
+        except (TimeoutError, FuturesTimeoutError) as error:
             future.cancel()
             raise TimeoutError(
                 f"source watchdog expired during HTTP transport for {url}"
@@ -1009,7 +1013,7 @@ class DedicatedAggregateCoordinator:
                 future = active_executor.submit(post_json, url, payload)
             try:
                 body = future.result(timeout=remaining)
-            except TimeoutError as error:
+            except (TimeoutError, FuturesTimeoutError) as error:
                 future.cancel()
                 raise TimeoutError(
                     f"source watchdog expired during HTTP POST transport for {url}"
