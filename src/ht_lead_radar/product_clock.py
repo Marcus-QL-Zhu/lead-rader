@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 from datetime import date, datetime, timezone
+import re
 from zoneinfo import ZoneInfo
 
 
 PRODUCT_TIMEZONE = ZoneInfo("Asia/Shanghai")
+_CANONICAL_DATE = re.compile(r"^[0-9]{4}-[0-9]{2}-[0-9]{2}$")
 
 
 def product_date(now: datetime | None = None) -> date:
@@ -22,4 +24,18 @@ def product_date_iso(now: datetime | None = None) -> str:
     return product_date(now).isoformat()
 
 
-__all__ = ["PRODUCT_TIMEZONE", "product_date", "product_date_iso"]
+def canonical_run_date(value: object) -> str:
+    """Accept exactly YYYY-MM-DD and return its validated canonical form."""
+
+    text = str(value)
+    if not _CANONICAL_DATE.fullmatch(text):
+        raise ValueError("run_date must use YYYY-MM-DD")
+    return date.fromisoformat(text).isoformat()
+
+
+__all__ = [
+    "PRODUCT_TIMEZONE",
+    "canonical_run_date",
+    "product_date",
+    "product_date_iso",
+]

@@ -48,7 +48,7 @@ from .models import CompanyLead, Evidence
 from .josint_snapshot import JOSINTSnapshotUnstable
 from .ops import AuditLog, OpsMetricsStore, SuppressionRegistry
 from .pipeline import build_late_opportunities, build_leads
-from .product_clock import product_date_iso
+from .product_clock import canonical_run_date, product_date_iso
 from .relationships import DeepResearchEngine, RelationshipStore
 from .reporting_v2 import render_complete_markdown, write_complete_outputs
 from .requests import CandidateProfile
@@ -1385,8 +1385,9 @@ def apply_defaults(payload: Mapping[str, Any]) -> dict[str, Any]:
     missing = [key for key in required if not output.get(key)]
     if missing:
         raise ValueError(f"missing application fields: {', '.join(missing)}")
-    raw_run_date = str(output.get("run_date") or product_date_iso())
-    output["run_date"] = date.fromisoformat(raw_run_date).isoformat()
+    output["run_date"] = canonical_run_date(
+        output.get("run_date") or product_date_iso()
+    )
     for key in (
         "fixed_sources",
         "source_packs",
@@ -1440,9 +1441,7 @@ def _adapter_metric_counts(adapter_run: Mapping[str, Any]) -> dict[str, Any]:
 def default_idempotency_key(
     payload: Mapping[str, Any], *, refresh: bool = False
 ) -> str:
-    run_date = date.fromisoformat(
-        str(payload.get("run_date") or product_date_iso())
-    ).isoformat()
+    run_date = canonical_run_date(payload.get("run_date") or product_date_iso())
     canonical = json.dumps(
         {
             "date": run_date,

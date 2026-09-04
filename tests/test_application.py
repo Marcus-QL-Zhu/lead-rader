@@ -155,15 +155,17 @@ def test_daily_cooldown_and_candidate_pool_are_part_of_idempotency(tmp_path):
     assert default_idempotency_key(cooled) != default_idempotency_key(differently_sized)
 
 
-def test_run_date_is_canonical_before_idempotency_and_collection(tmp_path):
+def test_run_date_is_strictly_canonical_before_idempotency_and_collection(tmp_path):
     payload = _payload(tmp_path)
     compact = dict(payload, run_date="20260905")
     canonical = dict(payload, run_date="2026-09-05")
 
-    assert default_idempotency_key(compact) == default_idempotency_key(canonical)
-    assert apply_defaults(compact)["run_date"] == "2026-09-05"
-    with pytest.raises(ValueError):
-        default_idempotency_key(dict(payload, run_date="not-a-date"))
+    assert apply_defaults(canonical)["run_date"] == "2026-09-05"
+    for invalid in (compact, dict(payload, run_date="not-a-date")):
+        with pytest.raises(ValueError, match="YYYY-MM-DD"):
+            default_idempotency_key(invalid)
+        with pytest.raises(ValueError, match="YYYY-MM-DD"):
+            apply_defaults(invalid)
 
 
 def test_daily_application_applies_delivery_cooldown_before_all_published_outputs(
