@@ -34,15 +34,16 @@ class _RecoveryAdapter(AggregateAdapter):
     def __init__(self):
         self.listed = True
         self.detail_complete = False
+        self.index_hash = "index-1"
 
     def parse_listing(self, channel, html, context):
         del channel, html
         if not self.listed:
             return []
-        return [self._index(context.now)]
+        return [self._index(context.now, self.index_hash)]
 
     @staticmethod
-    def _index(now):
+    def _index(now, content_hash):
         return SourceArticleIndex(
             source_id=CHANNEL.source_id,
             source_article_id="1",
@@ -54,7 +55,7 @@ class _RecoveryAdapter(AggregateAdapter):
             cursor_value="1",
             listing_page=CHANNEL.url,
             listing_position=1,
-            content_hash="index-1",
+            content_hash=content_hash,
             discovery_method="fixture",
             summary="\u661f\u6cb3\u79d1\u6280\u53d1\u5e03\u65b0\u4ea7\u54c1\u5e76\u8fdb\u5165\u5ba2\u6237\u9a8c\u8bc1\u9636\u6bb5\u3002",
         )
@@ -123,6 +124,40 @@ class _Runner:
             },
             ensure_ascii=False,
         )
+
+
+class _V27Runner:
+    config = type(
+        "Config",
+        (),
+        {"provider": "minimax", "model": "MiniMax-M3"},
+    )()
+
+    def __init__(self):
+        self.calls = 0
+
+    def run(self, prompt, *, session_id, system_prompt=""):
+        del session_id, system_prompt
+        self.calls += 1
+        payload = json.loads(prompt.split("\ninput=", 1)[1])
+        decisions = []
+        for claim in payload["claims"]:
+            decisions.append(
+                {
+                    "claim_id": claim["claim_id"],
+                    "decision": "accept",
+                    "subject_entity_id": claim["allowed_subject_entity_ids"][0],
+                    "event_type": claim["event_type_hint"],
+                    "event_status": claim["event_status_hint"],
+                    "funding_round": "",
+                    "funding_amount": "",
+                    "cumulative_funding_amount": "",
+                    "investors": [],
+                    "industry_tags": ["hardtech"],
+                    "confidence": "high",
+                }
+            )
+        return json.dumps({"decisions": decisions}, ensure_ascii=False)
 
 
 def test_open_dead_letter_is_drained_after_item_leaves_listing(tmp_path):
@@ -195,3 +230,82 @@ def test_unchanged_detail_after_recheck_does_not_call_minimax_again(tmp_path):
     assert second.run.incremental_count == 1
     assert runner.calls == 1
     assert len(second.evidence) == len(first.evidence) == 1
+
+
+def test_listing_only_hash_drift_rebinds_semantics_without_minimax(tmp_path):
+    adapter = _RecoveryAdapter()
+    adapter.detail_complete = True
+    runner = _Runner()
+    routes = {
+        CHANNEL.url: b"listing",
+        "https://example.com/detail/1": b"detail",
+    }
+    database = tmp_path / "listing-drift.sqlite3"
+    first = DedicatedAggregateCoordinator(
+        state_db=database,
+        registry=DedicatedAdapterRegistry((adapter,)),
+        fetch=lambda url: routes[url],
+        llm_runner=runner,
+        now=datetime(2026, 7, 31, 0, 0, tzinfo=timezone.utc),
+    ).collect_source(CHANNEL.source_id, "hardtech")
+    assert first.run.status == "ok"
+    assert runner.calls == 1
+
+    adapter.index_hash = "index-2"
+    second = DedicatedAggregateCoordinator(
+        state_db=database,
+        registry=DedicatedAdapterRegistry((adapter,)),
+        fetch=lambda url: routes[url],
+        llm_runner=runner,
+        now=datetime(2026, 7, 31, 1, 0, tzinfo=timezone.utc),
+    ).collect_source(CHANNEL.source_id, "hardtech")
+
+    assert second.run.status == "ok"
+    assert second.run.incremental_count == 1
+    assert runner.calls == 1
+    assert len(second.evidence) == len(first.evidence) == 1
+
+
+def test_v27_second_run_reuses_complete_materialization_without_minimax(tmp_path):
+    adapter = _RecoveryAdapter()
+    adapter.detail_complete = True
+    runner = _V27Runner()
+    routes = {
+        CHANNEL.url: b"listing",
+        "https://example.com/detail/1": b"detail",
+    }
+    database = tmp_path / "v27-cache.sqlite3"
+    first = DedicatedAggregateCoordinator(
+        state_db=database,
+        registry=DedicatedAdapterRegistry((adapter,)),
+        fetch=lambda url: routes[url],
+        llm_runner=runner,
+        now=datetime(2026, 7, 31, 0, 0, tzinfo=timezone.utc),
+        claim_centric_v27=True,
+        strict_claim_contract=True,
+    ).collect_source(CHANNEL.source_id, "hardtech")
+
+    assert first.run.status == "ok"
+    assert runner.calls == 1
+    adapter.index_hash = "index-v27-drift"
+    second = DedicatedAggregateCoordinator(
+        state_db=database,
+        registry=DedicatedAdapterRegistry((adapter,)),
+        fetch=lambda url: routes[url],
+        llm_runner=runner,
+        now=datetime(2026, 7, 31, 1, 0, tzinfo=timezone.utc),
+        claim_centric_v27=True,
+        strict_claim_contract=True,
+    ).collect_source(CHANNEL.source_id, "hardtech")
+
+    assert second.run.status == "ok"
+    assert runner.calls == 1
+    assert second.evidence == first.evidence
+    with sqlite3.connect(database) as connection:
+        audit = json.loads(
+            connection.execute(
+                "SELECT audit_json FROM aggregate_semantic_attempts"
+            ).fetchone()[0]
+        )
+    assert audit["index_content_hash"] == "index-v27-drift"
+    assert audit["article_content_hash"]

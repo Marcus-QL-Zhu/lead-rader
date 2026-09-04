@@ -33,6 +33,10 @@ name = Path(args[0]).name if args else ""
 with open(os.environ["LAUNCHER_CALL_LOG"], "a", encoding="utf-8") as stream:
     stream.write(json.dumps({{"name": name, "args": args}}, ensure_ascii=False) + "\\n")
 if name == "run_daily_hardtech_portfolio.py":
+    if "--run-id-file" in args:
+        run_id_path = Path(args[args.index("--run-id-file") + 1])
+        run_id_path.parent.mkdir(parents=True, exist_ok=True)
+        run_id_path.write_text("run_" + "1" * 32, encoding="utf-8")
     time.sleep(float(os.environ.get("PORTFOLIO_TEST_SLEEP", "0")))
 if name == "generate_talent_pool_drafts.py" and "--record-draft-failure" not in args:
     time.sleep(float(os.environ.get("DRAFT_TEST_SLEEP", "0")))
@@ -161,6 +165,15 @@ def test_inner_launcher_completion_matrix(
         "send_daily_feishu_summary.py": "fallback",
     }
     assert {aliases[name] for name in names if name in aliases} == expected_calls
+    if analysis_exit not in {0, 2}:
+        finalizers = [
+            json.loads(line)["args"]
+            for line in log.read_text(encoding="utf-8").splitlines()
+            if json.loads(line)["name"] == "run_lead_radar_v2.py"
+            and "finalize-interrupted-run" in json.loads(line)["args"]
+        ]
+        assert len(finalizers) == 1
+        assert "--run-id-file" in finalizers[0]
 
 
 def test_missing_openclaw_binary_records_preflight_failure_before_fallback(tmp_path):
@@ -246,10 +259,17 @@ def test_portfolio_wall_clock_timeout_persists_completion_and_runs_hook(tmp_path
     assert names == [
         "run_daily_hardtech_portfolio.py",
         "run_lead_radar_v2.py",
+        "run_lead_radar_v2.py",
         "generate_talent_pool_drafts.py",
         "openclaw_daily_report.py",
     ]
-    failure_call = business_calls[2]["args"]
+    finalizer_call = business_calls[1]["args"]
+    assert "finalize-interrupted-run" in finalizer_call
+    assert "PortfolioWallClockTimeout" in finalizer_call
+    run_id_file = app / "data" / "daily-active-run-id"
+    assert run_id_file.read_text(encoding="utf-8") == "run_" + "1" * 32
+    assert str(run_id_file.relative_to(app)) in finalizer_call
+    failure_call = business_calls[3]["args"]
     assert "--record-analysis-failure" in failure_call
     assert "PortfolioWallClockTimeout" in failure_call
 

@@ -7,7 +7,9 @@ from ht_lead_radar.aggregate_adapters.base import (
     DetailFetchError,
     ListingInvariantError,
 )
+from ht_lead_radar.aggregate_adapters.coordinator import DedicatedAggregateCoordinator
 from ht_lead_radar.aggregate_adapters.document_router import route_document
+from ht_lead_radar.aggregate_adapters.registry import DedicatedAdapterRegistry
 from ht_lead_radar.aggregate_adapters.sites.ccid_report import (
     CcidReportCommentaryAdapter,
 )
@@ -143,6 +145,53 @@ def test_listing_captures_complete_commentary_window(tmp_path):
         "https://www.ccidreport.com/zcjd/1121801.jhtml"
     )
     assert indexes[0].structured_data["document_type"] == "commentary"
+
+
+def test_new_leading_card_shifts_rank_without_refetching_existing_details(tmp_path):
+    listing = _listing()
+    initial = ADAPTER.parse_listing(CHANNEL, listing, _context(tmp_path))
+    new_id = 1121999
+    new_card = _card(
+        category="专家观点",
+        section="zjgd2",
+        article_id=new_id,
+        day=31,
+        position=99,
+    ).encode()
+    drifted = listing.replace(
+        b'<div class="news-list">',
+        b'<div class="news-list">' + new_card,
+        1,
+    )
+    moved = ADAPTER.parse_listing(CHANNEL, drifted, _context(tmp_path))
+    initial_hashes = {item.source_article_id: item.content_hash for item in initial}
+    moved_hashes = {item.source_article_id: item.content_hash for item in moved}
+    assert all(moved_hashes[key] == value for key, value in initial_hashes.items())
+
+    network = {CHANNEL.url: listing}
+    network.update({item.canonical_url: _detail(item) for item in initial})
+    new_index = next(item for item in moved if item.source_article_id == str(new_id))
+    network[new_index.canonical_url] = _detail(new_index)
+    calls: list[str] = []
+
+    def fetch(url: str) -> bytes:
+        calls.append(url)
+        return network[url]
+
+    coordinator = DedicatedAggregateCoordinator(
+        state_db=tmp_path / "coordinator.sqlite3",
+        registry=DedicatedAdapterRegistry((ADAPTER,)),
+        fetch=fetch,
+        now=NOW,
+    )
+    first = coordinator.collect_source(CHANNEL.source_id, "硬科技")
+    network[CHANNEL.url] = drifted
+    calls.clear()
+    second = coordinator.collect_source(CHANNEL.source_id, "硬科技")
+
+    assert first.run.incremental_count == len(initial)
+    assert second.run.incremental_count == 1
+    assert calls == [CHANNEL.url, new_index.canonical_url]
 
 
 def test_detail_cross_checks_title_date_and_routes_commentary(tmp_path):

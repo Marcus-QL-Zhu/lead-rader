@@ -9,6 +9,7 @@ import os
 import re
 import shutil
 import sqlite3
+import stat
 import subprocess
 import sys
 import tempfile
@@ -26,7 +27,7 @@ from .costs import SearchBudgetLedger
 from .ops import backup_sqlite, build_daily_monitoring_report
 from .relationships import DeepResearchEngine, RelationshipStore
 from .requests import OpportunityMode, plan_opportunity_request
-from .runtime import RunStore
+from .runtime import RunStore, make_run_id
 from .sanitization import safe_error_class
 from .source_packs import load_source_packs
 
@@ -52,6 +53,7 @@ PRODUCTION_SOURCE_MANIFESTS = (
     "config/openclaw-report-cron.json",
 )
 _GIT_SHA = re.compile(r"^[0-9a-f]{40}$")
+_RUN_ID = re.compile(r"^run_[0-9a-f]{32}$")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -118,6 +120,16 @@ def build_parser() -> argparse.ArgumentParser:
         ],
         default="normalize",
     )
+
+    finalize = subparsers.add_parser(
+        "finalize-interrupted-run",
+        help="由外部 watchdog 将被中断的运行及其在途 checkpoint 收口为失败",
+    )
+    finalize.add_argument("--runtime-db", default=DEFAULTS["runtime_db"])
+    finalize_target = finalize.add_mutually_exclusive_group(required=True)
+    finalize_target.add_argument("--run-id-file")
+    finalize_target.add_argument("--run-id")
+    finalize.add_argument("--error-class", required=True)
     replay.add_argument(
         "--repeat-costly",
         action="store_true",
@@ -222,6 +234,10 @@ def _add_pipeline_arguments(parser: argparse.ArgumentParser) -> None:
     )
     parser.add_argument("--actor", default="openclaw")
     parser.add_argument("--idempotency-key")
+    parser.add_argument(
+        "--run-id-file",
+        help="将本次稳定 run ID 原子写入文件，供外部 watchdog 精确收口",
+    )
     parser.add_argument("--refresh", action="store_true")
 
 
@@ -248,6 +264,8 @@ def main(argv: list[str] | None = None) -> int:
                 reuse_costly=not args.repeat_costly,
             )
             return _print_application_result(result)
+        if args.command == "finalize-interrupted-run":
+            return _finalize_interrupted_run(args)
         if args.command == "monitor":
             return _monitor(args)
         if args.command == "backup":
@@ -305,6 +323,7 @@ def _run_pipeline(args: argparse.Namespace) -> int:
     # The candidate description is task-local and must never enter runtime
     # checkpoints, manifests, projection state, or downstream fact stores.
     payload.pop("candidate", None)
+    run_id_file = payload.pop("run_id_file", None)
     payload.update(
         {
             "direction": direction,
@@ -316,6 +335,8 @@ def _run_pipeline(args: argparse.Namespace) -> int:
         payload,
         refresh=args.refresh,
     )
+    if run_id_file:
+        _write_run_id_file(Path(run_id_file), make_run_id(key))
     result = app.run(payload, key)
     if plan.clarification.next_question:
         print(
@@ -323,6 +344,65 @@ def _run_pipeline(args: argparse.Namespace) -> int:
             + plan.clarification.next_question.prompt
         )
     return _print_application_result(result)
+
+
+def _write_run_id_file(path: Path, run_id: str) -> None:
+    if not _RUN_ID.fullmatch(run_id):
+        raise ValueError("invalid runtime run ID")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.is_symlink():
+        raise ValueError("run ID file must not be a symlink")
+    handle, temporary_name = tempfile.mkstemp(
+        prefix=f".{path.name}.",
+        suffix=".tmp",
+        dir=path.parent,
+        text=False,
+    )
+    temporary = Path(temporary_name)
+    try:
+        os.chmod(temporary, 0o600)
+        with os.fdopen(handle, "wb") as stream:
+            stream.write((run_id + "\n").encode("ascii"))
+            stream.flush()
+            os.fsync(stream.fileno())
+        os.replace(temporary, path)
+    finally:
+        if temporary.exists():
+            temporary.unlink()
+
+
+def _read_run_id_file(path: Path) -> str:
+    metadata = path.lstat()
+    if not stat.S_ISREG(metadata.st_mode) or path.is_symlink():
+        raise ValueError("run ID file must be a regular non-symlink file")
+    if metadata.st_nlink != 1 or metadata.st_size > 128:
+        raise ValueError("run ID file has unsafe metadata")
+    run_id = path.read_text(encoding="ascii").strip()
+    if not _RUN_ID.fullmatch(run_id):
+        raise ValueError("run ID file contains an invalid run ID")
+    return run_id
+
+
+def _finalize_interrupted_run(args: argparse.Namespace) -> int:
+    run_id = (
+        _read_run_id_file(Path(args.run_id_file))
+        if args.run_id_file
+        else str(args.run_id or "")
+    )
+    if not _RUN_ID.fullmatch(run_id):
+        raise ValueError("invalid runtime run ID")
+    changed = RunStore(args.runtime_db).finalize_interrupted_run(
+        run_id,
+        args.error_class,
+    )
+    _print_json(
+        {
+            "run_id": run_id,
+            "status": "failed" if changed else "already_terminal",
+            "error_class": args.error_class,
+        }
+    )
+    return 0
 
 
 def _print_application_result(result) -> int:

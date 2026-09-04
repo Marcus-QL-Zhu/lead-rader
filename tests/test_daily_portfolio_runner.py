@@ -59,6 +59,8 @@ def test_daily_topics_are_collected_by_one_application_run(tmp_path, monkeypatch
             str(env_file),
             "--josint-db",
             str(tmp_path / "josint.sqlite"),
+            "--run-id-file",
+            str(tmp_path / "active-run-id"),
         ]
     )
 
@@ -68,6 +70,9 @@ def test_daily_topics_are_collected_by_one_application_run(tmp_path, monkeypatch
     assert command[command.index("--direction") + 1] == "硬科技组合"
     assert command[command.index("--source-topics") + 1] == "具身智能|半导体"
     assert "--skip-feishu-projection" not in command
+    assert command[command.index("--run-id-file") + 1] == str(
+        tmp_path / "active-run-id"
+    )
 
 
 def test_daily_refresh_is_forwarded_to_the_single_run(tmp_path, monkeypatch):

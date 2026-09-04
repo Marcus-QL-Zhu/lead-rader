@@ -384,16 +384,22 @@ def test_access_metadata_and_detail_mismatches_fail_closed(tmp_path):
 def test_second_coordinator_run_does_not_refetch_unchanged_detail(tmp_path):
     adapter = MiitAdapter()
     channel = adapter.channels[0]
-    listing = _closed_listing()
-    index = adapter.parse_listing(
+    current_rows = [
+        ("e" * 32, POSITIVE_TITLE, "2026-07-28"),
+        ("c" * 32, "工业和信息化部关于启动先进制造试点的通知", "2026-07-28"),
+    ]
+    current_rows.extend(
+        (f"{number:032x}", f"科技司历史文件{number:02d}", "2026-06-30")
+        for number in range(1, 23)
+    )
+    listing = _api_payload(_page(current_rows))
+    indexes = adapter.parse_listing(
         channel,
         listing,
         _context(tmp_path),
-    )[0]
-    network = {
-        channel.url: listing,
-        index.canonical_url: _detail(index.title),
-    }
+    )
+    network = {channel.url: listing}
+    network.update({item.canonical_url: _detail(item.title) for item in indexes})
     calls: list[str] = []
 
     def fetch(url: str) -> bytes:
@@ -407,13 +413,16 @@ def test_second_coordinator_run_does_not_refetch_unchanged_detail(tmp_path):
         now=NOW,
     )
     first = coordinator.collect_source(channel.source_id, "人工智能")
+    network[channel.url] = _api_payload(
+        _page([current_rows[1], current_rows[0], *current_rows[2:]])
+    )
     calls.clear()
     second = coordinator.collect_source(channel.source_id, "人工智能")
 
-    assert first.run.listing_count == 1
-    assert first.run.detail_success_count == 1
-    assert first.run.rule_event_count == 1
+    assert first.run.listing_count == 2
+    assert first.run.detail_success_count == 2
     assert second.run.incremental_count == 0
+    assert first.run.listing_count == second.run.listing_count == 2
     assert calls == [channel.url]
 
 

@@ -18,6 +18,17 @@ from ..sanitization import sanitize_tree, sanitize_url
 
 _PERSISTENCE_SANITIZER_VERSION = "4"
 
+_TERMINAL_SEMANTIC_STATUSES = frozenset(
+    {
+        "accepted",
+        "repaired",
+        "rules_only",
+        "no_rule_seed",
+        "prefiltered",
+        "no_claims",
+    }
+)
+
 
 _COMPANY_PUNCTUATION = re.compile(
     r"[\s\-_.,\uFF0C\u3002\u00B7:\uFF1A;\uFF1B'\""
@@ -412,6 +423,7 @@ class AggregateStateStore:
         *,
         prompt_version: str,
         model_identity: str,
+        claim_contract_version: str | None = None,
         claim_centric_v27: bool | None = None,
         strict_claim_contract: bool | None = None,
     ) -> bool:
@@ -431,18 +443,22 @@ class AggregateStateStore:
             return False
         if not isinstance(audit, dict):
             return False
-        if audit.get("status") not in {
-            "accepted",
-            "repaired",
-            "rules_only",
-            "no_rule_seed",
-            "prefiltered",
-            "no_claims",
-        }:
+        if audit.get("status") not in _TERMINAL_SEMANTIC_STATUSES:
             return False
+        audit = self._repair_legacy_v27_semantic_hashes(
+            source_id=index.source_id,
+            source_article_id=index.source_article_id,
+            prompt_version=prompt_version,
+            audit=audit,
+        )
         if audit.get("index_content_hash") != index.content_hash:
             return False
         if audit.get("model_identity") != model_identity:
+            return False
+        if (
+            claim_contract_version is not None
+            and audit.get("claim_contract_version") != claim_contract_version
+        ):
             return False
         if (
             claim_centric_v27 is not None
@@ -454,7 +470,11 @@ class AggregateStateStore:
             and bool(audit.get("strict_claim_contract")) != strict_claim_contract
         ):
             return False
-        return True
+        return self._semantic_audit_has_complete_materialization(
+            index.source_id,
+            index.source_article_id,
+            audit,
+        )
 
     def has_prior_semantic_attempt(self, index: SourceArticleIndex) -> bool:
         """Return whether this unchanged article has any semantic history."""
@@ -473,21 +493,281 @@ class AggregateStateStore:
                 audit = json.loads(str(row["audit_json"]))
             except (TypeError, json.JSONDecodeError):
                 continue
+            if not isinstance(audit, dict):
+                continue
+            audit = self._repair_legacy_v27_semantic_hashes(
+                source_id=index.source_id,
+                source_article_id=index.source_article_id,
+                prompt_version=str(audit.get("prompt_version") or ""),
+                audit=audit,
+            )
             if (
-                isinstance(audit, dict)
-                and audit.get("index_content_hash") == index.content_hash
-                and audit.get("status")
-                in {
-                    "accepted",
-                    "repaired",
-                    "rules_only",
-                    "no_rule_seed",
-                    "prefiltered",
-                    "no_claims",
-                }
+                audit.get("index_content_hash") == index.content_hash
+                and audit.get("status") in _TERMINAL_SEMANTIC_STATUSES
+                and self._semantic_audit_has_complete_materialization(
+                    index.source_id,
+                    index.source_article_id,
+                    audit,
+                )
             ):
                 return True
         return False
+
+    def rebind_semantic_cache(
+        self,
+        index: SourceArticleIndex,
+        *,
+        article_content_hash: str,
+        prompt_version: str,
+        model_identity: str,
+        claim_contract_version: str | None = None,
+        claim_centric_v27: bool | None = None,
+        strict_claim_contract: bool | None = None,
+    ) -> bool:
+        """Rebind a valid semantic audit after listing-only hash drift.
+
+        A detail fetch is still required before this method is called.  Reuse
+        is allowed only when the clean article body is byte-for-byte unchanged
+        and the prompt/model/contract namespace is current.  This avoids a
+        needless MiniMax call without hiding a real article edit.
+        """
+
+        if not article_content_hash:
+            return False
+        row = self.connection.execute(
+            """
+            SELECT audit_json
+            FROM aggregate_semantic_attempts
+            WHERE source_id = ? AND source_article_id = ? AND prompt_version = ?
+            """,
+            (index.source_id, index.source_article_id, prompt_version),
+        ).fetchone()
+        if row is None:
+            return False
+        try:
+            audit = json.loads(str(row["audit_json"]))
+        except (TypeError, json.JSONDecodeError):
+            return False
+        if not isinstance(audit, dict):
+            return False
+        if audit.get("status") not in _TERMINAL_SEMANTIC_STATUSES:
+            return False
+        audit = self._repair_legacy_v27_semantic_hashes(
+            source_id=index.source_id,
+            source_article_id=index.source_article_id,
+            prompt_version=prompt_version,
+            audit=audit,
+        )
+        if audit.get("article_content_hash") != article_content_hash:
+            return False
+        if audit.get("model_identity") != model_identity:
+            return False
+        if (
+            claim_contract_version is not None
+            and audit.get("claim_contract_version") != claim_contract_version
+        ):
+            return False
+        if (
+            claim_centric_v27 is not None
+            and bool(audit.get("claim_centric_v27")) != claim_centric_v27
+        ):
+            return False
+        if not self._semantic_audit_has_complete_materialization(
+            index.source_id,
+            index.source_article_id,
+            audit,
+        ):
+            return False
+        if (
+            strict_claim_contract is not None
+            and bool(audit.get("strict_claim_contract")) != strict_claim_contract
+        ):
+            return False
+        previous_hash = str(audit.get("index_content_hash") or "")
+        if previous_hash == index.content_hash:
+            return True
+        audit["index_content_hash"] = index.content_hash
+        audit["cache_rebound_from_index_content_hash"] = previous_hash
+        audit["cache_rebound_at"] = _now()
+        safe_audit = sanitize_semantic_audit(audit)
+        self.connection.execute(
+            """
+            UPDATE aggregate_semantic_attempts
+            SET audit_json = ?
+            WHERE source_id = ? AND source_article_id = ? AND prompt_version = ?
+            """,
+            (
+                json.dumps(safe_audit, ensure_ascii=False, sort_keys=True),
+                index.source_id,
+                index.source_article_id,
+                prompt_version,
+            ),
+        )
+        self.connection.commit()
+        return True
+
+    def _repair_legacy_v27_semantic_hashes(
+        self,
+        *,
+        source_id: str,
+        source_article_id: str,
+        prompt_version: str,
+        audit: dict[str, Any],
+    ) -> dict[str, Any]:
+        """Safely recover hashes omitted by the original V27 audit writer.
+
+        The repair is deliberately fail closed.  It only trusts the persisted
+        clean article when every materialized event belongs to that body, the
+        recorded event count agrees, and no unresolved failure exists for the
+        article.  This prevents the deployment fix from turning the historical
+        V27 corpus into a one-time MiniMax backfill.
+        """
+
+        if audit.get("index_content_hash") and audit.get("article_content_hash"):
+            return audit
+        if (
+            audit.get("status") not in _TERMINAL_SEMANTIC_STATUSES
+            or audit.get("claim_centric_v27") is not True
+            or "strict_claim_contract" not in audit
+            or not str(audit.get("claim_contract_version") or "")
+            or not str(audit.get("model_identity") or "")
+            or not prompt_version
+        ):
+            return audit
+        if self.has_open_dead_letter(
+            source_id=source_id,
+            source_article_id=source_article_id,
+        ):
+            return audit
+        try:
+            expected_events = int(audit["final_event_count"])
+        except (KeyError, TypeError, ValueError):
+            return audit
+        if expected_events < 0:
+            return audit
+        clean = self.connection.execute(
+            """
+            SELECT c.content_hash, c.article_json, c.fetched_at, a.attempted_at
+            FROM aggregate_clean_articles AS c
+            JOIN aggregate_semantic_attempts AS a
+              ON a.source_id = c.source_id
+             AND a.source_article_id = c.source_article_id
+             AND a.prompt_version = ?
+            WHERE c.source_id = ? AND c.source_article_id = ?
+            """,
+            (prompt_version, source_id, source_article_id),
+        ).fetchone()
+        if clean is None:
+            return audit
+        clean_hash = str(clean["content_hash"] or "")
+        try:
+            clean_payload = json.loads(str(clean["article_json"]))
+            embedded_hash = str(clean_payload.get("content_hash") or "")
+            embedded_index = clean_payload.get("index") or {}
+            embedded_index_hash = str(embedded_index.get("content_hash") or "")
+        except (AttributeError, TypeError, json.JSONDecodeError):
+            return audit
+        if not clean_hash or clean_hash != embedded_hash or not embedded_index_hash:
+            return audit
+        if expected_events == 0:
+            # A zero-event audit has no event row that can carry the body hash.
+            # It is recoverable only when the clean article was durably written
+            # before this exact audit and has not been rewritten since. Equal
+            # second-resolution timestamps remain ambiguous and fail closed.
+            try:
+                fetched_at = datetime.fromisoformat(str(clean["fetched_at"]))
+                attempted_at = datetime.fromisoformat(str(clean["attempted_at"]))
+            except (TypeError, ValueError):
+                return audit
+            if fetched_at >= attempted_at:
+                return audit
+        counts = self.connection.execute(
+            """
+            SELECT
+                COUNT(*) AS total,
+                SUM(CASE WHEN content_hash = ? THEN 1 ELSE 0 END) AS body_matching,
+                SUM(CASE WHEN prompt_version = ? THEN 1 ELSE 0 END) AS prompt_matching
+            FROM aggregate_semantic_events
+            WHERE source_id = ? AND source_article_id = ?
+            """,
+            (clean_hash, prompt_version, source_id, source_article_id),
+        ).fetchone()
+        total = int(counts["total"] if counts else 0)
+        body_matching = int((counts["body_matching"] if counts else 0) or 0)
+        prompt_matching = int((counts["prompt_matching"] if counts else 0) or 0)
+        if (
+            total != expected_events
+            or body_matching != expected_events
+            or prompt_matching != expected_events
+        ):
+            return audit
+        existing_index_hash = str(audit.get("index_content_hash") or "")
+        existing_article_hash = str(audit.get("article_content_hash") or "")
+        if existing_index_hash and existing_index_hash != embedded_index_hash:
+            return audit
+        if existing_article_hash and existing_article_hash != clean_hash:
+            return audit
+        repaired = dict(audit)
+        repaired["index_content_hash"] = embedded_index_hash
+        repaired["article_content_hash"] = clean_hash
+        repaired["legacy_hashes_recovered_at"] = _now()
+        safe_audit = sanitize_semantic_audit(repaired)
+        self.connection.execute(
+            """
+            UPDATE aggregate_semantic_attempts
+            SET audit_json = ?
+            WHERE source_id = ? AND source_article_id = ? AND prompt_version = ?
+            """,
+            (
+                json.dumps(safe_audit, ensure_ascii=False, sort_keys=True),
+                source_id,
+                source_article_id,
+                prompt_version,
+            ),
+        )
+        self.connection.commit()
+        return safe_audit
+
+    def _semantic_audit_has_complete_materialization(
+        self,
+        source_id: str,
+        source_article_id: str,
+        audit: dict[str, Any],
+    ) -> bool:
+        """Verify that a terminal audit, clean body, and event rows agree."""
+
+        article_hash = str(audit.get("article_content_hash") or "")
+        if not article_hash:
+            return False
+        try:
+            expected_events = int(audit["final_event_count"])
+        except (KeyError, TypeError, ValueError):
+            return False
+        if expected_events < 0:
+            return False
+        clean = self.connection.execute(
+            """
+            SELECT content_hash FROM aggregate_clean_articles
+            WHERE source_id = ? AND source_article_id = ?
+            """,
+            (source_id, source_article_id),
+        ).fetchone()
+        if clean is None or str(clean["content_hash"]) != article_hash:
+            return False
+        events = self.connection.execute(
+            """
+            SELECT COUNT(*) AS total FROM aggregate_semantic_events
+            WHERE source_id = ? AND source_article_id = ?
+              AND content_hash = ? AND prompt_version = ?
+            """,
+            (
+                source_id,
+                source_article_id,
+                article_hash,
+                str(audit.get("prompt_version") or ""),
+            ),
+        ).fetchone()
+        return int(events["total"] if events else 0) == expected_events
 
     def store_article(self, article: CleanArticle) -> None:
         safe_index = replace(
@@ -537,6 +817,8 @@ class AggregateStateStore:
         source_id: str,
         source_article_id: str,
         events: list[SemanticEvent],
+        *,
+        _commit: bool = True,
     ) -> None:
         self.connection.execute(
             """
@@ -635,7 +917,8 @@ class AggregateStateStore:
                             _now(),
                         ),
                     )
-        self.connection.commit()
+        if _commit:
+            self.connection.commit()
 
     def canonical_alias_map(self) -> dict[str, str]:
         rows = self.connection.execute(
@@ -703,13 +986,23 @@ class AggregateStateStore:
     def events_for_source(self, source_id: str) -> list[SemanticEvent]:
         rows = self.connection.execute(
             """
-            SELECT event_json FROM aggregate_semantic_events
-            WHERE source_id = ?
-            ORDER BY processed_at DESC, source_article_id DESC
+            SELECT e.event_json, i.canonical_url
+            FROM aggregate_semantic_events AS e
+            LEFT JOIN aggregate_article_index AS i
+              ON i.source_id = e.source_id
+             AND i.source_article_id = e.source_article_id
+            WHERE e.source_id = ?
+            ORDER BY e.processed_at DESC, e.source_article_id DESC
             """,
             (source_id,),
         ).fetchall()
-        return [self._event_from_json(str(row["event_json"])) for row in rows]
+        return [
+            self._event_from_json(
+                str(row["event_json"]),
+                canonical_url=str(row["canonical_url"] or ""),
+            )
+            for row in rows
+        ]
 
     def events_for_article(
         self,
@@ -719,19 +1012,38 @@ class AggregateStateStore:
         content_hash: str = "",
     ) -> list[SemanticEvent]:
         query = """
-            SELECT event_json FROM aggregate_semantic_events
-            WHERE source_id = ? AND source_article_id = ?
+            SELECT e.event_json, i.canonical_url
+            FROM aggregate_semantic_events AS e
+            LEFT JOIN aggregate_article_index AS i
+              ON i.source_id = e.source_id
+             AND i.source_article_id = e.source_article_id
+            WHERE e.source_id = ? AND e.source_article_id = ?
         """
         parameters: list[Any] = [source_id, source_article_id]
         if content_hash:
-            query += " AND content_hash = ?"
+            query += " AND e.content_hash = ?"
             parameters.append(content_hash)
         rows = self.connection.execute(query, parameters).fetchall()
-        return [self._event_from_json(str(row["event_json"])) for row in rows]
+        return [
+            self._event_from_json(
+                str(row["event_json"]),
+                canonical_url=str(row["canonical_url"] or ""),
+            )
+            for row in rows
+        ]
 
     @staticmethod
-    def _event_from_json(payload: str) -> SemanticEvent:
+    def _event_from_json(
+        payload: str,
+        *,
+        canonical_url: str = "",
+    ) -> SemanticEvent:
         raw = json.loads(payload)
+        if canonical_url:
+            # The relational index column is the canonical URL authority.
+            # This also repairs reads of legacy event JSON whose numeric path
+            # was mistaken for a phone number by an older sanitizer.
+            raw["canonical_url"] = canonical_url
         for field in (
             "company_mentions",
             "industry_tags",
@@ -768,7 +1080,7 @@ class AggregateStateStore:
     ) -> list[SourceArticleIndex]:
         rows = self.connection.execute(
             """
-            SELECT DISTINCT i.index_json
+            SELECT DISTINCT i.index_json, i.canonical_url
             FROM aggregate_dead_letters AS d
             JOIN aggregate_article_index AS i
               ON i.source_id = d.source_id
@@ -784,6 +1096,10 @@ class AggregateStateStore:
         for row in rows:
             try:
                 raw = json.loads(str(row["index_json"]))
+                # The relational column is the canonical identity authority.
+                # Legacy JSON blobs could have numeric URL path segments
+                # mistaken for phone numbers by an old PII sanitizer.
+                raw["canonical_url"] = str(row["canonical_url"])
                 output.append(SourceArticleIndex(**raw))
             except (TypeError, ValueError, json.JSONDecodeError):
                 continue
@@ -928,7 +1244,12 @@ class AggregateStateStore:
                 error=f"{claim_id}: {error}"[:2000],
             )
 
-    def store_semantic_audit(self, audit: dict[str, Any]) -> None:
+    def store_semantic_audit(
+        self,
+        audit: dict[str, Any],
+        *,
+        _commit: bool = True,
+    ) -> None:
         if not audit:
             return
         safe_audit = sanitize_semantic_audit(audit)
@@ -959,7 +1280,54 @@ class AggregateStateStore:
                 json.dumps(safe_audit, ensure_ascii=False, sort_keys=True),
             ),
         )
-        self.connection.commit()
+        if _commit:
+            self.connection.commit()
+
+    def store_semantic_result(
+        self,
+        *,
+        source_id: str,
+        source_article_id: str,
+        audit: dict[str, Any],
+        events: list[SemanticEvent],
+    ) -> None:
+        """Atomically replace one article's semantic audit and events."""
+
+        if str(audit.get("source_id") or "") != source_id or str(
+            audit.get("source_article_id") or ""
+        ) != source_article_id:
+            raise ValueError("semantic audit identity does not match article")
+        try:
+            expected_events = int(audit["final_event_count"])
+        except (KeyError, TypeError, ValueError) as exc:
+            raise ValueError("semantic audit has no valid final_event_count") from exc
+        if expected_events != len(events):
+            raise ValueError("semantic audit event count does not match events")
+        article_hash = str(audit.get("article_content_hash") or "")
+        if not article_hash:
+            raise ValueError("semantic audit has no article_content_hash")
+        if any(
+            event.source_id != source_id
+            or event.source_article_id != source_article_id
+            or event.content_hash != article_hash
+            for event in events
+        ):
+            raise ValueError("semantic event identity/body hash does not match audit")
+
+        self.connection.execute("SAVEPOINT aggregate_semantic_result")
+        try:
+            self.store_semantic_audit(audit, _commit=False)
+            self.store_events(
+                source_id,
+                source_article_id,
+                events,
+                _commit=False,
+            )
+            self.connection.execute("RELEASE aggregate_semantic_result")
+        except BaseException:
+            self.connection.execute("ROLLBACK TO aggregate_semantic_result")
+            self.connection.execute("RELEASE aggregate_semantic_result")
+            raise
 
     def update_cursor(
         self,

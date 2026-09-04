@@ -171,11 +171,7 @@ class Kr36Adapter(AggregateAdapter):
                 "time_label": time_label,
                 **project,
             }
-            stable_structured = {
-                key: value
-                for key, value in structured.items()
-                if key != "time_label"
-            }
+            stable_structured = self.stable_index_metadata(structured)
             content_hash = self.stable_hash(
                 "\n".join(
                     (

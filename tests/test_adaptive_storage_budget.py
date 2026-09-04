@@ -28,7 +28,7 @@ def test_adaptive_storage_connections_have_a_bounded_working_set(tmp_path):
 
 
 def test_adaptive_selectors_can_be_disabled_without_opening_storage(
-    tmp_path, monkeypatch
+    tmp_path, monkeypatch, caplog
 ):
     monkeypatch.setenv("LEAD_RADAR_ADAPTIVE_SELECTORS", "0")
     storage_path = tmp_path / "disabled.sqlite3"
@@ -48,3 +48,4 @@ def test_adaptive_selectors_can_be_disabled_without_opening_storage(
     assert not result.elements
     assert result.method == "failed"
     assert not storage_path.exists()
+    assert not any("auto_save" in record.getMessage() for record in caplog.records)

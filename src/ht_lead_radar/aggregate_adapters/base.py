@@ -74,6 +74,38 @@ class AggregateAdapter(ABC):
     channels: tuple[SourceChannel, ...] = ()
     minimum_listing_count = 1
     maximum_listing_count = 500
+    # Listing location and relative-display metadata describe the current web
+    # page, not the underlying article.  Hashing them makes an unchanged item
+    # look new whenever pagination, ranking, or labels such as ``3 hours ago``
+    # move.  Keep one source-independent deny-list so adapters do not each
+    # rediscover this incremental-crawl invariant.
+    volatile_index_metadata_keys = frozenset(
+        {
+            "archive_page_count",
+            "archive_total_count",
+            "category_position",
+            "closed_window_end",
+            "closed_window_start",
+            "cursor",
+            "cursor_value",
+            "discovered_at",
+            "fetch_time",
+            "fetched_at",
+            "homepage_item",
+            "homepage_section",
+            "image_url",
+            "listing_date_label",
+            "listing_position",
+            "listing_position_on_page",
+            "logo_url",
+            "page",
+            "page_position",
+            "run_id",
+            "thumbnail_url",
+            "time_label",
+            "updated_at",
+        }
+    )
 
     def channel_for(self, source_id: str) -> SourceChannel:
         for channel in self.channels:
@@ -185,6 +217,22 @@ class AggregateAdapter(ABC):
     @staticmethod
     def stable_hash(value: str) -> str:
         return sha256(value.encode("utf-8")).hexdigest()
+
+    @classmethod
+    def stable_index_metadata(
+        cls,
+        structured_data: dict[str, Any],
+        *,
+        extra_volatile_keys: tuple[str, ...] = (),
+    ) -> dict[str, Any]:
+        """Return only article-intrinsic listing metadata for fingerprints."""
+
+        volatile = cls.volatile_index_metadata_keys.union(extra_volatile_keys)
+        return {
+            key: value
+            for key, value in structured_data.items()
+            if key not in volatile and not key.endswith("_time_label")
+        }
 
     @staticmethod
     def clean_text(value: str) -> str:

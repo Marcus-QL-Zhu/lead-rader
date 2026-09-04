@@ -104,3 +104,95 @@ After deploying:
 - run a JOSINT adapter smoke test;
 - manually run the daily launcher when operationally safe;
 - inspect the generated report, health output, and exit status.
+
+## Mandatory project lessons and regression guardrails
+
+Before changing source collection, incremental identity, semantic processing,
+company/event normalization, demand inference, talent drafts, historical
+evaluation, OpenClaw/Feishu delivery, approval, or production runtime, read:
+
+- `docs/project-pitfalls-and-lessons.md` in this repository; and
+- the local knowledge copy at
+  `C:\Users\wande\Documents\LLM-wiki\wiki\explorations\lead-radar-project-pitfalls-and-lessons.md`
+  when it is available.
+
+The repository copy is the engineering source of truth. Keep the LLM-wiki copy,
+its `wiki/index.md` entry, and its `manifests/sources.md` entry synchronized when
+the lesson set changes.
+
+The following are hard requirements, not optional design suggestions:
+
+- Diagnose failures from the earliest responsible layer: source, stable
+  identity, document routing/item scope, entity/action ledger, MiniMax
+  adjudication, event clustering, role inference, draft/persistence, then
+  delivery/runtime. Do not patch a prompt to hide an upstream defect.
+- Do not include relative time labels, list positions, page/cursor values,
+  access/check timestamps, discovery timestamps, or run metadata in semantic
+  content fingerprints. Every high-value adapter needs a second-fetch
+  regression proving dynamic display changes do not trigger a new LLM call.
+- Treat relational canonical URL columns as identity authorities. Structured
+  URL fields must use URL-aware credential/query sanitization; never run generic
+  phone-number redaction over an article URL path. A listing-hash migration may
+  rebind cached semantics only after an unchanged detail-body hash and an exact
+  prompt/model/contract match are proven.
+- Persist each semantic audit and its complete event/alias materialization in
+  one transaction. A terminal cache hit requires matching index/body hashes,
+  final event count, prompt, model, and claim contract. Legacy cache repair must
+  fail closed unless those facts can be reconstructed from consistent rows;
+  never invent missing hashes merely to avoid a model call.
+- Daily discovery must use broad industry/aggregate sources fetched once as a
+  union. Specific company websites are prohibited as daily discovery inputs and
+  may only be used later for explicit verification.
+- Scrapling is a bounded DOM-relocation fallback only. When adaptive mode is
+  disabled, do not pass `auto_save` or open adaptive storage. Never use it to
+  bypass authentication, captcha, rate limits, or access controls.
+- Production permits at most one Chromium process at a time and defaults to one
+  LLM worker. Test-only MiniMax concurrency may be four. HTTP reads, each source,
+  collection, LLM batches, and the whole daily run all require wall-clock
+  bounds and isolated failure handling.
+- MiniMax may adjudicate deterministic claims but may not invent a company,
+  event, status, quote, or evidence. It must choose stable entity/claim IDs and
+  pass deterministic schema and verbatim-grounding checks. Lead Radar calls the
+  configured provider API directly; it does not ask the OpenClaw Agent to do
+  semantic analysis or job-ad generation.
+- Director+ role hypotheses require an explicit mechanism chain from event or
+  network exposure to responsibility/capability bottleneck and organizational
+  response. Job advertisements and JOSINT are late validation, not historical
+  prediction features.
+- The Director+ main evaluation excludes manager, expert, and engineer postings
+  as passing labels, even though the broader system may collect them. Historical
+  evaluation must be point-in-time, company-grouped, leakage-audited, and keep
+  `unknown/right-censored` distinct from negative.
+- Daily Top 20 may relax soft score thresholds but never the Director+ and
+  upstream-signal hard gates. Use a seven-day company cooldown, with a bypass
+  only for materially new evidence. Do not add a negative-signal deduction
+  module without a new user decision.
+- Talent JSON must comply with the current `liepin-job-posting/SKILL.md`, use
+  exactly one city (`上海` when uncertain), persist every human revision before
+  approval, include a valid expiry, and never add an unsolicited talent-pool
+  disclaimer. Persist the company-signal-role-draft relationship, not candidate
+  resumes or derived candidate profiles.
+- The OpenClaw/Feishu daily report must show the global candidate-company
+  summary and selected/suppressed/failure counts, not only the generated drafts.
+  Every draft must remain linked internally to its source company, inferred
+  role, evidence, and persisted Liepin JSON while the public ad stays anonymous.
+- Natural-language approval is valid when OpenClaw can unambiguously resolve
+  the currently displayed drafts; never force the user to repeat an exact CLI
+  string or expose a snapshot code. Hook/cron/report delivery is never approval.
+  Keep internal draft IDs, payload hashes, delivery state, and publish
+  idempotency strict.
+- The 05:00 run must persist a readable completion snapshot even on zero drafts,
+  partial source health, draft failure, timeout, or SIGTERM. The 05:50 and 06:50
+  OpenClaw jobs only reconcile persisted state. A normal same-day replay should
+  return `already_reported/no_change`, not a misleading lookup failure. An
+  out-of-process watchdog must finalize the exact atomically recorded run ID;
+  never sweep or rewrite unrelated or already-terminal runtime rows.
+- Never infer server shutdown from an earlier conversation. Shut down only when
+  the current user request explicitly authorizes it.
+- Use user-scoped GitHub credential storage for cross-session `gh` access. Never
+  place a GitHub token in this repository, project env files, prompts, or docs.
+
+When a change fixes a production incident, a frozen-evaluation failure, or a
+new product-boundary decision, update the lesson document in the same change.
+Record the symptom, responsible layer, failed approach, permanent guardrail,
+verification evidence, and any remaining uncertainty.

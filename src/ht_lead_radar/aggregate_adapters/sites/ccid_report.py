@@ -406,6 +406,7 @@ class CcidReportCommentaryAdapter(AggregateAdapter):
             "document_type": "commentary",
             "document_type_target": ("commentary",),
         }
+        stable_structured = self.stable_index_metadata(structured)
         content_hash = self.stable_hash(
             "\n".join(
                 (
@@ -413,7 +414,7 @@ class CcidReportCommentaryAdapter(AggregateAdapter):
                     title,
                     published_at,
                     summary,
-                    repr(sorted(structured.items())),
+                    repr(sorted(stable_structured.items())),
                 )
             )
         )

@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 
 import pytest
 
@@ -88,11 +88,11 @@ def _detail(title: str, body: str | None = None) -> bytes:
     """.encode()
 
 
-def _context(tmp_path):
+def _context(tmp_path, *, now=NOW):
     return AdapterContext.create(
         state_db=tmp_path / "state.sqlite3",
         fetch=lambda _: b"",
-        now=NOW,
+        now=now,
     )
 
 
@@ -106,6 +106,31 @@ def test_listing_enumerates_every_visible_item_without_keyword_prefilter(tmp_pat
     assert [item.listing_position for item in articles] == [1, 2, 3, 4, 5]
     assert articles[0].structured_data["company"] == "高云半导体"
     assert articles[0].canonical_url == "https://lieyunpro.com/archives/502050"
+
+
+def test_listing_hash_ignores_relative_time_and_page_position_drift(tmp_path):
+    adapter = LieyunAdapter()
+    channel = adapter.channels[0]
+    first = adapter._parse_listing_page(
+        channel,
+        _listing(),
+        _context(tmp_path),
+        page_url=channel.url,
+        position_offset=0,
+        first_page=True,
+    )
+    moved = adapter._parse_listing_page(
+        channel,
+        _listing(),
+        _context(tmp_path, now=NOW + timedelta(days=1)),
+        page_url="https://lieyunpro.com/archives/p2.html",
+        position_offset=20,
+        first_page=False,
+    )
+
+    assert first[0].published_at != moved[0].published_at
+    assert first[0].listing_position != moved[0].listing_position
+    assert first[0].content_hash == moved[0].content_hash
 
 
 def test_detail_extracts_dedicated_body_and_excludes_page_chrome(tmp_path):

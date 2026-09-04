@@ -84,13 +84,14 @@ class AdaptiveSelector:
         minimum_count: int = 1,
         maximum_count: int | None = None,
     ) -> Selection:
-        exact = tuple(
-            self._selector.css(
-                exact_selector,
-                identifier=identifier,
-                auto_save=True,
-            )
-        )
+        # Scrapling warns for every selector call when ``auto_save`` is sent
+        # while adaptive mode is disabled.  Production deliberately disables
+        # adaptive storage, so keep the ordinary CSS path completely ordinary
+        # instead of paying the warning/logging overhead hundreds of times.
+        exact_options: dict[str, Any] = {}
+        if self._adaptive_enabled:
+            exact_options.update(identifier=identifier, auto_save=True)
+        exact = tuple(self._selector.css(exact_selector, **exact_options))
         if self._count_valid(exact, minimum_count, maximum_count):
             return Selection(exact, "exact", None)
         if not self._adaptive_enabled:

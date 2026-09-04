@@ -474,6 +474,31 @@ def test_stcn_second_run_does_not_refetch_unchanged_details(tmp_path):
         now=NOW,
     )
     first = coordinator.collect_source(CHANNEL.source_id, "硬科技")
+    items = _fixture_items()
+    first_id = items[0]["time"]
+    pages.clear()
+    pages.update(
+        {
+            1: _api_document(
+                1,
+                items[:2],
+                first_id=first_id,
+                max_id=items[1]["time"],
+            ),
+            2: _api_document(
+                2,
+                items[2:],
+                first_id=first_id,
+                max_id=items[4]["time"],
+            ),
+            3: _api_document(
+                3,
+                None,
+                first_id=first_id,
+                max_id=items[4]["time"],
+            ),
+        }
+    )
     calls.clear()
     second = coordinator.collect_source(CHANNEL.source_id, "硬科技")
 

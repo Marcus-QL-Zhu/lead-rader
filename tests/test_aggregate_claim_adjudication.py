@@ -165,7 +165,9 @@ def test_claim_centric_processor_accepts_isolated_prompt_experiment_config() -> 
     )
 
     assert events[0].prompt_version == "experiment-r1-a"
-    assert processor.cache_key == "experiment-r1-a|minimax/test"
+    assert processor.cache_key == (
+        "experiment-r1-a|minimax/test|experiment-contract"
+    )
     assert runner.system_prompt == "custom-system"
     assert '"contract_version":"experiment-contract"' in runner.prompt
     assert json.dumps(
@@ -180,7 +182,7 @@ def test_semantic_wrapper_passes_isolated_claim_prompt_config() -> None:
         claim_prompt_config={"prompt_version": "experiment-wrapper-v1"},
     )
 
-    assert processor.cache_key == "experiment-wrapper-v1|rules-only"
+    assert processor.cache_key.endswith("|rules-only|v2-shadow")
 
 
 def test_semantic_wrapper_rejects_unknown_claim_prompt_config() -> None:
@@ -347,6 +349,8 @@ def test_minimax_processor_delegates_only_when_v27_flag_is_enabled() -> None:
     assert processor.last_audit["claim_contract_version"] == (
         "v5-open-action-ledger"
     )
+    assert processor.last_audit["index_content_hash"] == "index-hash"
+    assert processor.last_audit["article_content_hash"] == "body-hash"
 
 
 def test_v27_restores_citations_from_immutable_source_whitespace() -> None:

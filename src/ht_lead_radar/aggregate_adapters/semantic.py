@@ -18,6 +18,7 @@ from .body_scope import (
 )
 from .document_router import route_document
 from .claim_adjudication import (
+    CONTRACT_VERSION as CLAIM_CENTRIC_CONTRACT_VERSION,
     PROMPT_VERSION as CLAIM_CENTRIC_PROMPT_VERSION,
     ClaimCentricSemanticProcessor,
 )
@@ -202,6 +203,17 @@ class MiniMaxSemanticProcessor:
         return PROMPT_VERSION
 
     @property
+    def semantic_claim_contract_version(self) -> str:
+        """Return the exact semantic contract namespace used by this run."""
+
+        if self.claim_centric_v27 and self.runner is not None:
+            return str(
+                self.claim_prompt_config.get("contract_version")
+                or CLAIM_CENTRIC_CONTRACT_VERSION
+            )
+        return CLAIM_CONTRACT_VERSION
+
+    @property
     def cache_key(self) -> str:
         configured = self.claim_prompt_config.get("prompt_version")
         prompt_version = (
@@ -209,7 +221,10 @@ class MiniMaxSemanticProcessor:
             if self.claim_centric_v27
             else PROMPT_VERSION
         )
-        return f"{prompt_version}|{self.model_identity}"
+        return (
+            f"{prompt_version}|{self.model_identity}|"
+            f"{self.semantic_claim_contract_version}"
+        )
 
     @staticmethod
     def _runner_identity(runner: PromptRunner | None) -> str:
@@ -792,6 +807,8 @@ class MiniMaxSemanticProcessor:
         rule_events: list[SemanticEvent],
     ) -> list[SemanticEvent]:
         source_body = article.clean_body
+        source_index_content_hash = article.index.content_hash
+        source_article_content_hash = article.content_hash
         if self.claim_centric_v27 and self.runner is not None:
             scoped_body, window_decision = scope_long_article(
                 mask_semantic_body_scope(source_body),
@@ -808,7 +825,14 @@ class MiniMaxSemanticProcessor:
                     "semantic_window": window_decision.to_dict(),
                 },
             )
-            rule_events = self._normalize_rule_events(article, rule_events)
+            rule_events = [
+                replace(
+                    event,
+                    prompt_version=self.semantic_prompt_version,
+                    content_hash=source_article_content_hash,
+                )
+                for event in self._normalize_rule_events(article, rule_events)
+            ]
             v27 = ClaimCentricSemanticProcessor(
                 self.runner,
                 model_identity=self.model_identity,
@@ -825,6 +849,15 @@ class MiniMaxSemanticProcessor:
             self.last_audit = dict(v27.last_audit)
             self.last_audit["claim_centric_v27"] = True
             self.last_audit["strict_claim_contract"] = self.strict_claim_contract
+            self.last_audit["claim_contract_version"] = (
+                self.semantic_claim_contract_version
+            )
+            # Claim-centric processing scopes the body for model input, but
+            # cache validity is tied to the original persisted index and clean
+            # article.  Persist both hashes so a second daily crawl can prove
+            # that the materialized events still belong to this exact body.
+            self.last_audit["index_content_hash"] = source_index_content_hash
+            self.last_audit["article_content_hash"] = source_article_content_hash
             # Policy seeds may be retained after claim-centric projection and
             # the final normalizer may merge duplicate events.  Report the
             # same post-preservation count that callers receive.
@@ -840,7 +873,14 @@ class MiniMaxSemanticProcessor:
             article,
             clean_body=clean_semantic_body_scope(source_body),
         )
-        rule_events = self._normalize_rule_events(article, rule_events)
+        rule_events = [
+            replace(
+                event,
+                prompt_version=self.semantic_prompt_version,
+                content_hash=source_article_content_hash,
+            )
+            for event in self._normalize_rule_events(article, rule_events)
+        ]
         route = route_document(article)
         units = list(route.units)
         if not units:
@@ -862,6 +902,7 @@ class MiniMaxSemanticProcessor:
             "prompt_version": self.semantic_prompt_version,
             "model_identity": self.model_identity,
             "cache_key": self.cache_key,
+            "claim_contract_version": self.semantic_claim_contract_version,
             "claim_centric_v27": self.claim_centric_v27 and self.runner is not None,
             "strict_claim_contract": self.strict_claim_contract,
             "index_content_hash": article.index.content_hash,
@@ -2565,6 +2606,7 @@ class MiniMaxSemanticProcessor:
             "prompt_version": self.semantic_prompt_version,
             "model_identity": self.model_identity,
             "cache_key": self.cache_key,
+            "claim_contract_version": self.semantic_claim_contract_version,
             "claim_centric_v27": self.claim_centric_v27 and self.runner is not None,
             "strict_claim_contract": self.strict_claim_contract,
             "index_content_hash": article.index.content_hash,

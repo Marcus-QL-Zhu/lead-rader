@@ -86,6 +86,7 @@ set -- \
   --source-state-db data/fixed-sources.sqlite \
   --fact-db data/facts.sqlite \
   --runtime-db data/runtime.sqlite \
+  --run-id-file data/daily-active-run-id \
   --relationship-db data/relationships.sqlite \
   --budget-db data/search-budget.sqlite \
   --feishu-state-db data/feishu-projection.sqlite \
@@ -107,6 +108,18 @@ if [ -f config/suppressions.json ]; then set -- "$@" --suppressions config/suppr
 status=$?
 talent_draft_status=0
 completion_ready=0
+if [ "$status" -ne 0 ] && [ "$status" -ne 2 ]; then
+  finalizer_error_class="PortfolioRunFailed"
+  if [ "$status" -eq 124 ] || [ "$status" -eq 137 ]; then
+    finalizer_error_class="PortfolioWallClockTimeout"
+  fi
+  if ! "$PYTHON_BIN" scripts/run_lead_radar_v2.py finalize-interrupted-run \
+    --runtime-db data/runtime.sqlite \
+    --run-id-file data/daily-active-run-id \
+    --error-class "$finalizer_error_class"; then
+    echo "Lead Rader could not finalize the interrupted runtime row." >&2
+  fi
+fi
 if [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; then
   analysis_status="completed"
   "$PYTHON_BIN" scripts/run_lead_radar_v2.py monitor \

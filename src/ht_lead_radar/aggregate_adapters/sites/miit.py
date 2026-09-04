@@ -503,13 +503,14 @@ class MiitAdapter(AggregateAdapter):
                 "closed_window_end": window_end.isoformat(),
                 "company": "工业和信息化部",
             }
+            stable_structured = self.stable_index_metadata(structured)
             content_hash = self.stable_hash(
                 "\n".join(
                     (
                         canonical_url,
                         title,
                         published_at,
-                        repr(sorted(structured.items())),
+                        repr(sorted(stable_structured.items())),
                     )
                 )
             )

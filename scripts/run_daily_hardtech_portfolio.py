@@ -43,6 +43,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--source-state-db", default="data/fixed-sources.sqlite")
     parser.add_argument("--fact-db", default="data/facts.sqlite")
     parser.add_argument("--runtime-db", default="data/runtime.sqlite")
+    parser.add_argument(
+        "--run-id-file",
+        help="write the child pipeline run ID for the launcher's watchdog",
+    )
     parser.add_argument("--relationship-db", default="data/relationships.sqlite")
     parser.add_argument("--budget-db", default="data/search-budget.sqlite")
     parser.add_argument("--feishu-state-db", default="data/feishu-projection.sqlite")
@@ -138,6 +142,8 @@ def main(argv: list[str] | None = None) -> int:
         command.extend(["--suppressions", args.suppressions])
     if args.refresh:
         command.append("--refresh")
+    if args.run_id_file:
+        command.extend(["--run-id-file", args.run_id_file])
 
     completed = subprocess.run(command, check=False)
     if completed.returncode not in {0, 2}:

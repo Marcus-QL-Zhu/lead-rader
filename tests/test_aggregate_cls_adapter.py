@@ -274,6 +274,15 @@ def test_cls_second_run_does_not_refetch_unchanged_details(tmp_path):
         now=NOW,
     )
     first = coordinator.collect_source(CHANNEL.source_id, "硬科技")
+    first_page = json.loads(routes[DAY_END])["data"]["roll_data"]
+    second_page = json.loads(routes[DAY_END - 20])["data"]["roll_data"]
+    routes.clear()
+    routes.update(
+        {
+            DAY_END: _api(first_page[:1]),
+            DAY_END - 10: _api([first_page[1], *second_page]),
+        }
+    )
     calls.clear()
     second = coordinator.collect_source(CHANNEL.source_id, "硬科技")
 

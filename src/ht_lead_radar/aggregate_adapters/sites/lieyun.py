@@ -182,14 +182,16 @@ class LieyunAdapter(AggregateAdapter):
                 "time_label": time_label,
                 "company": self._company_from_title(title),
             }
+            stable_structured = self.stable_index_metadata(structured)
             content_hash = self.stable_hash(
                 "\n".join(
                     (
                         canonical_url,
                         title,
                         summary,
-                        published_at,
-                        repr(sorted(structured.items())),
+                        # Relative minute/hour/day labels make the inferred
+                        # date presentation metadata rather than identity.
+                        repr(sorted(stable_structured.items())),
                     )
                 )
             )

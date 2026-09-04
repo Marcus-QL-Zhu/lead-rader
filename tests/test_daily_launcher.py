@@ -50,6 +50,8 @@ def test_daily_launcher_persists_health_before_drafts_and_hooks_all_analysis_out
     assert "FALLBACK_KILL_GRACE_SECONDS=5" in script
     assert "--record-fallback-failure FeishuFallbackWallClockTimeout" in script
     assert "--record-analysis-failure" in script
+    assert "finalize-interrupted-run" in script
+    assert "--run-id-file data/daily-active-run-id" in script
     assert "--record-draft-failure" in script
     assert '--talent-completion-ready "$completion_ready"' in script
     assert "--require-report" in script

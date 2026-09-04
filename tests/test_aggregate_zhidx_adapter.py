@@ -1,4 +1,5 @@
 from datetime import datetime, timezone
+import re
 
 import pytest
 
@@ -258,10 +259,36 @@ def test_second_coordinator_run_does_not_refetch_unchanged_details(tmp_path):
         now=NOW,
     )
     first = coordinator.collect_source(channel.source_id, "硬科技")
+    new_title = "北辰机器人发布新一代控制器"
+    new_item = f"""
+        <li>
+          <div class="tag-info-left-title">
+            <a href="/p/7999.html" title="{new_title}">{new_title}</a>
+          </div>
+          <div class="tag-info-list-related">
+            <div class="iril-related-time">2026/07/29 16:00</div>
+          </div>
+        </li>
+    """.encode()
+    drifted = listing.replace(
+        b'<ul class="info-list">',
+        b'<ul class="info-list">' + new_item,
+    )
+    drifted = re.sub(
+        rb"<li>\s*<div class=\"tag-info-left-title\">\s*"
+        rb"<a href=\"/p/7010\.html\".*?</li>",
+        b"",
+        drifted,
+        count=1,
+        flags=re.DOTALL,
+    )
+    network[channel.url] = drifted
+    new_url = "https://zhidx.com/p/7999.html"
+    network[new_url] = _detail(new_title, "2026/07/29")
     calls.clear()
     second = coordinator.collect_source(channel.source_id, "硬科技")
 
     assert first.run.listing_count == 2
     assert first.run.detail_success_count == 2
-    assert second.run.incremental_count == 0
-    assert calls == [channel.url]
+    assert second.run.incremental_count == 1
+    assert calls == [channel.url, new_url]

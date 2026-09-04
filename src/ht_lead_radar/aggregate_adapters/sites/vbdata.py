@@ -161,14 +161,16 @@ class VbdataAdapter(AggregateAdapter):
                 "time_label": time_label,
                 "tracks": tracks,
             }
+            stable_structured = self.stable_index_metadata(structured)
             content_hash = self.stable_hash(
                 "\n".join(
                     (
                         canonical_url,
                         title,
                         summary,
-                        published_at,
-                        repr(sorted(structured.items())),
+                        # Listing dates can be inferred from relative labels;
+                        # neither value is a stable article identity signal.
+                        repr(sorted(stable_structured.items())),
                     )
                 )
             )

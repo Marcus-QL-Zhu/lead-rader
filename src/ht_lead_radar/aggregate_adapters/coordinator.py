@@ -434,6 +434,9 @@ class DedicatedAggregateCoordinator:
                             index,
                             prompt_version=self.processor.semantic_prompt_version,
                             model_identity=self.processor.model_identity,
+                            claim_contract_version=(
+                                self.processor.semantic_claim_contract_version
+                            ),
                             claim_centric_v27=self.processor.claim_centric_v27
                             and self.processor.runner is not None,
                             strict_claim_contract=self.strict_claim_contract,
@@ -449,6 +452,10 @@ class DedicatedAggregateCoordinator:
                                 store.events_for_article(
                                     source_id,
                                     index.source_article_id,
+                                    content_hash=store.article_content_hash(
+                                        source_id,
+                                        index.source_article_id,
+                                    ),
                                 ),
                                 channel.name,
                                 channel.source_grade,
@@ -483,6 +490,9 @@ class DedicatedAggregateCoordinator:
                             index,
                             prompt_version=self.processor.semantic_prompt_version,
                             model_identity=self.processor.model_identity,
+                            claim_contract_version=(
+                                self.processor.semantic_claim_contract_version
+                            ),
                             claim_centric_v27=self.processor.claim_centric_v27
                             and self.processor.runner is not None,
                             strict_claim_contract=self.strict_claim_contract,
@@ -516,11 +526,11 @@ class DedicatedAggregateCoordinator:
                                 article,
                                 reason="adapter_listing_router_rejected",
                             )
-                            store.store_semantic_audit(semantic_audit)
-                            store.store_events(
-                                source_id,
-                                index.source_article_id,
-                                semantic_events,
+                            store.store_semantic_result(
+                                source_id=source_id,
+                                source_article_id=index.source_article_id,
+                                audit=semantic_audit,
+                                events=semantic_events,
                             )
                             for resolved_stage in (
                                 "detail_fetch",
@@ -560,6 +570,9 @@ class DedicatedAggregateCoordinator:
                             index,
                             prompt_version=self.processor.semantic_prompt_version,
                             model_identity=self.processor.model_identity,
+                            claim_contract_version=(
+                                self.processor.semantic_claim_contract_version
+                            ),
                             claim_centric_v27=self.processor.claim_centric_v27
                             and self.processor.runner is not None,
                             strict_claim_contract=self.strict_claim_contract,
@@ -593,6 +606,33 @@ class DedicatedAggregateCoordinator:
                             article.extraction_method == "adaptive"
                             or index.discovery_method == "adaptive"
                         )
+                        if (
+                            prior_article_hash == article.content_hash
+                            and not semantic_still_current
+                            and not store.has_open_dead_letter(
+                                source_id=source_id,
+                                source_article_id=index.source_article_id,
+                            )
+                            and not force_reprocess
+                        ):
+                            semantic_still_current = store.rebind_semantic_cache(
+                                index,
+                                article_content_hash=article.content_hash,
+                                prompt_version=(
+                                    self.processor.semantic_prompt_version
+                                ),
+                                model_identity=self.processor.model_identity,
+                                claim_contract_version=(
+                                    self.processor.semantic_claim_contract_version
+                                ),
+                                claim_centric_v27=(
+                                    self.processor.claim_centric_v27
+                                    and self.processor.runner is not None
+                                ),
+                                strict_claim_contract=(
+                                    self.strict_claim_contract
+                                ),
+                            )
                         if (
                             prior_article_hash == article.content_hash
                             and semantic_still_current
@@ -665,7 +705,12 @@ class DedicatedAggregateCoordinator:
                         omissions_detected += int(
                             semantic_audit.get("omissions_detected") or 0
                         )
-                        store.store_semantic_audit(semantic_audit)
+                        store.store_semantic_result(
+                            source_id=source_id,
+                            source_article_id=index.source_article_id,
+                            audit=semantic_audit,
+                            events=semantic_events,
+                        )
                         semantic_error = _bounded_dead_letter_error(
                             semantic_audit.get("error"),
                             semantic_audit=semantic_audit,
@@ -706,11 +751,6 @@ class DedicatedAggregateCoordinator:
                             )
                         minimax_event_count += sum(
                             event.processor == "minimax" for event in semantic_events
-                        )
-                        store.store_events(
-                            source_id,
-                            index.source_article_id,
-                            semantic_events,
                         )
                         store.resolve_dead_letter(
                             source_id=source_id,

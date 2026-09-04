@@ -161,8 +161,17 @@ def test_vbdata_embedded_state_supplies_exact_relative_date(tmp_path):
         html.encode(),
         _context(tmp_path),
     )
+    relabeled = ADAPTER.parse_listing(
+        CHANNEL,
+        html.replace("1 天前", "8 小时前", 1).encode(),
+        _context(tmp_path),
+    )
 
     assert articles[0].published_at == "2026-07-14"
+    assert articles[0].structured_data["time_label"] != (
+        relabeled[0].structured_data["time_label"]
+    )
+    assert articles[0].content_hash == relabeled[0].content_hash
 
 
 def test_vbdata_detail_is_clean_and_checks_title_date(tmp_path):

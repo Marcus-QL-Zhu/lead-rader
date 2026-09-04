@@ -236,6 +236,9 @@ _STRUCTURED_TEXT_FIELD = re.compile(
     r"source_id|source_article_id|adapter_id|delivery_channel|event_type|"
     r"phase|mode|reason_code|code)$"
 )
+_URL_FIELD = re.compile(
+    r"(?i)(?:^|_)(?:url|urls|uri|uris|link|links)$"
+)
 
 
 def _normalized_key(value: object) -> str:
@@ -318,7 +321,15 @@ def sanitize_url(value: object, *, limit: int | None = None) -> str:
         netloc = f"{netloc}:{port}"
     query = urlencode(
         [
-            (key, item)
+            (
+                key,
+                _redact_pii(
+                    _TOKEN_SHAPE.sub(
+                        "[redacted-token]",
+                        _BEARER_VALUE.sub("Bearer [redacted]", item),
+                    )
+                ),
+            )
             for key, item in parse_qsl(parsed.query, keep_blank_values=True)
             if not _is_sensitive_url_query_key(key)
         ],
@@ -488,6 +499,33 @@ def sanitize_tree(
                     raw_value,
                     redact_pii=False,
                 )
+            elif _URL_FIELD.search(normalized_key):
+                # URL path segments often contain numeric article IDs that
+                # resemble phone numbers (for example ``2026-08-12-7``).
+                # Generic PII regexes must not corrupt those stable identities.
+                # ``sanitize_url`` still removes credentials, sensitive query
+                # parameters, and fragments at the persistence boundary.
+                if isinstance(raw_value, str):
+                    output[key] = sanitize_url(raw_value, limit=string_limit)
+                elif isinstance(raw_value, (list, tuple)):
+                    output[key] = [
+                        sanitize_url(item, limit=string_limit)
+                        if isinstance(item, str)
+                        else sanitize_tree(
+                            item,
+                            string_limit=string_limit,
+                            redact_pii=redact_pii,
+                            _redact_opaque_tokens=_redact_opaque_tokens,
+                        )
+                        for item in raw_value
+                    ]
+                else:
+                    output[key] = sanitize_tree(
+                        raw_value,
+                        string_limit=string_limit,
+                        redact_pii=redact_pii,
+                        _redact_opaque_tokens=_redact_opaque_tokens,
+                    )
             elif _DIAGNOSTIC_KEY.search(normalized_key):
                 output[key] = sanitize_tree(
                     raw_value,

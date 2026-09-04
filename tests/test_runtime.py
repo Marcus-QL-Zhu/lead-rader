@@ -370,6 +370,37 @@ def test_runtime_does_not_turn_database_paths_or_business_identity_into_placehol
     assert not (tmp_path / "[redacted-token]").exists()
 
 
+def test_finalize_interrupted_run_closes_run_checkpoint_and_effect(tmp_path):
+    store = RunStore(tmp_path / "interrupted.sqlite")
+    run = store.ensure_run("watchdog-run", {"trace": []})
+    store.set_run_state(run.run_id, "running", current_stage="collect")
+    store.start_checkpoint(
+        run.run_id,
+        "collect",
+        {"trace": []},
+        costly=True,
+        replay=False,
+    )
+    store.start_effect(run.run_id, "collect", "source:one", "token")
+
+    assert store.finalize_interrupted_run(
+        run.run_id,
+        RuntimeError("PortfolioWallClockTimeout"),
+    )
+    status = store.status(run.run_id)
+    effect = store.get_effect(run.run_id, "collect", "source:one")
+    assert status["status"] == "failed"
+    assert status["completed_at"]
+    assert status["stages"]["collect"]["status"] == "failed"
+    assert "PortfolioWallClockTimeout" in status["error"]
+    assert effect is not None and effect["status"] == "failed"
+    assert not store.finalize_interrupted_run(
+        run.run_id,
+        RuntimeError("must not overwrite terminal state"),
+    )
+    assert "must not overwrite" not in store.status(run.run_id)["error"]
+
+
 def test_replay_reuses_costly_stages_but_recomputes_cheap_stages(tmp_path):
     counts = Counter()
     store = RunStore(tmp_path / 'runs.sqlite')

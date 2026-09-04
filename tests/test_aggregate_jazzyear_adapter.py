@@ -269,6 +269,13 @@ def test_second_coordinator_run_does_not_refetch_unchanged_details(tmp_path):
         now=NOW,
     )
     first = coordinator.collect_source(channel.source_id, "硬科技")
+    network[adapter._listing_url(2, 2)] = _listing(
+        [
+            ("2011", "洞见窗口文章11", "2026-07-29"),
+            ("2010", "洞见窗口文章10", "2026-07-29"),
+            ("2012", "洞见窗口以前的边界文章", "2026-07-27"),
+        ]
+    )
     calls.clear()
     second = coordinator.collect_source(channel.source_id, "硬科技")
 

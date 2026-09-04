@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 import json
 import sqlite3
 
@@ -26,11 +26,11 @@ FINANCING = ADAPTER.channel_for("cyzone-financing")
 LATEST = ADAPTER.channel_for("cyzone-latest")
 
 
-def _context(tmp_path):
+def _context(tmp_path, *, now=NOW):
     return AdapterContext.create(
         state_db=tmp_path / "state.sqlite3",
         fetch=lambda _url: b"",
-        now=NOW,
+        now=now,
     )
 
 
@@ -41,12 +41,15 @@ def _latest_item(
     summary: str = "完整列表摘要，不按标题关键词过滤。",
     tags: tuple[str, ...] = ("创业公司", "融资", "快鲤鱼"),
     date: str = "07-29",
+    thumbnail: str = "/thumb.png",
 ) -> str:
     tag_html = "".join(f'<a href="/label/{tag}" rel="tag">{tag}</a>' for tag in tags)
     return f"""
     <div>
       <div class="article-item" data-id="{article_id}">
-        <a class="type-0 pic" href="/article/{article_id}.html"></a>
+        <a class="type-0 pic pic-a" href="/article/{article_id}.html">
+          <img src="{thumbnail}">
+        </a>
         <div class="item-intro">
           <a target="_blank" href="/article/{article_id}.html"
              class="item-title">{title}</a>
@@ -92,6 +95,22 @@ def _latest_listing(*, item_class: str = "article-item", date: str = "07-29") ->
     if date != "07-29":
         html = html.replace(">07-29<", f">{date}<")
     return html.encode()
+
+
+def test_latest_hash_ignores_relative_display_date_drift(tmp_path):
+    first = ADAPTER.parse_listing(
+        LATEST,
+        _latest_listing(date="今天"),
+        _context(tmp_path),
+    )
+    second = ADAPTER.parse_listing(
+        LATEST,
+        _latest_listing(date="今天"),
+        _context(tmp_path, now=NOW + timedelta(days=1)),
+    )
+
+    assert first[0].published_at != second[0].published_at
+    assert first[0].content_hash == second[0].content_hash
 
 
 def _capital_listing() -> bytes:
@@ -198,6 +217,19 @@ def test_cyzone_time_label_does_not_change_content_hash(tmp_path):
     assert [item.structured_data["time_label"] for item in first] != [
         item.structured_data["time_label"] for item in later
     ]
+
+
+def test_cyzone_thumbnail_drift_does_not_change_content_hash(tmp_path):
+    first_html = _latest_listing()
+    later_html = first_html.replace(b"/thumb.png", b"/thumb-v2.png?cache=2")
+
+    first = ADAPTER.parse_listing(FINANCING, first_html, _context(tmp_path))
+    later = ADAPTER.parse_listing(FINANCING, later_html, _context(tmp_path))
+
+    assert first[0].structured_data["thumbnail_url"] != (
+        later[0].structured_data["thumbnail_url"]
+    )
+    assert first[0].content_hash == later[0].content_hash
 
 
 def test_cyzone_relative_listing_time_uses_china_timezone_and_elapsed_time(tmp_path):

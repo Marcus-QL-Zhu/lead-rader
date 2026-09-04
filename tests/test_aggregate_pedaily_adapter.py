@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta, timezone
+import re
 
 import pytest
 
@@ -51,12 +52,14 @@ def _listing(
     first_id=566976,
     item_class="h-news lazyload",
     list_id="newslist-all",
+    same_time=False,
 ):
     items = []
     for position, title in enumerate(titles):
         article_id = str(first_id - position)
+        age_hours = 1 if same_time else position + 1
         published = (
-            NOW.astimezone(timezone(timedelta(hours=8))) - timedelta(hours=position + 1)
+            NOW.astimezone(timezone(timedelta(hours=8))) - timedelta(hours=age_hours)
         ).strftime("%Y-%m-%d %H:%M")
         items.append(
             f"""
@@ -79,6 +82,26 @@ def _listing(
         f"<html><body><ul class='masonry-list' id='{list_id}'>"
         f"{''.join(items)}</ul></body></html>"
     ).encode()
+
+
+def test_pedaily_listing_rank_drift_does_not_change_article_hash(tmp_path):
+    first_html = _listing(same_time=True).decode()
+    items = re.findall(r"<li\b.*?</li>", first_html, flags=re.DOTALL)
+    assert len(items) == len(TITLES)
+    second_html = (
+        "<html><body><ul class='masonry-list' id='newslist-all'>"
+        + "".join(reversed(items))
+        + "</ul></body></html>"
+    ).encode()
+
+    adapter = PedailyAdapter()
+    first = adapter.parse_listing(VCPE, first_html.encode(), _context(tmp_path))
+    second = adapter.parse_listing(VCPE, second_html, _context(tmp_path))
+    first_hashes = {item.source_article_id: item.content_hash for item in first}
+    second_hashes = {item.source_article_id: item.content_hash for item in second}
+
+    assert first_hashes == second_hashes
+    assert first[0].source_article_id == second[-1].source_article_id
 
 
 def _detail(title, body=None, *, author="投资界综合"):

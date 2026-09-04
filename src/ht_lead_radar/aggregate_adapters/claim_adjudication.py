@@ -1393,7 +1393,7 @@ class ClaimCentricSemanticProcessor:
 
     @property
     def cache_key(self) -> str:
-        return f"{self.prompt_version}|{self.model_identity}"
+        return f"{self.prompt_version}|{self.model_identity}|{self.contract_version}"
 
     def process(
         self,

@@ -48,7 +48,9 @@ def _opaque_idempotency_key(run_id: str) -> str:
 def _safe_error_text(error: object) -> str:
     diagnostic = safe_error(error)
     detail = diagnostic["detail"]
-    if detail.startswith(f"{diagnostic['error_class']}:"):
+    if detail == diagnostic["error_class"] or detail.startswith(
+        f"{diagnostic['error_class']}:"
+    ):
         return detail
     return (
         f"{diagnostic['error_class']}: {detail}"
@@ -464,7 +466,7 @@ class RunStore:
         error: object | None = None,
     ) -> None:
         now = _iso(self.clock())
-        completed = now if status == 'completed' else None
+        completed = now if status in {'completed', 'failed'} else None
         with self._connect() as connection:
             result = connection.execute(
                 '''
@@ -484,6 +486,53 @@ class RunStore:
             )
         if result.rowcount == 0:
             raise UnknownRun(run_id)
+
+    def finalize_interrupted_run(self, run_id: str, error: object) -> bool:
+        """Close in-flight runtime rows after an out-of-process watchdog kill.
+
+        The daily launcher owns the wall-clock watchdog, so the killed Python
+        process cannot reliably update SQLite itself.  This operation is
+        deliberately conditional and idempotent: completed or already-failed
+        runs are never rewritten.
+        """
+
+        now = _iso(self.clock())
+        safe_error = _safe_error_text(error)
+        with self._lock, self._connect() as connection:
+            connection.execute('BEGIN IMMEDIATE')
+            row = connection.execute(
+                'SELECT status FROM pipeline_runs WHERE run_id = ?',
+                (run_id,),
+            ).fetchone()
+            if row is None:
+                raise UnknownRun(run_id)
+            if str(row['status']) not in {'pending', 'running'}:
+                return False
+            connection.execute(
+                '''
+                UPDATE pipeline_checkpoints
+                SET status = 'failed', completed_at = ?, error = ?
+                WHERE run_id = ? AND status = 'running'
+                ''',
+                (now, safe_error, run_id),
+            )
+            connection.execute(
+                '''
+                UPDATE pipeline_effects
+                SET status = 'failed', updated_at = ?, error = ?
+                WHERE run_id = ? AND status = 'running'
+                ''',
+                (now, safe_error, run_id),
+            )
+            connection.execute(
+                '''
+                UPDATE pipeline_runs
+                SET status = 'failed', updated_at = ?, completed_at = ?, error = ?
+                WHERE run_id = ? AND status IN ('pending', 'running')
+                ''',
+                (now, now, safe_error, run_id),
+            )
+        return True
 
     def latest_checkpoint(
         self, run_id: str, stage: str

@@ -239,12 +239,13 @@ class SuzhouRobotAssociationAdapter(AggregateAdapter):
             raise ListingInvariantError(f"{channel.source_id} {category} card {card_no} has invalid URL, title, or date")
         published_at = datetime.combine(published, datetime.min.time(), tzinfo=_CHINA).isoformat()
         structured = {"homepage_category": category, "homepage_section": section_no, "homepage_item": card_no, "listing_date_label": date_label}
+        stable_structured = self.stable_index_metadata(structured)
         return SourceArticleIndex(
             source_id=channel.source_id, source_article_id=article_id, channel=category,
             canonical_url=url, title=title, published_at=published_at, discovered_at=found_at,
             cursor_value=f"{published_at}|{article_id}", listing_page=listing_page,
             listing_position=0,
-            content_hash=self.stable_hash("\n".join((url, title, published_at, repr(sorted(structured.items()))))),
+            content_hash=self.stable_hash("\n".join((url, title, published_at, repr(sorted(stable_structured.items()))))),
             discovery_method=method, structured_data=structured,
         )
 

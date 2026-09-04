@@ -7,8 +7,10 @@ from ht_lead_radar.aggregate_adapters.base import (
     DetailFetchError,
     ListingInvariantError,
 )
+from ht_lead_radar.aggregate_adapters.coordinator import DedicatedAggregateCoordinator
 from ht_lead_radar.aggregate_adapters.document_router import route_document
 from ht_lead_radar.aggregate_adapters.models import SourceArticleIndex
+from ht_lead_radar.aggregate_adapters.registry import DedicatedAdapterRegistry
 from ht_lead_radar.aggregate_adapters.sites.cena import CenaAdapter
 
 
@@ -139,6 +141,61 @@ def test_indexes_every_article_in_analysis_sections_and_skips_news(tmp_path):
     assert decisions[0][1]["analysis_sections"] == ["政策解读", "集成电路"]
     assert ADAPTER.should_fetch_detail(CHANNEL, indexes[0]) is True
     assert ADAPTER.should_fetch_detail(CHANNEL, indexes[1]) is False
+
+
+def test_new_section_item_shifts_page_rank_without_refetching_old_details(tmp_path):
+    pages = _pages()
+    initial = ADAPTER.parse_listing(CHANNEL, _issue_home(), _context(tmp_path, pages))
+    new_id = 17999
+    new_title = "智能制造基础设施建设进入新阶段"
+    new_item = f"""<li class="clearfix"><img src="bullet.png" />
+      <a href="../../../content/202607/31/content_{new_id}.html">{new_title}</a>
+      </li>""".encode()
+    pages[POLICY_URL] = pages[POLICY_URL].replace(
+        b'<ul class="newsList" id="articlelist">',
+        b'<ul class="newsList" id="articlelist">' + new_item,
+    )
+    moved = ADAPTER.parse_listing(CHANNEL, _issue_home(), _context(tmp_path, pages))
+    initial_hashes = {item.source_article_id: item.content_hash for item in initial}
+    moved_hashes = {item.source_article_id: item.content_hash for item in moved}
+    assert all(moved_hashes[key] == value for key, value in initial_hashes.items())
+
+    original_pages = _pages()
+    network = {CHANNEL.url: _issue_home(), **original_pages}
+    network.update(
+        {
+            item.canonical_url: _detail(item.title)
+            for item in initial
+            if ADAPTER.should_fetch_detail(CHANNEL, item)
+        }
+    )
+    new_index = next(item for item in moved if item.source_article_id == str(new_id))
+    network[new_index.canonical_url] = _detail(new_title)
+    calls: list[str] = []
+
+    def fetch(url: str) -> bytes:
+        calls.append(url)
+        return network[url]
+
+    coordinator = DedicatedAggregateCoordinator(
+        state_db=tmp_path / "coordinator.sqlite3",
+        registry=DedicatedAdapterRegistry((ADAPTER,)),
+        fetch=fetch,
+        now=NOW,
+    )
+    first = coordinator.collect_source(CHANNEL.source_id, "硬科技")
+    network.update(pages)
+    calls.clear()
+    second = coordinator.collect_source(CHANNEL.source_id, "硬科技")
+
+    assert first.run.incremental_count == len(initial)
+    assert second.run.incremental_count == 1
+    assert new_index.canonical_url in calls
+    assert not any(
+        item.canonical_url in calls
+        for item in initial
+        if ADAPTER.should_fetch_detail(CHANNEL, item)
+    )
 
 
 def test_short_decorative_anchor_is_skipped_but_invalid_article_id_still_fails_closed(

@@ -7,6 +7,8 @@ from ht_lead_radar.aggregate_adapters.base import (
     DetailFetchError,
     ListingInvariantError,
 )
+from ht_lead_radar.aggregate_adapters.coordinator import DedicatedAggregateCoordinator
+from ht_lead_radar.aggregate_adapters.registry import DedicatedAdapterRegistry
 from ht_lead_radar.aggregate_adapters.sites.suzhou_robot_association import (
     SuzhouRobotAssociationAdapter,
 )
@@ -114,6 +116,60 @@ def test_homepage_indexes_every_visible_news_and_policy_card(tmp_path):
     assert indexes[2].canonical_url.startswith("https://mp.weixin.qq.com/s/")
     assert indexes[4].canonical_url == "https://robotsz.org.cn/policy/32.html"
     assert indexes[4].source_article_id == "policy-32"
+
+
+def test_date_label_format_drift_does_not_refetch_existing_details(tmp_path):
+    listing = _listing()
+    drifted = listing
+    for source, target in (
+        (b"2026/06/03", b"2026-06-03"),
+        (b"2026/06/02", b"2026-06-02"),
+        (b"2026/05/22", b"2026-05-22"),
+        (b"2026/05/20", b"2026-05-20"),
+        (b"2026/05/19", b"2026-05-19"),
+    ):
+        drifted = drifted.replace(source, target)
+    initial = ADAPTER.parse_listing(CHANNEL, listing, _context(tmp_path))
+    relabeled = ADAPTER.parse_listing(CHANNEL, drifted, _context(tmp_path))
+    assert [item.content_hash for item in initial] == [
+        item.content_hash for item in relabeled
+    ]
+    assert [item.structured_data["listing_date_label"] for item in initial] != [
+        item.structured_data["listing_date_label"] for item in relabeled
+    ]
+
+    network = {CHANNEL.url: listing}
+    for item in initial:
+        if item.canonical_url.startswith("https://mp.weixin.qq.com/"):
+            network[item.canonical_url] = _wechat_detail(
+                item.title,
+                date=item.published_at[:10],
+            )
+        else:
+            network[item.canonical_url] = _native_detail(
+                item.title,
+                date=item.published_at[:10],
+            )
+    calls: list[str] = []
+
+    def fetch(url: str) -> bytes:
+        calls.append(url)
+        return network[url]
+
+    coordinator = DedicatedAggregateCoordinator(
+        state_db=tmp_path / "coordinator.sqlite3",
+        registry=DedicatedAdapterRegistry((ADAPTER,)),
+        fetch=fetch,
+        now=NOW,
+    )
+    first = coordinator.collect_source(CHANNEL.source_id, "具身智能")
+    network[CHANNEL.url] = drifted
+    calls.clear()
+    second = coordinator.collect_source(CHANNEL.source_id, "具身智能")
+
+    assert first.run.incremental_count == len(initial)
+    assert second.run.incremental_count == 0
+    assert calls == [CHANNEL.url]
 
 
 def test_details_extract_article_body_and_validate_both_real_detail_shapes(tmp_path):

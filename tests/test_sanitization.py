@@ -317,3 +317,27 @@ def test_diagnostic_pii_redaction_requires_no_contact_context():
         "+44 / 20 / 79460958",
     ):
         assert sanitize_text(standalone) == "[redacted-phone]"
+
+
+def test_structured_url_fields_preserve_numeric_article_ids_while_removing_secrets():
+    payload = sanitize_tree(
+        {
+            "canonical_url": (
+                "https://www.jiqizhixin.com/articles/2026-08-12-7"
+                "?access_token=secret&page=2#fragment"
+            ),
+            "evidence_urls": [
+                "https://example.test/articles/2026-08-12-7?token=secret"
+                "&phone=13800138000&email=a%40b.com"
+            ],
+        },
+        redact_pii=True,
+    )
+
+    assert payload["canonical_url"] == (
+        "https://www.jiqizhixin.com/articles/2026-08-12-7?page=2"
+    )
+    assert payload["evidence_urls"] == [
+        "https://example.test/articles/2026-08-12-7"
+        "?phone=%5Bredacted-phone%5D&email=%5Bredacted-email%5D"
+    ]
