@@ -286,12 +286,23 @@ def test_watchdog_cancels_queued_semantic_work_without_waiting_for_worker(tmp_pa
         def __init__(self):
             self.calls = 0
             self.lock = threading.Lock()
+            self.started = threading.Event()
+            self.release = threading.Event()
+            self.finished = threading.Event()
+            self.second_started = threading.Event()
 
         def run(self, *_args, **_kwargs):
             with self.lock:
                 self.calls += 1
-            time.sleep(0.5)
-            return '{"events":[],"ambiguities":[]}'
+                call_number = self.calls
+            if call_number > 1:
+                self.second_started.set()
+            self.started.set()
+            try:
+                self.release.wait(timeout=2)
+                return '{"events":[],"ambiguities":[]}'
+            finally:
+                self.finished.set()
 
     runner = SlowRunner()
     routes = {
@@ -313,18 +324,28 @@ def test_watchdog_cancels_queued_semantic_work_without_waiting_for_worker(tmp_pa
         source_timeout_seconds=0.1,
     )
 
-    started = time.monotonic()
+    started_at = time.monotonic()
     result = coordinator.collect_source("parallel-test", "hardtech")
-    elapsed = time.monotonic() - started
+    elapsed = time.monotonic() - started_at
 
-    assert elapsed < 0.3
-    assert result.run.status == "error"
-    assert "watchdog" in result.run.error
-    time.sleep(0.55)
+    try:
+        # Retain a generous wall-clock guard for the configured 0.1s deadline
+        # without making normal shared-runner scheduling part of correctness.
+        assert elapsed < 1.0
+        assert result.run.status == "error"
+        assert "watchdog" in result.run.error
+        if runner.started.is_set():
+            # Returning before the deliberately blocked active worker is the
+            # behavior under test; it does not depend on CI wall-clock speed.
+            assert not runner.finished.is_set()
+    finally:
+        runner.release.set()
+    # A worker can transition from queued to running at the return boundary;
+    # give that race time to declare itself and then drain it deterministically.
+    if runner.started.wait(timeout=0.5):
+        assert runner.finished.wait(timeout=1)
     assert runner.calls in {0, 1}
-    observed_after_drain = runner.calls
-    time.sleep(0.05)
-    assert runner.calls == observed_after_drain
+    assert not runner.second_started.wait(timeout=0.2)
 
 
 def test_ignored_transport_timeout_cannot_hold_interpreter_at_exit(tmp_path):
