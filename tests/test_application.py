@@ -1,6 +1,6 @@
 import json
 import sqlite3
-from datetime import date
+from datetime import date, datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -10,9 +10,11 @@ from ht_lead_radar.application import (
     DEFAULTS,
     LeadRadarApplication,
     _adapter_metric_counts,
+    apply_defaults,
     default_idempotency_key,
 )
 from ht_lead_radar.models import CompanyLead, Evidence
+from ht_lead_radar.product_clock import product_date
 from ht_lead_radar.requests import plan_opportunity_request
 from ht_lead_radar.runtime import StageExecutionError
 from ht_lead_radar.talent_pool_store import TalentPoolStore
@@ -35,6 +37,12 @@ def _payload(tmp_path):
         "output_dir": str(tmp_path / "reports"),
         "metaso_verify_limit": 0,
     }
+
+
+def test_product_date_uses_shanghai_calendar_day():
+    assert product_date(datetime(2026, 9, 4, 16, 30, tzinfo=timezone.utc)) == date(
+        2026, 9, 5
+    )
 
 
 def test_demo_application_is_checkpointed_and_report_is_traceable(tmp_path):
@@ -145,6 +153,17 @@ def test_daily_cooldown_and_candidate_pool_are_part_of_idempotency(tmp_path):
 
     assert default_idempotency_key(ordinary) != default_idempotency_key(cooled)
     assert default_idempotency_key(cooled) != default_idempotency_key(differently_sized)
+
+
+def test_run_date_is_canonical_before_idempotency_and_collection(tmp_path):
+    payload = _payload(tmp_path)
+    compact = dict(payload, run_date="20260905")
+    canonical = dict(payload, run_date="2026-09-05")
+
+    assert default_idempotency_key(compact) == default_idempotency_key(canonical)
+    assert apply_defaults(compact)["run_date"] == "2026-09-05"
+    with pytest.raises(ValueError):
+        default_idempotency_key(dict(payload, run_date="not-a-date"))
 
 
 def test_daily_application_applies_delivery_cooldown_before_all_published_outputs(
@@ -532,6 +551,7 @@ def test_public_search_initialization_failure_is_a_structured_critical_run(
         "request_plan": {},
         "env_file": None,
         "candidate_pool_size": 20,
+        "run_date": product_date().isoformat(),
         "source_state_db": str(tmp_path / "sources.sqlite"),
         "fixed_sources": str(tmp_path / "missing-fixed.json"),
         "source_packs": str(tmp_path / "packs.json"),
@@ -575,6 +595,7 @@ def test_unstable_josint_snapshot_is_a_local_structured_warning(
         "request_plan": {},
         "env_file": None,
         "candidate_pool_size": 20,
+        "run_date": product_date().isoformat(),
         "josint_db": str(josint),
         "source_state_db": str(tmp_path / "sources.sqlite"),
         "fixed_sources": str(tmp_path / "missing-fixed.json"),

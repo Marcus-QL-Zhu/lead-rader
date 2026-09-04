@@ -48,6 +48,7 @@ from .models import CompanyLead, Evidence
 from .josint_snapshot import JOSINTSnapshotUnstable
 from .ops import AuditLog, OpsMetricsStore, SuppressionRegistry
 from .pipeline import build_late_opportunities, build_leads
+from .product_clock import product_date_iso
 from .relationships import DeepResearchEngine, RelationshipStore
 from .reporting_v2 import render_complete_markdown, write_complete_outputs
 from .requests import CandidateProfile
@@ -90,7 +91,6 @@ DEFAULTS = {
     "metaso_provider_daily_limit": 500,
     "metaso_points_per_search": 6,
 }
-
 
 def _safe_error_text(error: object) -> str:
     diagnostic = safe_error(error)
@@ -329,7 +329,7 @@ class LeadRadarApplication:
         source_topics = _source_topics(payload, direction)
         collection_topic = "|".join(source_topics)
         plan = dict(payload.get("request_plan") or {})
-        as_of = date.today()
+        as_of = date.fromisoformat(str(payload["run_date"]))
         metadata: dict[str, Any] = {
             "routes": {},
             "ad_checks": {},
@@ -1385,6 +1385,8 @@ def apply_defaults(payload: Mapping[str, Any]) -> dict[str, Any]:
     missing = [key for key in required if not output.get(key)]
     if missing:
         raise ValueError(f"missing application fields: {', '.join(missing)}")
+    raw_run_date = str(output.get("run_date") or product_date_iso())
+    output["run_date"] = date.fromisoformat(raw_run_date).isoformat()
     for key in (
         "fixed_sources",
         "source_packs",
@@ -1438,9 +1440,12 @@ def _adapter_metric_counts(adapter_run: Mapping[str, Any]) -> dict[str, Any]:
 def default_idempotency_key(
     payload: Mapping[str, Any], *, refresh: bool = False
 ) -> str:
+    run_date = date.fromisoformat(
+        str(payload.get("run_date") or product_date_iso())
+    ).isoformat()
     canonical = json.dumps(
         {
-            "date": date.today().isoformat(),
+            "date": run_date,
             "command": payload.get("command", "run"),
             "direction": payload.get("direction"),
             "request_plan": payload.get("request_plan"),

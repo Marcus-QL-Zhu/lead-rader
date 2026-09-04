@@ -3,6 +3,7 @@ import sqlite3
 from datetime import date, timedelta
 
 import pytest
+import ht_lead_radar.talent_pool_store as talent_pool_store_module
 
 from ht_lead_radar.liepin_bridge import (
     FakePublisher,
@@ -192,6 +193,30 @@ def test_expired_draft_cannot_publish(tmp_path):
         ).isoformat(),
     )
     assert changed >= 1
+    assert store.batch(bundle.run_date, bundle.direction)[0]["status"] == "expired"
+
+
+def test_publish_expiry_uses_product_calendar_day(tmp_path, monkeypatch):
+    store, bundle = seeded_store(tmp_path)
+    store.apply_command(
+        run_date=bundle.run_date,
+        direction=bundle.direction,
+        command="发布 1",
+        actor="ou-user",
+    )
+    product_day_after_expiry = (
+        date.fromisoformat(bundle.drafts[0].expires_at) + timedelta(days=1)
+    ).isoformat()
+    monkeypatch.setattr(
+        talent_pool_store_module,
+        "product_date_iso",
+        lambda: product_day_after_expiry,
+    )
+    lease = store.acquire_publish_lease(bundle.run_date, bundle.direction)
+
+    with pytest.raises(ValueError, match="is expired"):
+        store.begin_publish(bundle.drafts[0].draft_id, lease_token=lease)
+
     assert store.batch(bundle.run_date, bundle.direction)[0]["status"] == "expired"
 
 

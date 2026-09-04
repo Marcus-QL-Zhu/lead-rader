@@ -25,6 +25,7 @@ from .application import (
 from .collectors import BingRSSCollector, SearXNGCollector, load_env_file
 from .costs import SearchBudgetLedger
 from .ops import backup_sqlite, build_daily_monitoring_report
+from .product_clock import product_date_iso
 from .relationships import DeepResearchEngine, RelationshipStore
 from .requests import OpportunityMode, plan_opportunity_request
 from .runtime import RunStore, make_run_id
@@ -183,6 +184,7 @@ def build_parser() -> argparse.ArgumentParser:
 def _add_pipeline_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--demo", action="store_true")
     parser.add_argument("--replay-json")
+    parser.add_argument("--run-date", default=product_date_iso())
     parser.add_argument(
         "--provider",
         choices=["auto", "fixed", "searxng", "bing"],

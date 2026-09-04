@@ -24,6 +24,7 @@ from .sanitization import (
     sanitize_tree,
     sanitize_url,
 )
+from .product_clock import product_date_iso
 
 
 _PERSISTENCE_SANITIZER_VERSION = "2"
@@ -1619,7 +1620,7 @@ class TalentPoolStore:
                   AND status IN ('draft', 'pending_approval', 'approved',
                                  'publish_failed', 'rejected')
                 """,
-                (now, run_date, direction, date.today().isoformat()),
+                (now, run_date, direction, product_date_iso()),
             )
             rows = connection.execute(
                 """
@@ -1728,7 +1729,7 @@ class TalentPoolStore:
         }
 
     def expire(self, *, run_date: str, direction: str, today: str | None = None) -> int:
-        today = today or date.today().isoformat()
+        today = today or product_date_iso()
         with self._connect() as connection:
             cursor = connection.execute(
                 """
@@ -1831,7 +1832,7 @@ class TalentPoolStore:
                 return None
             if row["status"] != "approved":
                 raise ValueError(f"{draft_id} is not approved")
-            if row["expires_at"] < date.today().isoformat():
+            if row["expires_at"] < product_date_iso():
                 connection.execute(
                     "UPDATE talent_pool_drafts SET status='expired', updated_at=? "
                     "WHERE draft_id=?",

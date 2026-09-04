@@ -65,6 +65,9 @@ raise SystemExit(int(os.environ.get(codes.get(name, ""), "0")))
         'SERVER_PYTHON="/home/admin/.pyenv/versions/3.11.14/bin/python3"',
         f'SERVER_PYTHON="{python_wrapper}"',
     ).replace(
+        "RUN_DATE=$(TZ=Asia/Shanghai /usr/bin/date '+%Y-%m-%d') || exit 69",
+        'RUN_DATE="${LAUNCHER_TEST_RUN_DATE:-2026-09-05}"',
+    ).replace(
         '"$PYTHON_BIN" "$APP_DIR/deployment/consume_runtime_capability.py" || exit 64',
         ': # capability boundary is independently covered by secret-boundary tests',
     ).replace(
@@ -165,6 +168,17 @@ def test_inner_launcher_completion_matrix(
         "send_daily_feishu_summary.py": "fallback",
     }
     assert {aliases[name] for name in names if name in aliases} == expected_calls
+    for call in [
+        json.loads(line)
+        for line in log.read_text(encoding="utf-8").splitlines()
+        if json.loads(line)["name"]
+        in {
+            "run_daily_hardtech_portfolio.py",
+            "generate_talent_pool_drafts.py",
+            "send_daily_feishu_summary.py",
+        }
+    ]:
+        assert call["args"][call["args"].index("--run-date") + 1] == "2026-09-05"
     if analysis_exit not in {0, 2}:
         finalizers = [
             json.loads(line)["args"]

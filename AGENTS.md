@@ -59,6 +59,12 @@ The production daily task is:
 
 - Lead generation cron time: 05:00 Asia/Shanghai
 - OpenClaw report reconciliation cron: exactly 05:50 and 06:50 Asia/Shanghai (50 5,6 * * *); no heartbeat
+- Report dates, cooldown windows, and daily idempotency keys use the
+  `Asia/Shanghai` product calendar day. UTC is only for aware absolute
+  timestamps. Freeze the product date once at the daily launcher and pass it
+  explicitly through analysis, report lookup, draft generation, notification,
+  approval, and expiry; never reintroduce host-local `date.today()` for these
+  fields.
 - launcher:
   `/home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/run_daily_fixed_sources.sh`
 - supported Python: 3.10 or newer

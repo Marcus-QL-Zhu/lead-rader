@@ -10,12 +10,12 @@ from time import monotonic
 import urllib.error
 import urllib.request
 from dataclasses import dataclass
-from datetime import date
 from pathlib import Path
 from typing import Any, Mapping
 from urllib.parse import urlencode
 
 from .http_runtime import call_with_wallclock, read_response_body
+from .product_clock import product_date_iso
 from .sanitization import safe_error_class
 
 
@@ -597,7 +597,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Send Lead Rader daily Feishu summary")
     parser.add_argument("--direction", required=True)
     parser.add_argument("--task-exit-code", required=True, type=int)
-    parser.add_argument("--run-date", default=date.today().isoformat())
+    parser.add_argument("--run-date", default=product_date_iso())
     parser.add_argument("--report-dir", default="reports-daily")
     parser.add_argument("--state-db", default="data/feishu-notifications.sqlite")
     parser.add_argument(

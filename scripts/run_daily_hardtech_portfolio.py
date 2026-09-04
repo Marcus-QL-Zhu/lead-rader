@@ -7,7 +7,6 @@ import argparse
 import json
 import subprocess
 import sys
-from datetime import date
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
@@ -17,6 +16,7 @@ from ht_lead_radar.daily_topics import (  # noqa: E402
     DEFAULT_PORTFOLIO_DIRECTION,
 )
 from ht_lead_radar.feishu_notify import find_report  # noqa: E402
+from ht_lead_radar.product_clock import product_date_iso  # noqa: E402
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -27,7 +27,7 @@ def build_parser() -> argparse.ArgumentParser:
         help="pipe-separated topics collected in one pass",
     )
     parser.add_argument("--portfolio-direction", default=DEFAULT_PORTFOLIO_DIRECTION)
-    parser.add_argument("--run-date", default=date.today().isoformat())
+    parser.add_argument("--run-date", default=product_date_iso())
     parser.add_argument("--output-dir", default="reports-daily")
     parser.add_argument("--target-count", type=int, default=20)
     parser.add_argument(
@@ -71,7 +71,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
-    today = date.today().isoformat()
+    today = product_date_iso()
     if args.run_date != today:
         raise ValueError("--run-date only supports today's date")
     topics = tuple(
@@ -88,6 +88,8 @@ def main(argv: list[str] | None = None) -> int:
         sys.executable,
         str(Path(__file__).with_name("run_lead_radar_v2.py")),
         "run",
+        "--run-date",
+        args.run_date,
         "--direction",
         args.portfolio_direction,
         "--source-topics",

@@ -7,7 +7,6 @@ import argparse
 import json
 import re
 import sys
-from datetime import date
 from pathlib import Path
 
 sys.dont_write_bytecode = True
@@ -25,6 +24,7 @@ from ht_lead_radar.liepin_bridge import (  # noqa: E402
     publish_approved_serially,
 )
 from ht_lead_radar.talent_pool_store import TalentPoolStore  # noqa: E402
+from ht_lead_radar.product_clock import product_date_iso  # noqa: E402
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -44,7 +44,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--actor", required=True)
     parser.add_argument("--direction", required=True)
-    parser.add_argument("--run-date", default=date.today().isoformat())
+    parser.add_argument("--run-date", default=product_date_iso())
     parser.add_argument("--state-db", default="data/talent-pool.sqlite")
     parser.add_argument(
         "--context-snapshot-id",

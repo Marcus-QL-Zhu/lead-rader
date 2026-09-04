@@ -44,6 +44,11 @@ export LEAD_RADAR_TALENT_LLM_TIMEOUT_SECONDS LEAD_RADAR_TALENT_LLM_MAX_COMPLETIO
 export LEAD_RADAR_TALENT_LLM_THINKING_MODE
 DAILY_DIRECTIONS="${HT_LEAD_DAILY_DIRECTIONS:-具身智能|半导体|商业航天|核聚变|脑机接口}"
 DAILY_DIRECTION="${HT_LEAD_DAILY_DIRECTION:-硬科技组合}"
+RUN_DATE=$(TZ=Asia/Shanghai /usr/bin/date '+%Y-%m-%d') || exit 69
+case "$RUN_DATE" in
+  [0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]) ;;
+  *) echo "Unable to determine the Asia/Shanghai product date." >&2; exit 69 ;;
+esac
 
 case "$APP_DIR" in
   /home/admin/.openclaw/workspace/skills/hardtech-lead-radar) ;;
@@ -79,6 +84,7 @@ if command -v flock >/dev/null 2>&1; then
 fi
 
 set -- \
+  --run-date "$RUN_DATE" \
   --directions "$DAILY_DIRECTIONS" \
   --portfolio-direction "$DAILY_DIRECTION" \
   --fixed-sources config/fixed-sources.json \
@@ -132,6 +138,7 @@ if [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; then
     --kill-after="${DRAFT_KILL_GRACE_SECONDS}s" \
     "${DRAFT_WALLCLOCK_SECONDS}s" \
     "$PYTHON_BIN" scripts/generate_talent_pool_drafts.py \
+    --run-date "$RUN_DATE" \
     --direction "$DAILY_DIRECTION" \
     --generator direct-llm \
     --report-dir reports-daily \
@@ -150,6 +157,7 @@ if [ "$status" -eq 0 ] || [ "$status" -eq 2 ]; then
     || [ "$talent_draft_status" -eq 137 ]; then
     talent_draft_status=71
     if "$PYTHON_BIN" scripts/generate_talent_pool_drafts.py \
+      --run-date "$RUN_DATE" \
       --direction "$DAILY_DIRECTION" \
       --report-dir reports-daily \
       --output-dir reports-daily/talent-pool \
@@ -173,6 +181,7 @@ else
     --budget-db data/search-budget.sqlite \
     > reports-daily/health-latest.json 2>&1 || true
   if "$PYTHON_BIN" scripts/generate_talent_pool_drafts.py \
+    --run-date "$RUN_DATE" \
     --direction "$DAILY_DIRECTION" \
     --report-dir reports-daily \
     --output-dir reports-daily/talent-pool \
@@ -213,6 +222,7 @@ if [ "$openclaw_hook_status" -ne 0 ] || [ "$completion_ready" -ne 1 ]; then
     --kill-after="${FALLBACK_KILL_GRACE_SECONDS}s" \
     "${FALLBACK_WALLCLOCK_SECONDS}s" \
     "$PYTHON_BIN" scripts/send_daily_feishu_summary.py \
+    --run-date "$RUN_DATE" \
     --direction "$DAILY_DIRECTION" \
     --task-exit-code "$status" \
     --report-dir reports-daily \
@@ -228,6 +238,7 @@ if [ "$openclaw_hook_status" -ne 0 ] || [ "$completion_ready" -ne 1 ]; then
     /usr/bin/timeout --signal=TERM --kill-after=2s \
       "${FALLBACK_RECORD_WALLCLOCK_SECONDS}s" \
       "$PYTHON_BIN" scripts/send_daily_feishu_summary.py \
+      --run-date "$RUN_DATE" \
       --direction "$DAILY_DIRECTION" \
       --task-exit-code "$status" \
       --report-dir reports-daily \

@@ -288,6 +288,7 @@
 
 - 本地修了但服务器没更新，或服务器临时改了却没有回灌 GitHub，导致 OpenClaw 看到旧 bug。
 - 本地 Windows 通过而 Linux CI 因换行、路径、Python 版本、symlink 权限或测试 fixture 失败。
+- 用宿主机 `date.today()` 计算日报日期，而投递时间按上海时区解释，导致 UTC runner 在北京时间零点后把同一次投递误判成“未来记录”，冷却失效。
 - 先宣称“已经部署”，后来才发现 commit 未 push、CI 未绿或服务器 symlink 仍指向旧版本。
 - release 目录混入 pyc、运行时数据库或临时文件，破坏 exact-SHA 可审计性。
 
@@ -302,6 +303,7 @@
 - JOSINT 是独立 GitHub 项目和晚期验证依赖。不得复制其源码或凭证到 Lead Radar；适配器要同时测试当前 canonical schema 与明确支持的 legacy fallback。
 - 部署前备份并校验数据库与来源清单；部署后核验 `.deployed_git_sha`、stable symlink、树洁净度、Python、JOSINT、日报、健康状态和回滚指针。
 - “测试通过”必须说清是哪一层：本地、Linux CI、生产 smoke 或真实日批。不能用低层测试替代生产结论。
+- 日批入口只冻结一次 `Asia/Shanghai` 产品日，并显式传给分析、报告查找、草稿、通知和审批/过期判断；不能让各阶段各自读取时钟。UTC 只用于保存带时区的绝对时间戳。测试必须覆盖 UTC 16:00 之后已经跨入北京时间次日的边界。
 
 ## 13. 修 bug 时的层级诊断顺序
 

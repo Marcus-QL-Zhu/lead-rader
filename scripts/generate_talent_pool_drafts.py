@@ -14,6 +14,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from ht_lead_radar.feishu_notify import find_report
+from ht_lead_radar.product_clock import product_date_iso
 from ht_lead_radar.direct_talent_generator import generate_direct_talent_bundle
 from ht_lead_radar.daily_opportunity_selection import select_daily_opportunities
 from ht_lead_radar.talent_pool import generate_draft_bundle, write_draft_bundle
@@ -365,7 +366,7 @@ def _analysis_reference(report_path: Path | None) -> dict[str, str]:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser()
     parser.add_argument("--direction", required=True)
-    parser.add_argument("--run-date", default=date.today().isoformat())
+    parser.add_argument("--run-date", default=product_date_iso())
     parser.add_argument("--report-dir", default="reports-daily")
     parser.add_argument("--report")
     parser.add_argument("--output-dir", default="reports-daily/talent-pool")
