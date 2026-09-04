@@ -10,6 +10,8 @@ import sys
 from datetime import date
 from pathlib import Path
 
+sys.dont_write_bytecode = True
+
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 if hasattr(sys.stderr, "reconfigure"):
@@ -17,12 +19,12 @@ if hasattr(sys.stderr, "reconfigure"):
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from ht_lead_radar.liepin_bridge import (
+from ht_lead_radar.liepin_bridge import (  # noqa: E402
     ExternalLiepinPublisher,
     FakePublisher,
     publish_approved_serially,
 )
-from ht_lead_radar.talent_pool_store import TalentPoolStore
+from ht_lead_radar.talent_pool_store import TalentPoolStore  # noqa: E402
 
 
 def build_parser() -> argparse.ArgumentParser:

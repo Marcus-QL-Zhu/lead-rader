@@ -38,13 +38,13 @@ Lead Rader 从公开的上游经营信号判断哪些公司可能新增总监级
 查看当前日报：
 
 ```bash
-/home/admin/.pyenv/versions/3.11.14/bin/python3 /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/openclaw_daily_report.py --state-db /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/data/talent-pool.sqlite show-current
+/home/admin/.pyenv/versions/3.11.14/bin/python3 -B /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/openclaw_daily_report.py --state-db /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/data/talent-pool.sqlite show-current
 ```
 
 查看第 2 条的完整内部映射与猎聘 JSON：
 
 ```bash
-/home/admin/.pyenv/versions/3.11.14/bin/python3 /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/openclaw_daily_report.py --state-db /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/data/talent-pool.sqlite show-draft --index 2
+/home/admin/.pyenv/versions/3.11.14/bin/python3 -B /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/openclaw_daily_report.py --state-db /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/data/talent-pool.sqlite show-draft --index 2
 ```
 
 回答“为什么推荐”“对应哪家公司/岗位”时，只引用该命令返回的 `source_leads`、证据 URL、`why_now` 和 `public_payload`。把岗位表述为推测，不得说成客户已委托的真实 vacancy。
@@ -69,7 +69,7 @@ Lead Rader 从公开的上游经营信号判断哪些公司可能新增总监级
 不承担命令解析：
 
 ```bash
-/home/admin/.pyenv/versions/3.11.14/bin/python3 /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/talent_pool_control.py \
+/home/admin/.pyenv/versions/3.11.14/bin/python3 -B /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/talent_pool_control.py \
   --action "<view|publish|reject>" \
   --indexes "<OpenClaw 判断的展示编号，如 1,2>" \
   --user-message "<真实飞书用户原文>" \

@@ -8,9 +8,11 @@ import json
 import sys
 from pathlib import Path
 
+sys.dont_write_bytecode = True
+
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from ht_lead_radar.talent_pool_store import TalentPoolStore
+from ht_lead_radar.talent_pool_store import TalentPoolStore  # noqa: E402
 
 
 def build_parser() -> argparse.ArgumentParser:

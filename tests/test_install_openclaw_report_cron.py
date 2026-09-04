@@ -31,6 +31,9 @@ def test_reconcile_cron_runs_exactly_twice_and_calls_main_bridge():
     assert str(cron.PRODUCTION_STABLE_ROOT) in message
     assert str(SCRIPT.parents[1]) not in message
     command_line = message.split("BEGIN_COMMAND\n", 1)[1].split("\nEND_COMMAND", 1)[0]
+    assert command_line.startswith(
+        "/home/admin/.pyenv/versions/3.11.14/bin/python3 -B "
+    )
     assert command_line.endswith(
         "/home/admin/.openclaw/agents/main/sessions/sessions.json"
     )
@@ -65,6 +68,10 @@ def test_exact_sha_and_stable_symlink_install_durable_stable_cron_path(tmp_path)
         )
         assert root == Path(os.path.abspath(stable))
         message = cron.reconcile_message(project_root=root)
+        command_line = message.split("BEGIN_COMMAND\n", 1)[1].split(
+            "\nEND_COMMAND", 1
+        )[0]
+        assert "python3 -B " in command_line
         assert str(stable / "scripts" / "openclaw_daily_report.py") in message
         assert str(stable / "data" / "talent-pool.sqlite") in message
         assert str(release) not in message

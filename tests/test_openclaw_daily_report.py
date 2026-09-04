@@ -414,6 +414,20 @@ def test_reset_guide_leaves_delivery_status_to_outer_bridge():
     assert "show-snapshot --snapshot-id" in guide
     assert "不要执行 `mark-reported`" in guide
     assert "delivery 失败则标记 `failed`" in guide
+    assert guide.count("/bin/python3 -B ") == 3
+    assert "/bin/python3 /home/admin" not in guide
+
+
+def test_openclaw_entry_points_disable_bytecode_before_project_imports():
+    root = bridge.ROOT
+    for relative in (
+        "scripts/openclaw_daily_report.py",
+        "scripts/talent_pool_control.py",
+    ):
+        source = (root / relative).read_text(encoding="utf-8")
+        assert source.index("sys.dont_write_bytecode = True") < source.index(
+            "from ht_lead_radar"
+        )
 
 
 def test_wake_runs_current_main_session_and_marks_reported(tmp_path):
@@ -477,6 +491,7 @@ def test_wake_runs_current_main_session_and_marks_reported(tmp_path):
     assert "openclaw-daily-operator.md" in event
     assert str(bridge.ROOT / "SKILL.md") in event
     assert "/home/admin/.pyenv/versions/3.11.14/bin/python3" in event
+    assert "/home/admin/.pyenv/versions/3.11.14/bin/python3 -B " in event
     assert "--state-db" in event
     assert event.index("--state-db") < event.index("show-snapshot")
     assert "--snapshot-id" in event

@@ -15,6 +15,10 @@ from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Callable
 
+# OpenClaw invokes this entry point from the immutable exact-SHA release. Keep
+# imports from materializing __pycache__ there even when a caller omits -B.
+sys.dont_write_bytecode = True
+
 if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
 if hasattr(sys.stderr, "reconfigure"):
@@ -453,7 +457,7 @@ def event_text(snapshot_id: str, *, source: str) -> str:
         "This is a read-and-report event, never an approval. After the 04:00 "
         "session reset, first read "
         f"{ROOT / 'SKILL.md'} and "
-        f"{GUIDE_PATH}. Then run: {SERVER_PYTHON} "
+        f"{GUIDE_PATH}. Then run: {SERVER_PYTHON} -B "
         f"{ROOT / 'scripts' / 'openclaw_daily_report.py'} "
         f"--state-db {ROOT / DEFAULT_STATE_DB} show-snapshot "
         f"--snapshot-id {snapshot_id}. "
