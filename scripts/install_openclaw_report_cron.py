@@ -83,8 +83,6 @@ def reconcile_message(*, project_root: str | Path | None = None) -> str:
             "scheduled-reconcile",
             "--openclaw-bin",
             OPENCLAW_BIN,
-            "--sessions-file",
-            "/home/admin/.openclaw/agents/main/sessions/sessions.json",
         )
     )
     return (

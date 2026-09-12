@@ -211,7 +211,6 @@ if [ "$completion_ready" -eq 1 ]; then
     "$PYTHON_BIN" scripts/openclaw_daily_report.py \
       --state-db data/talent-pool.sqlite \
       wake --source completion-hook --openclaw-bin "$OPENCLAW_BIN" \
-      --sessions-file /home/admin/.openclaw/agents/main/sessions/sessions.json \
       --require-report \
       || openclaw_hook_status=$?
   fi

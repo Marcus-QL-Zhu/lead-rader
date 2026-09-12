@@ -11,6 +11,7 @@ import re
 import signal
 import subprocess
 import sys
+import time
 from collections.abc import Mapping
 from pathlib import Path
 from typing import Any, Callable
@@ -42,7 +43,6 @@ DEFAULT_SESSION_KEY = "agent:main:main"
 DEFAULT_STATE_DB = "data/talent-pool.sqlite"
 GUIDE_PATH = ROOT / "references" / "openclaw-daily-operator.md"
 SERVER_PYTHON = "/home/admin/.pyenv/versions/3.11.14/bin/python3"
-DEFAULT_SESSIONS_FILE = "/home/admin/.openclaw/agents/main/sessions/sessions.json"
 OPENCLAW_CLI_TIMEOUT_SECONDS = 600
 OPENCLAW_PROCESS_TIMEOUT_SECONDS = 630
 OPENCLAW_TERM_GRACE_SECONDS = 2.0
@@ -480,10 +480,42 @@ def event_text(snapshot_id: str, *, source: str) -> str:
     )
 
 
-def _main_session_route(sessions_file: str | Path, session_key: str) -> dict[str, str]:
-    payload = json.loads(Path(sessions_file).read_text(encoding="utf-8"))
-    entry = payload.get(session_key) if isinstance(payload, dict) else None
-    if not isinstance(entry, dict):
+def _main_session_route(
+    openclaw_bin: str, session_key: str, *, runner=None
+) -> dict[str, str]:
+    """Resolve the live route through Gateway; never read legacy session files."""
+    offset = 0
+    deadline = time.monotonic() + 60
+    entry = None
+    for _page in range(100):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise TimeoutError("OpenClaw route lookup exceeded deadline")
+        command = [openclaw_bin, "gateway", "call", "sessions.list", "--params",
+                   json.dumps({"limit": 100, "offset": offset}), "--json"]
+        completed = (runner or _run_openclaw_process)(
+            command, text=True, capture_output=True, check=False, timeout=min(20, remaining),
+        )
+        if completed.returncode != 0:
+            raise RuntimeError("OpenClaw route lookup failed")
+        payload = json.loads(completed.stdout)
+        rows = payload.get("sessions") if isinstance(payload, dict) else None
+        if not isinstance(rows, list):
+            raise ValueError("OpenClaw route lookup returned invalid sessions")
+        matches = [row for row in rows if isinstance(row, dict)
+                   and row.get("key") == session_key]
+        if len(matches) > 1:
+            raise ValueError("OpenClaw route lookup returned duplicate session keys")
+        if matches:
+            entry = matches[0]
+            break
+        if not payload.get("hasMore"):
+            break
+        next_offset = payload.get("nextOffset")
+        if not isinstance(next_offset, int) or next_offset <= offset:
+            raise ValueError("OpenClaw route lookup returned invalid pagination")
+        offset = next_offset
+    if entry is None:
         raise LookupError(f"OpenClaw session key not found: {session_key}")
     route = entry.get("deliveryContext") or {}
     session_id = str(entry.get("sessionId") or "").strip()
@@ -508,7 +540,7 @@ def wake(
     session_key: str,
     source: str,
     openclaw_bin: str,
-    sessions_file: str | Path = DEFAULT_SESSIONS_FILE,
+    route_runner: Callable[..., subprocess.CompletedProcess[str]] | None = None,
     include_agent_response: bool = False,
     process_timeout_seconds: float = OPENCLAW_PROCESS_TIMEOUT_SECONDS,
     runner: Callable[..., subprocess.CompletedProcess[str]] | None = None,
@@ -517,12 +549,12 @@ def wake(
     if row is None:
         return {"status": "no_pending_report"}
     try:
-        route = _main_session_route(sessions_file, session_key)
+        route = _main_session_route(openclaw_bin, session_key, runner=route_runner)
         command = [
             openclaw_bin,
             "agent",
-            "--session-id",
-            route["session_id"],
+            "--session-key",
+            session_key,
             "--message",
             event_text(row["snapshot_id"], source=source),
             "--deliver",
@@ -621,7 +653,6 @@ def build_parser() -> argparse.ArgumentParser:
     wake_parser = sub.add_parser("wake")
     wake_parser.add_argument("--source", default="completion-hook")
     wake_parser.add_argument("--openclaw-bin", default="openclaw")
-    wake_parser.add_argument("--sessions-file", default=DEFAULT_SESSIONS_FILE)
     wake_parser.add_argument("--include-agent-response", action="store_true")
     wake_parser.add_argument("--require-report", action="store_true")
     preflight = sub.add_parser("record-hook-preflight-failure")
@@ -702,7 +733,6 @@ def main(argv: list[str] | None = None) -> int:
                 session_key=args.session_key,
                 source=args.source,
                 openclaw_bin=args.openclaw_bin,
-                sessions_file=args.sessions_file,
                 include_agent_response=args.include_agent_response,
             )
             if args.require_report and result.get("status") == "no_pending_report":

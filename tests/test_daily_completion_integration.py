@@ -128,7 +128,9 @@ def test_runtime_generator_hook_and_fallback_are_same_day_idempotent(
         session_key="agent:main:main",
         source="integration-test",
         openclaw_bin="openclaw",
-        sessions_file=sessions,
+        route_runner=lambda command, **kwargs: subprocess.CompletedProcess(
+            command, 0, json.dumps({"sessions": [dict(value, key=key)
+                for key, value in json.loads(sessions.read_text()).items()]}), ""),
         runner=fake_openclaw,
     )
     assert hook["status"] == "reported"

@@ -457,7 +457,7 @@ def test_wake_runs_current_main_session_and_marks_reported(tmp_path):
             session_key="agent:main:main",
             source="concurrent-test",
             openclaw_bin="openclaw",
-            sessions_file=sessions,
+            route_runner=_route_runner(sessions),
             runner=lambda *_args, **_kwargs: None,
         )
         assert second == {"status": "no_pending_report"}
@@ -471,7 +471,7 @@ def test_wake_runs_current_main_session_and_marks_reported(tmp_path):
         session_key="agent:main:main",
         source="test",
         openclaw_bin="openclaw",
-        sessions_file=sessions,
+        route_runner=_route_runner(sessions),
         runner=fake_runner,
         include_agent_response=True,
     )
@@ -479,8 +479,8 @@ def test_wake_runs_current_main_session_and_marks_reported(tmp_path):
     assert result["agent_response"] == "ok"
     assert store.pending_openclaw_report() is None
     command = calls[0][0]
-    assert command[:3] == ["openclaw", "agent", "--session-id"]
-    assert command[3] == "session-123"
+    assert command[:3] == ["openclaw", "agent", "--session-key"]
+    assert command[3] == "agent:main:main"
     assert "--deliver" in command
     assert command[command.index("--reply-channel") + 1] == "feishu"
     assert command[command.index("--reply-to") + 1] == "user:test-open-id"
@@ -517,7 +517,7 @@ def test_wake_fails_closed_without_feishu_main_route(tmp_path):
             session_key="agent:main:main",
             source="test",
             openclaw_bin="openclaw",
-            sessions_file=sessions,
+            route_runner=_route_runner(sessions),
         )
     assert store.latest_openclaw_context()["status"] == "failed"
 
@@ -550,7 +550,7 @@ def test_wake_does_not_mark_reported_when_agent_skips_pending_read(tmp_path):
             session_key="agent:main:main",
             source="test",
             openclaw_bin="openclaw",
-            sessions_file=sessions,
+            route_runner=_route_runner(sessions),
             runner=fake_runner,
         )
     assert store.latest_openclaw_context()["status"] == "failed"
@@ -587,7 +587,7 @@ def test_wake_outer_timeout_records_hook_failure_and_leaves_fallback_possible(
             session_key="agent:main:main",
             source="test",
             openclaw_bin="openclaw",
-            sessions_file=sessions,
+            route_runner=_route_runner(sessions),
             runner=hanging_runner,
         )
 
@@ -737,7 +737,7 @@ def test_delivery_failure_after_exact_read_remains_retriable(tmp_path):
             session_key="agent:main:main",
             source="test",
             openclaw_bin="openclaw",
-            sessions_file=sessions,
+            route_runner=_route_runner(sessions),
             runner=failing_runner,
         )
     current = store.latest_openclaw_context()
@@ -863,3 +863,43 @@ def test_demand_summary_uses_current_horizon_and_evidence_keys():
         "horizon": "near_term",
         "evidence_refs": ["event-1"],
     }]
+
+
+def _route_runner(path):
+    def run(command, **kwargs):
+        entries = json.loads(path.read_text(encoding="utf-8"))
+        return subprocess.CompletedProcess(command, 0, json.dumps({
+            "sessions": [dict(value, key=key) for key, value in entries.items()],
+            "hasMore": False,
+        }), "")
+    return run
+
+
+def test_route_lookup_pages_and_rejects_failure():
+    calls = []
+    def run(command, **kwargs):
+        calls.append(command)
+        params = json.loads(command[command.index("--params") + 1])
+        if params["offset"] == 0:
+            payload = {"sessions": [], "hasMore": True, "nextOffset": 100}
+        else:
+            payload = {"sessions": [{"key": "agent:main:main",
+                "sessionId": "rotated", "deliveryContext": {
+                    "channel": "feishu", "to": "user:test", "accountId": "bot"}}]}
+        return subprocess.CompletedProcess(command, 0, json.dumps(payload), "")
+    assert bridge._main_session_route("openclaw", "agent:main:main", runner=run)["session_id"] == "rotated"
+    assert len(calls) == 2
+    with pytest.raises(RuntimeError, match="route lookup failed"):
+        bridge._main_session_route("openclaw", "agent:main:main", runner=lambda *a, **k:
+            subprocess.CompletedProcess([], 1, "", "private error"))
+
+
+def test_route_lookup_deadline_and_invalid_shape(monkeypatch):
+    times = iter([0, 61])
+    monkeypatch.setattr(bridge.time, "monotonic", lambda: next(times))
+    with pytest.raises(TimeoutError, match="deadline"):
+        bridge._main_session_route("openclaw", "agent:main:main")
+    monkeypatch.setattr(bridge.time, "monotonic", lambda: 0)
+    with pytest.raises(ValueError, match="invalid sessions"):
+        bridge._main_session_route("openclaw", "agent:main:main", runner=lambda *a, **k:
+            subprocess.CompletedProcess([], 0, '{"sessions": null}', ""))

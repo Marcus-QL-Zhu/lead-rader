@@ -5,8 +5,7 @@ HT_LEAD_ENV_FILE=/home/admin/.openclaw/secrets/lead-radar.env
 
 0 5 * * * /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/run_daily_fixed_sources.sh >> /home/admin/.openclaw/workspace/skills/hardtech-lead-radar-state/logs/daily-cron.log 2>&1
 
-# The OpenClaw reconciliation schedule remains exactly 05:50 and 06:50 and is
-# managed by scripts/install_openclaw_report_cron.py, not duplicated here. The
-# installer canonicalizes either an exact-SHA release invocation or the live
-# symlink invocation to this stable project path. A local/legacy checkout must
-# be selected explicitly with --project-root when that behavior is intended.
+# Reconciliation remains exactly 05:50 and 06:50 Asia/Shanghai.
+# Run reconciliation directly: agent cron success is not report delivery success.
+50 5,6 * * * env PATH=/home/admin/.local/share/pnpm:/usr/local/bin:/usr/bin:/bin OPENCLAW_HOME=/home/admin OPENCLAW_CONFIG_PATH=/home/admin/.openclaw/openclaw.json /home/admin/.pyenv/versions/3.11.14/bin/python3 -B /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/scripts/openclaw_daily_report.py --state-db /home/admin/.openclaw/workspace/skills/hardtech-lead-radar/data/talent-pool.sqlite wake --source scheduled-reconcile --openclaw-bin /home/admin/.local/share/pnpm/openclaw >> /home/admin/.openclaw/workspace/skills/hardtech-lead-radar-state/logs/report-reconcile.log 2>&1
+# Disable old OpenClaw report reconciliation cron before enabling this line.

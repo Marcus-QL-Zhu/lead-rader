@@ -34,9 +34,7 @@ def test_reconcile_cron_runs_exactly_twice_and_calls_main_bridge():
     assert command_line.startswith(
         "/home/admin/.pyenv/versions/3.11.14/bin/python3 -B "
     )
-    assert command_line.endswith(
-        "/home/admin/.openclaw/agents/main/sessions/sessions.json"
-    )
+    assert "--sessions-file" not in command_line
     assert not command_line.endswith(".")
 
 

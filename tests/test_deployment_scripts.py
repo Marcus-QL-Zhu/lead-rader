@@ -154,7 +154,7 @@ def test_versioned_secret_and_cron_templates_contain_paths_not_secret_values():
 
     assert "HT_LEAD_ENV_FILE=/home/admin/.openclaw/secrets/lead-radar.env" in cron
     assert cron.count("0 5 * * *") == 1
-    assert "50 5,6 * * *" not in cron
+    assert cron.count("50 5,6 * * *") == 1
     assert "FEISHU_APP_SECRET=" not in cron
     assert "MINIMAX_API_KEY=" not in cron
     assert "# FEISHU_APP_SECRET=" in env_template
