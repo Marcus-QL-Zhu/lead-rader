@@ -215,6 +215,18 @@ def load_validated_runtime_env(
                 raise UnsafeRuntimeEnvError(
                     f"credential file line {line_number} contains a null byte"
                 )
+            if key == "FEISHU_APP_SECRET" and parsed_value == "${FEISHU_APP_SECRET}":
+                shared_path = Path(path).parent / "feishu-shared.env"
+                if Path(path) == shared_path:
+                    raise UnsafeRuntimeEnvError("shared credential cannot reference itself")
+                shared_values = load_validated_runtime_env(
+                    shared_path,
+                    expected_owner_uid=expected_owner_uid,
+                    expected_owner_gid=expected_owner_gid,
+                )
+                if set(shared_values) != {"FEISHU_APP_SECRET"} or not shared_values["FEISHU_APP_SECRET"]:
+                    raise UnsafeRuntimeEnvError("shared credential must contain exactly one nonempty Feishu secret")
+                parsed_value = shared_values["FEISHU_APP_SECRET"]
             values[key] = parsed_value
     return values
 

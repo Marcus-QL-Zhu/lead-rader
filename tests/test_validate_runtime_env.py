@@ -29,6 +29,59 @@ def _owner_kwargs():
     return {"expected_owner_uid": os.geteuid(), "expected_owner_gid": os.getegid()}
 
 
+@pytest.mark.skipif(os.name == "nt", reason="requires POSIX file ownership and permissions")
+def test_feishu_shared_secret_is_validated_and_loaded(tmp_path):
+    secrets = tmp_path / "secrets"
+    secrets.mkdir(mode=0o700)
+    secrets.chmod(0o700)
+    env_file = secrets / "lead-radar.env"
+    env_file.write_text("FEISHU_APP_SECRET=${FEISHU_APP_SECRET}\nOTHER=value\n")
+    env_file.chmod(0o600)
+    shared = secrets / "feishu-shared.env"
+    shared.write_text("FEISHU_APP_SECRET=test-secret\n")
+    shared.chmod(0o600)
+    assert load_validated_runtime_env(env_file, **_owner_kwargs()) == {
+        "FEISHU_APP_SECRET": "test-secret", "OTHER": "value"
+    }
+    shared.chmod(0o644)
+    with pytest.raises(UnsafeRuntimeEnvError):
+        load_validated_runtime_env(env_file, **_owner_kwargs())
+
+
+@pytest.mark.skipif(os.name == "nt", reason="requires POSIX file ownership and permissions")
+@pytest.mark.parametrize("content", ["", "FEISHU_APP_SECRET=\n", "FEISHU_APP_SECRET=x\nEXTRA=y\n", "FEISHU_APP_SECRET=${FEISHU_APP_SECRET}\n"])
+def test_shared_secret_rejects_invalid_content(tmp_path, content):
+    secrets = tmp_path / "secrets"
+    secrets.mkdir(mode=0o700)
+    secrets.chmod(0o700)
+    env_file = secrets / "lead-radar.env"
+    env_file.write_text("FEISHU_APP_SECRET=${FEISHU_APP_SECRET}\n")
+    env_file.chmod(0o600)
+    shared = secrets / "feishu-shared.env"
+    shared.write_text(content)
+    shared.chmod(0o600)
+    with pytest.raises(UnsafeRuntimeEnvError):
+        load_validated_runtime_env(env_file, **_owner_kwargs())
+
+
+@pytest.mark.skipif(os.name == "nt", reason="requires POSIX file ownership and permissions")
+def test_shared_secret_rejects_missing_or_symlink(tmp_path):
+    secrets = tmp_path / "secrets"
+    secrets.mkdir(mode=0o700)
+    secrets.chmod(0o700)
+    env_file = secrets / "lead-radar.env"
+    env_file.write_text("FEISHU_APP_SECRET=${FEISHU_APP_SECRET}\n")
+    env_file.chmod(0o600)
+    with pytest.raises((UnsafeRuntimeEnvError, OSError)):
+        load_validated_runtime_env(env_file, **_owner_kwargs())
+    target = secrets / "target.env"
+    target.write_text("FEISHU_APP_SECRET=test\n")
+    target.chmod(0o600)
+    (secrets / "feishu-shared.env").symlink_to(target)
+    with pytest.raises(UnsafeRuntimeEnvError):
+        load_validated_runtime_env(env_file, **_owner_kwargs())
+
+
 def test_service_identity_rejects_non_admin_runtime(monkeypatch):
     monkeypatch.setattr(runtime_env, "pwd", SimpleNamespace(getpwnam=lambda _n: SimpleNamespace(pw_uid=1001, pw_gid=1001)))
     monkeypatch.setattr(runtime_env, "grp", SimpleNamespace(getgrnam=lambda _n: SimpleNamespace(gr_gid=1001)))
